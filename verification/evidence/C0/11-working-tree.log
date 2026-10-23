@@ -1,24 +1,14 @@
 $ git status --short
 
- M app/contracts/generate.py
- M app/contracts/lint.py
- M app/contracts/order_boundary/openapi.fragment.json
- M app/contracts/platform/openapi.fragment.json
  M app/seed/cli.py
  M app/seed/repository.py
  M app/seed/tests/test_cli.py
  M app/seed/tests/test_repository.py
- M app/tests/contracts/base/test_contracts_infrastructure.py
- M contracts/README.md
- M contracts/openapi/fragments/FS-00.openapi.json
- M contracts/openapi/openapi.json
- M contracts/openapi/openapi.yaml
-?? app/contracts/platform/build_from_app.py
+ M verification/evidence/C0/10-git-head.log
+ M verification/evidence/C0/11-working-tree.log
 ?? app/seed/tests/conftest.py
 ?? app/seed/tests/test_cli_sqlalchemy_live.py
 ?? app/seed/tests/test_sqlalchemy_live.py
-?? app/tests/contracts/platform/
-?? verification/evidence/C0/
 ?? verification/evidence/FS00-AUDIT/
 ?? verification/evidence/W2/
 
