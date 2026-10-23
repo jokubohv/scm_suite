@@ -2257,14 +2257,21 @@ class ProcurementService:
                     ownership=str(detail.get("ownership") or "OWNED").upper(),
                     qty=qty(detail.get("qty_received", detail.get("qty", qty_received))),
                 )
+        landed_cost_ref = None
+        if data.get("landed_cost_charges"):
+            landed_cost_ref = await self._create_estimated_landed_cost_document(
+                receipt_id, data.get("landed_cost_charges") or [], actor_id=actor_id
+            )
         await self._audit(
             "receipt.created",
             "procurement.item_receipt",
             receipt_id,
-            {"lines": len(lines), "deferred": deferred},
+            {"lines": len(lines), "deferred": deferred, "landed_cost_id": landed_cost_ref["id"] if landed_cost_ref else None},
             actor_id,
         )
         result = await self.get_receipt(receipt_id)
+        if landed_cost_ref:
+            result["landed_cost"] = landed_cost_ref
         await self._idem_complete("POST /api/v1/item-receipts", idempotency_key, result, receipt_id, 201)
         return result
 
@@ -2435,14 +2442,18 @@ class ProcurementService:
                 ],
             },
         )
+        landed_cost = await self._post_estimated_landed_cost_for_receipt(receipt, actor_id=actor_id)
         await self._audit(
             "receipt.posted",
             "procurement.item_receipt",
             receipt_id,
-            {"transaction_id": result["transaction_id"]},
+            {"transaction_id": result["transaction_id"], "landed_cost": landed_cost},
             actor_id,
         )
-        return {"id": str(receipt_id), "status": "POSTED", "posted_transaction_id": result["transaction_id"]}
+        response = {"id": str(receipt_id), "status": "POSTED", "posted_transaction_id": result["transaction_id"]}
+        if landed_cost:
+            response["landed_cost"] = landed_cost
+        return response
 
     async def reverse_receipt(
         self, receipt_id: Any, reason: str, *, actor_id: str | None = None, idempotency_key: str | None = None
@@ -2659,6 +2670,13 @@ class ProcurementService:
                 receipt_line = await self._require_row(
                     "item_receipt_line", line["item_receipt_line_id"], "receipt line"
                 )
+                parent_receipt = await self._require_row("item_receipt", receipt_line["item_receipt_id"], "item receipt")
+                if parent_receipt["status"] != "POSTED":
+                    raise ValidationFailed("landed-cost bill line must reference a POSTED item receipt")
+                if line.get("item_id") and str(line["item_id"]) != str(receipt_line["item_id"]):
+                    raise ValidationFailed("landed-cost bill line item does not match the receipt line item")
+                if amount < 0:
+                    raise ValidationFailed("landed-cost bill line amount must be >= 0")
                 if not line.get("item_id"):
                     line = {**line, "item_id": receipt_line["item_id"]}
             prepared.append((index, line, qty_value, unit_price, amount))
@@ -3264,16 +3282,24 @@ class ProcurementService:
                 "posted_transaction_id": transaction_id,
             },
         )
+        landed_cost = await self._post_actual_landed_cost_for_bill(bill, actor_id=actor_id)
         await self._audit(
-            "vendor_bill.posted", "procurement.vendor_bill", bill_id, {"transaction_id": transaction_id}, actor_id
+            "vendor_bill.posted",
+            "procurement.vendor_bill",
+            bill_id,
+            {"transaction_id": transaction_id, "landed_cost": landed_cost},
+            actor_id,
         )
         result = await self.get_bill(bill_id)
-        return {
+        response = {
             "id": str(bill_id),
             "status": "OPEN",
             "posted_transaction_id": transaction_id,
             "variances": result["variances"],
         }
+        if landed_cost:
+            response["landed_cost"] = landed_cost
+        return response
 
     async def bill_variances(self, bill_id: Any) -> dict[str, Any]:
         bill = await self.get_bill(bill_id)
@@ -3931,3 +3957,355 @@ class ProcurementService:
             actor_id,
         )
         return {"id": str(link_id), "status": "FULFILLED", "posted_transaction_id": result["transaction_id"]}
+
+    # ----------------------------------------------------------------- landed-cost bridge ------
+    async def _receipt_landed_refs(self, receipt: Mapping[str, Any]) -> list[dict[str, Any]]:
+        refs = []
+        for line in receipt.get("lines") or []:
+            qty_received = dec(line["qty_received"])
+            unit_cost = dec(line.get("unit_cost") or 0)
+            refs.append(
+                {
+                    "item_receipt_id": str(receipt["id"]),
+                    "item_receipt_line_id": str(line["id"]),
+                    "item_id": str(line["item_id"]),
+                    "qty": _num(qty_received),
+                    "amount": _num(money(qty_received * unit_cost)),
+                    "weight": "0",
+                    "location_id": str(line.get("location_id")) if line.get("location_id") else None,
+                    "inventory_status_id": str(line.get("inventory_status_id")) if line.get("inventory_status_id") else None,
+                }
+            )
+        return refs
+
+    async def _create_estimated_landed_cost_document(
+        self, receipt_id: Any, charges: Sequence[Mapping[str, Any]], *, actor_id: Any = None
+    ) -> dict[str, Any]:
+        receipt = await self.get_receipt(receipt_id)
+        return await self._create_landed_cost_document(
+            vendor_id=receipt["vendor_id"],
+            transaction_date=receipt.get("received_at") or receipt.get("created_at"),
+            currency_code=receipt["currency_code"],
+            receipt_refs=await self._receipt_landed_refs(receipt),
+            charges=charges,
+            estimated=True,
+            actor_id=actor_id,
+        )
+
+    async def _create_landed_cost_document(
+        self,
+        *,
+        vendor_id: Any,
+        transaction_date: Any,
+        currency_code: str,
+        receipt_refs: Sequence[Mapping[str, Any]],
+        charges: Sequence[Mapping[str, Any]],
+        vendor_bill_id: Any = None,
+        estimated: bool = False,
+        actor_id: Any = None,
+    ) -> dict[str, Any]:
+        """Create an FS-05 landed-cost document from receipt charges / vendor-bill landed lines."""
+        from app.modules.costing.service import CostingService
+
+        lines = []
+        for index, charge in enumerate(charges, start=1):
+            amount = money(charge.get("amount") or 0)
+            if amount < 0:
+                raise ValidationFailed(f"landed-cost charge {index} amount must be >= 0")
+            line: dict[str, Any] = {
+                "description": str(charge.get("description") or f"Landed cost charge {index}"),
+                "amount": _num(amount),
+                "currency_code": str(charge.get("currency_code") or currency_code).upper(),
+            }
+            if charge.get("cost_category_id"):
+                line["cost_category_id"] = str(charge["cost_category_id"])
+            if charge.get("allocation_basis_override"):
+                line["allocation_basis_override"] = str(charge["allocation_basis_override"]).upper()
+            lines.append(line)
+        if not lines:
+            raise ValidationFailed("at least one landed-cost charge is required")
+        costing = CostingService(self.session, self.tenant_id)
+        document = await costing.create_landed_cost(
+            {
+                "vendor_id": str(vendor_id),
+                "vendor_bill_id": str(vendor_bill_id) if vendor_bill_id else None,
+                "transaction_date": str(_date(transaction_date)),
+                "allocation_basis": "AMOUNT",
+                "currency_code": currency_code,
+                "receipt_refs": [dict(ref) for ref in receipt_refs],
+                "lines": lines,
+            }
+        )
+        if estimated:
+            document = await costing.repo.update_landed_cost(document["id"], {"estimated": True})
+        await self._link_document(
+            link_type="LANDED_COST_ESTIMATE" if estimated else "LANDED_COST_ACTUAL",
+            from_type="ITEM_RECEIPT" if estimated else "VENDOR_BILL",
+            from_id=(receipt_refs[0].get("item_receipt_id") if estimated else vendor_bill_id),
+            to_id=document["id"],
+            amount=dec(document.get("total_amount") or 0),
+            actor_id=actor_id,
+        )
+        await self._audit(
+            "landed_cost.created" if not estimated else "landed_cost.estimated_created",
+            "costing.landed_cost",
+            document["id"],
+            {
+                "vendor_id": str(vendor_id),
+                "vendor_bill_id": str(vendor_bill_id) if vendor_bill_id else None,
+                "receipt_refs": len(receipt_refs),
+                "lines": len(lines),
+                "estimated": estimated,
+            },
+            actor_id,
+        )
+        return {
+            "id": document["id"],
+            "status": document["status"],
+            "total_amount": _num(document.get("total_amount") or 0),
+            "estimated": bool(document.get("estimated")),
+            "receipt_refs": len(receipt_refs),
+            "lines": len(lines),
+        }
+
+    async def _link_document(
+        self, *, link_type: str, from_type: str, from_id: Any, to_id: Any, amount: Decimal, actor_id: Any = None
+    ) -> None:
+        if not from_id:
+            return
+        await self._exec(
+            """
+            INSERT INTO platform.document_link
+                (id, tenant_id, link_type, from_type, from_id, to_type, to_id, amount_base, created_by, updated_by)
+            VALUES (:id, :tenant_id, :link_type, :from_type, :from_id, 'COSTING_LANDED_COST', :to_id, :amount, :actor, :actor)
+            ON CONFLICT (tenant_id, link_type, from_type, from_id, to_type, to_id) DO NOTHING
+            """,
+            id=uuid.uuid4(),
+            link_type=link_type,
+            from_type=from_type,
+            from_id=_as_uuid(from_id),
+            to_id=_as_uuid(to_id),
+            amount=amount,
+            actor=_as_uuid(actor_id) if actor_id else None,
+        )
+
+    async def _post_landed_cost_value_only(
+        self,
+        *,
+        landed_cost: Mapping[str, Any],
+        posting_type: str,
+        idempotency_key: str,
+        transaction_date: Any,
+        source_doc_type: str,
+        source_doc_id: Any,
+        receipt_lines: Mapping[str, Mapping[str, Any]],
+    ) -> dict[str, Any]:
+        from app.modules.costing.service import CostingService
+        from app.modules.inventory_ledger.facade import PostingPort
+
+        costing = CostingService(self.session, self.tenant_id)
+        landed_cost_id = str(landed_cost["id"])
+        document = await costing.get_landed_cost(landed_cost_id)
+        if document["status"] == "DRAFT":
+            await costing.transition_landed_cost(landed_cost_id, "submit")
+            await costing.transition_landed_cost(landed_cost_id, "approve")
+            await costing.transition_landed_cost(landed_cost_id, "post")
+            document = await costing.get_landed_cost(landed_cost_id)
+        elif document["status"] in {"PENDING_APPROVAL", "APPROVED"}:
+            if document["status"] == "PENDING_APPROVAL":
+                await costing.transition_landed_cost(landed_cost_id, "approve")
+            if document["status"] != "POSTED":
+                document = await costing.transition_landed_cost(landed_cost_id, "post")
+        allocations = (await costing.landed_cost_allocations(landed_cost_id))["items"]
+        movements: list[dict[str, Any]] = []
+        allocated_total = ZERO
+        for allocation in allocations:
+            allocated = dec(allocation["allocated_amount"])
+            if allocated == 0:
+                continue
+            line = receipt_lines.get(str(allocation["item_receipt_line_id"]))
+            if line is None:
+                raise ValidationFailed("landed-cost allocation references an unknown receipt line")
+            location_id = line.get("location_id")
+            status_id = line.get("inventory_status_id")
+            if not location_id or not status_id:
+                # fall back to the allocated item/receipt line metadata captured in receipt_refs
+                ref = next((ref for ref in document.get("receipt_refs") or [] if str(ref.get("item_receipt_line_id")) == str(allocation["item_receipt_line_id"])), None)
+                location_id = location_id or (ref or {}).get("location_id")
+                status_id = status_id or (ref or {}).get("inventory_status_id")
+            if not location_id or not status_id:
+                raise ValidationFailed("landed-cost posting requires location/status on the receipt lines")
+            allocated_total += allocated
+            movements.append(
+                {
+                    "item_id": str(allocation["item_id"]),
+                    "location_id": str(location_id),
+                    "inventory_status_id": str(status_id),
+                    "qty": "0",
+                    "value_base": _num(allocated),
+                    "movement_type": "LANDED_COST",
+                    "source_line_ref": str(allocation["item_receipt_line_id"]),
+                    "details": [{"qty": "0", "inventory_status_id": str(status_id), "ownership": "OWNED"}],
+                }
+            )
+        transaction_id = None
+        if movements:
+            port = PostingPort(self.session, self.tenant_id)
+            if posting_type == "T-27":
+                result = await port.post_estimated_landed_cost(
+                    transaction_date=transaction_date,
+                    source_doc_type=source_doc_type,
+                    source_doc_id=str(source_doc_id),
+                    idempotency_key=idempotency_key,
+                    movements=movements,
+                )
+            else:
+                result = await port.post_landed_cost(
+                    transaction_date=transaction_date,
+                    source_doc_type=source_doc_type,
+                    source_doc_id=str(source_doc_id),
+                    idempotency_key=idempotency_key,
+                    movements=movements,
+                )
+            transaction_id = result["transaction_id"]
+            await costing.repo.update_landed_cost(landed_cost_id, {"posted_transaction_id": _as_uuid(transaction_id)})
+        return {
+            "landed_cost_id": landed_cost_id,
+            "posting_type": posting_type,
+            "allocated_total": _num(allocated_total),
+            "allocations": [
+                {
+                    "item_receipt_line_id": str(allocation["item_receipt_line_id"]),
+                    "item_id": str(allocation["item_id"]),
+                    "allocated_amount": _num(allocation["allocated_amount"]),
+                }
+                for allocation in allocations
+            ],
+            "posted_transaction_id": transaction_id,
+            "value_only": True,
+        }
+
+    async def _post_estimated_landed_cost_for_receipt(
+        self, receipt: Mapping[str, Any], *, actor_id: Any = None
+    ) -> dict[str, Any] | None:
+        try:
+            landed_cost = await self._one(
+                """
+                SELECT * FROM costing.landed_cost
+                 WHERE tenant_id = :tenant_id AND vendor_bill_id IS NULL AND estimated
+                   AND receipt_refs @> CAST(:needle AS jsonb)
+                 ORDER BY created_at DESC LIMIT 1
+                """,
+                needle=json.dumps([{"item_receipt_id": str(receipt["id"])}]),
+            )
+        except Exception:  # noqa: BLE001 - costing unavailable/rolled-back in isolated unit tests
+            return None
+        if landed_cost is None:
+            return None
+        if landed_cost.get("status") == "POSTED" and landed_cost.get("posted_transaction_id"):
+            return {
+                "landed_cost_id": landed_cost["id"],
+                "posting_type": "T-27",
+                "status": "POSTED",
+                "posted_transaction_id": landed_cost.get("posted_transaction_id"),
+                "replayed": True,
+            }
+        receipt_lines = {
+            str(line["id"]): line
+            for line in await self._all(
+                "SELECT id, item_id, location_id, inventory_status_id FROM procurement.item_receipt_line "
+                "WHERE tenant_id = :tenant_id AND item_receipt_id = :id",
+                id=_as_uuid(receipt["id"]),
+            )
+        }
+        result = await self._post_landed_cost_value_only(
+            landed_cost=landed_cost,
+            posting_type="T-27",
+            idempotency_key=f"landed-cost:estimated:{receipt['id']}:{landed_cost['id']}",
+            transaction_date=_date(receipt.get("received_at")) or _date(landed_cost["transaction_date"]) or date.today(),
+            source_doc_type="ITEM_RECEIPT",
+            source_doc_id=receipt["id"],
+            receipt_lines=receipt_lines,
+        )
+        await self._audit(
+            "landed_cost.estimated_posted", "costing.landed_cost", landed_cost["id"], result, actor_id
+        )
+        return result
+
+    async def _post_actual_landed_cost_for_bill(self, bill: Mapping[str, Any], *, actor_id: Any = None) -> dict[str, Any] | None:
+        landed_lines = [line for line in bill.get("lines") or [] if line.get("is_landed_cost")]
+        if not landed_lines:
+            return None
+        existing = await self._one(
+            "SELECT * FROM costing.landed_cost WHERE tenant_id = :tenant_id AND vendor_bill_id = :bill ORDER BY created_at DESC LIMIT 1",
+            bill=_as_uuid(bill["id"]),
+        )
+        if existing is not None and existing.get("status") == "POSTED":
+            receipt_lines = {
+                str(line["id"]): line
+                for line in await self._all(
+                    "SELECT id, item_id, location_id, inventory_status_id FROM procurement.item_receipt_line "
+                    "WHERE tenant_id = :tenant_id AND item_receipt_id = :id",
+                    id=_as_uuid(bill.get("item_receipt_id")),
+                )
+            } if bill.get("item_receipt_id") else {}
+            return await self._post_landed_cost_value_only(
+                landed_cost=existing,
+                posting_type="T-26",
+                idempotency_key=f"landed-cost:actual:{bill['id']}:{existing['id']}",
+                transaction_date=bill["transaction_date"],
+                source_doc_type="VENDOR_BILL",
+                source_doc_id=bill["id"],
+                receipt_lines=receipt_lines,
+            )
+        charges = []
+        receipt_refs = []
+        for line in landed_lines:
+            receipt_line = await self._require_row("item_receipt_line", line["item_receipt_line_id"], "receipt line")
+            receipt = await self._require_row("item_receipt", receipt_line["item_receipt_id"], "item receipt")
+            if receipt["status"] != "POSTED":
+                raise ValidationFailed("landed-cost bill line references an unposted receipt")
+            charges.append({
+                "description": line.get("description") or f"Landed cost bill line {line['line_number']}",
+                "amount": line["amount"],
+                "cost_category_id": line.get("landed_cost_category_id"),
+            })
+            receipt_refs.append({
+                "item_receipt_id": str(receipt["id"]),
+                "item_receipt_line_id": str(receipt_line["id"]),
+                "item_id": str(receipt_line["item_id"]),
+                "qty": _num(line["qty"] or receipt_line["qty_received"]),
+                "amount": _num(line["amount"]),
+                "weight": "0",
+                "location_id": str(receipt_line.get("location_id")) if receipt_line.get("location_id") else None,
+                "inventory_status_id": str(receipt_line.get("inventory_status_id")) if receipt_line.get("inventory_status_id") else None,
+            })
+        document = await self._create_landed_cost_document(
+            vendor_id=bill["vendor_id"],
+            transaction_date=bill["transaction_date"],
+            currency_code=bill["currency_code"],
+            receipt_refs=receipt_refs,
+            charges=charges,
+            vendor_bill_id=bill["id"],
+            estimated=False,
+            actor_id=actor_id,
+        )
+        receipt_lines = {
+            str(line["id"]): line
+            for line in await self._all(
+                "SELECT id, item_id, location_id, inventory_status_id FROM procurement.item_receipt_line "
+                "WHERE tenant_id = :tenant_id AND item_receipt_id = :id",
+                id=_as_uuid(receipt_refs[0]["item_receipt_id"]),
+            )
+        }
+        result = await self._post_landed_cost_value_only(
+            landed_cost=document,
+            posting_type="T-26",
+            idempotency_key=f"landed-cost:actual:{bill['id']}:{document['id']}",
+            transaction_date=bill["transaction_date"],
+            source_doc_type="VENDOR_BILL",
+            source_doc_id=bill["id"],
+            receipt_lines=receipt_lines,
+        )
+        await self._audit("landed_cost.actual_posted", "costing.landed_cost", document["id"], result, actor_id)
+        return result
