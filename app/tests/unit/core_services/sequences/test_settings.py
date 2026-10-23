@@ -24,10 +24,11 @@ pytestmark = pytest.mark.integration
 
 def test_declared_settings_filter_db_namespaces() -> None:
     definitions = declared_settings()
-    assert len(definitions) == 7
+    assert len(definitions) == 8
     assert ("inventory", "negative_inventory_policy") in definitions
     assert ("rbac", "sod_enforcement") in definitions
     assert ("auth", "local_login_enabled") in definitions
+    assert ("platform", "approval_definitions_required") in definitions
     assert ("policy", "approval_definitions_required") not in definitions
     assert definitions[("inventory", "retention_ledger_years")].value_type is SettingType.NUMBER
     assert definitions[("inventory", "multi_location_enabled")].value_type is SettingType.BOOL

@@ -76,7 +76,7 @@ warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 check_untyped_defs = true
-exclude = "app/migrations/versions"
+exclude = "app/migrations/versions|app/tests|app/migrations/tests|app/seed/tests"
 
 [tool.coverage.run]
 source = ["app"]

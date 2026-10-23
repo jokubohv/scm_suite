@@ -13,7 +13,7 @@ SEED_SCHEMA_VERSION = "1.0.0"
 
 #: Reserved tenant id for global reference rows (DATA-MODEL §1.2, DM-GLOBAL-10). UUIDv7-shaped:
 #: version nibble 7, RFC 4122 variant. The zero payload marks it as the reserved system tenant.
-SYSTEM_TENANT_ID = UUID("00000000-0000-7000-8000-000000000000")
+SYSTEM_TENANT_ID = UUID("00000000-0000-0000-0000-000000000000")
 
 #: Seed data directory shipped with the package.
 DEFAULT_DATA_DIR = Path(__file__).resolve().parent / "data"

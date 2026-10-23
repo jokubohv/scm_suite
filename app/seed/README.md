@@ -36,7 +36,7 @@ python -m app.seed.cli --tenant <tenant-uuid> --state /tmp/seed-state.json --jso
 # -> second run: totals.inserted == 0, totals.updated == 0, identical digest
 
 # global/system datasets only (currencies, SYSTEM tenant, transaction-type catalogue)
-python -m app.seed.cli --tenant 00000000-0000-7000-8000-000000000000
+python -m app.seed.cli --tenant 00000000-0000-0000-0000-000000000000
 ```
 
 Exit codes: `0` valid run (dry-run included), `1` unexpected failure, `2` invalid input/data/repository
@@ -50,7 +50,7 @@ Tenant selection: `--tenant <uuid>` or `--tenant system`; without either flag th
 | File | Contents |
 |---|---|
 | `manifest.json` | ordered dataset list: name, target table, natural key, tenant scope, owner FS, source |
-| `system_tenant.json` | reserved `SYSTEM` tenant row (`00000000-0000-7000-8000-000000000000`, UUIDv7-shaped) |
+| `system_tenant.json` | reserved `SYSTEM` tenant row (`00000000-0000-0000-0000-000000000000`, UUIDv7-shaped) |
 | `currencies.json` | initial ISO-4217 active set with numeric code + minor units (extend additively) |
 | `uom.json` | UoM types (`EA_TYPE`, `WEIGHT`, `VOLUME`, `TIME`) and units with base-unit flags |
 | `inventory_statuses.json` | `AVAILABLE` (default) … `USED`/`REFURB` with availability/commit/sell/consigned flags |
