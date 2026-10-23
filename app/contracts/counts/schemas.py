@@ -213,7 +213,7 @@ __all__ = [
     "CountPlanFilterIn",
     "CountPlanUpdate",
     "CountRecountedEvent",
-    "CountRejectIn",
+    "RejectIn",
     "CountedLineIn",
     "EVENT_MODELS",
     "GenerateCountIn",

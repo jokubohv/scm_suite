@@ -891,7 +891,7 @@ class CostingEngine:
             gl = self._gl("RCPT" if movement_type in {"IN", "ADJUST"} else "XFRIN", movement, unit, value, qty)
         elif movement_type in {"OUT", "ADJUST", "TRANSFER"}:
             require = q12(abs(qty))
-            unit = current.avg_cost if current.avg_cost > ZERO else (current.last_purchase_price or ZERO)
+            unit = current.avg_cost if current.avg_cost > ZERO else (current.last_purchase_price or movement.unit_cost or ZERO)
             if unit == ZERO:
                 if not settings.allow_negative and not settings.allow_provisional:
                     raise CostingIncomplete("no average cost basis for outbound movement")
@@ -962,8 +962,9 @@ class CostingEngine:
                 )
             new_qty, new_value, _ = self._inventory_state_changes(current, qty, value)
             new_state = current.with_qty_value(new_qty, new_value, avg_cost=standard)
-            gl.append(self._intent("RCPT", movement.asset_account_ref, debit=value))
-            gl.append(self._intent("RCPT", movement.offset_account_ref or "ACCRUED_PURCHASES", credit=value))
+            if value != ZERO:
+                gl.append(self._intent("RCPT", movement.asset_account_ref, debit=value))
+                gl.append(self._intent("RCPT", movement.offset_account_ref or "ACCRUED_PURCHASES", credit=value))
             if variance != ZERO:
                 gl.append(self._intent("BILLVAR", movement.variance_account_ref, debit=variance if variance > 0 else 0, credit=abs(variance) if variance < 0 else 0))
         else:
@@ -972,8 +973,9 @@ class CostingEngine:
             entries.append(CostEntryDraft("OUT", -require, standard, value))
             new_qty, new_value, _ = self._inventory_state_changes(current, -require, value)
             new_state = current.with_qty_value(new_qty, new_value, avg_cost=standard)
-            gl.append(self._intent("COGS", "COGS", debit=abs(value)))
-            gl.append(self._intent("COGS", movement.asset_account_ref, credit=abs(value)))
+            if value != ZERO:
+                gl.append(self._intent("COGS", "COGS", debit=abs(value)))
+                gl.append(self._intent("COGS", movement.asset_account_ref, credit=abs(value)))
         events = self._events(ctx, new_state, entries, False, variance)
         return ValueResult(
             unit_cost=standard,
@@ -1044,8 +1046,9 @@ class CostingEngine:
                 avg_cost=avg,
                 last_purchase_price=unit if unit > ZERO else current.last_purchase_price,
             )
-            gl.append(self._intent("RCPT", movement.asset_account_ref, debit=value))
-            gl.append(self._intent("RCPT", movement.offset_account_ref or "ACCRUED_PURCHASES", credit=value))
+            if value != ZERO:
+                gl.append(self._intent("RCPT", movement.asset_account_ref, debit=value))
+                gl.append(self._intent("RCPT", movement.offset_account_ref or "ACCRUED_PURCHASES", credit=value))
             estimated = unit_estimated
         else:
             require = q12(abs(qty))
@@ -1092,8 +1095,9 @@ class CostingEngine:
                 avg_cost=avg,
                 status="UNDERWATER" if new_qty < ZERO else current.status,
             )
-            gl.append(self._intent("COGS" if movement_type == "OUT" else "XFROUT", "COGS" if movement_type == "OUT" else movement.asset_account_ref, debit=abs(consumed_value)))
-            gl.append(self._intent("COGS" if movement_type == "OUT" else "XFROUT", movement.asset_account_ref, credit=abs(consumed_value)))
+            if consumed_value != ZERO:
+                gl.append(self._intent("COGS" if movement_type == "OUT" else "XFROUT", "COGS" if movement_type == "OUT" else movement.asset_account_ref, debit=abs(consumed_value)))
+                gl.append(self._intent("COGS" if movement_type == "OUT" else "XFROUT", movement.asset_account_ref, credit=abs(consumed_value)))
         events = self._events(ctx, new_state, entries, estimated)
         return ValueResult(
             unit_cost=entries[0].unit_cost if entries else ZERO,
@@ -1192,6 +1196,8 @@ class CostingEngine:
     def _gl(self, posting_rule_id: str, movement: ValueMovement, unit: Decimal, value: Decimal, qty: Decimal) -> list[GLIntent]:
         del unit
         abs_value = q12(abs(value))
+        if abs_value == ZERO:
+            return []
         if value >= ZERO:
             return [
                 self._intent(posting_rule_id, movement.asset_account_ref, debit=abs_value),

@@ -8,8 +8,7 @@ the spec requires it.
 
 from __future__ import annotations
 
-import uuid
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Any
@@ -25,9 +24,8 @@ from app.modules.counts.errors import (
     CountsConflict,
     CountsDisabled,
     CountsNotFound,
-    CountsValidationError,
     CountStateError,
-    ProhibitedCountType,
+    CountsValidationError,
 )
 from app.modules.counts.repository import CountsRepository
 
@@ -298,7 +296,7 @@ class CountsService:
         return e.count_ref(count)
 
     async def create_count(self, payload: Mapping[str, Any]) -> dict[str, Any]:
-        settings = await self._require_enabled()
+        await self._require_enabled()
         count_type = str(payload.get("count_type", "MANUAL")).upper()
         if count_type not in e.COUNT_TYPES:
             raise CountsValidationError(f"count_type must be one of {e.COUNT_TYPES}")
@@ -338,7 +336,6 @@ class CountsService:
                 "count_plan_id": None, "count_date": count_date.isoformat(), "line_count": len(positions),
             },
         )
-        del settings
         return e.count_ref(count)
 
     async def _create_count_document(
@@ -385,14 +382,15 @@ class CountsService:
 
     # ------------------------------------------------------------------ snapshot / start -----
     async def start_count(self, count_id: str) -> dict[str, Any]:
-        settings = await self._require_enabled()
+        await self._require_enabled()
         count = await self._get_count(count_id)
         e.assert_count_transition(count["status"], "OPEN")
         if count["status"] != "DRAFT":
             raise CountStateError("count has already been started")
         scope = dict(count.get("scope") or {})
         positions = await self.repo.load_positions(
-            item_ids=[str(item) for item in scope.get("item_ids") or []],
+            item_ids=[str(item) for item in (scope.get("item_ids") or scope.get("items") or [])],
+            location_ids=[str(location) for location in (scope.get("locations") or [])],
             include_bins=False,
         )
         if scope.get("expected_lines") and not positions:
@@ -408,7 +406,7 @@ class CountsService:
         await self.repo.insert_lines([draft.as_values(self.tenant_id) for draft in line_drafts])
         updated = await self.repo.update_count(
             count_id,
-            {"status": "OPEN", "snapshot_at": snapshot_at, "recalc_snapshot_on_reject": settings.post_on_approve},
+            {"status": "OPEN", "snapshot_at": snapshot_at, "recalc_snapshot_on_reject": True},
         )
         return {"status": updated["status"], "snapshot_at": updated["snapshot_at"], "line_count": len(line_drafts)}
 
@@ -568,7 +566,7 @@ class CountsService:
         )
         return {"status": updated["status"], "snapshot_revision": snapshot_revision}
 
-    async def recalculate_snapshot(self, count_id: str, payload: Mapping[str, Any], *, status_override: str | None = None) -> dict[str, Any]:
+    async def recalculate_snapshot(self, count_id: str, payload: Mapping[str, Any], *, status_override: str | None = None) -> int:
         count = await self._get_count(count_id)
         if count["status"] in {"POSTED", "CANCELLED"}:
             raise CountStateError("posted/cancelled counts cannot recalculate their snapshot")
@@ -592,11 +590,9 @@ class CountsService:
             position = current_by_key.get(key)
             new_qty = position.qty_on_hand if position is not None else e.q12(line["snapshot_qty"])
             new_value = position.value_base if position is not None else None
-            from app.modules.counts.engine import SnapshotRow
-
-            row = SnapshotRow(
+            snapshot_row = e.SnapshotRow(
                 inventory_count_id=count_id,
-                position=CountPosition(
+                position=e.CountPosition(
                     item_id=line["item_id"], location_id=line["location_id"],
                     inventory_status_id=line["inventory_status_id"], uom_id=line["uom_id"],
                     qty_on_hand=new_qty, value_base=new_value if new_value is not None else Decimal("0"),
@@ -606,7 +602,7 @@ class CountsService:
                 snapshot_at=snapshot_at,
                 recalculated_from_id=recalculated_from_id,
             )
-            new_rows.append(row.as_values(self.tenant_id))
+            new_rows.append(snapshot_row.as_values(self.tenant_id))
         await self.repo.insert_snapshots(new_rows)
         for line in lines:
             key = (line["item_id"], line["location_id"], line.get("bin_id"), line.get("lot_id"), line.get("serial_id"), line["inventory_status_id"], line.get("ownership"))

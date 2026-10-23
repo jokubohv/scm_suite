@@ -23,7 +23,6 @@ from app.modules.counts.engine import (
     CountPosition,
     CountSettings,
     build_t20_command,
-    count_ref,
     q12,
 )
 from app.modules.counts.errors import CountsNotFound, CountsValidationError
@@ -366,7 +365,7 @@ class CountsRepository:
     async def reason_code_id(self, code: str = "CYCLE_COUNT") -> str | None:
         result = await self.session.execute(
             text(
-                "SELECT id FROM inventory_ledger.reason_code "
+                "SELECT id FROM inventory_ledger.inventory_reason_code "
                 "WHERE tenant_id = :tenant_id AND reason_type = 'COUNT' AND code = :code LIMIT 1"
             ),
             {"tenant_id": self.tenant_id, "code": code},

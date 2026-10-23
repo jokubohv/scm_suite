@@ -356,7 +356,7 @@ def evaluate_tolerance(lines: Sequence[Mapping[str, Any]], settings: CountSettin
         if line.get("counted_qty") is None:
             reasons.append(f"line_uncounted:{line.get('id')}")
             continue
-        variance = abs(q12(line.get("variance_qty") if line.get("variance_qty") is not None else line_variance(line["counted_qty"], line["snapshot_qty"])))
+        variance = abs(q12(line.get("variance_qty") if line.get("variance_qty") is not None else (line_variance(line["counted_qty"], line["snapshot_qty"]) or ZERO)))
         snapshot_value = q12(line.get("snapshot_value_base", ZERO))
         if settings.tolerance_qty > ZERO and variance > settings.tolerance_qty:
             reasons.append(f"qty_tolerance_exceeded:{line.get('id')}")
@@ -389,7 +389,10 @@ def next_count_date(
     elif abc_class and abc_class.upper() in policy.abc_class_intervals:
         source = "TENANT_DEFAULT"
         interval = int(policy.abc_class_intervals[abc_class.upper()])
-    base = last_count_date or today
+    if isinstance(last_count_date, str):
+        base = date.fromisoformat(last_count_date)
+    else:
+        base = last_count_date or today
     return base + timedelta(days=max(0, interval)), interval, source
 
 
@@ -405,7 +408,7 @@ def assert_postable_lines(lines: Sequence[Mapping[str, Any]], *, group_average_i
                 "consigned positions cannot post through T-20; route through the consigned adjustment path",
                 details={"line_id": str(line.get("id")), "ownership": "CONSIGNED"},
             )
-        variance = line_variance(line["counted_qty"], line["snapshot_qty"])
+        variance = line_variance(line["counted_qty"], line["snapshot_qty"]) or ZERO
         if variance == ZERO:
             continue
         if line.get("serial_id") is not None and abs(variance) > ONE:
@@ -446,7 +449,11 @@ def build_t20_movements(
             "uom_id": str(uom),
             "movement_type": "COUNT_VARIANCE",
             "source_line_ref": str(line.get("id")),
-            "unit_cost": None,
+            "unit_cost": (
+                q12(line["snapshot_value_base"]) / q12(line["snapshot_qty"])
+                if line.get("snapshot_value_base") is not None and q12(line.get("snapshot_qty", 0)) != ZERO
+                else None
+            ),
             "value_base": ZERO,
         }
         for field_name in ("bin_id", "lot_id", "serial_id"):
@@ -492,33 +499,33 @@ def count_ref(count: Mapping[str, Any]) -> dict[str, Any]:
 def assert_snapshot_consistency(lines: Sequence[Mapping[str, Any]], snapshots: Sequence[Mapping[str, Any]]) -> None:
     """DM-CNT-01: line snapshot must equal the latest snapshot revision for its position."""
     latest: dict[tuple[Any, ...], Mapping[str, Any]] = {}
-    for row in snapshots:
-        key = (row["item_id"], row["location_id"], row.get("bin_id"), row.get("lot_id"), row.get("serial_id"), row["inventory_status_id"], row.get("ownership"))
-        current = latest.get(key)
-        if current is None or str(row["snapshot_at"]) >= str(current["snapshot_at"]):
-            latest[key] = row
+    for snapshot_row in snapshots:
+        key = (snapshot_row["item_id"], snapshot_row["location_id"], snapshot_row.get("bin_id"), snapshot_row.get("lot_id"), snapshot_row.get("serial_id"), snapshot_row["inventory_status_id"], snapshot_row.get("ownership"))
+        existing = latest.get(key)
+        if existing is None or str(snapshot_row["snapshot_at"]) >= str(existing["snapshot_at"]):
+            latest[key] = snapshot_row
     for line in lines:
         key = (line["item_id"], line["location_id"], line.get("bin_id"), line.get("lot_id"), line.get("serial_id"), line["inventory_status_id"], line.get("ownership"))
-        row = latest.get(key)
-        if row is None:
+        latest_row = latest.get(key)
+        if latest_row is None:
             raise CountsValidationError("count line has no snapshot revision", details={"line_id": str(line.get("id"))})
-        if q12(row["snapshot_qty"]) != q12(line["snapshot_qty"]):
+        if q12(latest_row["snapshot_qty"]) != q12(line["snapshot_qty"]):
             raise CountsValidationError("count line snapshot differs from the latest revision (DM-CNT-01)", details={"line_id": str(line.get("id"))})
 
 
 def derive_counted_snapshot(lines: Sequence[Mapping[str, Any]], recount: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
     """Apply append-only recount attempts; the accepted (latest) attempt is copied to the line (DM-CNT-07)."""
     accepted: dict[Any, Mapping[str, Any]] = {}
-    for attempt in sorted(recount, key=lambda row: int(row["attempt"])):
-        accepted[attempt["inventory_count_line_id"]] = attempt
+    for recount_row in sorted(recount, key=lambda row: int(row["attempt"])):
+        accepted[recount_row["inventory_count_line_id"]] = recount_row
     merged: list[dict[str, Any]] = []
     for line in lines:
-        row = dict(line)
-        attempt = accepted.get(line.get("id"))
-        if attempt is not None and row.get("counted_qty") is None:
-            row["counted_qty"] = attempt["counted_qty"]
-            row["variance_qty"] = line_variance(attempt["counted_qty"], line["snapshot_qty"])
-        merged.append(row)
+        merged_line: dict[str, Any] = dict(line)
+        accepted_attempt = accepted.get(line.get("id"))
+        if accepted_attempt is not None and merged_line.get("counted_qty") is None:
+            merged_line["counted_qty"] = accepted_attempt["counted_qty"]
+            merged_line["variance_qty"] = line_variance(accepted_attempt["counted_qty"], line["snapshot_qty"])
+        merged.append(merged_line)
     return merged
 
 

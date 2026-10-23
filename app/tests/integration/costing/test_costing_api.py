@@ -181,7 +181,34 @@ async def test_revaluation_lifecycle(client: Any, seeded: dict[str, Any]) -> Non
     assert invalid.json()["code"] == "INVALID_STATE_TRANSITION"
 
 
-async def test_landed_cost_allocation_sums_to_line_amount(client: Any, seeded: dict[str, Any]) -> None:
+async def test_landed_cost_allocation_sums_to_line_amount(client: Any, db_session: Any, seeded: dict[str, Any]) -> None:
+    # FS-08 migration closed the deferred landed-cost FK: seed a real vendor/receipt/lines.
+    from sqlalchemy import text as sa_text
+
+    vendor_id, receipt_id = uuid4(), uuid4()
+    receipt_line_ids = [uuid4(), uuid4()]
+    await db_session.execute(
+        sa_text("INSERT INTO procurement.vendor (id, tenant_id, vendor_number, name, version) VALUES (:id,:t,:code,'Costing Vendor',1)"),
+        {"id": vendor_id, "t": TENANT_ID, "code": f"V{uuid4().hex[:6].upper()}"},
+    )
+    await db_session.execute(
+        sa_text(
+            "INSERT INTO procurement.item_receipt (id, tenant_id, document_number, vendor_id, version) "
+            "VALUES (:id,:t,:doc,:vendor,1)"
+        ),
+        {"id": receipt_id, "t": TENANT_ID, "doc": f"RCV-{uuid4().hex[:6].upper()}", "vendor": vendor_id},
+    )
+    for index, (line_id, item_id) in enumerate(zip(receipt_line_ids, [ITEM_A, ITEM_B])):
+        await db_session.execute(
+            sa_text(
+                "INSERT INTO procurement.item_receipt_line "
+                "(id, tenant_id, item_receipt_id, line_number, item_id, qty_expected, qty_received, version) "
+                "VALUES (:id,:t,:receipt,:line,:item,:qty,:qty,1)"
+            ),
+            {"id": line_id, "t": TENANT_ID, "receipt": receipt_id, "line": index + 1,
+             "item": item_id, "qty": Decimal("2") if index == 0 else Decimal("6")},
+        )
+    await db_session.flush()
     created = await client.post(
         "/api/v1/landed-costs",
         json={
@@ -189,8 +216,8 @@ async def test_landed_cost_allocation_sums_to_line_amount(client: Any, seeded: d
             "allocation_basis": "QUANTITY",
             "currency_code": "USD",
             "receipt_refs": [
-                {"item_receipt_line_id": str(uuid4()), "item_id": str(ITEM_A), "qty": "2", "weight": "1", "amount": "20"},
-                {"item_receipt_line_id": str(uuid4()), "item_id": str(ITEM_B), "qty": "6", "weight": "1", "amount": "60"},
+                {"item_receipt_line_id": str(receipt_line_ids[0]), "item_id": str(ITEM_A), "qty": "2", "weight": "1", "amount": "20"},
+                {"item_receipt_line_id": str(receipt_line_ids[1]), "item_id": str(ITEM_B), "qty": "6", "weight": "1", "amount": "60"},
             ],
             "lines": [{"description": "Freight", "amount": "8"}],
         },
