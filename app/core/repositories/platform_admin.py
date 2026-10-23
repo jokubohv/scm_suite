@@ -39,6 +39,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import platform as p
 from app.core.security.tenant_context import SYSTEM_TENANT_ID
+from app.core.tenant_provisioning import provision_tenant_defaults
 
 # --------------------------------------------------------------------------- constants ----------
 TENANT_STATUSES: tuple[str, ...] = ("ACTIVE", "SUSPENDED", "OFFBOARDING")
@@ -619,6 +620,9 @@ class PlatformAdminRepository:
         }
         try:
             await self.session.execute(p.tenant.insert().values(**values))
+            # FS-00 tenant provisioning: clone sequences/settings/flags + the default enabled
+            # INVENTORY_COUNT approval definition (idempotent; same transaction as the tenant row).
+            await provision_tenant_defaults(self.session, tenant_id)
         except Exception as exc:  # pragma: no cover - unique race maps to the same conflict
             if "uq_tenant_code" in str(exc):
                 raise TenantConflictError("tenant code already exists", details={"code": code}) from exc
