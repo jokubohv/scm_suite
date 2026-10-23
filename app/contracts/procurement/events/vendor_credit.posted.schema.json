@@ -1,0 +1,94 @@
+{
+  "$id": "https://contracts.inventory-platform.local/procurement.p2p/vendor_credit.posted/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "procurement.p2p@1.0.0 vendor_credit.posted payload (final outbox envelope; data fields implemented).",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "causation_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "applied_amount": {},
+        "posted_transaction_id": {},
+        "tenant_id": {},
+        "total": {},
+        "vendor_credit_id": {}
+      },
+      "required": [
+        "vendor_credit_id",
+        "total",
+        "applied_amount",
+        "posted_transaction_id"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "event_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "vendor_credit.posted",
+  "type": "object",
+  "x-contract": "procurement.p2p",
+  "x-event-type": "vendor_credit.posted",
+  "x-event-version": "1.0.0",
+  "x-feature-set": "FS-08",
+  "x-payload-key-fields": [
+    "tenant_id",
+    "vendor_credit_id",
+    "total",
+    "applied_amount",
+    "posted_transaction_id"
+  ]
+}
