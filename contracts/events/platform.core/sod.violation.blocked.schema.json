@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/sod.violation.blocked/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 sod.violation.blocked payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,48 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "actor_app_user_id": {
+          "title": "Actor App User Id",
+          "type": "string"
+        },
+        "context": {
+          "additionalProperties": true,
+          "title": "Context",
+          "type": "object"
+        },
+        "decision": {
+          "title": "Decision",
+          "type": "string"
+        },
+        "pair": {
+          "additionalProperties": true,
+          "title": "Pair",
+          "type": "object"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "rule": {
+          "title": "Rule",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "actor_app_user_id",
+        "context",
+        "pair",
+        "rule",
+        "resource_id",
+        "decision"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -87,6 +128,5 @@
     "rule",
     "resource_id",
     "decision"
-  ],
-  "x-todo": true
+  ]
 }

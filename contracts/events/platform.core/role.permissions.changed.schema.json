@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/role.permissions.changed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 role.permissions.changed payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,41 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "actor_app_user_id": {
+          "title": "Actor App User Id",
+          "type": "string"
+        },
+        "added_scope_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Added Scope Ids",
+          "type": "array"
+        },
+        "removed_scope_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Removed Scope Ids",
+          "type": "array"
+        },
+        "role_id": {
+          "title": "Role Id",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "role_id",
+        "added_scope_ids",
+        "removed_scope_ids"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -85,6 +119,5 @@
     "added_scope_ids",
     "removed_scope_ids",
     "actor_app_user_id"
-  ],
-  "x-todo": true
+  ]
 }

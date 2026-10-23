@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 membership.activated payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "app_user_id": {
+      "title": "App User Id",
+      "type": "string"
+    },
+    "identity_id": {
+      "title": "Identity Id",
+      "type": "string"
+    },
+    "joined_at": {
+      "format": "date-time",
+      "title": "Joined At",
+      "type": "string"
+    },
+    "role_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Role Ids",
+      "type": "array"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "app_user_id",
+    "identity_id",
+    "joined_at",
+    "role_ids"
+  ],
+  "title": "MembershipActivatedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "membership.activated"
+}

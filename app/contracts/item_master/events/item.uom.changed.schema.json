@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "item.master@1.0.0 item.uom.changed payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "conversion_version": {
+      "title": "Conversion Version",
+      "type": "string"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Roles",
+      "type": "array"
+    },
+    "stock_uom_id": {
+      "title": "Stock Uom Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "roles",
+    "conversion_version"
+  ],
+  "title": "ItemUomChangedEvent",
+  "type": "object",
+  "x-contract": "item.master",
+  "x-event-family": true,
+  "x-event-type": "item.uom.changed"
+}

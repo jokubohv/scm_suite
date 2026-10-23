@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/item.master/item.matrix.changed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "item.master@1.0.0 item.matrix.changed payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,26 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "changed": {
+          "title": "Changed",
+          "type": "string"
+        },
+        "children_count": {
+          "title": "Children Count",
+          "type": "integer"
+        },
+        "parent_item_id": {
+          "title": "Parent Item Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent_item_id",
+        "changed",
+        "children_count"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -83,6 +102,5 @@
     "parent_item_id",
     "changed",
     "children_count"
-  ],
-  "x-todo": true
+  ]
 }

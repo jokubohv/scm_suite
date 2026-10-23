@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "order.demand@0.1.0 order.demand.changed payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "changed_count": {
+      "title": "Changed Count",
+      "type": "integer"
+    },
+    "fixture_version": {
+      "title": "Fixture Version",
+      "type": "string"
+    },
+    "item_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Item Ids",
+      "type": "array"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fixture_version",
+    "item_ids",
+    "changed_count",
+    "occurred_at"
+  ],
+  "title": "OrderDemandChangedEvent",
+  "type": "object",
+  "x-contract": "order.demand",
+  "x-event-family": true,
+  "x-event-type": "order.demand.changed"
+}

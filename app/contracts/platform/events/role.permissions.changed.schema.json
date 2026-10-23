@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 role.permissions.changed payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "actor_app_user_id": {
+      "title": "Actor App User Id",
+      "type": "string"
+    },
+    "added_scope_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Added Scope Ids",
+      "type": "array"
+    },
+    "removed_scope_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Removed Scope Ids",
+      "type": "array"
+    },
+    "role_id": {
+      "title": "Role Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "role_id",
+    "added_scope_ids",
+    "removed_scope_ids"
+  ],
+  "title": "RolePermissionsChangedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "role.permissions.changed"
+}

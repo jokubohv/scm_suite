@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/sso.connection.tested/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 sso.connection.tested payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,37 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "connection_id": {
+          "title": "Connection Id",
+          "type": "string"
+        },
+        "last_tested_at": {
+          "format": "date-time",
+          "title": "Last Tested At",
+          "type": "string"
+        },
+        "result": {
+          "title": "Result",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "connection_id",
+        "result",
+        "status",
+        "last_tested_at"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -85,6 +115,5 @@
     "result",
     "status",
     "last_tested_at"
-  ],
-  "x-todo": true
+  ]
 }

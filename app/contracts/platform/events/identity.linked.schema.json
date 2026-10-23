@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 identity.linked payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "action": {
+      "title": "Action",
+      "type": "string"
+    },
+    "app_user_id": {
+      "title": "App User Id",
+      "type": "string"
+    },
+    "connection_id": {
+      "title": "Connection Id",
+      "type": "string"
+    },
+    "identity_id": {
+      "title": "Identity Id",
+      "type": "string"
+    },
+    "sessions_revoked": {
+      "title": "Sessions Revoked",
+      "type": "boolean"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "app_user_id",
+    "identity_id",
+    "connection_id",
+    "action",
+    "sessions_revoked"
+  ],
+  "title": "IdentityLinkedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "identity.linked"
+}

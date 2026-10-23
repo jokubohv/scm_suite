@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 auth.tenant_switched payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "app_user_id": {
+      "title": "App User Id",
+      "type": "string"
+    },
+    "from_tenant_id": {
+      "title": "From Tenant Id",
+      "type": "string"
+    },
+    "identity_id": {
+      "title": "Identity Id",
+      "type": "string"
+    },
+    "to_tenant_id": {
+      "title": "To Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "identity_id",
+    "from_tenant_id",
+    "to_tenant_id",
+    "app_user_id"
+  ],
+  "title": "AuthTenantSwitchedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "auth.tenant_switched"
+}

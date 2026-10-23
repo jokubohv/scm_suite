@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 user.session.revoked payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "app_user_id": {
+      "title": "App User Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "replay_detected": {
+      "title": "Replay Detected",
+      "type": "boolean"
+    },
+    "session_id": {
+      "title": "Session Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "app_user_id",
+    "session_id",
+    "reason",
+    "replay_detected"
+  ],
+  "title": "UserSessionRevokedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "user.session.revoked"
+}

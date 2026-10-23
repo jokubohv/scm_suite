@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/item.master/item.barcode.added/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "item.master@1.0.0 item.barcode.added payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,31 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "barcode": {
+          "title": "Barcode",
+          "type": "string"
+        },
+        "barcode_type": {
+          "title": "Barcode Type",
+          "type": "string"
+        },
+        "is_primary": {
+          "title": "Is Primary",
+          "type": "boolean"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "barcode",
+        "barcode_type",
+        "is_primary"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +108,5 @@
     "barcode",
     "barcode_type",
     "is_primary"
-  ],
-  "x-todo": true
+  ]
 }

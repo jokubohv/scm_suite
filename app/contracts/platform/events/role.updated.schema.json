@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 role.updated payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "changed_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Changed Fields",
+      "type": "array"
+    },
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "inactive": {
+      "title": "Inactive",
+      "type": "boolean"
+    },
+    "role_id": {
+      "title": "Role Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "role_id",
+    "code",
+    "changed_fields"
+  ],
+  "title": "RoleUpdatedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "role.updated"
+}

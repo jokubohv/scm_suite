@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 membership.roles.changed payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "actor_app_user_id": {
+      "title": "Actor App User Id",
+      "type": "string"
+    },
+    "added_role_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Added Role Ids",
+      "type": "array"
+    },
+    "app_user_id": {
+      "title": "App User Id",
+      "type": "string"
+    },
+    "effective_from": {
+      "format": "date-time",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "removed_role_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Removed Role Ids",
+      "type": "array"
+    },
+    "role_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Role Ids",
+      "type": "array"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "app_user_id",
+    "role_ids",
+    "added_role_ids",
+    "removed_role_ids",
+    "effective_from"
+  ],
+  "title": "MembershipRolesChangedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "membership.roles.changed"
+}

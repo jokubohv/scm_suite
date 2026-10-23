@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "item.master@1.0.0 item.planning_values.updated payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "applied_by": {
+      "title": "Applied By",
+      "type": "string"
+    },
+    "effective_at": {
+      "format": "date-time",
+      "title": "Effective At",
+      "type": "string"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "lead_time_days": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Lead Time Days"
+    },
+    "location_id": {
+      "title": "Location Id",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "preferred_stock_level": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Preferred Stock Level"
+    },
+    "reorder_point": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Reorder Point"
+    },
+    "safety_stock": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Safety Stock"
+    },
+    "seasonal_demand": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "title": "Seasonal Demand"
+    },
+    "source": {
+      "title": "Source",
+      "type": "string"
+    },
+    "values": {
+      "additionalProperties": true,
+      "title": "Values",
+      "type": "object"
+    }
+  },
+  "required": [
+    "item_id",
+    "location_id",
+    "values",
+    "source",
+    "policy_version",
+    "effective_at"
+  ],
+  "title": "ItemPlanningValuesUpdatedEvent",
+  "type": "object",
+  "x-contract": "item.master",
+  "x-event-family": true,
+  "x-event-type": "item.planning_values.updated"
+}

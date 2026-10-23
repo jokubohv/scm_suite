@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 sod.violation.blocked payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "actor_app_user_id": {
+      "title": "Actor App User Id",
+      "type": "string"
+    },
+    "context": {
+      "additionalProperties": true,
+      "title": "Context",
+      "type": "object"
+    },
+    "decision": {
+      "title": "Decision",
+      "type": "string"
+    },
+    "pair": {
+      "additionalProperties": true,
+      "title": "Pair",
+      "type": "object"
+    },
+    "resource_id": {
+      "title": "Resource Id",
+      "type": "string"
+    },
+    "rule": {
+      "title": "Rule",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "actor_app_user_id",
+    "context",
+    "pair",
+    "rule",
+    "resource_id",
+    "decision"
+  ],
+  "title": "SodViolationBlockedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "sod.violation.blocked"
+}

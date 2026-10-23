@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 user.invited payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "intended_role_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Intended Role Ids",
+      "type": "array"
+    },
+    "invitation_id": {
+      "title": "Invitation Id",
+      "type": "string"
+    },
+    "invited_by_app_user_id": {
+      "title": "Invited By App User Id",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "invitation_id",
+    "intended_role_ids",
+    "expires_at"
+  ],
+  "title": "UserInvitedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "user.invited"
+}

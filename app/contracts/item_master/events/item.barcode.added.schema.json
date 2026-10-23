@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "item.master@1.0.0 item.barcode.added payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "barcode": {
+      "title": "Barcode",
+      "type": "string"
+    },
+    "barcode_type": {
+      "title": "Barcode Type",
+      "type": "string"
+    },
+    "is_primary": {
+      "title": "Is Primary",
+      "type": "boolean"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "barcode",
+    "barcode_type",
+    "is_primary"
+  ],
+  "title": "ItemBarcodeAddedEvent",
+  "type": "object",
+  "x-contract": "item.master",
+  "x-event-family": true,
+  "x-event-type": "item.barcode.added"
+}

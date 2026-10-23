@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/document.reversed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 document.reversed payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,29 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "document_id": {
+          "title": "Document Id",
+          "type": "string"
+        },
+        "document_type": {
+          "title": "Document Type",
+          "type": "string"
+        },
+        "reversal_document_id": {
+          "title": "Reversal Document Id",
+          "type": "string"
+        },
+        "reversal_reason": {
+          "title": "Reversal Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_type",
+        "document_id"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +106,5 @@
     "document_id",
     "reversal_document_id",
     "reversal_reason"
-  ],
-  "x-todo": true
+  ]
 }

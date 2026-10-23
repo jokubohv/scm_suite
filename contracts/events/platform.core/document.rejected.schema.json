@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/document.rejected/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 document.rejected payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,31 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "approval_request_id": {
+          "title": "Approval Request Id",
+          "type": "string"
+        },
+        "document_id": {
+          "title": "Document Id",
+          "type": "string"
+        },
+        "document_type": {
+          "title": "Document Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_type",
+        "document_id",
+        "approval_request_id",
+        "actor_id"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +108,5 @@
     "document_id",
     "approval_request_id",
     "actor_id"
-  ],
-  "x-todo": true
+  ]
 }

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "item.master@1.0.0 item.updated payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "changed_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Changed Fields",
+      "type": "array"
+    },
+    "is_active": {
+      "title": "Is Active",
+      "type": "boolean"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "item_id",
+    "changed_fields",
+    "version",
+    "is_active"
+  ],
+  "title": "ItemUpdatedEvent",
+  "type": "object",
+  "x-contract": "item.master",
+  "x-event-family": true,
+  "x-event-type": "item.updated"
+}

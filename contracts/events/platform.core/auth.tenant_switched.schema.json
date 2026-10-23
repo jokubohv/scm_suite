@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/auth.tenant_switched/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 auth.tenant_switched payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,31 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "app_user_id": {
+          "title": "App User Id",
+          "type": "string"
+        },
+        "from_tenant_id": {
+          "title": "From Tenant Id",
+          "type": "string"
+        },
+        "identity_id": {
+          "title": "Identity Id",
+          "type": "string"
+        },
+        "to_tenant_id": {
+          "title": "To Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "identity_id",
+        "from_tenant_id",
+        "to_tenant_id",
+        "app_user_id"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +108,5 @@
     "from_tenant_id",
     "to_tenant_id",
     "app_user_id"
-  ],
-  "x-todo": true
+  ]
 }

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 platform.audit.recorded payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "action": {
+      "title": "Action",
+      "type": "string"
+    },
+    "actor_type": {
+      "title": "Actor Type",
+      "type": "string"
+    },
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "resource_id": {
+      "title": "Resource Id",
+      "type": "string"
+    },
+    "resource_type": {
+      "title": "Resource Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "actor_type",
+    "action",
+    "resource_type",
+    "resource_id",
+    "occurred_at"
+  ],
+  "title": "PlatformAuditRecordedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "platform.audit.recorded"
+}

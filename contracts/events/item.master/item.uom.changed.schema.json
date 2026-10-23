@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/item.master/item.uom.changed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "item.master@1.0.0 item.uom.changed payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,33 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "conversion_version": {
+          "title": "Conversion Version",
+          "type": "string"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "array"
+        },
+        "stock_uom_id": {
+          "title": "Stock Uom Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "roles",
+        "conversion_version"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +110,5 @@
     "stock_uom_id",
     "roles",
     "conversion_version"
-  ],
-  "x-todo": true
+  ]
 }

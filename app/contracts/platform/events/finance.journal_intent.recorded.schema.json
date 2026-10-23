@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.finance@1.0.0 finance.journal_intent.recorded payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "currency_code": {
+      "title": "Currency Code",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "intent_line_count": {
+      "title": "Intent Line Count",
+      "type": "integer"
+    },
+    "inventory_transaction_id": {
+      "title": "Inventory Transaction Id",
+      "type": "string"
+    },
+    "period_key": {
+      "title": "Period Key",
+      "type": "string"
+    },
+    "posting_rule_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Posting Rule Ids",
+      "type": "array"
+    },
+    "source_doc_id": {
+      "title": "Source Doc Id",
+      "type": "string"
+    },
+    "source_doc_type": {
+      "title": "Source Doc Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "inventory_transaction_id",
+    "source_doc_type",
+    "source_doc_id",
+    "idempotency_key",
+    "posting_rule_ids",
+    "intent_line_count",
+    "currency_code",
+    "period_key"
+  ],
+  "title": "FinanceJournalIntentRecordedEvent",
+  "type": "object",
+  "x-contract": "platform.finance",
+  "x-event-family": true,
+  "x-event-type": "finance.journal_intent.recorded"
+}

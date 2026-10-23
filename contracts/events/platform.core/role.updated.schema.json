@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/role.updated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 role.updated payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,38 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "changed_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Changed Fields",
+          "type": "array"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "inactive": {
+          "title": "Inactive",
+          "type": "boolean"
+        },
+        "role_id": {
+          "title": "Role Id",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "role_id",
+        "code",
+        "changed_fields"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -85,6 +116,5 @@
     "code",
     "changed_fields",
     "inactive"
-  ],
-  "x-todo": true
+  ]
 }

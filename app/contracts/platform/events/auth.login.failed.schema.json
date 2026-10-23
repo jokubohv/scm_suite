@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 auth.login.failed payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "identity_id": {
+      "title": "Identity Id",
+      "type": "string"
+    },
+    "ip_hash": {
+      "title": "Ip Hash",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "reason_code": {
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "identity_id",
+    "tenant_id",
+    "reason_code",
+    "occurred_at"
+  ],
+  "title": "AuthLoginFailedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "auth.login.failed"
+}

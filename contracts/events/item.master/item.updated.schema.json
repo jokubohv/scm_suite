@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/item.master/item.updated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "item.master@1.0.0 item.updated payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,34 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "changed_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Changed Fields",
+          "type": "array"
+        },
+        "is_active": {
+          "title": "Is Active",
+          "type": "boolean"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "item_id",
+        "changed_fields",
+        "version",
+        "is_active"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +111,5 @@
     "changed_fields",
     "version",
     "is_active"
-  ],
-  "x-todo": true
+  ]
 }

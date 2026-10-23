@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 tenant.provisioned payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "base_currency_code": {
+      "title": "Base Currency Code",
+      "type": "string"
+    },
+    "bootstrap_invitation_id": {
+      "title": "Bootstrap Invitation Id",
+      "type": "string"
+    },
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "flags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Flags",
+      "type": "array"
+    },
+    "roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Roles",
+      "type": "array"
+    },
+    "seeded": {
+      "title": "Seeded",
+      "type": "boolean"
+    },
+    "sequences": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Sequences",
+      "type": "array"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "timezone": {
+      "title": "Timezone",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "code",
+    "base_currency_code",
+    "timezone"
+  ],
+  "title": "TenantProvisionedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "tenant.provisioned"
+}

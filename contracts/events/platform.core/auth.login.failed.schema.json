@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/auth.login.failed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 auth.login.failed payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,36 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "identity_id": {
+          "title": "Identity Id",
+          "type": "string"
+        },
+        "ip_hash": {
+          "title": "Ip Hash",
+          "type": "string"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "reason_code": {
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "identity_id",
+        "tenant_id",
+        "reason_code",
+        "occurred_at"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -85,6 +114,5 @@
     "reason_code",
     "ip_hash",
     "occurred_at"
-  ],
-  "x-todo": true
+  ]
 }

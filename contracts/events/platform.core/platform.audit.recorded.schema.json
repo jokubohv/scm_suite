@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/platform.audit.recorded/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 platform.audit.recorded payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,42 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "actor_type": {
+          "title": "Actor Type",
+          "type": "string"
+        },
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "resource_type": {
+          "title": "Resource Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "actor_type",
+        "action",
+        "resource_type",
+        "resource_id",
+        "occurred_at"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +121,5 @@
     "resource_type",
     "resource_id",
     "occurred_at"
-  ],
-  "x-todo": true
+  ]
 }

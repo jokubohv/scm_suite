@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "item.master@1.0.0 item.inactivated payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "inactivated_at": {
+      "format": "date-time",
+      "title": "Inactivated At",
+      "type": "string"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "inactivated_at"
+  ],
+  "title": "ItemInactivatedEvent",
+  "type": "object",
+  "x-contract": "item.master",
+  "x-event-family": true,
+  "x-event-type": "item.inactivated"
+}

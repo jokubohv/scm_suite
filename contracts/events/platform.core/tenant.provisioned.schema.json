@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/platform.core/tenant.provisioned/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "platform.core@1.0.0 tenant.provisioned payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,60 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "base_currency_code": {
+          "title": "Base Currency Code",
+          "type": "string"
+        },
+        "bootstrap_invitation_id": {
+          "title": "Bootstrap Invitation Id",
+          "type": "string"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "flags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Flags",
+          "type": "array"
+        },
+        "roles": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Roles",
+          "type": "array"
+        },
+        "seeded": {
+          "title": "Seeded",
+          "type": "boolean"
+        },
+        "sequences": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sequences",
+          "type": "array"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "timezone": {
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "code",
+        "base_currency_code",
+        "timezone"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -89,6 +142,5 @@
     "roles",
     "sequences",
     "flags"
-  ],
-  "x-todo": true
+  ]
 }

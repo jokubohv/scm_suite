@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 sso.connection.tested payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "connection_id": {
+      "title": "Connection Id",
+      "type": "string"
+    },
+    "last_tested_at": {
+      "format": "date-time",
+      "title": "Last Tested At",
+      "type": "string"
+    },
+    "result": {
+      "title": "Result",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "connection_id",
+    "result",
+    "status",
+    "last_tested_at"
+  ],
+  "title": "SsoConnectionTestedEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "sso.connection.tested"
+}

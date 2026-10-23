@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/item.master/item.created/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "item.master@1.0.0 item.created payload (implementation-backed; data object folded into the canonical envelope).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,39 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "base_uom_id": {
+          "title": "Base Uom Id",
+          "type": "string"
+        },
+        "is_active": {
+          "title": "Is Active",
+          "type": "boolean"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "item_number": {
+          "title": "Item Number",
+          "type": "string"
+        },
+        "item_type_code": {
+          "title": "Item Type Code",
+          "type": "string"
+        },
+        "units_type_id": {
+          "title": "Units Type Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "item_number",
+        "item_type_code",
+        "is_active"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +118,5 @@
     "base_uom_id",
     "units_type_id",
     "is_active"
-  ],
-  "x-todo": true
+  ]
 }

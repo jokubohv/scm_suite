@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "platform.core@1.0.0 sso.connection.error payload (implementation-backed; data object folded into the canonical envelope).",
+  "properties": {
+    "connection_id": {
+      "title": "Connection Id",
+      "type": "string"
+    },
+    "error_code": {
+      "title": "Error Code",
+      "type": "string"
+    },
+    "last_error_summary": {
+      "title": "Last Error Summary",
+      "type": "string"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "connection_id",
+    "error_code"
+  ],
+  "title": "SsoConnectionErrorEvent",
+  "type": "object",
+  "x-contract": "platform.core",
+  "x-event-family": true,
+  "x-event-type": "sso.connection.error"
+}
