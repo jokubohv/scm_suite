@@ -188,6 +188,16 @@ async def seed_manufacturing_world(session: Any, *, code_prefix: str = "MFG") ->
                 version=1,
             )
         )
+    from app.modules.costing import tables as costing_tables
+
+    cost_category_id = uuid.uuid4()
+    await session.execute(
+        costing_tables.cost_category.insert().values(
+            id=cost_category_id, tenant_id=tenant_id, code=f"{code_prefix}-LABOR", name="Labor",
+            category_type="LABOR", is_rollup_input=False, sort_order=10, is_active=True,
+            created_at=__import__("datetime").datetime.now(__import__("datetime").UTC), version=1,
+        )
+    )
     item_service = ItemMasterService(session, tenant_id)
     assembly_item = await item_service.create_item(
         {
@@ -274,6 +284,7 @@ async def seed_manufacturing_world(session: Any, *, code_prefix: str = "MFG") ->
         "other_assembly_id": _as_uuid(assembly_rows["other"]["id"]),
         "assembly_extension_id": _as_uuid(assembly_rows["assembly"]["id"]),
         "uom_id": uom,
+        "cost_category_id": cost_category_id,
         "service": service,
         "posting": posting,
         "balances": balances,

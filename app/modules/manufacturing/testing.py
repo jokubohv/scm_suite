@@ -53,6 +53,10 @@ class FakePostingPort:
     async def post_assembly_unbuild(self, **kwargs: Any) -> dict[str, Any]:
         return self._record("post_assembly_unbuild", kwargs)
 
+    async def post(self, command: Mapping[str, Any]) -> dict[str, Any]:
+        """Generic `PostingPort.post` used by explicit WIP transaction posting (T-17/T-18/T-19)."""
+        return self._record("post", dict(command))
+
     async def commit(self, payload: Mapping[str, Any], *, idempotency_key: str) -> dict[str, Any]:
         commitment_id = str(uuid.uuid4())
         self.commitments.append({**dict(payload), "commitment_id": commitment_id, "idempotency_key": idempotency_key})

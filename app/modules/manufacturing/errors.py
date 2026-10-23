@@ -5,15 +5,26 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
+from fastapi import HTTPException
 
-class ManufacturingError(Exception):
+
+class ManufacturingError(HTTPException):
+    """Typed manufacturing error that also renders as RFC 9457 problem+json when uncaught.
+
+    Router handlers mostly convert these explicitly; subclassing ``HTTPException`` guarantees the
+    platform error handlers produce the documented problem response for any uncaught service error.
+    """
+
     code: str = "MANUFACTURING_ERROR"
     http_status: int = 400
 
     def __init__(self, message: str = "", *, details: Mapping[str, Any] | None = None) -> None:
-        super().__init__(message or self.code)
         self.message = message or self.code
         self.details: dict[str, Any] = dict(details or {})
+        super().__init__(
+            status_code=self.http_status,
+            detail={"code": self.code, "message": self.message, "details": self.details or []},
+        )
 
     def to_problem(self) -> dict[str, Any]:
         return {

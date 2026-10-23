@@ -1404,4 +1404,874 @@ async def compat_report(svc: ServiceDep, assembly_item_id: str | None = None) ->
     return await svc.compat_report(assembly_item_id=assembly_item_id)
 
 
+# =================================================================== canonical surface gaps ====
+# Genuine FS-09 declared operations without a legacy spelling (implemented on the existing service;
+# no schema changes). Scopes/status codes mirror the declared aggregate contract.
+@router.get(
+    "/manufacturing/compat/attributes/{id}",
+    dependencies=[_scoped("GET", "/api/v1/manufacturing/compat/attributes/{id}", COMPAT_MANAGE)],
+)
+async def get_compat_attribute(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"attribute": await svc.get_attribute_def(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/manufacturing/compat/rule-sets/{id}/rules",
+    dependencies=[_scoped("GET", "/api/v1/manufacturing/compat/rule-sets/{id}/rules", COMPAT_MANAGE)],
+)
+async def get_compat_rule_set_rules(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"items": await svc.list_rule_set_rules(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.delete(
+    "/manufacturing/compat/rule-sets/{id}",
+    status_code=204,
+    dependencies=[_scoped("DELETE", "/api/v1/manufacturing/compat/rule-sets/{id}", COMPAT_MANAGE)],
+)
+async def delete_compat_rule_set(id: str, svc: ServiceDep) -> None:
+    try:
+        await svc.delete_rule_set(id)
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.delete(
+    "/manufacturing/compat/rules/{id}",
+    status_code=204,
+    dependencies=[_scoped("DELETE", "/api/v1/manufacturing/compat/rules/{id}", COMPAT_MANAGE)],
+)
+async def delete_compat_rule(id: str, svc: ServiceDep) -> None:
+    try:
+        await svc.delete_rule(id)
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get("/ecos/{id}/lines", dependencies=[_scoped("GET", "/api/v1/ecos/{id}/lines", MFG_READ)])
+async def get_eco_lines(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"items": await svc.list_eco_lines(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/work-order-operations/{id}/completions",
+    dependencies=[_scoped("GET", "/api/v1/work-order-operations/{id}/completions", MFG_READ)],
+)
+async def get_operation_completions(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"items": await svc.list_operation_completions(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch("/boms/{id}", dependencies=[_scoped("PATCH", "/api/v1/boms/{id}", MFG_WRITE)])
+async def patch_bom(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"bom": await svc.update_bom(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/routing-step-charges/{id}", dependencies=[_scoped("PATCH", "/api/v1/routing-step-charges/{id}", MFG_WRITE)]
+)
+async def patch_routing_step_charge(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"charge": await svc.update_routing_step_charge(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/work-order-components/{id}", dependencies=[_scoped("PATCH", "/api/v1/work-order-components/{id}", MFG_WRITE)]
+)
+async def patch_work_order_component(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"component": await svc.update_work_order_component(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/work-order-operations/{id}", dependencies=[_scoped("PATCH", "/api/v1/work-order-operations/{id}", MFG_WRITE)]
+)
+async def patch_work_order_operation(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"operation": await svc.update_work_order_operation(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/assembly-builds/{id}/unbuild",
+    status_code=201,
+    dependencies=[_scoped("POST", "/api/v1/assembly-builds/{id}/unbuild", MFG_WRITE)],
+)
+async def post_assembly_build_unbuild(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return {"unbuild": await svc.create_unbuild_from_build(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/wip-transactions", status_code=201, dependencies=[_scoped("POST", "/api/v1/wip-transactions", MFG_WRITE)]
+)
+async def create_wip_transaction(payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"wip_transaction": await svc.create_wip_transaction(payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/wip-transactions/{id}/post", dependencies=[_scoped("POST", "/api/v1/wip-transactions/{id}/post", MFG_POST)]
+)
+async def post_wip_transaction(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return {"wip_transaction": await svc.post_wip_transaction(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/mass-create",
+    status_code=201,
+    dependencies=[_scoped("POST", "/api/v1/work-orders/mass-create", MFG_WRITE)],
+)
+async def mass_create_work_orders(payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return await svc.mass_create_work_orders(payload.model_dump())
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+# =================================================================== canonical {id} aliases ==
+# Behaviour-preserving canonical `{id}` spellings of the resource-specific routes above (FS-09
+# declared surface); both spellings stay mounted for contract-first/legacy consumers.
+@router.delete(
+    "/bom-components/{id}",
+    dependencies=[_scoped("DELETE", "/api/v1/bom-components/{id}", "manufacturing.write")],
+    status_code=204,
+)
+async def delete_bom_components_id_alias(id: str, svc: ServiceDep) -> None:
+    try:
+        await svc.delete_bom_component(id)
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/assemblies/{id}",
+    dependencies=[_scoped("GET", "/api/v1/assemblies/{id}", "manufacturing.read")],
+)
+async def get_assemblies_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"assembly": await svc.get_assembly_item(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/assemblies/{id}/bom-inquiry",
+    dependencies=[_scoped("GET", "/api/v1/assemblies/{id}/bom-inquiry", "manufacturing.read")],
+)
+async def get_assemblies_id_bom_inquiry_alias(
+    id: str, svc: ServiceDep, qty: str = "1", as_of: date | None = None
+) -> dict[str, Any]:
+    try:
+        return await svc.bom_inquiry(id, qty=qty, as_of=as_of)
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/assemblies/{id}/costed-bom-inquiry",
+    dependencies=[_scoped("GET", "/api/v1/assemblies/{id}/costed-bom-inquiry", "manufacturing.cost.view")],
+)
+async def get_assemblies_id_costed_bom_inquiry_alias(
+    id: str, svc: ServiceDep, qty: str = "1", as_of: date | None = None
+) -> dict[str, Any]:
+    try:
+        return await svc.costed_bom_inquiry(id, qty=qty, as_of=as_of)
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/assembly-unbuilds/{id}",
+    dependencies=[_scoped("GET", "/api/v1/assembly-unbuilds/{id}", "manufacturing.read")],
+)
+async def get_assembly_unbuilds_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"unbuild": await svc.get_unbuild(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/bom-components/{id}/control",
+    dependencies=[_scoped("GET", "/api/v1/bom-components/{id}/control", "manufacturing.read")],
+)
+async def get_bom_components_id_control_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return {"items": await svc.list_component_controls(id)}
+
+
+@router.get(
+    "/bom-revisions/{id}",
+    dependencies=[_scoped("GET", "/api/v1/bom-revisions/{id}", "manufacturing.read")],
+)
+async def get_bom_revisions_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"revision": await svc.get_bom_revision(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/bom-revisions/{id}/components",
+    dependencies=[_scoped("GET", "/api/v1/bom-revisions/{id}/components", "manufacturing.read")],
+)
+async def get_bom_revisions_id_components_alias(id: str, svc: ServiceDep, as_of: date | None = None) -> dict[str, Any]:
+    return {"items": await svc.list_bom_components(id, as_of=as_of)}
+
+
+@router.get(
+    "/boms/{id}",
+    dependencies=[_scoped("GET", "/api/v1/boms/{id}", "manufacturing.read")],
+)
+async def get_boms_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"bom": await svc.get_bom(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/boms/{id}/revisions",
+    dependencies=[_scoped("GET", "/api/v1/boms/{id}/revisions", "manufacturing.read")],
+)
+async def get_boms_id_revisions_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return {"items": await svc.list_bom_revisions(id)}
+
+
+@router.get(
+    "/manufacturing/compat/rule-sets/{id}",
+    dependencies=[_scoped("GET", "/api/v1/manufacturing/compat/rule-sets/{id}", "manufacturing.compat.manage")],
+)
+async def get_manufacturing_compat_rule_sets_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return {"rule_set": await svc.get_rule_set(id)}
+
+
+@router.get(
+    "/manufacturing/configurations/{id}",
+    dependencies=[_scoped("GET", "/api/v1/manufacturing/configurations/{id}", "manufacturing.compat.validate")],
+)
+async def get_manufacturing_configurations_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return {"configuration": await svc.get_compat_configuration(id)}
+
+
+@router.get(
+    "/routings/{id}",
+    dependencies=[_scoped("GET", "/api/v1/routings/{id}", "manufacturing.read")],
+)
+async def get_routings_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"routing": await svc.get_routing(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/scheduling-runs/{id}",
+    dependencies=[_scoped("GET", "/api/v1/scheduling-runs/{id}", "manufacturing.read")],
+)
+async def get_scheduling_runs_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"scheduling_run": await svc.get_scheduling_run(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/scheduling-runs/{id}/scheduled-operations",
+    dependencies=[_scoped("GET", "/api/v1/scheduling-runs/{id}/scheduled-operations", "manufacturing.read")],
+)
+async def get_scheduling_runs_id_scheduled_operations_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return {"items": await svc.list_scheduled_operations(id)}
+
+
+@router.get(
+    "/wip-transactions/{id}",
+    dependencies=[_scoped("GET", "/api/v1/wip-transactions/{id}", "manufacturing.read")],
+)
+async def get_wip_transactions_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"wip_transaction": await svc.get_wip_transaction(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/work-orders/{id}",
+    dependencies=[_scoped("GET", "/api/v1/work-orders/{id}", "manufacturing.read")],
+)
+async def get_work_orders_id_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"work_order": await svc.get_work_order(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/work-orders/{id}/components",
+    dependencies=[_scoped("GET", "/api/v1/work-orders/{id}/components", "manufacturing.read")],
+)
+async def get_work_orders_id_components_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        work_order = await svc.get_work_order(id)
+    except ManufacturingError as exc:
+        _raise(exc)
+    return {"items": work_order["components"]}
+
+
+@router.get(
+    "/work-orders/{id}/components/pick-requirements",
+    dependencies=[_scoped("GET", "/api/v1/work-orders/{id}/components/pick-requirements", "manufacturing.read")],
+)
+async def get_work_orders_id_components_pick_requirements_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return await svc.pick_requirements(id)
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.get(
+    "/work-orders/{id}/operations",
+    dependencies=[_scoped("GET", "/api/v1/work-orders/{id}/operations", "manufacturing.read")],
+)
+async def get_work_orders_id_operations_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        work_order = await svc.get_work_order(id)
+    except ManufacturingError as exc:
+        _raise(exc)
+    return {"items": work_order["operations"]}
+
+
+@router.get(
+    "/work-orders/{id}/wip-balance",
+    dependencies=[_scoped("GET", "/api/v1/work-orders/{id}/wip-balance", "manufacturing.read")],
+)
+async def get_work_orders_id_wip_balance_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return await svc.get_wip_balance(id)
+
+
+@router.patch(
+    "/assemblies/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/assemblies/{id}", "manufacturing.write")],
+)
+async def patch_assemblies_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"assembly": await svc.update_assembly_item(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/bom-components/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/bom-components/{id}", "manufacturing.write")],
+)
+async def patch_bom_components_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"component": await svc.update_bom_component(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/bom-revisions/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/bom-revisions/{id}", "manufacturing.write")],
+)
+async def patch_bom_revisions_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"revision": await svc.update_bom_revision(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/manufacturing/compat/attributes/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/manufacturing/compat/attributes/{id}", "manufacturing.compat.manage")],
+)
+async def patch_manufacturing_compat_attributes_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    return {"attribute": await svc.update_attribute_def(id, payload.model_dump(exclude_unset=True))}
+
+
+@router.patch(
+    "/manufacturing/compat/rule-sets/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/manufacturing/compat/rule-sets/{id}", "manufacturing.compat.manage")],
+)
+async def patch_manufacturing_compat_rule_sets_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    return {"rule_set": await svc.update_rule_set(id, payload.model_dump(exclude_unset=True))}
+
+
+@router.patch(
+    "/manufacturing/compat/rules/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/manufacturing/compat/rules/{id}", "manufacturing.compat.manage")],
+)
+async def patch_manufacturing_compat_rules_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    return {"rule": await svc.update_rule(id, payload.model_dump(exclude_unset=True))}
+
+
+@router.patch(
+    "/manufacturing/compat/slots/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/manufacturing/compat/slots/{id}", "manufacturing.compat.manage")],
+)
+async def patch_manufacturing_compat_slots_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    return {"slot": await svc.update_slot(id, payload.model_dump(exclude_unset=True))}
+
+
+@router.patch(
+    "/manufacturing/condition-codes/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/manufacturing/condition-codes/{id}", "manufacturing.unbuild.dispose")],
+)
+async def patch_manufacturing_condition_codes_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    return {"condition": await svc.update_condition_code(id, payload.model_dump(exclude_unset=True))}
+
+
+@router.patch(
+    "/routing-steps/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/routing-steps/{id}", "manufacturing.write")],
+)
+async def patch_routing_steps_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"step": await svc.update_routing_step(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/routings/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/routings/{id}", "manufacturing.write")],
+)
+async def patch_routings_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"routing": await svc.update_routing(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/work-centers/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/work-centers/{id}", "manufacturing.write")],
+)
+async def patch_work_centers_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"work_center": await svc.update_work_center(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.patch(
+    "/work-orders/{id}",
+    dependencies=[_scoped("PATCH", "/api/v1/work-orders/{id}", "manufacturing.write")],
+)
+async def patch_work_orders_id_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"work_order": await svc.update_work_order(id, payload.model_dump(exclude_unset=True))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/assemblies/{id}/explode",
+    dependencies=[_scoped("POST", "/api/v1/assemblies/{id}/explode", "manufacturing.read")],
+)
+async def post_assemblies_id_explode_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        lines = await svc.resolve_bom(
+            id, qty_ordered=payload.model_dump().get("qty") or 1, as_of=payload.model_dump().get("as_of")
+        )
+        return {"lines": lines, "count": len(lines)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/assembly-builds/{id}/post",
+    dependencies=[_scoped("POST", "/api/v1/assembly-builds/{id}/post", "manufacturing.post")],
+)
+async def post_assembly_builds_id_post_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return {"build": await svc.post_build(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/assembly-builds/{id}/reverse",
+    dependencies=[_scoped("POST", "/api/v1/assembly-builds/{id}/reverse", "manufacturing.post")],
+)
+async def post_assembly_builds_id_reverse_alias(
+    id: str, svc: ServiceDep, payload: Body | None = None
+) -> dict[str, Any]:
+    try:
+        return {"build": await svc.reverse_build(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/assembly-unbuilds/{id}/post",
+    dependencies=[_scoped("POST", "/api/v1/assembly-unbuilds/{id}/post", "manufacturing.post")],
+)
+async def post_assembly_unbuilds_id_post_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return {"unbuild": await svc.post_unbuild(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/assembly-unbuilds/{id}/reverse",
+    dependencies=[_scoped("POST", "/api/v1/assembly-unbuilds/{id}/reverse", "manufacturing.unbuild.dispose")],
+)
+async def post_assembly_unbuilds_id_reverse_alias(
+    id: str, svc: ServiceDep, payload: Body | None = None
+) -> dict[str, Any]:
+    try:
+        return {"unbuild": await svc.reverse_unbuild(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/bom-revisions/{id}/activate",
+    dependencies=[_scoped("POST", "/api/v1/bom-revisions/{id}/activate", "manufacturing.write")],
+)
+async def post_bom_revisions_id_activate_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"revision": await svc.activate_bom_revision(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/bom-revisions/{id}/components",
+    dependencies=[_scoped("POST", "/api/v1/bom-revisions/{id}/components", "manufacturing.write")],
+    status_code=201,
+)
+async def post_bom_revisions_id_components_alias(id: str, payload: ComponentCreate, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"component": await svc.add_bom_component(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/boms/{id}/revisions",
+    dependencies=[_scoped("POST", "/api/v1/boms/{id}/revisions", "manufacturing.write")],
+    status_code=201,
+)
+async def post_boms_id_revisions_alias(id: str, payload: RevisionCreate, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"revision": await svc.create_bom_revision(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/ecos/{id}/approve",
+    dependencies=[_scoped("POST", "/api/v1/ecos/{id}/approve", "manufacturing.approve")],
+)
+async def post_ecos_id_approve_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"eco": await svc.approve_eco(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/ecos/{id}/implement",
+    dependencies=[_scoped("POST", "/api/v1/ecos/{id}/implement", "manufacturing.approve")],
+)
+async def post_ecos_id_implement_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"eco": await svc.implement_eco(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/ecos/{id}/submit",
+    dependencies=[_scoped("POST", "/api/v1/ecos/{id}/submit", "manufacturing.write")],
+)
+async def post_ecos_id_submit_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"eco": await svc.submit_eco(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/manufacturing-cost-templates/{id}/lines",
+    dependencies=[_scoped("POST", "/api/v1/manufacturing-cost-templates/{id}/lines", "manufacturing.write")],
+    status_code=201,
+)
+async def post_manufacturing_cost_templates_id_lines_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"line": await svc.add_cost_template_line(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/manufacturing/compat/rule-sets/{id}/activate",
+    dependencies=[
+        _scoped("POST", "/api/v1/manufacturing/compat/rule-sets/{id}/activate", "manufacturing.compat.manage")
+    ],
+)
+async def post_manufacturing_compat_rule_sets_id_activate_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return {"rule_set": await svc.activate_rule_set(id)}
+
+
+@router.post(
+    "/manufacturing/compat/rule-sets/{id}/retire",
+    dependencies=[_scoped("POST", "/api/v1/manufacturing/compat/rule-sets/{id}/retire", "manufacturing.compat.manage")],
+)
+async def post_manufacturing_compat_rule_sets_id_retire_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    return {"rule_set": await svc.retire_rule_set(id)}
+
+
+@router.post(
+    "/manufacturing/compat/rule-sets/{id}/rules",
+    dependencies=[_scoped("POST", "/api/v1/manufacturing/compat/rule-sets/{id}/rules", "manufacturing.compat.manage")],
+    status_code=201,
+)
+async def post_manufacturing_compat_rule_sets_id_rules_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    return {"rule": await svc.add_rule(id, payload.model_dump())}
+
+
+@router.post(
+    "/outsourced-operations/{id}/close",
+    dependencies=[_scoped("POST", "/api/v1/outsourced-operations/{id}/close", "manufacturing.write")],
+)
+async def post_outsourced_operations_id_close_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"operation": await svc.close_outsourced_operation(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/outsourced-operations/{id}/create-po",
+    dependencies=[_scoped("POST", "/api/v1/outsourced-operations/{id}/create-po", "manufacturing.write")],
+)
+async def post_outsourced_operations_id_create_po_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return await svc.create_outsourced_po(id, payload.model_dump())
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/outsourced-operations/{id}/receive",
+    dependencies=[_scoped("POST", "/api/v1/outsourced-operations/{id}/receive", "manufacturing.post")],
+)
+async def post_outsourced_operations_id_receive_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return await svc.receive_outsourced_operation(id, payload.model_dump())
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/routing-steps/{id}/charges",
+    dependencies=[_scoped("POST", "/api/v1/routing-steps/{id}/charges", "manufacturing.write")],
+    status_code=201,
+)
+async def post_routing_steps_id_charges_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"charge": await svc.add_routing_step_charge(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/routings/{id}/activate",
+    dependencies=[_scoped("POST", "/api/v1/routings/{id}/activate", "manufacturing.write")],
+)
+async def post_routings_id_activate_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"routing": await svc.activate_routing(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/routings/{id}/steps",
+    dependencies=[_scoped("POST", "/api/v1/routings/{id}/steps", "manufacturing.write")],
+    status_code=201,
+)
+async def post_routings_id_steps_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"step": await svc.add_routing_step(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/scheduling-runs/{id}/apply",
+    dependencies=[_scoped("POST", "/api/v1/scheduling-runs/{id}/apply", "manufacturing.write")],
+)
+async def post_scheduling_runs_id_apply_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return await svc.apply_scheduling_run(id, payload.model_dump() if payload else {})
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/wip-transactions/{id}/reverse",
+    dependencies=[_scoped("POST", "/api/v1/wip-transactions/{id}/reverse", "manufacturing.post")],
+)
+async def post_wip_transactions_id_reverse_alias(
+    id: str, svc: ServiceDep, payload: Body | None = None
+) -> dict[str, Any]:
+    try:
+        return {"wip_transaction": await svc.reverse_wip_transaction(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-order-operations/{id}/complete",
+    dependencies=[_scoped("POST", "/api/v1/work-order-operations/{id}/complete", "manufacturing.post")],
+)
+async def post_work_order_operations_id_complete_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"completion": await svc.add_operation_completion(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/backflush",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/backflush", "manufacturing.post")],
+)
+async def post_work_orders_id_backflush_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return await svc.backflush_work_order(id, payload.model_dump() if payload else {})
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/close",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/close", "manufacturing.post")],
+)
+async def post_work_orders_id_close_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return {"work_order": await svc.close_work_order(id, payload.model_dump() if payload else {})}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/complete",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/complete", "manufacturing.post")],
+)
+async def post_work_orders_id_complete_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"wip_transaction": await svc.complete_work_order(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/firm",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/firm", "manufacturing.write")],
+)
+async def post_work_orders_id_firm_alias(id: str, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"work_order": await svc.firm_work_order(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/issue",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/issue", "manufacturing.post")],
+)
+async def post_work_orders_id_issue_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"wip_transaction": await svc.issue_components(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/release",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/release", "manufacturing.release")],
+)
+async def post_work_orders_id_release_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    body = payload.model_dump(exclude_none=True) if payload is not None else {}
+    try:
+        return {"work_order": await svc.release_work_order(id, wip_location_id=body.get("wip_location_id"))}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/reopen",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/reopen", "manufacturing.write")],
+)
+async def post_work_orders_id_reopen_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return {"work_order": await svc.reopen_work_order(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.post(
+    "/work-orders/{id}/void",
+    dependencies=[_scoped("POST", "/api/v1/work-orders/{id}/void", "manufacturing.write")],
+)
+async def post_work_orders_id_void_alias(id: str, svc: ServiceDep, payload: Body | None = None) -> dict[str, Any]:
+    try:
+        return {"work_order": await svc.void_work_order(id)}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.put(
+    "/bom-components/{id}/control",
+    dependencies=[_scoped("PUT", "/api/v1/bom-components/{id}/control", "manufacturing.write")],
+)
+async def put_bom_components_id_control_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"control": await svc.upsert_component_control(id, payload.model_dump())}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
+@router.put(
+    "/work-center-calendars/{id}/days",
+    dependencies=[_scoped("PUT", "/api/v1/work-center-calendars/{id}/days", "manufacturing.write")],
+)
+async def put_work_center_calendars_id_days_alias(id: str, payload: Body, svc: ServiceDep) -> dict[str, Any]:
+    try:
+        return {"days": await svc.upsert_calendar_days(id, payload.model_dump().get("days") or [])}
+    except ManufacturingError as exc:
+        _raise(exc)
+
+
 __all__ = ["ROUTE_SCOPES", "router"]

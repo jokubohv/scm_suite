@@ -3220,5 +3220,276 @@ class ManufacturingService:
             raise NotFoundError("assembly item not found", details={"item_id": str(item_id)})
         return await self.get_assembly_item(row["id"])
 
+    # ==================================================================== canonical surface gaps ==
+    async def get_attribute_def(self, attribute_id: Any) -> dict[str, Any]:
+        row = await self._fetch("compat_attribute_def", attribute_id)
+        if row is None:
+            raise NotFoundError("compatibility attribute definition not found")
+        return serialize(row) or {}
+
+    async def list_rule_set_rules(self, rule_set_id: Any) -> list[dict[str, Any]]:
+        await self.get_rule_set(rule_set_id)
+        return [
+            serialize(row) or {}
+            for row in await self._all(
+                "SELECT * FROM manufacturing.compat_rule WHERE tenant_id = :tenant_id AND rule_set_id = :id "
+                "ORDER BY priority, code",
+                id=_uuid(rule_set_id),
+            )
+        ]
+
+    async def delete_rule_set(self, rule_set_id: Any) -> None:
+        rule_set = await self._fetch("compat_rule_set", rule_set_id)
+        if rule_set is None:
+            raise NotFoundError("compatibility rule set not found")
+        if rule_set["status"] != "DRAFT":
+            raise InvalidStateTransition(
+                "only DRAFT compatibility rule sets can be deleted; retire ACTIVE sets instead"
+            )
+        await self._exec(
+            "DELETE FROM manufacturing.compat_rule WHERE tenant_id = :tenant_id AND rule_set_id = :id",
+            id=rule_set["id"],
+        )
+        await self._exec(
+            "DELETE FROM manufacturing.compat_rule_set WHERE tenant_id = :tenant_id AND id = :id",
+            id=rule_set["id"],
+        )
+
+    async def delete_rule(self, rule_id: Any) -> None:
+        rule = await self._fetch("compat_rule", rule_id)
+        if rule is None:
+            raise NotFoundError("compatibility rule not found")
+        rule_set = await self._fetch("compat_rule_set", rule["rule_set_id"])
+        if rule_set is None or rule_set["status"] != "DRAFT":
+            raise InvalidStateTransition("rules can only be deleted from DRAFT compatibility rule sets")
+        await self._exec(
+            "DELETE FROM manufacturing.compat_rule WHERE tenant_id = :tenant_id AND id = :id", id=rule["id"]
+        )
+
+    async def list_eco_lines(self, eco_id: Any) -> list[dict[str, Any]]:
+        eco = await self._fetch("eco", eco_id)
+        if eco is None:
+            raise NotFoundError("ECO not found")
+        return [
+            serialize(row) or {}
+            for row in await self._all(
+                "SELECT * FROM manufacturing.eco_line WHERE tenant_id = :tenant_id AND eco_id = :id ORDER BY line_number",
+                id=eco["id"],
+            )
+        ]
+
+    async def list_operation_completions(self, operation_id: Any) -> list[dict[str, Any]]:
+        operation = await self._fetch("work_order_operation", operation_id)
+        if operation is None:
+            raise NotFoundError("work order operation not found")
+        return [
+            serialize(row) or {}
+            for row in await self._all(
+                "SELECT * FROM manufacturing.operation_completion WHERE tenant_id = :tenant_id "
+                "AND work_order_operation_id = :id ORDER BY completion_number",
+                id=operation["id"],
+            )
+        ]
+
+    async def update_bom(self, bom_id: Any, payload: Mapping[str, Any]) -> dict[str, Any]:
+        allowed = {"bom_code", "name", "is_default", "effective_from", "effective_to"}
+        row = await self._update("bom", bom_id, payload, allowed=allowed, status_from="DRAFT")
+        return serialize(row) or {}
+
+    async def update_routing_step_charge(self, charge_id: Any, payload: Mapping[str, Any]) -> dict[str, Any]:
+        allowed = {"charge_item_id", "rate", "rate_uom", "cost_category_id", "sort_order"}
+        row = await self._update("routing_step_charge", charge_id, payload, allowed=allowed)
+        return serialize(row) or {}
+
+    async def update_work_order_component(self, component_id: Any, payload: Mapping[str, Any]) -> dict[str, Any]:
+        component = await self._fetch("work_order_component", component_id)
+        if component is None:
+            raise NotFoundError("work order component not found")
+        line = await self._fetch("work_order_line", component["work_order_line_id"])
+        work_order = await self._fetch("work_order", line["work_order_id"]) if line is not None else None
+        if work_order is None:
+            raise NotFoundError("work order not found for component")
+        if work_order["status"] not in {"PLANNED", "FIRM_PLANNED"}:
+            raise InvalidStateTransition(
+                "component quantities can only be edited before release", details={"status": work_order["status"]}
+            )
+        allowed = {"qty_required", "component_yield_percent", "round_up_component_qty", "over_issue_tolerance"}
+        if payload.get("qty_required") is not None:
+            new_qty = qty(payload["qty_required"])
+            if new_qty <= 0:
+                raise ValidationFailed("qty_required must be > 0")
+            if new_qty < dec(component["qty_issued"]):
+                raise ValidationFailed("qty_required cannot be below the already issued quantity")
+        row = await self._update("work_order_component", component_id, payload, allowed=allowed)
+        return serialize(row) or {}
+
+    async def update_work_order_operation(self, operation_id: Any, payload: Mapping[str, Any]) -> dict[str, Any]:
+        operation = await self._fetch("work_order_operation", operation_id)
+        if operation is None:
+            raise NotFoundError("work order operation not found")
+        status = payload.get("status")
+        if status is not None and str(status).upper() not in {"PENDING", "IN_PROGRESS", "COMPLETED", "SKIPPED"}:
+            raise ValidationFailed("invalid work order operation status", details={"status": status})
+        allowed = {
+            "status",
+            "planned_start",
+            "planned_end",
+            "qty_completed",
+            "qty_scrapped",
+            "setup_minutes_actual",
+            "run_minutes_actual",
+        }
+        values = dict(payload)
+        if values.get("status") is not None:
+            values["status"] = str(values["status"]).upper()
+        if values.get("status") == "COMPLETED":
+            values["actual_end"] = utc_now()
+            values.setdefault("actual_start", operation.get("actual_start") or utc_now())
+        row = await self._update(
+            "work_order_operation", operation_id, values, allowed=allowed | {"actual_start", "actual_end"}
+        )
+        return serialize(row) or {}
+
+    async def create_unbuild_from_build(self, build_id: Any, payload: Mapping[str, Any]) -> dict[str, Any]:
+        build = await self._fetch("assembly_build", build_id)
+        if build is None:
+            raise NotFoundError("assembly build not found")
+        if build["status"] != "POSTED":
+            raise InvalidStateTransition(
+                "only POSTED assembly builds can be unbuilt", details={"status": build["status"]}
+            )
+        already = await self._one(
+            "SELECT COALESCE(SUM(qty_unbuilt), 0) AS qty FROM manufacturing.assembly_unbuild "
+            "WHERE tenant_id = :tenant_id AND original_assembly_build_id = :build_id AND status IN ('DRAFT','POSTED')",
+            build_id=build["id"],
+        )
+        existing = dec((already or {}).get("qty") or 0)
+        requested = qty(payload.get("qty_unbuilt") or build["qty_built"])
+        if existing + requested > dec(build["qty_built"]):
+            raise UnbuildNotReversible(
+                "unbuild quantity exceeds the original build quantity",
+                details={"built": str(build["qty_built"]), "already_unbuilt": str(existing)},
+            )
+        values = {
+            "assembly_item_id": build["assembly_item_id"],
+            "qty_unbuilt": requested,
+            "location_id": build["location_id"],
+            "uom_id": build["uom_id"],
+            "original_assembly_build_id": build["id"],
+            "transaction_date": payload.get("transaction_date") or date.today(),
+            "bom_revision_id": build.get("bom_revision_id"),
+            "reason_code_id": payload.get("reason_code_id"),
+            "lines": payload.get("lines") or [],
+        }
+        return await self.create_unbuild(values)
+
+    async def create_wip_transaction(self, payload: Mapping[str, Any]) -> dict[str, Any]:
+        transaction_type = str(payload.get("wip_transaction_type") or "").upper()
+        if transaction_type not in {"ISSUE", "COMPLETION", "CLOSE"}:
+            raise ValidationFailed("wip_transaction_type must be ISSUE, COMPLETION or CLOSE")
+        work_order = await self._fetch("work_order", payload.get("work_order_id"))
+        if work_order is None:
+            raise NotFoundError("work order not found")
+        if work_order["status"] in {"VOID", "CANCELLED", "CLOSED"}:
+            raise InvalidStateTransition(
+                "work order does not accept WIP transactions", details={"status": work_order["status"]}
+            )
+        transaction_date = to_date(payload.get("transaction_date")) or date.today()
+        location_id = payload.get("location_id") or work_order.get("wip_location_id") or await self._default_location()
+        status_id = payload.get("inventory_status_id") or await self._default_status()
+        doc = await self._create(
+            "wip_transaction",
+            {
+                "document_number": payload.get("document_number") or await self._next_number("WIP"),
+                "transaction_date": transaction_date,
+                "status": "DRAFT",
+                "wip_transaction_type": transaction_type,
+                "work_order_id": work_order["id"],
+                "is_backflush": bool(payload.get("is_backflush", False)),
+                "memo": payload.get("memo"),
+            },
+        )
+        for index, line in enumerate(payload.get("lines") or [], start=1):
+            item_id = line.get("item_id")
+            if item_id is None:
+                raise ValidationFailed("WIP transaction lines require item_id", details={"line": index})
+            quantity = qty(line.get("qty"))
+            if quantity == 0:
+                raise ValidationFailed("WIP transaction line qty must be non-zero", details={"line": index})
+            await self._create(
+                "wip_transaction_line",
+                {
+                    "wip_transaction_id": doc["id"],
+                    "line_number": index,
+                    "item_id": _uuid(item_id, field="item_id"),
+                    "qty": quantity,
+                    "uom_id": _uuid(line.get("uom_id") or work_order["uom_id"]),
+                    "unit_cost": dec(line.get("unit_cost") or 0),
+                    "value_base": dec(line.get("value_base") or 0),
+                    "is_assembly_output": bool(line.get("is_assembly_output", False)),
+                    "work_order_component_id": _uuid(line["work_order_component_id"])
+                    if line.get("work_order_component_id")
+                    else None,
+                    "location_id": _uuid(line.get("location_id") or location_id),
+                    "inventory_status_id": _uuid(line.get("inventory_status_id") or status_id),
+                },
+            )
+        return await self.get_wip_transaction(doc["id"])
+
+    async def post_wip_transaction(
+        self, wip_transaction_id: Any, payload: Mapping[str, Any] | None = None
+    ) -> dict[str, Any]:
+        payload = dict(payload or {})
+        transaction = await self.get_wip_transaction(wip_transaction_id)
+        require_transition("wip_transaction", transaction["status"], "POSTED")
+        if not transaction["lines"]:
+            raise ValidationFailed("WIP transaction has no lines to post")
+        posting_type = {"ISSUE": "T-17", "COMPLETION": "T-18", "CLOSE": "T-19"}.get(transaction["wip_transaction_type"])
+        if posting_type is None:
+            raise ValidationFailed("unsupported WIP transaction type")
+        movements = []
+        for line in transaction["lines"]:
+            signed = dec(line["qty"]) if line["is_assembly_output"] else -dec(line["qty"])
+            movements.append(
+                {
+                    "item_id": line["item_id"],
+                    "location_id": line["location_id"],
+                    "inventory_status_id": line["inventory_status_id"],
+                    "qty": str(signed),
+                    "movement_type": f"WIP_{transaction['wip_transaction_type']}",
+                    "source_line_ref": str(line["line_number"]),
+                    "unit_cost": str(dec(line["unit_cost"])),
+                }
+            )
+        result = await self.posting.post(
+            {
+                "posting_type": posting_type,
+                "transaction_date": transaction["transaction_date"],
+                "source_doc_type": "WIP_TRANSACTION",
+                "source_doc_id": str(transaction["id"]),
+                "idempotency_key": payload.get("idempotency_key") or f"wip-post:{transaction['id']}",
+                "movements": movements,
+            }
+        )
+        await self._update(
+            "wip_transaction",
+            transaction["id"],
+            {"status": "POSTED", "posted_transaction_id": _uuid(result["transaction_id"], field="transaction_id")},
+        )
+        return {**transaction, "status": "POSTED", "posting": result}
+
+    async def mass_create_work_orders(self, payload: Mapping[str, Any]) -> dict[str, Any]:
+        requests = payload.get("work_orders") or payload.get("items") or []
+        if not isinstance(requests, list) or not requests:
+            raise ValidationFailed("work_orders must be a non-empty list")
+        if len(requests) > 100:
+            raise ValidationFailed("at most 100 work orders can be created per request")
+        created = []
+        for entry in requests:
+            if not isinstance(entry, Mapping):
+                raise ValidationFailed("work_orders entries must be objects")
+            created.append(await self.create_work_order(entry))
+        return {"items": created, "count": len(created)}
+
 
 TABLES = TABLE_BY_NAME
