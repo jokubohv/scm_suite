@@ -25,8 +25,9 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://inventory:inventory@localhost:5432/inventory"
     redis_url: str = "redis://localhost:6379/0"
 
-    jwt_secret: str = "dev-only-change-me"
+    jwt_secret: str = "dev-only-change-me-32-bytes-minimum!!"
     jwt_issuer: str = "inventory-platform"
+    jwt_audience: str = "inventory-platform-api"
     access_token_ttl_seconds: int = 900
     refresh_token_ttl_seconds: int = 1209600
 
