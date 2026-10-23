@@ -2478,6 +2478,9 @@ class ProcurementService:
             reason=reason,
             idempotency_key=idempotency_key or f"receipt-reverse:{receipt_id}",
         )
+        landed_cost_reversal = await self._reverse_estimated_landed_cost_for_receipt(
+            receipt, reason=reason, actor_id=actor_id
+        )
         await self._exec(
             "UPDATE procurement.item_receipt SET status = 'REVERSED', reversal_transaction_id = :txn, updated_at = now(), version = version + 1 "
             "WHERE tenant_id = :tenant_id AND id = :id",
@@ -2512,7 +2515,10 @@ class ProcurementService:
             {"reason": reason, "reversal": result["transaction_id"]},
             actor_id,
         )
-        return {"id": str(receipt_id), "status": "REVERSED", "reversal_transaction_id": result["transaction_id"]}
+        response = {"id": str(receipt_id), "status": "REVERSED", "reversal_transaction_id": result["transaction_id"]}
+        if landed_cost_reversal:
+            response["landed_cost_reversal"] = landed_cost_reversal
+        return response
 
     async def _refresh_po_status(self, po_id: Any) -> str:
         po = await self.get_purchase_order(po_id)
@@ -4307,5 +4313,273 @@ class ProcurementService:
             source_doc_id=bill["id"],
             receipt_lines=receipt_lines,
         )
+        variance = await self._post_landed_cost_absorption_variance(
+            bill=bill, actual_document=document, actual_result=result, receipt_refs=receipt_refs, actor_id=actor_id
+        )
+        if variance:
+            result["variance"] = variance
         await self._audit("landed_cost.actual_posted", "costing.landed_cost", document["id"], result, actor_id)
         return result
+
+    async def _post_landed_cost_absorption_variance(
+        self,
+        *,
+        bill: Mapping[str, Any],
+        actual_document: Mapping[str, Any],
+        actual_result: Mapping[str, Any],
+        receipt_refs: Sequence[Mapping[str, Any]],
+        actor_id: Any = None,
+    ) -> dict[str, Any] | None:
+        """Record/post T-06 landed-cost absorption variance (actual T-26 − estimated T-27), value-only."""
+        from app.modules.costing.repository import CostingRepository
+        from app.modules.inventory_ledger.facade import PostingPort
+
+        receipt_ids = sorted({str(ref["item_receipt_id"]) for ref in receipt_refs})
+        estimated_documents: dict[str, dict[str, Any]] = {}
+        for receipt_id in receipt_ids:
+            row = await self._one(
+                """
+                SELECT * FROM costing.landed_cost
+                 WHERE tenant_id = :tenant_id AND estimated
+                   AND receipt_refs @> CAST(:needle AS jsonb)
+                 ORDER BY created_at DESC LIMIT 1
+                """,
+                needle=json.dumps([{"item_receipt_id": receipt_id}]),
+            )
+            if row is not None:
+                estimated_documents[str(row["id"])] = row
+        if not estimated_documents:
+            return None
+        existing = await self._one(
+            "SELECT * FROM costing.cost_variance WHERE tenant_id = :tenant_id "
+            "AND variance_type = 'LANDED_COST_ABSORPTION' AND detail ->> 'vendor_bill_id' = :bill ORDER BY created_at DESC",
+            bill=str(bill["id"]),
+        )
+        if existing is not None:
+            return {
+                "variance_ids": [str(existing["id"])],
+                "posting_type": "T-06",
+                "total_variance": _num(dec(existing["amount_base"])),
+                "posted_transaction_id": existing.get("inventory_transaction_id"),
+                "replayed": True,
+            }
+        estimated: dict[str, dict[str, Any]] = {}
+        for landed_cost_id in estimated_documents:
+            allocations = await self._all(
+                "SELECT item_receipt_line_id, item_id, allocated_amount FROM costing.landed_cost_allocation "
+                "WHERE tenant_id = :tenant_id AND landed_cost_id = :id",
+                id=_as_uuid(landed_cost_id),
+            )
+            for allocation in allocations:
+                key = str(allocation["item_receipt_line_id"])
+                bucket = estimated.setdefault(key, {"item_id": allocation["item_id"], "amount": ZERO})
+                bucket["amount"] += dec(allocation["allocated_amount"])
+        actual: dict[str, dict[str, Any]] = {}
+        for allocation in actual_result.get("allocations") or []:
+            key = str(allocation["item_receipt_line_id"])
+            bucket = actual.setdefault(key, {"item_id": allocation["item_id"], "amount": ZERO})
+            bucket["amount"] += dec(allocation["allocated_amount"])
+        estimated_total = sum((bucket["amount"] for bucket in estimated.values()), ZERO)
+        actual_total = sum((bucket["amount"] for bucket in actual.values()), ZERO)
+        variance_items: list[dict[str, Any]] = []
+        for key in sorted(set(estimated) | set(actual)):
+            estimated_amount = estimated.get(key, {}).get("amount", ZERO)
+            actual_amount = actual.get(key, {}).get("amount", ZERO)
+            difference = money(actual_amount - estimated_amount)
+            if difference == 0:
+                continue
+            receipt_line = await self._one(
+                "SELECT id, item_id, location_id, inventory_status_id FROM procurement.item_receipt_line "
+                "WHERE tenant_id = :tenant_id AND id = :id",
+                id=_as_uuid(key),
+            )
+            if receipt_line is None:
+                raise ValidationFailed("landed-cost variance references an unknown receipt line")
+            item_id = (actual.get(key) or estimated.get(key) or {}).get("item_id") or receipt_line["item_id"]
+            landed_bill_line = next(
+                (
+                    line
+                    for line in bill.get("lines") or []
+                    if line.get("is_landed_cost") and str(line.get("item_receipt_line_id")) == key
+                ),
+                None,
+            )
+            variance_items.append(
+                {
+                    "item_receipt_line_id": key,
+                    "item_id": str(item_id),
+                    "location_id": str(receipt_line["location_id"]),
+                    "inventory_status_id": str(receipt_line["inventory_status_id"]),
+                    "estimated_amount": estimated_amount,
+                    "actual_amount": actual_amount,
+                    "variance_amount": difference,
+                    "vendor_bill_line_id": str(landed_bill_line["id"]) if landed_bill_line else None,
+                    "line_number": landed_bill_line.get("line_number") if landed_bill_line else None,
+                }
+            )
+        if not variance_items:
+            return None
+        port = PostingPort(self.session, self.tenant_id)
+        movements = [
+            {
+                "item_id": item["item_id"],
+                "location_id": item["location_id"],
+                "inventory_status_id": item["inventory_status_id"],
+                "qty": "0",
+                "value_base": _num(item["variance_amount"]),
+                "movement_type": "VARIANCE",
+                "source_line_ref": item["item_receipt_line_id"],
+                "details": [{"qty": "0", "inventory_status_id": item["inventory_status_id"], "ownership": "OWNED"}],
+            }
+            for item in variance_items
+        ]
+        variance_result = await port.post_variance(
+            transaction_date=bill["transaction_date"],
+            source_doc_type="VENDOR_BILL_LANDED_COST_VARIANCE",
+            source_doc_id=str(bill["id"]),
+            idempotency_key=f"landed-cost-variance:{bill['id']}",
+            movements=movements,
+        )
+        transaction_id = variance_result["transaction_id"]
+        repository = CostingRepository(self.session, self.tenant_id)
+        variance_ids: list[str] = []
+        for item in variance_items:
+            row = await repository.create_variance(
+                {
+                    "variance_type": "LANDED_COST_ABSORPTION",
+                    "item_id": _as_uuid(item["item_id"]),
+                    "inventory_transaction_id": _as_uuid(transaction_id),
+                    "vendor_bill_line_id": _as_uuid(item["vendor_bill_line_id"]) if item["vendor_bill_line_id"] else None,
+                    "amount_base": item["variance_amount"],
+                    "account_ref": str(bill.get("variance_account_ref") or "LANDED_COST_ABSORPTION"),
+                    "status": "OPEN",
+                    "detail": {
+                        "vendor_bill_id": str(bill["id"]),
+                        "item_receipt_line_id": item["item_receipt_line_id"],
+                        "estimated_landed_cost_ids": sorted(estimated_documents),
+                        "actual_landed_cost_id": str(actual_document["id"]),
+                        "estimated_amount": _num(item["estimated_amount"]),
+                        "actual_amount": _num(item["actual_amount"]),
+                        "applied_landed_cost": _num(item["actual_amount"]),
+                        "absorbed_landed_cost": _num(item["estimated_amount"]),
+                        "posting_type": "T-06",
+                        "value_only": True,
+                    },
+                }
+            )
+            variance_ids.append(str(row["id"]))
+        total_variance = sum((item["variance_amount"] for item in variance_items), ZERO)
+        await self._audit(
+            "landed_cost.absorption_variance_posted",
+            "costing.cost_variance",
+            bill["id"],
+            {
+                "variance_ids": variance_ids,
+                "posting_type": "T-06",
+                "posted_transaction_id": transaction_id,
+                "estimated_total": _num(estimated_total),
+                "actual_total": _num(actual_total),
+                "total_variance": _num(total_variance),
+            },
+            actor_id,
+        )
+        return {
+            "variance_ids": variance_ids,
+            "posting_type": "T-06",
+            "posted_transaction_id": transaction_id,
+            "estimated_total": _num(estimated_total),
+            "actual_total": _num(actual_total),
+            "total_variance": _num(total_variance),
+            "items": [
+                {
+                    "item_receipt_line_id": item["item_receipt_line_id"],
+                    "item_id": item["item_id"],
+                    "estimated_amount": _num(item["estimated_amount"]),
+                    "actual_amount": _num(item["actual_amount"]),
+                    "variance_amount": _num(item["variance_amount"]),
+                }
+                for item in variance_items
+            ],
+            "value_only": True,
+        }
+
+    async def _reverse_estimated_landed_cost_for_receipt(
+        self, receipt: Mapping[str, Any], *, reason: str, actor_id: Any = None
+    ) -> dict[str, Any] | None:
+        """Reverse a posted T-27 estimated landed cost when the receipt is reversed (no double-reverse)."""
+        from app.modules.costing.service import CostingService
+        from app.modules.inventory_ledger.facade import PostingPort
+
+        needle = json.dumps([{"item_receipt_id": str(receipt["id"])}])
+        landed_cost = await self._one(
+            """
+            SELECT * FROM costing.landed_cost
+             WHERE tenant_id = :tenant_id AND estimated
+               AND receipt_refs @> CAST(:needle AS jsonb)
+             ORDER BY created_at DESC LIMIT 1
+            """,
+            needle=needle,
+        )
+        if landed_cost is None:
+            return None
+        if landed_cost["status"] == "REVERSED":
+            return {
+                "landed_cost_id": str(landed_cost["id"]),
+                "posting_type": "T-27",
+                "status": "REVERSED",
+                "replayed": True,
+            }
+        actual = await self._one(
+            "SELECT id FROM costing.landed_cost WHERE tenant_id = :tenant_id AND NOT estimated AND status = 'POSTED' "
+            "AND receipt_refs @> CAST(:needle AS jsonb) ORDER BY created_at DESC LIMIT 1",
+            needle=needle,
+        )
+        if actual is not None:
+            raise DependentDocuments(
+                "estimated landed cost has been actualized by a vendor bill; reverse the bill/actual landed cost first",
+                details={"estimated_landed_cost_id": str(landed_cost["id"]), "actual_landed_cost_id": str(actual["id"])},
+            )
+        costing = CostingService(self.session, self.tenant_id)
+        if landed_cost["status"] == "DRAFT":
+            await costing.transition_landed_cost(landed_cost["id"], "void")
+            return {
+                "landed_cost_id": str(landed_cost["id"]),
+                "posting_type": "T-27",
+                "status": "VOID",
+                "amount": _num(dec(landed_cost.get("total_amount") or 0)),
+            }
+        if landed_cost["status"] != "POSTED" or not landed_cost.get("posted_transaction_id"):
+            raise InvalidStateTransition(f"estimated landed cost is {landed_cost['status']} and cannot be reversed")
+        port = PostingPort(self.session, self.tenant_id)
+        reversal = await port.reverse(
+            str(landed_cost["posted_transaction_id"]),
+            reason=reason,
+            idempotency_key=f"landed-cost:estimated:reverse:{receipt['id']}:{landed_cost['id']}",
+        )
+        await costing.transition_landed_cost(landed_cost["id"], "reverse")
+        amount = dec(landed_cost.get("total_amount") or 0)
+        await self._link_document(
+            link_type="LANDED_COST_ESTIMATE_REVERSAL",
+            from_type="ITEM_RECEIPT",
+            from_id=receipt["id"],
+            to_id=landed_cost["id"],
+            amount=-amount,
+            actor_id=actor_id,
+        )
+        summary = {
+            "landed_cost_id": str(landed_cost["id"]),
+            "posting_type": "T-27",
+            "status": "REVERSED",
+            "amount": _num(-amount),
+            "original_transaction_id": str(landed_cost["posted_transaction_id"]),
+            "reversal_transaction_id": reversal["transaction_id"],
+            "value_only": True,
+        }
+        await self._audit(
+            "landed_cost.estimated_reversed",
+            "costing.landed_cost",
+            landed_cost["id"],
+            {"receipt_id": str(receipt["id"]), "reverse": summary, "reason": reason},
+            actor_id,
+        )
+        return summary
