@@ -1,0 +1,13 @@
+== W1 end-to-end smoke 2026-10-23T04:49:31Z ==
+-- healthz
+{"status":"ok","version":"0.1.0","env":"dev"}
+-- unauth admin permissions
+401
+{"type":"about:blank","title":"TOKEN_INVALID","status":401,"code":"TOKEN_INVALID","message":"bearer token required","details":[],"correlation_id":"req_62993f56be7a49899b1f06f53f3ecb66","trace_id":"5925be23397a4caba5de181636cfd952"}
+-- providers
+200
+{"methods":["LOCAL"],"local_allowed":true,"connections":[]}
+-- openapi paths
+paths 78 operations 106
+-- authorized permissions
+{"version":"1.5.0","counts":{"scopes":255,"assignable":241,"service_only":13,"platform_only":1,"role_templates":7,"sod_pairs":14},"aliases":{"platform.user.manage":"platform.users.manage"},"items":[{"scope":"atp.rebuild","domain":"atp","action":"rebuild","requires_approval":false,"is_platform_only":false,"is_assignable":true,"service_only":false,"owner_feature_set":"FS-00"},{"scope":"consigned.admin","domain":"consigned","action":"admin","requires_approval":false,"is_platform_only":false,"is_ass

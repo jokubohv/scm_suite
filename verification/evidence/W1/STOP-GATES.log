@@ -1,0 +1,59 @@
+== W1 STOP GATES 2026-10-23T06:00:11Z ==
+-- plan: s0
+  wide-build concurrency: B4 max 8 builders
+  S0 execution-ready: YES
+-- plan: validate/permissions/coverage/render
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+  spec reconciliation: 16 specs, 791 endpoint rows scanned, 188 catalogue scope references, 0 unknown, 67 unreferenced warning(s)
+  every feature set owns >= 1 topic; EXCLUDED-SCM-MOBILE=0; totals consistent
+render OK
+-- compile
+PASS
+-- ruff
+All checks passed!
+-- mypy
+Success: no issues found in 95 source files
+-- pytest
+........................................................................ [ 90%]
+.......................................................                  [100%]
+-- chain guard
+RESULT: OK
+-- contract lint
+contract lint: PASS — errors=0 warnings=2
+-- compose
+inv-s0-gate-api-1 Up About an hour (unhealthy)
+inv-s0-gate-dex-1 Up About an hour (unhealthy)
+inv-s0-gate-minio-1 Up 2 hours (unhealthy)
+inv-s0-gate-outbox-relay-1 Up About an hour (unhealthy)
+inv-s0-gate-postgres-1 Up 2 hours (healthy)
+inv-s0-gate-redis-1 Up 2 hours (unhealthy)
+inv-s0-gate-worker-1 Up About an hour (unhealthy)
+ Container inv-s0-gate-api-1  Stopping
+ Container inv-s0-gate-worker-1  Stopping
+ Container inv-s0-gate-outbox-relay-1  Stopping
+ Container inv-s0-gate-worker-1  Stopped
+ Container inv-s0-gate-worker-1  Removing
+ Container inv-s0-gate-worker-1  Error while Removing
+ Container inv-s0-gate-api-1  Stopped
+ Container inv-s0-gate-api-1  Removing
+ Container inv-s0-gate-api-1  Error while Removing
+ Container inv-s0-gate-outbox-relay-1  Stopped
+ Container inv-s0-gate-outbox-relay-1  Removing
+ Container inv-s0-gate-outbox-relay-1  Error while Removing
+Error response from daemon: cannot remove container "2f83d7de640088d49fb79e2e3a57772076c8c1f6acbcfba336399e4c62a8daa8": write /var/lib/containerd/io.containerd.metadata.v1.bolt/meta.db: input/output error
+-- docker compose down failed; stopping containers directly
+3defe22b5805
+2f83d7de6400
+e2fe8cd4e4ba
+a5b99a0c0cb3
+500b6aa3a2cb
+06d55342d942
+9736c2aad658
+-- remaining:
+inv-s0-gate-api-1
+inv-s0-gate-worker-1
+inv-s0-gate-outbox-relay-1
+inv-s0-gate-dex-1
+inv-s0-gate-postgres-1
+inv-s0-gate-redis-1
+inv-s0-gate-minio-1

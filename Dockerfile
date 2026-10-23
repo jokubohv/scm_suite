@@ -79,6 +79,9 @@ COPY alembic.ini pyproject.toml README.IMPLEMENTATION.md ./
 COPY app ./app
 COPY design/permissions.json ./design/permissions.json
 
+# Runtime files must be readable by the non-root app user (source files may be mode 600).
+RUN chown -R 10001:10001 /app && chmod -R a+rX /app
+
 # Drop privileges: runtime processes never run as root (S0-02 requirement, INV security posture).
 USER 10001:10001
 

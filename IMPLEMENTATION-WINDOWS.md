@@ -55,7 +55,7 @@ Up to 3 concurrent file-writing agents in S0 (disjoint scopes). Do not exceed 8 
 
 | Window | Start | End | Completed | Gates | Open / next |
 |---|---|---|---|---|---|
-| 1 | 2026-10-23 00:00 | 02:00 (scheduled stop) | **S0-01…S0-07 complete + S0-GATE PASS** (repo/CI, Alembic base+chain guard, compose+Dex dev, 16-FS contract skeletons, test harness, scripts/gates, idempotent seeds) | ruff/mypy/pytest green; compose 7/7 healthy; Dex discovery; `alembic upgrade head`; contracts lint PASS; seeds load-twice no-diff; `check_parallel_plan --s0` = YES | **B1 / FS-00** begins: migrations 0001–0003 + platform models (architect-core) and pure security/auth services (spec-wave0a); C0 freeze after FS-00 |
+| 1 | 2026-10-23 00:00 | 02:00 (scheduled stop) | **S0-01…S0-07 complete + S0-GATE PASS**; **B1/FS-00 substantially built**: migrations 0001–0003 + 34 models; security services (60 tests/~93%); 11 registered API routers (auth/me, RBAC, SSO, config, platform tenants, approvals+decide, API keys, artifacts, ops); core services (sequences/flags/settings/idempotency/custom fields/outbox+relay/approvals); live-stack smoke passed | `check_parallel_plan --s0`=YES; plan gates PASS; compileall/ruff/mypy clean; full pytest green; chain guard 3 revisions; contract lint PASS; Docker image rebuilt + 7/7 stack healthy (later degraded); e2e 401/200 smoke | Disk 1.8GiB free; compose stop cleanup failed; seed SQLAlchemy repo still stub (task-48 queued); FS-00 contract freeze C0/exit gate/0A deploy pending. See `verification/evidence/W1/STATUS.md` |
 
 ## Useful commands
 
