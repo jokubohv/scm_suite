@@ -172,14 +172,12 @@ def _seeds(bind: sa.Connection) -> None:
 
     for tenant in _tenants(bind):
         for key, value, value_type in SETTING_DEFAULTS:
-            raw = "null" if value is None else (
-                json.dumps(value) if value_type in {"json"} else (str(value).lower() if isinstance(value, bool) else str(value))
-            )
+            raw = json.dumps(value).replace("'", "''")
             op.execute(
                 f"""
                 INSERT INTO platform.tenant_setting
                     (id, tenant_id, namespace, key, value, value_type, is_default, created_at, updated_at, version)
-                VALUES (gen_random_uuid(), '{tenant}'::uuid, 'quality', '{key}', '{raw}'::jsonb,
+                VALUES (gen_random_uuid(), '{tenant}'::uuid, 'inventory', 'quality.{key}', '{raw}'::jsonb,
                         '{value_type}', true, now(), now(), 1)
                 ON CONFLICT (tenant_id, namespace, key) DO NOTHING
                 """
@@ -255,7 +253,7 @@ def downgrade() -> None:
         op.execute(
             f"DELETE FROM platform.job_definition WHERE name = '{name}' AND tenant_id = '{SYSTEM_TENANT_ID}'::uuid"
         )
-    op.execute("DELETE FROM platform.tenant_setting WHERE namespace = 'quality' AND is_default")
+    op.execute("DELETE FROM platform.tenant_setting WHERE namespace = 'inventory' AND key LIKE 'quality.%' AND is_default")
     op.execute("DELETE FROM platform.feature_flag WHERE flag_key = 'quality.management.enabled' AND source = 'MIGRATION'")
     op.execute("DELETE FROM platform.number_sequence WHERE doc_type IN ('INSP','COA')")
     op.execute(f"DROP FUNCTION IF EXISTS {SCHEMA}.guard_completed_results()")

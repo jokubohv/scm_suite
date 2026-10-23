@@ -93,14 +93,14 @@ class QualityRepository:
         table = platform_models.metadata.tables["platform.tenant_setting"]
         return await self.session.scalar(
             select(table.c.value).where(
-                table.c.tenant_id == tenant_id, table.c.namespace == "quality", table.c.key == key
+                table.c.tenant_id == tenant_id, table.c.namespace == "inventory", table.c.key == f"quality.{key}"
             )
         )
 
     async def set_setting(self, tenant_id: UUID | str, key: str, value: Any, value_type: str = "json") -> None:
         table = platform_models.metadata.tables["platform.tenant_setting"]
         existing = await self.session.scalar(
-            select(table.c.id).where(table.c.tenant_id == tenant_id, table.c.namespace == "quality", table.c.key == key)
+            select(table.c.id).where(table.c.tenant_id == tenant_id, table.c.namespace == "inventory", table.c.key == f"quality.{key}")
         )
         if existing is None:
             await self.session.execute(
