@@ -32,12 +32,12 @@ async def test_registry_covers_every_live_seeded_job_name(db_session) -> None:
     assert len(live) == 57, f"unexpected seeded job count {len(live)}"
     assert live == set(SEEDED_JOB_NAMES)
     assert live == set(JOB_SPECS)
-    assert len(JOB_HANDLERS) == 38
+    assert len(JOB_HANDLERS) == 46
     summary = coverage_summary()
     assert summary["covered"] is True
     assert summary["missing"] == [] and summary["unseeded_extra"] == []
-    assert summary["by_kind"] == {"sweep": 30, "command": 8, "noop": 19}
-    assert summary["implemented"] == 38 and summary["noop"] == 19
+    assert summary["by_kind"] == {"sweep": 39, "command": 7, "noop": 11}
+    assert summary["implemented"] == 46 and summary["noop"] == 11
 
 
 def test_specs_are_well_formed() -> None:
@@ -69,15 +69,15 @@ def test_resolution_and_unknown_job_errors() -> None:
     with pytest.raises(UnknownJobError):
         get_spec("platform.jobs.scheduler.missing")
     with pytest.raises(NoopJobError) as noop:
-        resolve_handler("quality.trigger.evaluate")
-    assert "event-driven consumer" in str(noop.value)
+        resolve_handler("costing.rollup.run")
+    assert "payload-driven" in str(noop.value)
 
 
 def test_listing_and_implemented_filter() -> None:
     all_jobs = list_jobs()
     implemented = list_jobs(implemented_only=True)
-    assert len(all_jobs) == 57 and len(implemented) == 38
+    assert len(all_jobs) == 57 and len(implemented) == 46
     assert {row["name"] for row in implemented} == set(JOB_HANDLERS)
     assert all(row["implemented"] for row in implemented)
     noop = [row for row in all_jobs if row["kind"] == "noop"]
-    assert len(noop) == 19 and all(row["noop_reason"] for row in noop)
+    assert len(noop) == 11 and all(row["noop_reason"] for row in noop)

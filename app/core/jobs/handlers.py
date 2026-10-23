@@ -145,21 +145,6 @@ async def item_inventory_defaults_repair_job(ctx: JobContext) -> dict[str, Any]:
 
 
 # =========================================================================== FS-02 pricing ========
-async def pricing_apply_effective_updates_job(ctx: JobContext) -> dict[str, Any]:
-    update_id = ctx.get("update_id")
-    if not update_id:
-        return _skip("price updates are applied on their effective date by the owning document flow")
-    from app.modules.pricing.service import PricingService
-
-    service = PricingService(ctx.session)
-    return await service.apply_price_update(
-        tenant_id=ctx.tenant_id,
-        update_id=str(update_id),
-        as_of=_parse_date(ctx.get("as_of")),
-        actor_id=ctx.actor_id,
-    )
-
-
 async def pricing_recompute_dynamic_collections_job(ctx: JobContext) -> dict[str, Any]:
     from app.modules.pricing.service import PricingService
 
@@ -576,6 +561,281 @@ async def reporting_reconcile_readmodels_job(ctx: JobContext) -> dict[str, Any]:
     return {"views_checked": len(views), "degraded": len(stale), "degraded_views": stale, "errors": errors[:20]}
 
 
+# =========================================================================== implemented conversions
+async def pricing_coupon_expire_job(ctx: JobContext) -> dict[str, Any]:
+    from app.modules.pricing.service import PricingService
+
+    service = PricingService(ctx.session)
+    as_of = _parse_date(ctx.get("as_of")) or date.today()
+    result = await service.repo.expire_coupons(tenant_id=ctx.tenant_id, as_of=as_of, actor_id=ctx.actor_id)
+    return {"as_of": as_of.isoformat(), **{key: _jsonable(value) for key, value in result.items()}}
+
+
+async def pricing_apply_effective_updates_job(ctx: JobContext) -> dict[str, Any]:
+    from app.modules.pricing.service import PricingService
+
+    service = PricingService(ctx.session)
+    result = await service.repo.apply_due_updates(now=datetime.now(UTC))
+    return {"applied": int(result.get("applied", 0)), "reverted": int(result.get("reverted", 0))}
+
+
+async def costing_cogs_true_up_job(ctx: JobContext) -> dict[str, Any]:
+    from app.modules.costing.service import CostingService
+
+    service = CostingService(ctx.session, ctx.tenant_id)
+    listing = await service.list_cogs_adjustments(status="APPROVED")
+    items = listing.get("items", [])
+    posted: list[str] = []
+    errors: list[dict[str, Any]] = []
+    for row in items:
+        try:
+            document = await service.transition_cogs_adjustment(str(row["id"]), "post")
+            posted.append(str(document["id"]))
+        except Exception as exc:  # noqa: BLE001 - per-document isolation for the sweep
+            errors.append({"adjustment_id": str(row.get("id")), "error": str(exc)[:300]})
+    return {"approved": len(items), "posted": len(posted), "posted_ids": posted[:50], "errors": errors[:20]}
+
+
+async def costing_landedcost_allocate_job(ctx: JobContext) -> dict[str, Any]:
+    from app.modules.costing.service import CostingService
+
+    service = CostingService(ctx.session, ctx.tenant_id)
+    listing = await service.list_landed_costs(status="APPROVED")
+    items = listing.get("items", [])
+    posted: list[str] = []
+    errors: list[dict[str, Any]] = []
+    for row in items:
+        try:
+            document = await service.transition_landed_cost(str(row["id"]), "post")
+            posted.append(str(document["id"]))
+        except Exception as exc:  # noqa: BLE001 - per-document isolation for the sweep
+            errors.append({"landed_cost_id": str(row.get("id")), "error": str(exc)[:300]})
+    return {"approved": len(items), "allocated": len(posted), "landed_cost_ids": posted[:50], "errors": errors[:20]}
+
+
+async def costing_standards_revalue_job(ctx: JobContext) -> dict[str, Any]:
+    from app.modules.costing.service import CostingService
+
+    service = CostingService(ctx.session, ctx.tenant_id)
+    listing = await service.list_revaluations(status="APPROVED")
+    items = listing.get("items", [])
+    posted: list[str] = []
+    errors: list[dict[str, Any]] = []
+    for row in items:
+        try:
+            document = await service.transition_revaluation(str(row["id"]), "post")
+            posted.append(str(document["id"]))
+        except Exception as exc:  # noqa: BLE001 - per-document isolation for the sweep
+            errors.append({"revaluation_id": str(row.get("id")), "error": str(exc)[:300]})
+    return {"approved": len(items), "posted": len(posted), "revaluation_ids": posted[:50], "errors": errors[:20]}
+
+
+async def quality_queue_expire_job(ctx: JobContext) -> dict[str, Any]:
+    days = ctx.get("days")
+    if days is None:
+        row = await ctx.session.execute(
+            text(
+                "SELECT value FROM platform.tenant_setting "
+                "WHERE tenant_id = :tenant AND namespace = 'inventory' AND key = 'quality.queue_expiry_days'"
+            ),
+            {"tenant": ctx.tenant_id},
+        )
+        raw = row.scalar_one_or_none()
+        try:
+            days = int(raw) if raw is not None else 30
+        except (TypeError, ValueError):
+            days = 30
+    days = max(int(days), 1)
+    limit = max(1, min(int(ctx.get("limit", 500)), 5000))
+    result = await ctx.session.execute(
+        text(
+            """
+            UPDATE quality.inspection
+               SET status = 'CANCELLED', cancel_reason = 'queue expiry',
+                   updated_at = now(), version = version + 1
+             WHERE id IN (
+                 SELECT id FROM quality.inspection
+                  WHERE tenant_id = :tenant AND status IN ('PENDING', 'IN_PROGRESS')
+                    AND created_at < now() - make_interval(days => :days)
+                  ORDER BY created_at
+                  LIMIT :limit
+             )
+            RETURNING id::text AS id
+            """
+        ),
+        {"tenant": ctx.tenant_id, "days": days, "limit": limit},
+    )
+    expired = [row[0] for row in result.all()]
+    return {"days": days, "expired": len(expired), "inspection_ids": expired[:100]}
+
+
+async def quality_derived_field_recalc_job(ctx: JobContext) -> dict[str, Any]:
+    import json
+
+    from app.modules.quality.service import derive_result_summary
+
+    config_row = await ctx.session.execute(
+        text(
+            "SELECT value FROM platform.tenant_setting "
+            "WHERE tenant_id = :tenant AND namespace = 'inventory' AND key = 'quality.derived_fields'"
+        ),
+        {"tenant": ctx.tenant_id},
+    )
+    raw_config = config_row.scalar_one_or_none()
+    derived_config = raw_config if isinstance(raw_config, list) else []
+    limit = max(1, min(int(ctx.get("limit", 200)), 1000))
+    inspections = await ctx.session.execute(
+        text(
+            "SELECT id::text AS id, result_summary FROM quality.inspection "
+            "WHERE tenant_id = :tenant AND status IN ('PASSED', 'FAILED', 'WAIVED') "
+            "ORDER BY completed_at DESC NULLS LAST LIMIT :limit"
+        ),
+        {"tenant": ctx.tenant_id, "limit": limit},
+    )
+    recalculated: list[str] = []
+    unchanged = 0
+    errors: list[dict[str, Any]] = []
+    checked = 0
+    for inspection in inspections.mappings():
+        checked += 1
+        try:
+            rows = await ctx.session.execute(
+                text(
+                    "SELECT sequence, characteristic, quality_spec_line_id::text AS quality_spec_line_id, "
+                    "measured_value_text, measured_value_number, is_pass "
+                    "FROM quality.inspection_result WHERE tenant_id = :tenant AND inspection_id = :inspection "
+                    "ORDER BY sequence"
+                ),
+                {"tenant": ctx.tenant_id, "inspection": inspection["id"]},
+            )
+            result_rows = [dict(row) for row in rows.mappings()]
+            summary = derive_result_summary(result_rows, derived_config)
+            previous = inspection["result_summary"] if isinstance(inspection["result_summary"], dict) else {}
+            summary["notes"] = previous.get("notes")
+            if previous and summary == previous:
+                unchanged += 1
+                continue
+            await ctx.session.execute(
+                text(
+                    "UPDATE quality.inspection SET result_summary = CAST(:summary AS jsonb), "
+                    "updated_at = now(), version = version + 1 WHERE tenant_id = :tenant AND id = :inspection"
+                ),
+                {"tenant": ctx.tenant_id, "inspection": inspection["id"], "summary": json.dumps(summary, default=str)},
+            )
+            recalculated.append(str(inspection["id"]))
+        except Exception as exc:  # noqa: BLE001 - per-inspection isolation for the sweep
+            errors.append({"inspection_id": str(inspection.get("id")), "error": str(exc)[:300]})
+    return {
+        "inspections": checked,
+        "recalculated": len(recalculated),
+        "inspection_ids": recalculated[:50],
+        "unchanged": unchanged,
+        "errors": errors[:20],
+    }
+
+
+async def quality_trigger_evaluate_job(ctx: JobContext) -> dict[str, Any]:
+    """Backstop consumer: replay recent outbox events through active triggers (dedupe-safe)."""
+    from app.modules.quality.service import QualityService
+
+    event_map = {
+        "inventory.receipt.posted": "ITEM_RECEIPT",
+        "work_order.built": "WORK_ORDER_COMPLETION",
+        "assembly.built": "WORK_ORDER_COMPLETION",
+        "wip.completed": "WORK_ORDER_COMPLETION",
+        "inventory.fulfilled": "FULFILLMENT",
+        "inventory.adjusted": "ADJUSTMENT",
+    }
+    triggers = await ctx.session.execute(
+        text(
+            "SELECT id::text AS id, trigger_event FROM quality.inspection_trigger "
+            "WHERE tenant_id = :tenant AND is_active ORDER BY priority"
+        ),
+        {"tenant": ctx.tenant_id},
+    )
+    by_event: dict[str, list[str]] = {}
+    for trigger in triggers.mappings():
+        by_event.setdefault(str(trigger["trigger_event"]), []).append(trigger["id"])
+    if not by_event:
+        return {"events": 0, "created": 0, "deduplicated": 0, "skipped": 0, "triggers": 0}
+    limit = max(1, min(int(ctx.get("limit", 200)), 1000))
+    placeholders = ", ".join(f"'{event}'" for event in event_map)
+    events = await ctx.session.execute(
+        text(
+            f"SELECT id::text AS id, event_type, aggregate_id::text AS aggregate_id, payload "
+            f"FROM platform.outbox_event WHERE tenant_id = :tenant AND event_type IN ({placeholders}) "
+            f"ORDER BY occurred_at DESC LIMIT :limit"
+        ),
+        {"tenant": ctx.tenant_id, "limit": limit},
+    )
+    service = QualityService(ctx.session)
+    created = deduplicated = skipped = 0
+    errors: list[dict[str, Any]] = []
+    event_count = 0
+    for event in events.mappings():
+        event_count += 1
+        trigger_event = event_map[event["event_type"]]
+        payload = event["payload"] if isinstance(event["payload"], Mapping) else {}
+        item_id = payload.get("item_id")
+        location_id = payload.get("location_id")
+        if not item_id or not location_id:
+            skipped += 1
+            continue
+        source_id = payload.get("transaction_id") or payload.get("inventory_transaction_id") or event["aggregate_id"]
+        for trigger_id in by_event.get(trigger_event, []):
+            try:
+                outcome = await service.evaluate_trigger(
+                    tenant_id=ctx.tenant_id,
+                    trigger_id=trigger_id,
+                    event={
+                        "source_entity_type": trigger_event,
+                        "source_entity_id": str(source_id),
+                        "item_id": item_id,
+                        "location_id": location_id,
+                        "lot_id": payload.get("lot_id"),
+                        "serial_id": payload.get("serial_id"),
+                    },
+                )
+                if outcome.get("created"):
+                    created += 1
+                else:
+                    deduplicated += 1
+            except Exception as exc:  # noqa: BLE001 - per-trigger isolation for the backstop
+                errors.append({"trigger_id": trigger_id, "event_id": event["id"], "error": str(exc)[:300]})
+    return {
+        "events": event_count,
+        "triggers": sum(len(ids) for ids in by_event.values()),
+        "created": created,
+        "deduplicated": deduplicated,
+        "skipped": skipped,
+        "errors": errors[:20],
+    }
+
+
+async def ledger_import_process_job(ctx: JobContext) -> dict[str, Any]:
+    from app.modules.inventory_ledger.facade import PostingPort
+
+    port = PostingPort(ctx.session, ctx.tenant_id)
+    documents = port.documents
+    limit = max(1, min(int(ctx.get("limit", 20)), 200))
+    processed: list[dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
+    for status in ("UPLOADED", "VALIDATED"):
+        listing = await documents.list_documents("import_batch", status=status, limit=limit)
+        for batch in listing.get("items", []):
+            batch_id = str(batch["id"])
+            try:
+                if status == "UPLOADED":
+                    validation = await documents.validate_import(batch_id)
+                    if validation.get("status") != "VALIDATED":
+                        continue
+                posted = await documents.post_import(batch_id, idempotency_key=f"ledger-import-job:{batch_id}")
+                processed.append({"batch_id": batch_id, "status": posted.get("status", "POSTED")})
+            except Exception as exc:  # noqa: BLE001 - per-batch isolation for the sweep
+                errors.append({"batch_id": batch_id, "error": str(exc)[:300]})
+    return {"processed": len(processed), "batches": processed[:50], "errors": errors[:20]}
+
+
 # =========================================================================== no-op documentation ==
 def _noop(name: str, feature_set: str, reason: str, description: str) -> JobSpec:
     return JobSpec(
@@ -640,35 +900,34 @@ JOB_SPECS: dict[str, JobSpec] = {
             "Detect items missing item_inventory defaults (repair via API)",
         ),
         # FS-02 pricing
-        _command(
+        _sweep(
             "pricing.apply_effective_updates",
             "FS-02",
             pricing_apply_effective_updates_job,
-            ("update_id",),
-            "Apply a price update on its effective date",
+            "Apply due price-update documents and revert expired ones (tenant-scoped)",
         ),
-        _noop(
+        _sweep(
             "pricing.coupon.expire",
             "FS-02",
-            "coupon expiry is enforced at redemption/validation time; no scheduled expiry sweep yet",
-            "Expire coupons",
+            pricing_coupon_expire_job,
+            "Expire active coupons past end_date and report redemption drift",
         ),
         _noop(
             "pricing.level_swap",
             "FS-02",
-            "price-level swaps are document-driven via the pricing API",
+            "document-driven: executed as price-update documents by the pricing.apply_effective_updates sweep",
             "Price level swap",
         ),
         _noop(
             "pricing.mass_price_update",
             "FS-02",
-            "mass price updates run as price-update documents through the pricing API",
+            "document-driven: executed as price-update documents by the pricing.apply_effective_updates sweep",
             "Mass price update",
         ),
         _noop(
             "pricing.purchase_price_update",
             "FS-02",
-            "purchase-price updates run as price-update documents through the pricing API",
+            "document-driven: purchase-price writes arrive via the FS-01 item-master facade, not a cron sweep",
             "Purchase price update",
         ),
         _sweep(
@@ -694,19 +953,19 @@ JOB_SPECS: dict[str, JobSpec] = {
         _noop(
             "ledger.commit_orders.schedule",
             "FS-04",
-            "commitment scheduling is created by order/document flows, not a cron sweep",
+            "order/document-driven: commitments are scheduled by source documents, no cron input",
             "Schedule commit orders",
         ),
-        _noop(
+        _sweep(
             "ledger.import.process",
             "FS-04",
-            "ledger imports are processed per import batch via the ledger API",
-            "Process ledger import batch",
+            ledger_import_process_job,
+            "Validate/post UPLOADED and VALIDATED ledger import batches",
         ),
         _noop(
             "ledger.partition.maintenance",
             "FS-04",
-            "ledger partitions are provisioned by migrations; no runtime rotation handler yet",
+            "no partitioned ledger parent tables exist in the current schema; migrations own partition DDL",
             "Ledger partition maintenance",
         ),
         _sweep(
@@ -716,17 +975,17 @@ JOB_SPECS: dict[str, JobSpec] = {
             "Read-only balance reconciliation (detail vs balance, negative/availability checks)",
         ),
         # FS-05 costing
-        _noop(
+        _sweep(
             "costing.cogs.true_up",
             "FS-05",
-            "COGS true-up is posting/document-driven through the costing API",
-            "COGS true-up",
+            costing_cogs_true_up_job,
+            "Post APPROVED COGS true-up adjustments",
         ),
-        _noop(
+        _sweep(
             "costing.landedcost.allocate",
             "FS-05",
-            "landed-cost allocation runs per landed-cost document through the costing API",
-            "Landed-cost allocation",
+            costing_landedcost_allocate_job,
+            "Post APPROVED landed costs (computes and records allocations)",
         ),
         _sweep(
             "costing.recalculate_item_cost",
@@ -738,14 +997,14 @@ JOB_SPECS: dict[str, JobSpec] = {
         _noop(
             "costing.rollup.run",
             "FS-05",
-            "cost rollups are created by the costing API with an explicit rollup payload",
+            "payload-driven: a cost rollup needs an explicit cost_version/scope document, no sweep input",
             "Cost rollup run",
         ),
-        _noop(
+        _sweep(
             "costing.standards.revalue",
             "FS-05",
-            "standard-cost revaluation runs per revaluation document through the costing API",
-            "Standard-cost revalue",
+            costing_standards_revalue_job,
+            "Post APPROVED standard-cost revaluation documents",
         ),
         # FS-06 numbered inventory
         _sweep(
@@ -787,7 +1046,7 @@ JOB_SPECS: dict[str, JobSpec] = {
         _noop(
             "procurement.partition.maintenance",
             "FS-08",
-            "procurement partitions are provisioned by migrations; no runtime rotation handler yet",
+            "no partitioned procurement parent tables exist in the current schema; migrations own partition DDL",
             "Procurement partition maintenance",
         ),
         _command(
@@ -825,20 +1084,20 @@ JOB_SPECS: dict[str, JobSpec] = {
             quality_coa_auto_issue_job,
             "Auto-issue COAs for PASSED inspections when quality.auto_coa is on",
         ),
-        _noop(
+        _sweep(
             "quality.derived_field.recalc",
             "FS-12",
-            "derived fields are computed on inspection completion; batch recalc deferred",
-            "Recompute derived fields",
+            quality_derived_field_recalc_job,
+            "Recompute inspection result summaries/derived fields",
         ),
         _sweep(
             "quality.hold.reconcile", "FS-12", quality_hold_reconcile_job, "Read-only hold/T-30 drift reconciliation"
         ),
-        _noop(
+        _sweep(
             "quality.queue.expire",
             "FS-12",
-            "queue expiry needs a tenant policy surface that is not implemented yet",
-            "Expire stale inspection queue items",
+            quality_queue_expire_job,
+            "Cancel stale PENDING/IN_PROGRESS inspections (queue_expiry_days, default 30)",
         ),
         _sweep(
             "quality.trigger.counter_reset",
@@ -846,11 +1105,11 @@ JOB_SPECS: dict[str, JobSpec] = {
             quality_trigger_counter_reset_job,
             "Reset trigger evaluation counters (optionally one trigger)",
         ),
-        _noop(
+        _sweep(
             "quality.trigger.evaluate",
             "FS-12",
-            "triggers are evaluated by the event-driven consumer; no replay buffer/backstop scan yet",
-            "Evaluate deferred inspection triggers",
+            quality_trigger_evaluate_job,
+            "Backstop replay of recent outbox events through active triggers (dedupe-safe)",
         ),
         # FS-13 consigned inventory
         _sweep(

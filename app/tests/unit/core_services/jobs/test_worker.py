@@ -39,6 +39,9 @@ async def _seed_tenant(db_session, *, counts_enabled: bool = True):
     for flag_key, enabled in (
         ("inventory.counts.enabled", counts_enabled),
         ("traceability.registry.enabled", True),
+        ("costing.engine.enabled", True),
+        ("quality.management.enabled", True),
+        ("reporting.readmodels.enabled", True),
     ):
         await db_session.execute(
             insert(p.feature_flag).values(
@@ -145,3 +148,48 @@ def test_list_jobs_has_seeded_definition_shape() -> None:
     rows = JobWorker.list_jobs()
     assert len(rows) == 57
     assert all({"name", "kind", "feature_set", "implemented"} <= set(row) for row in rows)
+
+
+async def test_newly_implemented_sweeps_run_against_empty_tenant(db_session) -> None:
+    tenant_id = await _seed_tenant(db_session)
+    worker = JobWorker(session_factory=_factory(db_session))
+    expectations = {
+        "pricing.coupon.expire": {"expired": int, "as_of": str},
+        "pricing.apply_effective_updates": {"applied": int, "reverted": int},
+        "costing.cogs.true_up": {"approved": int, "posted": int},
+        "costing.landedcost.allocate": {"approved": int, "allocated": int},
+        "costing.standards.revalue": {"approved": int, "posted": int},
+        "quality.queue.expire": {"days": int, "expired": int},
+        "quality.derived_field.recalc": {"inspections": int, "recalculated": int},
+        "quality.trigger.evaluate": {"events": int, "created": int, "deduplicated": int},
+        "ledger.import.process": {"processed": int},
+    }
+    for job_name, fields in expectations.items():
+        envelope = await worker.run_job(job_name, tenant_id=str(tenant_id))
+        assert envelope["status"] == "succeeded", (job_name, envelope)
+        for field, field_type in fields.items():
+            assert isinstance(envelope["result"][field], field_type), (job_name, field, envelope["result"])
+        assert envelope["result"].get("errors", []) == [], (job_name, envelope["result"].get("errors"))
+
+
+async def test_noop_remainders_are_only_external_or_payload_driven() -> None:
+    remaining = {row["name"] for row in JobWorker.list_jobs() if not row["implemented"]}
+    assert remaining == {
+        "platform.outbox.relay",
+        "platform.jobs.scheduler",
+        "platform.retention.purge",
+        "platform.sso.health.monitor",
+        "ledger.commit_orders.schedule",
+        "ledger.partition.maintenance",
+        "procurement.partition.maintenance",
+        "costing.rollup.run",
+        "pricing.level_swap",
+        "pricing.mass_price_update",
+        "pricing.purchase_price_update",
+    }
+    reasons = {row["name"]: row["noop_reason"] for row in JobWorker.list_jobs() if not row["implemented"]}
+    assert all(reasons.values())
+    assert any(
+        "external" in str(reason) or "dedicated" in str(reason) or "document" in str(reason)
+        for reason in reasons.values()
+    )
