@@ -50,7 +50,12 @@ def token_service() -> TokenService:
     settings = _settings()
     return TokenService(
         HmacTokenSigner(settings.jwt_secret),
-        config=TokenConfig(issuer=settings.jwt_issuer, audience=settings.jwt_audience),
+        config=TokenConfig(
+            issuer=settings.jwt_issuer,
+            audience=settings.jwt_audience,
+            access_ttl_seconds=settings.access_token_ttl_seconds,
+            refresh_ttl_seconds=settings.refresh_token_ttl_seconds,
+        ),
     )
 
 
