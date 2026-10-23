@@ -27,7 +27,7 @@ import binascii
 import hashlib
 import json
 import re
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import UUID, uuid4
@@ -111,6 +111,11 @@ class TenantTransitionError(PlatformAdminError):
 class ReservedTenantError(PlatformAdminError):
     code = "SYSTEM_TENANT_RESERVED"
     http_status = 409
+
+
+class TenantVersionConflictError(PlatformAdminError):
+    code = "STALE_VERSION"
+    http_status = 412
 
 
 class IdempotencyError(PlatformAdminError):
@@ -237,9 +242,7 @@ def validate_create(payload: Mapping[str, Any]) -> dict[str, Any]:
         "status": status,
         "timezone": validate_timezone(str(payload.get("timezone") or "UTC")),
         "base_currency_code": (
-            validate_currency_code(payload["base_currency_code"])
-            if payload.get("base_currency_code")
-            else None
+            validate_currency_code(payload["base_currency_code"]) if payload.get("base_currency_code") else None
         ),
         "negative_inventory_policy": policy,
         "rounding_mode": rounding,
@@ -640,7 +643,10 @@ class PlatformAdminRepository:
         current_status = str(current["status"])
         current_version = int(current["version"])
         if expected_version is not None and expected_version != current_version:
-            raise PlatformAdminError("tenant was modified by another request") from None
+            raise TenantVersionConflictError(
+                "tenant version does not match If-Match",
+                details={"current_version": current_version, "expected_version": expected_version},
+            )
         changed = sorted(patch)
         target_status = str(patch.get("status", current_status))
         action = transition_audit_action(current_status, target_status)
@@ -656,7 +662,7 @@ class PlatformAdminRepository:
         )
         result = await self.session.execute(stmt)
         if getattr(result, "rowcount", 1) == 0:
-            raise PlatformAdminError("tenant was modified by another request", details={"field": "If-Match"})
+            raise TenantVersionConflictError("tenant was modified by another request", details={"field": "If-Match"})
         sessions_revoked = 0
         if target_status in {"SUSPENDED", "OFFBOARDING"} and target_status != current_status:
             sessions_revoked = await self.revoke_sessions(tenant_id, reason=f"tenant.{target_status.lower()}")
@@ -766,7 +772,7 @@ class PlatformAdminRepository:
     ) -> dict[str, Any] | None:
         """Reserve an idempotency key. Returns a stored replay payload for completed duplicates."""
         validate_idempotency_key(key)
-        await self.session.execute(
+        insert_result = await self.session.execute(
             pg_insert(p.idempotency_key)
             .values(
                 id=uuid4(),
@@ -782,8 +788,10 @@ class PlatformAdminRepository:
             )
             .on_conflict_do_nothing(index_elements=["tenant_id", "endpoint_id", "key_value"])
         )
+        if int(getattr(insert_result, "rowcount", 0) or 0) == 1:
+            return None  # this request reserved the key and should proceed
         row = await self._idempotency_row(endpoint_id, key)
-        if row is None:  # pragma: no cover - insert just happened
+        if row is None:  # pragma: no cover - conflict without a readable row
             return None
         if str(row["request_hash"]) != request_hash:
             raise IdempotencyError(
@@ -852,6 +860,7 @@ __all__ = [
     "TenantNotFoundError",
     "TenantTransitionError",
     "TenantValidationError",
+    "TenantVersionConflictError",
     "decode_cursor",
     "encode_cursor",
     "is_system_tenant",
