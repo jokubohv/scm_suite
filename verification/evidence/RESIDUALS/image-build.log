@@ -1,0 +1,267 @@
+ Service api  Building
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [api internal] load build definition from Dockerfile
+#1 transferring dockerfile: 5.48kB done
+#1 DONE 0.0s
+
+#2 [api internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.7s
+
+#3 [api internal] load .dockerignore
+#3 transferring context: 1.20kB done
+#3 DONE 0.0s
+
+#4 [api builder 1/6] FROM docker.io/library/python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704
+#4 resolve docker.io/library/python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704 done
+#4 DONE 0.0s
+
+#5 [api internal] load build context
+#5 transferring context: 711.61kB 0.1s done
+#5 DONE 0.1s
+
+#6 [api builder 2/6] WORKDIR /build
+#6 CACHED
+
+#7 [api builder 3/6] RUN apt-get update     && apt-get install -y --no-install-recommends build-essential     && rm -rf /var/lib/apt/lists/*
+#7 CACHED
+
+#8 [api builder 4/6] COPY pyproject.toml README.IMPLEMENTATION.md ./
+#8 DONE 0.0s
+
+#9 [api builder 5/6] COPY app ./app
+#9 DONE 0.2s
+
+#10 [api builder 6/6] RUN python -m venv /opt/venv     && /opt/venv/bin/python -m pip install --upgrade pip     && /opt/venv/bin/pip install .
+#10 2.265 Requirement already satisfied: pip in /opt/venv/lib/python3.12/site-packages (25.0.1)
+#10 2.421 Collecting pip
+#10 2.545   Downloading pip-26.2.2-py3-none-any.whl.metadata (4.6 kB)
+#10 2.574 Downloading pip-26.2.2-py3-none-any.whl (1.8 MB)
+#10 2.736    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 19.0 MB/s eta 0:00:00
+#10 2.753 Installing collected packages: pip
+#10 2.753   Attempting uninstall: pip
+#10 2.755     Found existing installation: pip 25.0.1
+#10 2.777     Uninstalling pip-25.0.1:
+#10 2.782       Successfully uninstalled pip-25.0.1
+#10 3.258 Successfully installed pip-26.2.2
+#10 3.675 Processing ./.
+#10 3.676   Installing build dependencies: started
+#10 4.857   Installing build dependencies: finished with status 'done'
+#10 4.858   Getting requirements to build wheel: started
+#10 5.344   Getting requirements to build wheel: finished with status 'done'
+#10 5.344   Preparing metadata (pyproject.toml): started
+#10 5.887   Preparing metadata (pyproject.toml): finished with status 'done'
+#10 6.041 Collecting fastapi>=0.115 (from inventory-platform==0.1.0)
+#10 6.139   Downloading fastapi-0.161.1-py3-none-any.whl.metadata (26 kB)
+#10 6.196 Collecting uvicorn>=0.30 (from uvicorn[standard]>=0.30->inventory-platform==0.1.0)
+#10 6.225   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+#10 6.367 Collecting pydantic>=2.8 (from inventory-platform==0.1.0)
+#10 6.394   Downloading pydantic-2.14.1-py3-none-any.whl.metadata (133 kB)
+#10 6.465 Collecting pydantic-settings>=2.4 (from inventory-platform==0.1.0)
+#10 6.494   Downloading pydantic_settings-2.16.1-py3-none-any.whl.metadata (4.0 kB)
+#10 6.735 Collecting sqlalchemy>=2.0.32 (from sqlalchemy[asyncio]>=2.0.32->inventory-platform==0.1.0)
+#10 6.762   Downloading sqlalchemy-2.1.6-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (9.7 kB)
+#10 6.811 Collecting asyncpg>=0.29 (from inventory-platform==0.1.0)
+#10 6.841   Downloading asyncpg-0.32.0-cp312-cp312-manylinux_2_28_aarch64.whl.metadata (4.4 kB)
+#10 6.877 Collecting alembic>=1.13 (from inventory-platform==0.1.0)
+#10 6.909   Downloading alembic-1.20.1-py3-none-any.whl.metadata (7.3 kB)
+#10 6.950 Collecting redis>=5.0 (from inventory-platform==0.1.0)
+#10 6.978   Downloading redis-8.1.0-py3-none-any.whl.metadata (16 kB)
+#10 7.020 Collecting rq>=1.16 (from inventory-platform==0.1.0)
+#10 7.052   Downloading rq-2.12.0-py3-none-any.whl.metadata (12 kB)
+#10 7.088 Collecting httpx>=0.27 (from inventory-platform==0.1.0)
+#10 7.118   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+#10 7.159 Collecting pyjwt>=2.9 (from pyjwt[crypto]>=2.9->inventory-platform==0.1.0)
+#10 7.187   Downloading pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
+#10 7.319 Collecting cryptography>=42 (from inventory-platform==0.1.0)
+#10 7.349   Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_aarch64.whl.metadata (4.4 kB)
+#10 7.387 Collecting argon2-cffi>=23.1 (from inventory-platform==0.1.0)
+#10 7.413   Downloading argon2_cffi-25.1.0-py3-none-any.whl.metadata (4.1 kB)
+#10 7.451 Collecting minio>=7.2 (from inventory-platform==0.1.0)
+#10 7.482   Downloading minio-7.2.20-py3-none-any.whl.metadata (6.5 kB)
+#10 7.517 Collecting jsonschema>=4.23 (from inventory-platform==0.1.0)
+#10 7.545   Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+#10 7.611 Collecting pyyaml>=6.0 (from inventory-platform==0.1.0)
+#10 7.637   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.4 kB)
+#10 7.671 Collecting structlog>=24.1 (from inventory-platform==0.1.0)
+#10 7.701   Downloading structlog-26.1.0-py3-none-any.whl.metadata (9.7 kB)
+#10 7.736 Collecting python-multipart>=0.0.9 (from inventory-platform==0.1.0)
+#10 7.762   Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+#10 7.799 Collecting Mako (from alembic>=1.13->inventory-platform==0.1.0)
+#10 7.829   Downloading mako-1.4.3-py3-none-any.whl.metadata (2.9 kB)
+#10 7.870 Collecting typing-extensions>=4.12 (from alembic>=1.13->inventory-platform==0.1.0)
+#10 7.900   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#10 7.935 Collecting argon2-cffi-bindings (from argon2-cffi>=23.1->inventory-platform==0.1.0)
+#10 7.964   Downloading argon2_cffi_bindings-26.1.0-cp310-abi3-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl.metadata (7.5 kB)
+#10 8.040 Collecting cffi>=2.0.0 (from cryptography>=42->inventory-platform==0.1.0)
+#10 8.067   Downloading cffi-2.1.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (2.5 kB)
+#10 8.098 Collecting pycparser (from cffi>=2.0.0->cryptography>=42->inventory-platform==0.1.0)
+#10 8.128   Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+#10 8.163 Collecting starlette>=0.46.0 (from fastapi>=0.115->inventory-platform==0.1.0)
+#10 8.192   Downloading starlette-1.9.0-py3-none-any.whl.metadata (6.6 kB)
+#10 8.222 Collecting typing-inspection>=0.4.2 (from fastapi>=0.115->inventory-platform==0.1.0)
+#10 8.249   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+#10 8.280 Collecting annotated-doc>=0.0.2 (from fastapi>=0.115->inventory-platform==0.1.0)
+#10 8.308   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+#10 8.349 Collecting opentelemetry-api>=1.44.0 (from fastapi>=0.115->inventory-platform==0.1.0)
+#10 8.375   Downloading opentelemetry_api-1.45.1-py3-none-any.whl.metadata (1.4 kB)
+#10 8.413 Collecting anyio (from httpx>=0.27->inventory-platform==0.1.0)
+#10 8.443   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+#10 8.486 Collecting certifi (from httpx>=0.27->inventory-platform==0.1.0)
+#10 8.513   Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+#10 8.551 Collecting httpcore==1.* (from httpx>=0.27->inventory-platform==0.1.0)
+#10 8.579   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#10 8.619 Collecting idna (from httpx>=0.27->inventory-platform==0.1.0)
+#10 8.649   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+#10 8.684 Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.27->inventory-platform==0.1.0)
+#10 8.716   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#10 8.759 Collecting attrs>=22.2.0 (from jsonschema>=4.23->inventory-platform==0.1.0)
+#10 8.791   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+#10 8.837 Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=4.23->inventory-platform==0.1.0)
+#10 8.868   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+#10 8.916 Collecting referencing>=0.28.4 (from jsonschema>=4.23->inventory-platform==0.1.0)
+#10 8.947   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+#10 9.132 Collecting rpds-py>=0.25.0 (from jsonschema>=4.23->inventory-platform==0.1.0)
+#10 9.161   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (4.1 kB)
+#10 9.226 Collecting pycryptodome (from minio>=7.2->inventory-platform==0.1.0)
+#10 9.254   Downloading pycryptodome-4.1.0-cp39-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl.metadata (5.9 kB)
+#10 9.290 Collecting urllib3 (from minio>=7.2->inventory-platform==0.1.0)
+#10 9.318   Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+#10 9.348 Collecting annotated-types>=0.6.0 (from pydantic>=2.8->inventory-platform==0.1.0)
+#10 9.375   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+#10 9.810 Collecting pydantic-core==2.50.1 (from pydantic>=2.8->inventory-platform==0.1.0)
+#10 9.839   Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (6.5 kB)
+#10 9.874 Collecting python-dotenv>=1.2.2 (from pydantic-settings>=2.4->inventory-platform==0.1.0)
+#10 9.907   Downloading python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+#10 9.951 Collecting click>=5 (from rq>=1.16->inventory-platform==0.1.0)
+#10 9.977   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+#10 10.01 Collecting croniter (from rq>=1.16->inventory-platform==0.1.0)
+#10 10.04   Downloading croniter-6.2.4-py3-none-any.whl.metadata (23 kB)
+#10 10.16 Collecting greenlet>=1 (from sqlalchemy[asyncio]>=2.0.32->inventory-platform==0.1.0)
+#10 10.20   Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl.metadata (3.8 kB)
+#10 10.25 Collecting httptools>=0.8.0 (from uvicorn[standard]>=0.30->inventory-platform==0.1.0)
+#10 10.28   Downloading httptools-0.9.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (3.5 kB)
+#10 10.33 Collecting uvloop>=0.15.1 (from uvicorn[standard]>=0.30->inventory-platform==0.1.0)
+#10 10.36   Downloading uvloop-0.23.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (5.1 kB)
+#10 10.41 Collecting watchfiles>=0.20 (from uvicorn[standard]>=0.30->inventory-platform==0.1.0)
+#10 10.44   Downloading watchfiles-1.3.0-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl.metadata (4.9 kB)
+#10 10.52 Collecting websockets>=13.0 (from uvicorn[standard]>=0.30->inventory-platform==0.1.0)
+#10 10.55   Downloading websockets-17.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (6.3 kB)
+#10 10.59 Collecting python-dateutil (from croniter->rq>=1.16->inventory-platform==0.1.0)
+#10 10.62   Downloading python_dateutil-3.0.0-py2.py3-none-any.whl.metadata (8.2 kB)
+#10 10.67 Collecting MarkupSafe>=2.0 (from Mako->alembic>=1.13->inventory-platform==0.1.0)
+#10 10.70   Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (2.7 kB)
+#10 10.73 Collecting six>=1.6 (from python-dateutil->croniter->rq>=1.16->inventory-platform==0.1.0)
+#10 10.75   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#10 10.79 Collecting tzdata (from python-dateutil->croniter->rq>=1.16->inventory-platform==0.1.0)
+#10 10.82   Downloading tzdata-2026.5-py2.py3-none-any.whl.metadata (1.4 kB)
+#10 10.85 Downloading alembic-1.20.1-py3-none-any.whl (270 kB)
+#10 10.91 Downloading argon2_cffi-25.1.0-py3-none-any.whl (14 kB)
+#10 10.94 Downloading asyncpg-0.32.0-cp312-cp312-manylinux_2_28_aarch64.whl (3.7 MB)
+#10 11.04    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.7/3.7 MB 35.3 MB/s  0:00:00
+#10 11.08 Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_aarch64.whl (4.7 MB)
+#10 11.16    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 64.1 MB/s  0:00:00
+#10 11.19 Downloading cffi-2.1.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (222 kB)
+#10 11.23 Downloading fastapi-0.161.1-py3-none-any.whl (149 kB)
+#10 11.26 Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+#10 11.30 Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+#10 11.33 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#10 11.37 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#10 11.40 Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+#10 11.43 Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+#10 11.47 Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+#10 11.50 Downloading minio-7.2.20-py3-none-any.whl (93 kB)
+#10 11.53 Downloading opentelemetry_api-1.45.1-py3-none-any.whl (60 kB)
+#10 11.56 Downloading pydantic-2.14.1-py3-none-any.whl (488 kB)
+#10 11.61 Downloading pydantic_core-2.50.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (2.0 MB)
+#10 11.64    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 67.2 MB/s  0:00:00
+#10 11.67 Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+#10 11.70 Downloading pydantic_settings-2.16.1-py3-none-any.whl (80 kB)
+#10 11.73 Downloading pyjwt-2.15.1-py3-none-any.whl (33 kB)
+#10 11.76 Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+#10 11.79 Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#10 11.82 Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (775 kB)
+#10 11.83    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 775.1/775.1 kB 67.0 MB/s  0:00:00
+#10 11.86 Downloading redis-8.1.0-py3-none-any.whl (560 kB)
+#10 11.87    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 560.6/560.6 kB 62.0 MB/s  0:00:00
+#10 11.90 Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+#10 11.93 Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (373 kB)
+#10 11.97 Downloading rq-2.12.0-py3-none-any.whl (127 kB)
+#10 12.00 Downloading click-8.5.0-py3-none-any.whl (125 kB)
+#10 12.04 Downloading sqlalchemy-2.1.6-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (4.7 MB)
+#10 12.13    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 49.5 MB/s  0:00:00
+#10 12.16 Downloading greenlet-3.5.6-cp312-cp312-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl (611 kB)
+#10 12.17    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 611.7/611.7 kB 47.0 MB/s  0:00:00
+#10 12.20 Downloading starlette-1.9.0-py3-none-any.whl (80 kB)
+#10 12.23 Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+#10 12.26 Downloading idna-3.20-py3-none-any.whl (69 kB)
+#10 12.29 Downloading structlog-26.1.0-py3-none-any.whl (73 kB)
+#10 12.32 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#10 12.36 Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+#10 12.39 Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+#10 12.43 Downloading httptools-0.9.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (549 kB)
+#10 12.44    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 549.2/549.2 kB 57.4 MB/s  0:00:00
+#10 12.47 Downloading uvloop-0.23.0-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (4.4 MB)
+#10 12.55    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.4/4.4 MB 54.3 MB/s  0:00:00
+#10 12.59 Downloading watchfiles-1.3.0-cp310-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (454 kB)
+#10 12.62 Downloading websockets-17.3-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (227 kB)
+#10 12.66 Downloading argon2_cffi_bindings-26.1.0-cp310-abi3-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl (27 kB)
+#10 12.69 Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+#10 12.71 Downloading croniter-6.2.4-py3-none-any.whl (46 kB)
+#10 12.74 Downloading mako-1.4.3-py3-none-any.whl (80 kB)
+#10 12.77 Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (24 kB)
+#10 12.81 Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+#10 12.84 Downloading pycryptodome-4.1.0-cp39-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl (2.1 MB)
+#10 12.90    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 33.2 MB/s  0:00:00
+#10 12.93 Downloading python_dateutil-3.0.0-py2.py3-none-any.whl (94 kB)
+#10 12.96 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+#10 12.99 Downloading tzdata-2026.5-py2.py3-none-any.whl (347 kB)
+#10 13.02 Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+#10 13.11 Building wheels for collected packages: inventory-platform
+#10 13.11   Building wheel for inventory-platform (pyproject.toml): started
+#10 13.83   Building wheel for inventory-platform (pyproject.toml): finished with status 'done'
+#10 13.83   Created wheel for inventory-platform: filename=inventory_platform-0.1.0-py3-none-any.whl size=1403187 sha256=23b08082fa9beb257c786a459959a58345820bbdf3bfdd30dda3f70bcd2005e6
+#10 13.83   Stored in directory: /tmp/pip-ephem-wheel-cache-jo_y4u5k/wheels/7f/5c/67/61a4ca28ccbc7df61f55a044560f100aa81c66ef20585de495
+#10 13.83 Successfully built inventory-platform
+#10 13.89 Installing collected packages: websockets, uvloop, urllib3, tzdata, typing-extensions, structlog, six, rpds-py, redis, pyyaml, python-multipart, python-dotenv, pyjwt, pycryptodome, pycparser, MarkupSafe, idna, httptools, h11, greenlet, click, certifi, attrs, asyncpg, annotated-types, annotated-doc, uvicorn, typing-inspection, sqlalchemy, referencing, python-dateutil, pydantic-core, opentelemetry-api, Mako, httpcore, cffi, anyio, watchfiles, starlette, pydantic, jsonschema-specifications, httpx, cryptography, croniter, argon2-cffi-bindings, alembic, rq, pydantic-settings, jsonschema, fastapi, argon2-cffi, minio, inventory-platform
+#10 17.92 
+#10 17.92 Successfully installed Mako-1.4.3 MarkupSafe-3.0.4 alembic-1.20.1 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 argon2-cffi-25.1.0 argon2-cffi-bindings-26.1.0 asyncpg-0.32.0 attrs-26.1.0 certifi-2026.10.23 cffi-2.1.1 click-8.5.0 croniter-6.2.4 cryptography-50.0.2 fastapi-0.161.1 greenlet-3.5.6 h11-0.16.0 httpcore-1.0.9 httptools-0.9.0 httpx-0.28.1 idna-3.20 inventory-platform-0.1.0 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 minio-7.2.20 opentelemetry-api-1.45.1 pycparser-3.12 pycryptodome-4.1.0 pydantic-2.14.1 pydantic-core-2.50.1 pydantic-settings-2.16.1 pyjwt-2.15.1 python-dateutil-3.0.0 python-dotenv-1.2.4 python-multipart-0.0.32 pyyaml-6.0.3 redis-8.1.0 referencing-0.37.0 rpds-py-2026.9.1 rq-2.12.0 six-1.17.0 sqlalchemy-2.1.6 starlette-1.9.0 structlog-26.1.0 typing-extensions-4.16.0 typing-inspection-0.4.4 tzdata-2026.5 urllib3-2.8.0 uvicorn-0.54.0 uvloop-0.23.0 watchfiles-1.3.0 websockets-17.3
+#10 DONE 18.3s
+
+#11 [api runtime 2/8] RUN apt-get update     && apt-get install -y --no-install-recommends ca-certificates tini     && rm -rf /var/lib/apt/lists/*     && groupadd --gid 10001 app     && useradd --uid 10001 --gid 10001 --create-home --shell /usr/sbin/nologin app
+#11 CACHED
+
+#12 [api runtime 3/8] WORKDIR /app
+#12 CACHED
+
+#13 [api runtime 4/8] COPY --from=builder /opt/venv /opt/venv
+#13 DONE 0.9s
+
+#14 [api runtime 5/8] COPY alembic.ini pyproject.toml README.IMPLEMENTATION.md ./
+#14 DONE 0.1s
+
+#15 [api runtime 6/8] COPY app ./app
+#15 DONE 0.1s
+
+#16 [api runtime 7/8] COPY design/permissions.json ./design/permissions.json
+#16 DONE 0.0s
+
+#17 [api runtime 8/8] RUN chown -R 10001:10001 /app && chmod -R a+rX /app
+#17 DONE 0.9s
+
+#18 [api] exporting to image
+#18 exporting layers
+#18 exporting layers 4.0s done
+#18 exporting manifest sha256:fd35d5c8619c39161fdfa04314c3f2b25cfe71234d57e7bd0428dd0a7cf025de
+#18 exporting manifest sha256:fd35d5c8619c39161fdfa04314c3f2b25cfe71234d57e7bd0428dd0a7cf025de done
+#18 exporting config sha256:2473689a9ae57988a5c8e276f7f602d1a7a4328daed4b3f77345fa60c0106590 0.0s done
+#18 exporting attestation manifest sha256:112f415c90f9994b95619e1ffb4c54052e359748d72fabe15d44ac76ec36783b done
+#18 exporting manifest list sha256:956ff2b3bb74a0ce8082d95cc3cb91edd3282717192fc32aa81c6f953d292cbb done
+#18 naming to docker.io/library/inventory-platform-api:local done
+#18 unpacking to docker.io/library/inventory-platform-api:local
+#18 unpacking to docker.io/library/inventory-platform-api:local 1.0s done
+ Service api  Built
+#18 DONE 5.0s
+
+#19 [api] resolving provenance for metadata file
+#19 DONE 0.0s
