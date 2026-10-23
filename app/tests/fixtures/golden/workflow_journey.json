@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0.0",
+  "plan_version": "1.5.0",
+  "name": "workflow_journey_placeholder",
+  "status": "placeholder",
+  "expand_in": "B3/B4 (golden journeys owned by the e2e owner)",
+  "purpose": "Canonical cross-set golden journey skeleton: receipt -> transfer order -> count variance -> fulfillment/return, with expected ledger invariants. Populate expected values when FS-04/FS-05 engines land; keep decimal values as strings with 12 dp.",
+  "steps": [
+    {
+      "step": 1,
+      "name": "receipt",
+      "document": "item_receipt",
+      "posting_type": "T-01",
+      "expected": {
+        "qty_effect": "+10.000000000000",
+        "value_effect": "+50.000000000000",
+        "events": ["inventory.receipt.posted", "po.receipted", "cost.layer.created"],
+        "invariants": ["INV-01", "INV-02", "INV-03", "INV-17"],
+        "placeholder": true
+      }
+    },
+    {
+      "step": 2,
+      "name": "transfer_order_fulfilment",
+      "document": "transfer_order",
+      "posting_type": "T-10",
+      "expected": {
+        "qty_effect": "-4.000000000000",
+        "in_transit_effect": "+4.000000000000",
+        "events": ["to.fulfilled", "inventory.in_transit.changed"],
+        "invariants": ["INV-01", "INV-05"],
+        "placeholder": true
+      }
+    },
+    {
+      "step": 3,
+      "name": "transfer_order_receipt",
+      "document": "transfer_order",
+      "posting_type": "T-11",
+      "expected": {
+        "in_transit_effect": "-4.000000000000",
+        "qty_effect": "+4.000000000000",
+        "events": ["to.received"],
+        "invariants": ["INV-01", "INV-05"],
+        "placeholder": true
+      }
+    },
+    {
+      "step": 4,
+      "name": "count_variance",
+      "document": "inventory_count",
+      "posting_type": "T-20",
+      "expected": {
+        "qty_effect": "-1.000000000000",
+        "value_effect": "-5.000000000000",
+        "events": ["count.approved", "count.variance_posted", "inventory.adjusted"],
+        "invariants": ["INV-01", "INV-02", "INV-03"],
+        "placeholder": true
+      }
+    },
+    {
+      "step": 5,
+      "name": "fulfillment",
+      "document": "fulfillment",
+      "posting_type": "T-12",
+      "expected": {
+        "qty_effect": "-5.000000000000",
+        "value_effect": "-25.000000000000",
+        "events": ["fulfillment.posted", "cogs.recorded", "inventory.issued"],
+        "invariants": ["INV-01", "INV-02", "INV-10"],
+        "placeholder": true
+      }
+    }
+  ],
+  "final_expectations": {
+    "on_hand_qty": "0.000000000000",
+    "in_transit_qty": "0.000000000000",
+    "value_reconciles": true,
+    "ledger_append_only": true,
+    "placeholder": true
+  }
+}

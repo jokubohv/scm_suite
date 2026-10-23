@@ -1,0 +1,32 @@
+Δ-RBAC (PERMISSIONS & ROLES) DELTA SUMMARY  2026-10-21T15:17:52-04:00
+Plan version: 1.2.0 (v1.1.0 verified PASS -> Δ-RBAC amendment)
+
+== scope (hash-diff vs v1.1.0 snapshot) ==
+new: design/PERMISSIONS-ROLES-ADDENDUM.md (binding; §10 resolved clarifications), design/permissions.json (authoritative catalogue)
+amended: design/ARCHITECTURE.md, design/DATA-MODEL.md, design/FEATURE-SETS.md, design/feature-sets.json, feature-sets/FS-00.md, feature-sets/FS-01.md, PLAN.md, README.md
+unchanged: catalogs, coverage, other 15 specs, tables/views/posting types/DAG/contracts
+
+== catalogue (permissions.json) ==
+scopes 249 assignable 235 service-only 13 platform-only 1 requires_approval 18
+alias: {'platform.user.manage': 'platform.users.manage'} not seeded: True
+roles: [('admin', 235), ('planner', 50), ('buyer', 71), ('warehouse_operator', 81), ('cost_accountant', 57), ('quality_inspector', 47), ('readonly', 43)]
+sod pairs 14 global rules 6 public 6 self-service 6
+
+== counts ==
+277 base tables / platform 31 / 21 views unchanged; 31 posting types T-01..T-31 + 6 commands unchanged; 140 scoped + 10 global = 150 rules; INV-01..INV-31; plan_version 1.2.0; FS-00 31 tables / 85 endpoints / 26 events; exit gate 14 commands
+
+== re-run results ==
+PERMISSIONS OK: 249 scopes (235 assignable, 13 service-only, 1 platform-only, 18 requires-approval, 1 alias(es)); 7 role templates; 14 SoD pairs; 6 global rules
+  spec reconciliation: 16 specs, 763 endpoint rows scanned, 182 catalogue scope references, 0 unknown, 67 unreferenced warning(s)
+unit:  / permissions 
+reproduce rc: 1
+independent: INDEPENDENT PHASE-A RECHECK  --  96 PASS / 0 FAIL
+spec/PLAN audit: AUDIT RESULT: PASS -- 0 findings, 0 check failures (703 checks passed)
+MT regression: Δ-MT (MULTI-TENANT USERS) DELTA AUDIT  --  50 PASS / 0 FAIL / 1 findings
+RBAC audit: RBAC DELTA AUDIT  --  47 PASS / 3 FAIL / 4 findings
+
+== findings (MINOR documentation, text-only) ==
+[MINOR] RBAC-D2 (feature-sets/FS-01.md line 347 (GET /api/v1/items/{item_id}/locations)): GET /items/{item_id}/locations (read of per-location settings) is scoped `items.location.manage` while every sibling reference/config read in FS-01 (accounting, purchasing, sales, uoms, availability-settings, barcodes, aliases, ...) uses `items.read`. This is the only remaining GET row not using `items.read`; it is likely a residual of the five read-scope fixes (addendum §10: FS-01 read cells to `items.read`).
+[MINOR] RBAC-D4 (design/DATA-MODEL.md:192 (DM-RBAC-01)): DM-RBAC-01 says the self-service allowlist has 5 entries; the final catalogue/ARCHITECTURE §5.2 have 6 (the sixth is GET /api/v1/me/effective-permissions, added with the Δ-RBAC fixes).
+[MINOR] RBAC-D3 (PLAN.md:49): PLAN deliverable table still says '206 capability scopes'; the final authoritative catalogue is 249 (reconciled after the four missing action scopes and the alias cleanup).
+[MINOR] RBAC-D1 (feature-sets/FS-00.md:367 and feature-sets/FS-00.md:990): FS-00 role-template scope counts are stale: the §4.3 role table lists `buyer` 70 / `warehouse_operator` 78, but the authoritative catalogue has buyer 71 / warehouse_operator 81 (ARCHITECTURE §5.2 and FS-00 §4.3 prose already state 71/81, so the spec is internally inconsistent).

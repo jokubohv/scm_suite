@@ -1,0 +1,7 @@
+ERROR E-WAVE-MONO: FS-01 (wave 0B) depends on FS-05 (wave 0C); within a phase a dependency wave must be no later than the dependent wave
+ERROR E-CYCLE: dependency cycle detected: FS-01 -> FS-05 -> FS-01
+ERROR E-CYCLE: dependency cycle detected: FS-01 -> FS-05 -> FS-03 -> FS-01
+ERROR E-CYCLE: dependency cycle detected: FS-01 -> FS-05 -> FS-04 -> FS-02 -> FS-01
+ERROR E-CYCLE: dependency cycle detected: FS-01 -> FS-05 -> FS-04 -> FS-01
+VALIDATE FAILED: 5 error(s), 0 warning(s) | sets=16 edges=117 contracts=21
+rc=2

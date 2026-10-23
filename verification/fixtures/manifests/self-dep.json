@@ -1,0 +1,1510 @@
+{
+  "schema_version": "1.0",
+  "plan_version": "1.0.0",
+  "feature_sets": [
+    {
+      "id": "FS-00",
+      "name": "Platform Core (tenancy, identity, audit, events, jobs, boundaries)",
+      "phase": 1,
+      "wave": "0A",
+      "summary": "Tenant registry with Postgres RLS, users/roles/scopes, immutable audit trail, number sequences, per-tenant feature flags, transactional outbox + relay, job definitions/runs, idempotency keys, attachments metadata, declarative approvals, document links, custom-field registry, the FinancePort (finance_journal_intent persistence + read API per D2) and the v0 order boundary stub contracts (order.demand@0 / order.supply@0 per D3).",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2164398.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161963741628.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158403724627.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156520467974.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156520480478.html"
+      ],
+      "depends_on": [],
+      "provides": [
+        {
+          "contract": "platform.core",
+          "version": "1.0.0"
+        },
+        {
+          "contract": "platform.events",
+          "version": "1.0.0"
+        },
+        {
+          "contract": "platform.finance",
+          "version": "1.0.0"
+        },
+        {
+          "contract": "order.demand",
+          "version": "0.1.0"
+        },
+        {
+          "contract": "order.supply",
+          "version": "0.1.0"
+        }
+      ],
+      "modules": [
+        "app/core",
+        "app/api/routers/platform",
+        "app/contracts/platform",
+        "app/contracts/order_boundary"
+      ],
+      "migrations": [
+        "alembic:0001_platform_core",
+        "alembic:0002_platform_security",
+        "alembic:0003_platform_events"
+      ],
+      "flags": [
+        "platform.core.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-00 --env $ENV",
+        "pytest app/tests/contracts/test_fs00_order_boundary_stub.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/platform -q",
+        "pytest app/tests/contracts/test_fs00_provider_contract.py -q",
+        "pytest app/tests/invariants/test_rls_tenant_isolation.py app/tests/invariants/test_append_only_privileges.py -q",
+        "pytest app/tests/integration/finance_port/test_journal_intent_read_api.py -q",
+        "python tools/feature_sets.py record --set FS-00 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a request authenticated for tenant A, when it requests a tenant-B resource by id, then the API returns 404 and a raw-SQL read without the tenant GUC returns no row (RLS test matrix on every route).",
+        "Given the same Idempotency-Key and request hash submitted twice, when both requests complete, then exactly one resource/outcome exists and the replay returns the stored response; a different hash with the same key returns 409 IDEMPOTENCY_CONFLICT.",
+        "Given a committed domain transaction emitting events, when the outbox relay runs, then events are delivered at-least-once with per-aggregate ordering and consumers deduplicate via event_consumer_checkpoint.",
+        "Given NullFinanceAdapter is active, when a value-bearing posting emits a journal intent, then the intent (accounts, debit/credit, currency, dimensions, source document, posting-rule id) is persisted to finance_journal_intent and returned read-only by GET /v1/finance/journal-intents (D2).",
+        "Given the order boundary stub contract v0.1.0, when a documented commit/release/fulfill/return command is replayed against the test double, then request/response schemas validate and the inventory-side command shapes are stable (D3)."
+      ],
+      "rollback": "Flag off platform.core.enabled blocks every domain write while platform tables stay readable; forward-fix only; migrations are additive and N-1 compatible (no down-migrations in prod); restore from pre-deploy snapshot only if the outbox/audit exit gate fails.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-01",
+      "name": "Item Master and UoM Engine",
+      "phase": 1,
+      "wave": "0B",
+      "summary": "Item identity and NetSuite item-type taxonomy with type-specific extensions (inventory/purchasing/sales/accounting), UoM types/units/conversions and per-item UoM sets, item categories, kit/group composition, matrix parent/child items, barcodes/aliases/related items, and per-item/per-location stock and planning attributes (reorder point, preferred stock, safety stock, lead time).",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2164398.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2166469.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2211898.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2227654.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2305626.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433512.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "item.master",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/item_master",
+        "app/api/routers/item_master",
+        "app/contracts/item_master"
+      ],
+      "migrations": [
+        "alembic:0004_item_master",
+        "alembic:0005_item_master_uom"
+      ],
+      "flags": [
+        "inventory.item_master.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-01 --env $ENV",
+        "pytest app/tests/contracts/test_fs00_fs01_platform_contract.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/item_master -q",
+        "pytest app/tests/contracts/test_fs01_provider_contract.py -q",
+        "pytest app/tests/invariants/test_uom_conversion.py app/tests/invariants/test_item_taxonomy.py -q",
+        "python tools/feature_sets.py record --set FS-01 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given an item of type INVENTORY, when it is created with a units type and base UoM, then exactly one item_inventory row and one STOCK item_uom row exist and posting eligibility resolves from the type taxonomy.",
+        "Given a quantity expressed in a non-base UoM, when the conversion engine normalises it, then it returns a NUMERIC(38,12) base quantity with documented rounding and an unmapped UoM returns 422 UOM_TYPE_MISMATCH.",
+        "Given a saved item, when any client or migration attempts to change item_type, costing_method, stock UoM or initial cost, then the database trigger rejects the update (documented immutability D-22).",
+        "Given a matrix parent with option values, when a child item is created, then item_matrix_member stores the full option mapping and a second parent for the same child is rejected."
+      ],
+      "rollback": "Flag off inventory.item_master.enabled stops new item writes; existing items remain readable; migrations additive; forward-fix for data issues (no hard delete; inactivate instead).",
+      "backend_only": true
+    },
+    {
+      "id": "FS-02",
+      "name": "Pricing Engine (item pricing + advanced pricing + effective-date updates)",
+      "phase": 1,
+      "wave": "0B",
+      "summary": "Price levels, item prices per level/currency with quantity breaks, quantity pricing schedules and calculation modes, pricing groups, customer groups (external refs), price rules with criteria/actions and dynamic item collections, coupons, and effective-date price updates with overlap exclusion (EXT, D4) \u2014 resolves immutable price snapshots for documents.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2164398.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2181018.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2183333.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2184077.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_8135641320.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1536354469.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "pricing.engine",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/pricing",
+        "app/api/routers/pricing",
+        "app/contracts/pricing"
+      ],
+      "migrations": [
+        "alembic:0006_pricing"
+      ],
+      "flags": [
+        "pricing.engine.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-02 --env $ENV",
+        "pytest app/tests/contracts/test_fs00_fs01_fs02_contract.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/pricing -q",
+        "pytest app/tests/contracts/test_fs02_provider_contract.py -q",
+        "pytest app/tests/invariants/test_price_resolution_order.py -q",
+        "python tools/feature_sets.py record --set FS-02 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given coupon, price-rule, pricing-group, price-level and base-price data for one item, when a price is resolved, then the documented precedence (coupon -> rule priority with conflict policy -> pricing group -> level -> base) is applied deterministically and the source is recorded.",
+        "Given overlapping effective-date price updates for the same target/level/currency, when the second update is saved, then the overlap exclusion constraint rejects it or marks the earlier one SUPERSEDED per documented handling.",
+        "Given an applied effective-date update, when its start date arrives, then new item_price rows become effective and previously stored document price snapshots are unchanged.",
+        "Given quantity pricing with LINE/OVERALL_ITEM/PARENT/SCHEDULE modes, when a line quantity crosses a break, then the calculation matches the golden dataset for every mode."
+      ],
+      "rollback": "Flag off pricing.engine.enabled; document creation falls back to explicit prices; additive migrations; price updates reversible via REVERTED status, never by deleting rows.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-03",
+      "name": "Storage and Inventory-Status Registry",
+      "phase": 1,
+      "wave": "0C",
+      "summary": "Location registry (hierarchy, type, bins/statuses/consignment flags, per-line locations, exactly one UNALLOCATED bootstrap sentinel), zones and bins, and the inventory-status registry whose flags are the single source of availability/commitment/sellability semantics.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2249433.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_162100850596.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2307648.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2274082.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433532.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "traceability.registry",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/traceability",
+        "app/api/routers/traceability_registry",
+        "app/contracts/traceability"
+      ],
+      "migrations": [
+        "alembic:0007_traceability_registry"
+      ],
+      "flags": [
+        "inventory.storage_registry.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-03 --env $ENV",
+        "pytest app/tests/contracts/test_fs00_fs01_fs03_contract.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/traceability/registry -q",
+        "pytest app/tests/contracts/test_fs03_provider_contract.py -q",
+        "pytest app/tests/invariants/test_status_availability_flags.py -q",
+        "python tools/feature_sets.py record --set FS-03 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a bootstrap tenant, when the registry migration/seed completes, then exactly one location has is_unallocated=true and it validates location_type=UNALLOCATED.",
+        "Given a location with bins disabled, when a bin or bin-scoped posting position is requested, then the API rejects it with 422 BINS_NOT_ENABLED / location rule.",
+        "Given an inventory status with is_committable=false, when a commitment is attempted against stock in that status, then the ledger rejects it with 409 STATUS_NOT_COMMITTABLE.",
+        "Given a tenant with a default status, when no status is supplied on a posting, then the tenant default status is applied deterministically."
+      ],
+      "rollback": "Flag off inventory.storage_registry.enabled blocks new location/bin/status changes; existing references stay valid; additive migrations; master data is inactivated, never deleted.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-04",
+      "name": "Inventory Ledger Core (posting, balances, commitments, transfers, adjustments, imports)",
+      "phase": 1,
+      "wave": "0C",
+      "summary": "Append-only inventory transaction headers/lines/details with the atomic posting engine, synchronously maintained balances and availability, commitments/allocations and the external order boundary commands (commit/release/reallocate/fulfil/return), one-step and transfer-order flows with in-transit, adjustments/absolute worksheets, UNALLOCATED bootstrap distribution, reason codes and the idempotent import contract.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2249433.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2251098.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2259648.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2308766.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3765928460.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0207114228.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.finance",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "order.demand",
+          "version": ">=0.1.0 <1.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-02",
+          "contract": "pricing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "inventory.ledger",
+          "version": "1.0.0"
+        },
+        {
+          "contract": "inventory.balances",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/inventory_ledger",
+        "app/api/routers/inventory_ledger",
+        "app/contracts/inventory_ledger",
+        "app/contracts/inventory_balances"
+      ],
+      "migrations": [
+        "alembic:0008_ledger_core",
+        "alembic:0009_ledger_commitment_guards",
+        "alembic:0010_ledger_balances"
+      ],
+      "flags": [
+        "inventory.ledger.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-04 --env $ENV",
+        "pytest app/tests/contracts/test_fs00_fs01_fs02_fs03_fs04_contracts.py -q",
+        "pytest app/tests/contracts/test_order_boundary_v0_doubles.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/inventory_ledger -q",
+        "pytest app/tests/contracts/test_fs04_provider_contract.py -q",
+        "pytest app/tests/invariants/test_qty_conservation.py app/tests/invariants/test_balance_equals_sum_lines.py app/tests/invariants/test_commitment_le_onhand.py -q",
+        "pytest app/tests/concurrency/test_posting_locks.py app/tests/concurrency/test_idempotent_retries.py -q",
+        "python tools/feature_sets.py record --set FS-04 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given an approved adjustment/transfer/receipt posting command with an Idempotency-Key, when it posts, then exactly one inventory_transaction plus signed lines/details and balance updates commit atomically and a retry returns the same transaction id.",
+        "Given any posting, when the exit-gate invariant query runs, then sum(line.qty_base) equals the balance delta per posting key (INV-01) and no balance references the UNALLOCATED location after bootstrap.",
+        "Given available stock and a commit command from the external order boundary, when it is accepted, then qty_committed rises by exactly q and a release/reallocate restores availability without ledger rows.",
+        "Given a transfer order, when it is approved/fulfilled/received/closed, then source on-hand, destination in-transit and destination on-hand move per T-10/T-11 and C-04/C-05 with the expected events.",
+        "Given an import batch with one invalid row, when it posts, then valid rows are posted idempotently, the invalid row is reported with its error, and the batch ends PARTIAL."
+      ],
+      "rollback": "Flag off inventory.ledger.enabled blocks posting writes; append-only ledger rows are never deleted \u2014 corrections are compensating postings; additive migrations stay N-1 compatible.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-05",
+      "name": "Costing and Valuation Engine",
+      "phase": 1,
+      "wave": "0C",
+      "summary": "Cost objects and methods (average, FIFO, LIFO, standard, specific, lot, group-average), cost layers and consumption trail, append-only cost ledger, recalculation engine with per-tenant block/provisional policy (D5), standard cost categories/templates/versions/rollup/revaluation, variances, landed/estimated landed cost, COGS adjustments, location costing groups and value reconciliation.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2164398.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2191818.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2201059.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2204939.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2205401.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4345703444.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2416930.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.finance",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "costing.engine",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/costing",
+        "app/api/routers/costing",
+        "app/contracts/costing"
+      ],
+      "migrations": [
+        "alembic:0011_costing",
+        "alembic:0012_costing_standard"
+      ],
+      "flags": [
+        "costing.engine.enabled",
+        "costing.block_when_recalc_pending"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-05 --env $ENV",
+        "pytest app/tests/contracts/test_fs00_fs01_fs03_fs04_fs05_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/costing -q",
+        "pytest app/tests/contracts/test_fs05_provider_contract.py -q",
+        "pytest app/tests/invariants/test_value_conservation.py app/tests/invariants/test_costing_methods_golden.py app/tests/invariants/test_recalc_block_policy.py -q",
+        "python tools/feature_sets.py record --set FS-05 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a posted receipt, when the costing engine runs inside the posting transaction, then each movement's value delta equals qty x the method-deterministic unit cost and the cost ledger entry links to the ledger line.",
+        "Given an item with a pending recalculation and costing.block_when_recalc_pending=true, when a posting requires a provisional cost, then the API returns 409 COSTING_RECALC_REQUIRED and nothing is posted (D5).",
+        "Given a FIFO/LIFO item, when layers are consumed across receipts, then the append-only consumption trail reconstructs the exact remaining layer state and a nightly reconcile compares cost ledger to item_cost with zero drift.",
+        "Given a standard-cost revaluation or landed-cost application, when it posts value-only movements, then layer/avg state updates and the finance intent carries the correct posting-rule dimension.",
+        "Given group-average costing, when an inventory worksheet is attempted for a group item, then the documented incompatibility guard rejects it (D6)."
+      ],
+      "rollback": "Flag off costing.engine.enabled; postings fall back to a provisional-cost block (default) instead of writing values; additive migrations; recalculations and valuations are rerunnable/idempotent, corrections via compensating value postings only.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-06",
+      "name": "Numbered Inventory (lots and serials)",
+      "phase": 1,
+      "wave": "1A",
+      "summary": "Lot and serial identity registries, serial current projection plus append-only serial history, expiry/FEFO attributes, specific-cost identity, and the deferred-FK backfill that closes ledger/costing lot/serial references created nullable in earlier sets.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2164398.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2230290.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2231339.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_96151731732.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2235684.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_N2236107.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-05",
+          "contract": "costing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "traceability.numbered",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/traceability/numbered",
+        "app/api/routers/numbered_inventory",
+        "app/contracts/traceability_numbered"
+      ],
+      "migrations": [
+        "alembic:0013_numbered_inventory"
+      ],
+      "flags": [
+        "inventory.numbered.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-06 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs03_fs04_fs05_fs06_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/traceability/numbered -q",
+        "pytest app/tests/contracts/test_fs06_provider_contract.py -q",
+        "pytest app/tests/invariants/test_serial_projection_matches_history.py app/tests/invariants/test_deferred_fk_backfill.py -q",
+        "python tools/feature_sets.py record --set FS-06 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a serialized item receipt with N serials, when it posts, then N serial_number rows and N append-only serial_number_history rows exist and the sum of ledger detail for serialized positions equals the serial count (INV-18).",
+        "Given a lot-numbered item with expiry, when FEFO allocation runs, then earlier-expiry lots are recommended first and picking an expired lot is rejected with 422 LOT_EXPIRED.",
+        "Given deferred lot/serial FK columns created by FS-04/FS-05, when the FS-06 migration runs, then every existing row backfills to NULL-or-valid identity, FK constraints validate, and the orphan check returns zero.",
+        "Given a serialized item, when a posting is attempted with a line/serial quantity mismatch, then the posting is rejected with 409 SERIAL_QTY_MISMATCH and nothing is written."
+      ],
+      "rollback": "Flag off inventory.numbered.enabled blocks new numbered-item posting; existing lot/serial rows remain readable and FKs stay additive; forward-fix only (no removal of validated constraints in prod).",
+      "backend_only": true
+    },
+    {
+      "id": "FS-07",
+      "name": "Inventory Counts and Cycle Counts",
+      "phase": 1,
+      "wave": "1A",
+      "summary": "Count plans/filters and cycle-count scheduling, physical and cycle count aggregates with immutable on-hand snapshot, line capture/recount, approve/reject/recalculation handling, and variance posting (T-20) with documented numbered/consigned/group-average routing.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2249433.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2297156.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2296970.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2299731.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442081.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993310131.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.finance",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-05",
+          "contract": "costing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "counts.engine",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/counts",
+        "app/api/routers/counts",
+        "app/contracts/counts"
+      ],
+      "migrations": [
+        "alembic:0014_counts"
+      ],
+      "flags": [
+        "inventory.counts.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-07 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs03_fs04_fs05_fs06_fs07_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/counts -q",
+        "pytest app/tests/contracts/test_fs07_provider_contract.py -q",
+        "pytest app/tests/invariants/test_count_variance_equals_delta.py app/tests/invariants/test_count_snapshot_immutable.py -q",
+        "python tools/feature_sets.py record --set FS-07 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a count plan on a bin/item scope, when a count is generated, then count lines snapshot on-hand at generation time and later postings do not change the snapshot.",
+        "Given an approved count with variances, when it posts, then T-20 writes one COUNT_VARIANCE transaction per count whose per-line delta equals counted minus snapshot and costing values it per method.",
+        "Given an approved-then-recalculated count (documented rejection path), when the snapshot recalculates, then only unposted counted quantities are considered and the original snapshot is retained for audit.",
+        "Given a count line for a serialized/consigned position, when variance posting is requested via the wrong path, then the documented prohibition routes it to adjustment/consigned posting (409 PROHIBITED_COUNT_TYPE)."
+      ],
+      "rollback": "Flag off inventory.counts.enabled blocks new counts and variance posting; count snapshots/decisions stay readable for audit; additive migrations; corrections via compensations, never deletes.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-08",
+      "name": "Procurement (vendor master, P2P documents, receipts, bills, returns)",
+      "phase": 1,
+      "wave": "1B",
+      "summary": "Vendor master and item-vendor pricing/contracts, requisitions/purchase requests/RFQ with declarative approvals, PO lifecycle (standard/blanket/drop-ship/special-order), receipts with T-01/T-02, vendor bills/variance/3-way match T-04/T-06, credits T-05, vendor returns T-03, drop-ship T-28 and special-order links, all posting through the FS-04 ledger and FS-05 costing contracts.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/set_N2360130.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2360272.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2370131.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2386193.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2393897.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2399286.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2410585.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.finance",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "order.demand",
+          "version": ">=0.1.0 <1.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-05",
+          "contract": "costing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "procurement.p2p",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/procurement",
+        "app/api/routers/procurement",
+        "app/contracts/procurement"
+      ],
+      "migrations": [
+        "alembic:0015_procurement_vendors",
+        "alembic:0016_procurement_ordering",
+        "alembic:0017_procurement_billing"
+      ],
+      "flags": [
+        "procurement.p2p.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-08 --env $ENV",
+        "pytest app/tests/contracts/test_fs00_fs01_fs03_fs04_fs05_fs06_fs08_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/procurement -q",
+        "pytest app/tests/contracts/test_fs08_provider_contract.py -q",
+        "pytest app/tests/invariants/test_po_open_qty.py app/tests/invariants/test_receipt_bill_match.py -q",
+        "pytest app/tests/invariants/test_state_machines_procurement.py -q",
+        "python tools/feature_sets.py record --set FS-08 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given an approved PO line for 10 units, when two partial receipts post, then open qty decreases by each receipt, over-receipt beyond tolerance is rejected, and po.receipted events carry cumulative quantities.",
+        "Given a receipt-matched vendor bill, when it posts, then it is value-only (no qty change), bill qty <= received qty is enforced, variance rows are created within tolerance, and the finance intent records the accrual reclass.",
+        "Given a vendor return authorization, when it ships, then T-03 removes on-hand at the item method cost and the RA line tracks shipped vs authorized quantities.",
+        "Given a drop-ship/special-order PO linked to external demand via order.demand external_ref, when it is fulfilled, then T-28 posts value-only with no inventory movement and the special_order_link is unique per external line.",
+        "Given a PO whose receipt was fully billed, when the PO is closed, then no line retains open qty or unposted receipt state."
+      ],
+      "rollback": "Flag off procurement.p2p.enabled blocks new document creation/posting; posted documents remain immutable and readable; additive migrations; corrections via reversal/credit documents, no deletes.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-09",
+      "name": "Manufacturing (assembly/BOM, work orders, WIP, routing, scheduling inputs)",
+      "phase": 1,
+      "wave": "1C",
+      "summary": "Assembly item extensions, BOM/revisions/component control, phantom explosion, routings/work centres/calendars and cost templates, work-order lifecycle (planned/firm/release/in-process/built/closed/void), WIP issue/completion/close T-17/T-18/T-19, assembly build/unbuild T-15/T-16, outsourced operations, ECOs, scheduling runs/capacity data (computation + API only; Scheduler UI deferred, D4) and available-to-build calculation (EXT, D4).",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_1506002637.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2319594.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2328390.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2335392.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2341076.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_5212015722.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1531288763.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.finance",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "order.demand",
+          "version": ">=0.1.0 <1.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.balances",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-05",
+          "contract": "costing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-08",
+          "contract": "procurement.p2p",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "manufacturing.execution",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/manufacturing",
+        "app/api/routers/manufacturing",
+        "app/contracts/manufacturing"
+      ],
+      "migrations": [
+        "alembic:0018_manufacturing_master",
+        "alembic:0019_manufacturing_routing",
+        "alembic:0020_manufacturing_execution"
+      ],
+      "flags": [
+        "manufacturing.enabled",
+        "manufacturing.wip.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-09 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs03_fs04_fs05_fs06_fs08_fs09_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/manufacturing -q",
+        "pytest app/tests/contracts/test_fs09_provider_contract.py -q",
+        "pytest app/tests/invariants/test_assembly_build_value.py app/tests/invariants/test_wip_reconciliation.py app/tests/invariants/test_mps_schedule_inputs.py -q",
+        "python tools/feature_sets.py record --set FS-09 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a released work order with component requirements, when a WIP issue posts, then component on-hand decreases at the WIP location, WIP value rises, and a work_order_wip_balance read model reconciles to the postings.",
+        "Given a build/unbuild command, when it posts, then T-15/T-16 consumes/restores components per the effective BOM revision and any value difference posts to the unbuild variance cost category.",
+        "Given a WIP work order on a LIFO/FIFO/specific-cost assembly, when WIP is enabled for that item, then the documented incompatibility guard rejects the configuration (D6).",
+        "Given a scheduling run request with finite/infinite and forward/backward parameters, when it executes, then scheduled_operation/capacity_plan/work_center_load rows are written deterministically for the same inputs and no UI is required (D4).",
+        "Given an item with a BOM and on-hand components, when GET /v1/available-to-build is called, then the calculation returns buildable quantity from the documented inputs (EXT, D4) and is covered by deterministic fixtures."
+      ],
+      "rollback": "Flag off manufacturing.wip.enabled then manufacturing.enabled; open WOs must be closed/voided before disabling; posted WIP/build documents are immutable; additive migrations; forward-fix only.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-10",
+      "name": "Replenishment and Planning (AIM, demand, supply/MRP, DRP, allocation, ATP)",
+      "phase": 1,
+      "wave": "1D",
+      "summary": "Planning rules/scopes and time fences, demand history and statistical demand plans, supply/MRP plans with suggestions and action messages, DRP network/bill-of-distribution on the same engine, supply-allocation strategies/runs with FEFO, versioned AIM reorder-point/preferred-stock formula policy (D7), and ATP projections/query API with versioned method policy (D7); order creation is explicit draft creation through FS-08/FS-09/FS-04 APIs and planning never posts inventory.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2249433.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2285050.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2286970.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4049498070.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159171867422.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156424975823.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2300269.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "order.demand",
+          "version": ">=0.1.0 <1.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.balances",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-05",
+          "contract": "costing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-08",
+          "contract": "procurement.p2p",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-09",
+          "contract": "manufacturing.execution",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "replenishment.planning",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/replenishment",
+        "app/api/routers/replenishment",
+        "app/contracts/replenishment"
+      ],
+      "migrations": [
+        "alembic:0021_planning",
+        "alembic:0022_planning_atp"
+      ],
+      "flags": [
+        "replenishment.planning.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-10 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs04_fs05_fs06_fs08_fs09_fs10_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/replenishment -q",
+        "pytest app/tests/contracts/test_fs10_provider_contract.py -q",
+        "pytest app/tests/invariants/test_planning_readonly_ledger.py app/tests/invariants/test_atp_never_negative.py app/tests/invariants/test_aim_formula_policy_fixtures.py -q",
+        "python tools/feature_sets.py record --set FS-10 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a tenant with an AIM formula policy id+version, when replenishment.aim runs, then every replenishment_calculation_line records formula_version and deterministic fixtures produce the same reorder point/preferred stock as the policy contract (D7).",
+        "Given open demands and supplies, when a supply plan runs, then supply_plan_line projected balances and suggestions are produced and POST /v1/supply-plans/{id}/create-orders creates drafts only via FS-08/FS-09/FS-04 APIs (no ledger rows from planning).",
+        "Given allocation strategies and FEFO lots, when an allocation run executes, then allocation_result never exceeds supply by item/location or lot, and unsatisfied demand raises allocation_exception records.",
+        "Given an ATP method policy, when GET /v1/atp is queried, then earliest availability and per-bucket projections are returned per the versioned method semantics and projected available is clamped at zero.",
+        "Given planning runs, when they complete twice from identical inputs, then results are deterministic and a rerun creates a new immutable run (idempotent run_key)."
+      ],
+      "rollback": "Flag off replenishment.planning.enabled stops jobs/APIs; plans/results remain readable and immutable; draft documents created from suggestions remain owned by their contexts; additive migrations.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-11",
+      "name": "Warehouse Management Execution (server-side tasks only)",
+      "phase": 1,
+      "wave": "1E",
+      "summary": "Warehouse extensions of locations, item process families/groups/stock locations, order types/UCC formats/carrier service levels, pick/putaway strategies and system rules, bin blocking, inbound shipments/receiving orders/putaway tasks, waves/release schedules, pick/pack/ship tasks and ship manifests, WMS replenishment and status-change tasks, and backend cart/device-session records (EXT; no mobile UI/protocol, D8).",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_156356229851.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156382465711.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156406848826.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541435915.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541441780.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541442931.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0803020225.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "order.demand",
+          "version": ">=0.1.0 <1.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.balances",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-07",
+          "contract": "counts.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-08",
+          "contract": "procurement.p2p",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-09",
+          "contract": "manufacturing.execution",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "wms.execution",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/wms",
+        "app/api/routers/wms",
+        "app/contracts/wms"
+      ],
+      "migrations": [
+        "alembic:0023_wms_setup",
+        "alembic:0024_wms_inbound",
+        "alembic:0025_wms_execution"
+      ],
+      "flags": [
+        "wms.execution.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-11 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs03_fs04_fs06_fs07_fs08_fs09_fs11_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/wms -q",
+        "pytest app/tests/contracts/test_fs11_provider_contract.py -q",
+        "pytest app/tests/invariants/test_wave_task_completion.py app/tests/invariants/test_pick_never_negative.py app/tests/invariants/test_bin_block_pick_guard.py -q",
+        "python tools/feature_sets.py record --set FS-11 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a released order line, when a wave releases it, then pick tasks decompose per strategy/rules and PATCH task completion posts the corresponding ledger movements (bin transfer/status change/fulfillment) through FS-04 contracts only.",
+        "Given a blocked bin or an expired lot, when a pick task recommendation is generated, then the bin/lot is excluded and an exception state is recorded instead of a negative or expired pick.",
+        "Given an inbound shipment and a receiving order, when receiving completes with deferred posting enabled, then item_receipt moves to PENDING_POSTING and manual post/reversal flows use FS-08 receipt contracts.",
+        "Given cart/device_session records exist, when any mobile-specific protocol or offline sync endpoint is requested, then the API has none (D8); only server-side task/queue resources are exposed.",
+        "Given WMS replenishment planning/execution, when a replenishment task completes, then it posts a bin transfer (T-29) and updates the primary bin quantity read model."
+      ],
+      "rollback": "Flag off wms.execution.enabled blocks task creation/completion; tasks remain as records for audit; posted movements are immutable (corrective postings only); additive migrations.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-12",
+      "name": "Quality Management (specs, inspections, COA) \u2014 SuiteApp semantics backend",
+      "phase": 1,
+      "wave": "1F",
+      "summary": "Quality specs/lines, inspection plans/lines, event triggers and on-demand inspection queues, inspection instances/results with disposition and waiver, COA headers/lines, quality images via attachment metadata, and preference/derived-field configuration \u2014 backend data/logic only per D4 (quality REST API, mobile collection and reports deferred).",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2249433.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/part_1510239273.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1503070323.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1525966493.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1525966601.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_163274330949.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-08",
+          "contract": "procurement.p2p",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-09",
+          "contract": "manufacturing.execution",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "quality.management",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/quality",
+        "app/api/routers/quality",
+        "app/contracts/quality"
+      ],
+      "migrations": [
+        "alembic:0026_quality"
+      ],
+      "flags": [
+        "quality.management.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-12 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs03_fs04_fs06_fs08_fs09_fs12_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/quality -q",
+        "pytest app/tests/contracts/test_fs12_provider_contract.py -q",
+        "pytest app/tests/invariants/test_inspection_trigger_once.py app/tests/invariants/test_quality_hold_status.py -q",
+        "python tools/feature_sets.py record --set FS-12 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given an inspection trigger configured on receipts and a posted receipt, when the trigger evaluates, then exactly one inspection is created for the source document and its queue entry is idempotent per event.",
+        "Given an inspection with required spec lines, when all results are recorded, then PASS/FAIL disposition derives from results and a FAIL can only be closed by approved WAIVE or an inventory hold posting via FS-04.",
+        "Given a quality hold, when it is applied, then the affected stock is moved to a non-committable status through the ledger status-change contract (T-30) and availability changes accordingly.",
+        "Given a passed inspection/COA, when a COA is generated, then it references the inspection and its result lines and is immutable after issue."
+      ],
+      "rollback": "Flag off quality.management.enabled blocks new inspections/triggers/COA writes; holds already applied remain as status postings and are not auto-released by the flag; additive migrations.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-13",
+      "name": "Consigned Inventory Management",
+      "phase": 1,
+      "wave": "1F",
+      "summary": "Vendor consignment agreements and covered items/locations, consigned ownership receipts T-21 and ownership-transfer-on-consumption T-22, consigned adjustments/counts T-23, consumption audit trail feeding reporting, finance intents for consigned accounts, and the documented consigned-vs-assembly incompatibility guard (D6).",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2249433.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_94502112.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0218102533.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0218010714.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0317081004.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.finance",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-05",
+          "contract": "costing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-08",
+          "contract": "procurement.p2p",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "consigned.inventory",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/consigned",
+        "app/api/routers/consigned",
+        "app/contracts/consigned"
+      ],
+      "migrations": [
+        "alembic:0027_consigned"
+      ],
+      "flags": [
+        "consigned.inventory.enabled",
+        "consigned.assembly_incompatible_guard"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-13 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs03_fs04_fs05_fs06_fs08_fs13_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/consigned -q",
+        "pytest app/tests/contracts/test_fs13_provider_contract.py -q",
+        "pytest app/tests/invariants/test_consigned_ownership_conservation.py app/tests/invariants/test_consigned_assembly_guard.py -q",
+        "python tools/feature_sets.py record --set FS-13 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given an ACTIVE consignment agreement and an allowed item, when a consigned receipt posts (T-21), then qty rises under ownership=CONSIGNED with no AP liability and a consigned valuation entry.",
+        "Given consigned on-hand, when consumption/ownership transfer posts (T-22), then the same qty moves CONSIGNED->OWNED, a vendor bill is created through the FS-08 contract, and consignment_consumption records the audit row.",
+        "Given a tenant that enables consigned inventory, when an assembly item is configured for consignment or manufacturing is enabled, then the documented incompatibility guard rejects the configuration (D6).",
+        "Given consigned stock, when an inventory worksheet or ordinary adjustment path is attempted, then the consigned routing (T-23) is enforced and the ordinary path returns 409 PROHIBITED_CONSIGNED_OPERATION."
+      ],
+      "rollback": "Flag off consigned.inventory.enabled blocks new consigned postings; existing consigned positions remain valued/readable; use T-22/T-23 for disposition before disabling; additive migrations.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-14",
+      "name": "Extensions (warranty, customer part numbers, UPC registry)",
+      "phase": 1,
+      "wave": "1F",
+      "summary": "Backend-only SuiteApp semantics included by D4: item warranty terms and warranty registration/claims/actions/repair-order data, customer part number mappings to items, and the Auto Assign UPC registry (assignment/retirement/monitoring) \u2014 no UI/workbook, no external integrations.",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2164398.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4575965810.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_3938292477.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3938299291.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3938315832.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3938319263.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_158373836991.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158737099515.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-08",
+          "contract": "procurement.p2p",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "extensions.registry",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/extensions",
+        "app/api/routers/extensions",
+        "app/contracts/extensions"
+      ],
+      "migrations": [
+        "alembic:0028_extensions"
+      ],
+      "flags": [
+        "extensions.registry.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-14 --env $ENV",
+        "pytest app/tests/contracts/test_fs01_fs06_fs08_fs14_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --restart=no api alembic upgrade head",
+        "pytest app/tests/integration/extensions -q",
+        "pytest app/tests/contracts/test_fs14_provider_contract.py -q",
+        "pytest app/tests/invariants/test_upc_uniqueness.py app/tests/invariants/test_warranty_claim_validation.py -q",
+        "python tools/feature_sets.py record --set FS-14 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given an item with default warranty terms, when a warranty registration is created for a serialized unit, then the registration validates the serial identity (FS-06) and the coverage window/terms derive from the item terms.",
+        "Given a registration and claim, when a claim is validated, then it is rejected outside coverage unless approved as an override, and repair/refund/replacement actions are recorded append-only on the claim.",
+        "Given Auto Assign UPC enabled for a tenant, when two items are assigned UPCs, then the registry enforces uniqueness and retirement frees a UPC for assignment tracking but never reuses the item/UPC history row.",
+        "Given a customer part number mapping, when a duplicate mapping is inserted, then the (tenant, customer_ref, part_number) uniqueness rule rejects it."
+      ],
+      "rollback": "Flag off extensions.registry.enabled blocks new registrations/claims/UPC assignments; existing records readable; additive migrations; corrections via new claim actions/registrations, never deletes.",
+      "backend_only": true
+    },
+    {
+      "id": "FS-15",
+      "name": "Reporting Read Models and Reporting API",
+      "phase": 1,
+      "wave": "2",
+      "summary": "Read-only reporting schemas/views and query APIs over the read models of all prior sets: stock ledger, valuation summary/detail, current snapshot, back-order, activity detail, pending fulfillment, turnover and profitability inputs, balance/detail search, ATP/workbench views \u2014 no writes and no analytics UI (D1, framework \u00a71).",
+      "source_docs": [
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2249433.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1518564230.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2353200.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4521145431.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2356560.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2358933.html",
+        "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2359248.html"
+      ],
+      "depends_on": [
+        {
+          "id": "FS-00",
+          "contract": "platform.core",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-00",
+          "contract": "platform.events",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-01",
+          "contract": "item.master",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-02",
+          "contract": "pricing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-03",
+          "contract": "traceability.registry",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.ledger",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-04",
+          "contract": "inventory.balances",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-05",
+          "contract": "costing.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-06",
+          "contract": "traceability.numbered",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-07",
+          "contract": "counts.engine",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-08",
+          "contract": "procurement.p2p",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-09",
+          "contract": "manufacturing.execution",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-10",
+          "contract": "replenishment.planning",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-11",
+          "contract": "wms.execution",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-12",
+          "contract": "quality.management",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-13",
+          "contract": "consigned.inventory",
+          "version": ">=1.0.0 <2.0.0"
+        },
+        {
+          "id": "FS-14",
+          "contract": "extensions.registry",
+          "version": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "provides": [
+        {
+          "contract": "reporting.readmodels",
+          "version": "1.0.0"
+        }
+      ],
+      "modules": [
+        "app/modules/reporting",
+        "app/api/routers/reporting",
+        "app/contracts/reporting"
+      ],
+      "migrations": [
+        "alembic:0029_reporting_views",
+        "alembic:0030_rls_grants_verify"
+      ],
+      "flags": [
+        "reporting.readmodels.enabled"
+      ],
+      "entry_checks": [
+        "python tools/feature_sets.py validate",
+        "python tools/feature_sets.py check-env --set FS-15 --env $ENV",
+        "pytest app/tests/contracts/test_fs15_readmodel_contracts.py -q"
+      ],
+      "exit_checks": [
+        "docker compose run --rm api alembic upgrade head",
+        "pytest app/tests/integration/reporting -q",
+        "pytest app/tests/contracts/test_fs15_provider_contract.py -q",
+        "pytest app/tests/invariants/test_reporting_readonly.py app/tests/invariants/test_reconcile_exact.py -q",
+        "python tools/feature_sets.py coverage",
+        "python tools/feature_sets.py record --set FS-15 --env $ENV --status verified"
+      ],
+      "acceptance": [
+        "Given a posted ledger/cost history, when reporting views/materialised views refresh, then valuation summary/detail, stock ledger, snapshot, back-order and pending-fulfillment results reconcile exactly to the underlying read models (zero drift).",
+        "Given any reporting endpoint, when a write verb is attempted, then the API returns 405/403 and the reporting schema grants reject writes (read-only contract).",
+        "Given balance/detail search endpoints, when queried with tenant+dimension+date filters, then results respect RLS, cursor pagination and the p95 read budget.",
+        "Given a read-model refresh failure, when the job retries, then the previous snapshot remains served and an alert/reporting.view.refreshed failure metric is raised."
+      ],
+      "rollback": "Flag off reporting.readmodels.enabled leaves views in place but stops refreshes/APIs; views are droppable/recreatable without touching base tables; no data migrations in this set.",
+      "backend_only": true
+    }
+  ]
+}

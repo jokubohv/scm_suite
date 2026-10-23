@@ -1,0 +1,111 @@
+{
+  "contracts": [
+    {
+      "contract": "procurement.p2p",
+      "depends_on": [
+        "costing.engine",
+        "inventory.ledger",
+        "item.master",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "procurement",
+      "events": [
+        {
+          "event": "dropship.fulfilled",
+          "schema": "contracts/events/procurement.p2p/dropship.fulfilled.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "inventory.receipt.posted",
+          "schema": "contracts/events/procurement.p2p/inventory.receipt.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "inventory.receipt.reversed",
+          "schema": "contracts/events/procurement.p2p/inventory.receipt.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.approved",
+          "schema": "contracts/events/procurement.p2p/po.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.billed",
+          "schema": "contracts/events/procurement.p2p/po.billed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.closed",
+          "schema": "contracts/events/procurement.p2p/po.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.created",
+          "schema": "contracts/events/procurement.p2p/po.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.receipted",
+          "schema": "contracts/events/procurement.p2p/po.receipted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.created",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.posted",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.variance_created",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.variance_created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.variance_posted",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.variance_posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_credit.posted",
+          "schema": "contracts/events/procurement.p2p/vendor_credit.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_return.credited",
+          "schema": "contracts/events/procurement.p2p/vendor_return.credited.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_return.shipped",
+          "schema": "contracts/events/procurement.p2p/vendor_return.shipped.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-08",
+      "fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+      "version": "1.0.0",
+      "wave": "1B"
+    }
+  ],
+  "dir": "procurement",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/procurement/openapi.fragment.json",
+  "feature_set": "FS-08",
+  "fragments": [
+    "contracts/openapi/fragments/FS-08.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1B"
+}

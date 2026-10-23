@@ -1,0 +1,1380 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-14 — Extensions (warranty, customer part numbers, UPC registry) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "extensions.registry",
+        "dir": "extensions",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-14",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1F"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/customer-parts": {
+      "get": {
+        "operationId": "fs14_get_api-v1-customer-parts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create mapping",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/customer-parts",
+        "x-required-scopes": [
+          "extensions.customerpart.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs14_post_api-v1-customer-parts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create mapping",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/customer-parts",
+        "x-required-scopes": [
+          "extensions.customerpart.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/customer-parts/import": {
+      "post": {
+        "operationId": "fs14_post_api-v1-customer-parts-import",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Batch import mappings (data path)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/customer-parts/import",
+        "x-required-scopes": [
+          "extensions.customerpart.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/customer-parts/resolve": {
+      "get": {
+        "operationId": "fs14_get_api-v1-customer-parts-resolve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Resolve customer+part number → item (order boundary read)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/customer-parts/resolve",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/customer-parts/{id}": {
+      "get": {
+        "operationId": "fs14_get_api-v1-customer-parts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Mapping detail",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/customer-parts/{id}",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs14_patch_api-v1-customer-parts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate mapping",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/customer-parts/{id}",
+        "x-required-scopes": [
+          "extensions.customerpart.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/extensions/settings": {
+      "get": {
+        "operationId": "fs14_get_api-v1-extensions-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Tenant settings (company prefix, auto-assign toggle, claim policy)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/extensions/settings",
+        "x-required-scopes": [
+          "extensions.admin",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs14_patch_api-v1-extensions-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Tenant settings (company prefix, auto-assign toggle, claim policy)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/extensions/settings",
+        "x-required-scopes": [
+          "extensions.admin",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{id}/customer-parts": {
+      "get": {
+        "operationId": "fs14_get_api-v1-items-id-customer-parts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List item's customer part numbers",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/items/{id}/customer-parts",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{id}/warranty": {
+      "get": {
+        "operationId": "fs14_get_api-v1-items-id-warranty",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/replace default warranty terms",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on PUT",
+        "x-original-path": "/v1/items/{id}/warranty",
+        "x-required-scopes": [
+          "extensions.warranty.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs14_put_api-v1-items-id-warranty",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/replace default warranty terms",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on PUT",
+        "x-original-path": "/v1/items/{id}/warranty",
+        "x-required-scopes": [
+          "extensions.warranty.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/upc-registry": {
+      "get": {
+        "operationId": "fs14_get_api-v1-upc-registry",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create assignment",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/upc-registry",
+        "x-required-scopes": [
+          "extensions.upc.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs14_post_api-v1-upc-registry",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create assignment",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/upc-registry",
+        "x-required-scopes": [
+          "extensions.upc.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/upc-registry/assign-batch": {
+      "post": {
+        "operationId": "fs14_post_api-v1-upc-registry-assign-batch",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Trigger batch assignment (EXT)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/upc-registry/assign-batch",
+        "x-required-scopes": [
+          "extensions.upc.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/upc-registry/monitoring": {
+      "get": {
+        "operationId": "fs14_get_api-v1-upc-registry-monitoring",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Monitoring summary (iri-390)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/upc-registry/monitoring",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/upc-registry/validate": {
+      "get": {
+        "operationId": "fs14_get_api-v1-upc-registry-validate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Validate UPC checksum/uniqueness/status",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/upc-registry/validate",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/upc-registry/{id}": {
+      "get": {
+        "operationId": "fs14_get_api-v1-upc-registry-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Assignment detail",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/upc-registry/{id}",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/upc-registry/{id}/retire": {
+      "post": {
+        "operationId": "fs14_post_api-v1-upc-registry-id-retire",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Retire UPC (never reuse)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/upc-registry/{id}/retire",
+        "x-required-scopes": [
+          "extensions.upc.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims": {
+      "get": {
+        "operationId": "fs14_get_api-v1-warranty-claims",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create claim",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/warranty/claims",
+        "x-required-scopes": [
+          "extensions.claims.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-claims",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create claim",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/warranty/claims",
+        "x-required-scopes": [
+          "extensions.claims.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims/{id}": {
+      "get": {
+        "operationId": "fs14_get_api-v1-warranty-claims-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Claim detail + validation + actions",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/warranty/claims/{id}",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims/{id}/actions": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-claims-id-actions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Append claim action",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/claims/{id}/actions",
+        "x-required-scopes": [
+          "extensions.claims.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims/{id}/approve": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-claims-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "APPROVED (validation/override)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/claims/{id}/approve",
+        "x-required-scopes": [
+          "extensions.claims.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims/{id}/cancel": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-claims-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "CANCELLED",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/claims/{id}/cancel",
+        "x-required-scopes": [
+          "extensions.claims.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims/{id}/complete": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-claims-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "COMPLETED",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/claims/{id}/complete",
+        "x-required-scopes": [
+          "extensions.claims.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims/{id}/reject": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-claims-id-reject",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "REJECTED with reason",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/claims/{id}/reject",
+        "x-required-scopes": [
+          "extensions.claims.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/claims/{id}/validate": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-claims-id-validate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Recompute validation",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/claims/{id}/validate",
+        "x-required-scopes": [
+          "extensions.claims.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/coverage": {
+      "get": {
+        "operationId": "fs14_get_api-v1-warranty-coverage",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Compute coverage for item/serial/date",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/warranty/coverage",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/registrations": {
+      "get": {
+        "operationId": "fs14_get_api-v1-warranty-registrations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create registration (manual; auto path uses explicit source)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/warranty/registrations",
+        "x-required-scopes": [
+          "extensions.warranty.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-registrations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create registration (manual; auto path uses explicit source)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/warranty/registrations",
+        "x-required-scopes": [
+          "extensions.warranty.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/registrations/import": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-registrations-import",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Batch import registrations (data path)",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/registrations/import",
+        "x-required-scopes": [
+          "extensions.warranty.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/registrations/{id}": {
+      "get": {
+        "operationId": "fs14_get_api-v1-warranty-registrations-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Registration detail + coverage",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-original-path": "/v1/warranty/registrations/{id}",
+        "x-required-scopes": [
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/registrations/{id}/void": {
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-registrations-id-void",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Void registration",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warranty/registrations/{id}/void",
+        "x-required-scopes": [
+          "extensions.warranty.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warranty/repair-orders": {
+      "get": {
+        "operationId": "fs14_get_api-v1-warranty-repair-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage repair-order data",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/warranty/repair-orders",
+        "x-required-scopes": [
+          "extensions.warranty.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs14_patch_api-v1-warranty-repair-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage repair-order data",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/warranty/repair-orders",
+        "x-required-scopes": [
+          "extensions.warranty.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs14_post_api-v1-warranty-repair-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage repair-order data",
+        "tags": [
+          "FS-14",
+          "extensions.registry"
+        ],
+        "x-contract": [
+          "extensions.registry"
+        ],
+        "x-feature-set": "FS-14",
+        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/warranty/repair-orders",
+        "x-required-scopes": [
+          "extensions.warranty.write",
+          "extensions.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 36,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "extensions.registry",
+      "event": "extensions.upc.batch.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "extensions.registry",
+      "event": "warranty.claim.action.recorded",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "extensions.registry",
+      "event": "warranty.registered",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "extensions.registry",
+      "event": "warranty.registration.expired",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "extensions.registry",
+      "event": "warranty.registration.voided",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "extensions.registry",
+      "event": "warranty.terms.updated",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "extensions.claims.reconcile",
+    "extensions.customer_part.import.process",
+    "extensions.registration.import.process",
+    "extensions.upc.assign",
+    "extensions.upc.reconcile",
+    "extensions.warranty.expiry"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "FS-00": {
+    "status": "verified",
+    "contracts": {
+      "platform.core": "1.0.0",
+      "platform.events": "1.0.0",
+      "platform.finance": "1.0.0",
+      "order.demand": "0.1.0",
+      "order.supply": "0.1.0"
+    },
+    "evidence": "verification/evidence/FS-00/migration.log",
+    "health": "ok",
+    "updated_at": "2026-10-21T12:00:00+00:00"
+  },
+  "FS-01": {
+    "status": "verified",
+    "contracts": {
+      "item.master": "1.0.0"
+    },
+    "evidence": "verification/evidence/FS-01/invariants.log",
+    "health": "ok",
+    "updated_at": "2026-10-21T12:30:00+00:00"
+  },
+  "FS-02": {
+    "status": "verified",
+    "contracts": {
+      "pricing.engine": "1.0.0"
+    },
+    "evidence": "verification/evidence/FS-02/invariants.log",
+    "health": "ok",
+    "updated_at": "2026-10-21T13:00:00+00:00"
+  }
+}

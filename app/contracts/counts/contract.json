@@ -1,0 +1,55 @@
+{
+  "contracts": [
+    {
+      "contract": "counts.engine",
+      "depends_on": [
+        "costing.engine",
+        "inventory.ledger",
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "counts",
+      "events": [
+        {
+          "event": "count.approved",
+          "schema": "contracts/events/counts.engine/count.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "count.generated",
+          "schema": "contracts/events/counts.engine/count.generated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "count.rejected",
+          "schema": "contracts/events/counts.engine/count.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "count.variance_posted",
+          "schema": "contracts/events/counts.engine/count.variance_posted.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-07",
+      "fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+      "version": "1.0.0",
+      "wave": "1A"
+    }
+  ],
+  "dir": "counts",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/counts/openapi.fragment.json",
+  "feature_set": "FS-07",
+  "fragments": [
+    "contracts/openapi/fragments/FS-07.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1A"
+}

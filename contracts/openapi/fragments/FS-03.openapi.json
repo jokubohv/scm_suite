@@ -1,0 +1,1110 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-03 — Storage and Inventory-Status Registry (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "traceability.registry",
+        "dir": "traceability",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-03",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "0C"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/bins": {
+      "get": {
+        "operationId": "fs03_get_api-v1-bins",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search bins",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/bins",
+        "x-required-scopes": [
+          "inventory.bin.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs03_post_api-v1-bins",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create bin",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/bins",
+        "x-required-scopes": [
+          "inventory.bin.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bins/{id}": {
+      "get": {
+        "operationId": "fs03_get_api-v1-bins-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read bin",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/bins/{id}",
+        "x-required-scopes": [
+          "inventory.bin.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs03_patch_api-v1-bins-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update bin (zone/name/type/pickable/capacity)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/bins/{id}",
+        "x-required-scopes": [
+          "inventory.bin.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bins/{id}/activate": {
+      "post": {
+        "operationId": "fs03_post_api-v1-bins-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activate bin",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/bins/{id}/activate",
+        "x-required-scopes": [
+          "inventory.bin.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bins/{id}/inactivate": {
+      "post": {
+        "operationId": "fs03_post_api-v1-bins-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inactivate bin (§5.4.1 guard)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/bins/{id}/inactivate",
+        "x-required-scopes": [
+          "inventory.bin.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-statuses": {
+      "get": {
+        "operationId": "fs03_get_api-v1-inventory-statuses",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List statuses",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/inventory-statuses",
+        "x-required-scopes": [
+          "inventory.status.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs03_post_api-v1-inventory-statuses",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create status",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-statuses",
+        "x-required-scopes": [
+          "inventory.status.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-statuses/{id}": {
+      "get": {
+        "operationId": "fs03_get_api-v1-inventory-statuses-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read status",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/inventory-statuses/{id}",
+        "x-required-scopes": [
+          "inventory.status.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs03_patch_api-v1-inventory-statuses-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update status flags (§5.2 rules)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/inventory-statuses/{id}",
+        "x-required-scopes": [
+          "inventory.status.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-statuses/{id}/activate": {
+      "post": {
+        "operationId": "fs03_post_api-v1-inventory-statuses-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activate status",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-statuses/{id}/activate",
+        "x-required-scopes": [
+          "inventory.status.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-statuses/{id}/inactivate": {
+      "post": {
+        "operationId": "fs03_post_api-v1-inventory-statuses-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inactivate status (guards)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-statuses/{id}/inactivate",
+        "x-required-scopes": [
+          "inventory.status.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-statuses/{id}/set-default": {
+      "post": {
+        "operationId": "fs03_post_api-v1-inventory-statuses-id-set-default",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Set tenant default status",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-statuses/{id}/set-default",
+        "x-required-scopes": [
+          "inventory.status.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations": {
+      "get": {
+        "operationId": "fs03_get_api-v1-locations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search locations",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/locations",
+        "x-required-scopes": [
+          "inventory.location.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs03_post_api-v1-locations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create location",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/locations",
+        "x-required-scopes": [
+          "inventory.location.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations/{id}": {
+      "get": {
+        "operationId": "fs03_get_api-v1-locations-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read location",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/locations/{id}",
+        "x-required-scopes": [
+          "inventory.location.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs03_patch_api-v1-locations-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update location (whitelisted fields)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/locations/{id}",
+        "x-required-scopes": [
+          "inventory.location.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations/{id}/activate": {
+      "post": {
+        "operationId": "fs03_post_api-v1-locations-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activate",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/locations/{id}/activate",
+        "x-required-scopes": [
+          "inventory.location.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations/{id}/bins": {
+      "get": {
+        "operationId": "fs03_get_api-v1-locations-id-bins",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bins at location",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/locations/{id}/bins",
+        "x-required-scopes": [
+          "inventory.bin.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations/{id}/children": {
+      "get": {
+        "operationId": "fs03_get_api-v1-locations-id-children",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Direct children",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/locations/{id}/children",
+        "x-required-scopes": [
+          "inventory.location.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations/{id}/descendants": {
+      "get": {
+        "operationId": "fs03_get_api-v1-locations-id-descendants",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Full descendant id/code tree (data-scope hook)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/locations/{id}/descendants",
+        "x-required-scopes": [
+          "inventory.location.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations/{id}/inactivate": {
+      "post": {
+        "operationId": "fs03_post_api-v1-locations-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inactivate (guards §5.4)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/locations/{id}/inactivate",
+        "x-required-scopes": [
+          "inventory.location.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/locations/{id}/posting-eligibility": {
+      "get": {
+        "operationId": "fs03_get_api-v1-locations-id-posting-eligibility",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Registry validation for a candidate posting position",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/locations/{id}/posting-eligibility",
+        "x-required-scopes": [
+          "inventory.location.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/traceability/bootstrap": {
+      "get": {
+        "operationId": "fs03_get_api-v1-traceability-bootstrap",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bootstrap/sentinel status (read-only contract)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/traceability/bootstrap",
+        "x-required-scopes": [
+          "inventory.location.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/zones": {
+      "get": {
+        "operationId": "fs03_get_api-v1-zones",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List zones",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/zones",
+        "x-required-scopes": [
+          "inventory.bin.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs03_post_api-v1-zones",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create zone",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/zones",
+        "x-required-scopes": [
+          "inventory.bin.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/zones/{id}": {
+      "get": {
+        "operationId": "fs03_get_api-v1-zones-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read zone",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/zones/{id}",
+        "x-required-scopes": [
+          "inventory.bin.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs03_patch_api-v1-zones-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update zone (name, priority, zone_type?)",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-original-path": "/v1/zones/{id}",
+        "x-required-scopes": [
+          "inventory.bin.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/zones/{id}/inactivate": {
+      "post": {
+        "operationId": "fs03_post_api-v1-zones-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inactivate zone",
+        "tags": [
+          "FS-03",
+          "traceability.registry"
+        ],
+        "x-contract": [
+          "traceability.registry"
+        ],
+        "x-feature-set": "FS-03",
+        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/zones/{id}/inactivate",
+        "x-required-scopes": [
+          "inventory.bin.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 29,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.bin.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.bootstrap.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.deferred_fk.checked",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.location.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.location.inactivated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.location.updated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.status.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.registry",
+      "event": "traceability.zone.changed",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "traceability.bootstrap.sentinel",
+    "traceability.deferred_fk.close",
+    "traceability.registry.reconcile"
+  ]
+}

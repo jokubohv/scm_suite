@@ -1,0 +1,54 @@
+{
+  "contracts": [
+    {
+      "contract": "reporting.readmodels",
+      "depends_on": [
+        "consigned.inventory",
+        "costing.engine",
+        "counts.engine",
+        "extensions.registry",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "platform.core",
+        "platform.events",
+        "pricing.engine",
+        "procurement.p2p",
+        "quality.management",
+        "replenishment.planning",
+        "traceability.numbered",
+        "traceability.registry",
+        "wms.execution"
+      ],
+      "dir": "reporting",
+      "events": [
+        {
+          "event": "reporting.refresh.failed",
+          "schema": "contracts/events/reporting.readmodels/reporting.refresh.failed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "reporting.view.refreshed",
+          "schema": "contracts/events/reporting.readmodels/reporting.view.refreshed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-15",
+      "fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+      "version": "1.0.0",
+      "wave": "2"
+    }
+  ],
+  "dir": "reporting",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/reporting/openapi.fragment.json",
+  "feature_set": "FS-15",
+  "fragments": [
+    "contracts/openapi/fragments/FS-15.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "2"
+}

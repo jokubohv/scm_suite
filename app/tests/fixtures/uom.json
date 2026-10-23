@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "plan_version": "1.5.0",
+  "note": "Canonical test UoM samples. Mirrors app/seed/data/uom.json but is intentionally test-local/stable; add pairs additively and never rename codes.",
+  "uom_pairs": [
+    {
+      "name": "eaches",
+      "uom_type_code": "EA_TYPE",
+      "base_uom_code": "EA",
+      "units": [
+        {"code": "EA", "name": "Each", "conversion_factor": "1", "is_base": true, "rounding_precision": 0},
+        {"code": "DZ", "name": "Dozen", "conversion_factor": "12", "is_base": false, "rounding_precision": 0},
+        {"code": "CS", "name": "Case (24)", "conversion_factor": "24", "is_base": false, "rounding_precision": 0}
+      ]
+    },
+    {
+      "name": "weight",
+      "uom_type_code": "WEIGHT",
+      "base_uom_code": "KG",
+      "units": [
+        {"code": "KG", "name": "Kilogram", "conversion_factor": "1", "is_base": true, "rounding_precision": 3},
+        {"code": "G", "name": "Gram", "conversion_factor": "0.001", "is_base": false, "rounding_precision": 0},
+        {"code": "LB", "name": "Pound", "conversion_factor": "0.45359237", "is_base": false, "rounding_precision": 3}
+      ]
+    }
+  ]
+}

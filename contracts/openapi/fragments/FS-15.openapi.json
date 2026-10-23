@@ -1,0 +1,904 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-15 — Reporting Read Models and Reporting API (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "reporting.readmodels",
+        "dir": "reporting",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-15",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "2"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/inventory/balances/search": {
+      "get": {
+        "operationId": "fs15_get_api-v1-inventory-balances-search",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Balance search (V-02; `iri-217`)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/inventory/balances/search",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory/details/search": {
+      "get": {
+        "operationId": "fs15_get_api-v1-inventory-details-search",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inventory detail search (V-10; `iri-218`)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/inventory/details/search",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Report catalogue + freshness metadata (additive)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/atp-workbench": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-atp-workbench",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ATP projection view (V-13)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/atp-workbench",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/available-to-build": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-available-to-build",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Available-to-build reporting projection (V-21; additive — view exists with no baseline path)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/available-to-build",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/backorders": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-backorders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Back-order report (V-08)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/backorders",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/consigned-balance": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-consigned-balance",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Consigned balance (V-19)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/consigned-balance",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/inventory-activity": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-inventory-activity",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activity detail (V-10)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/inventory-activity",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/inventory-snapshot": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-inventory-snapshot",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Current snapshot (V-05)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/inventory-snapshot",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/inventory-valuation": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-inventory-valuation",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Valuation summary (V-03)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/inventory-valuation",
+        "x-required-scopes": [
+          "reporting.cost.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/inventory-valuation-detail": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-inventory-valuation-detail",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Valuation detail by layer (V-04)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/inventory-valuation-detail",
+        "x-required-scopes": [
+          "reporting.cost.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/lot-expiry": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-lot-expiry",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Lots expiring in horizon (V-17)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/lot-expiry",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/manufacturing-workbench": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-manufacturing-workbench",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manufacturing workbench (V-16)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/manufacturing-workbench",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/negative-inventory": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-negative-inventory",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Underwater positions (V-06)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/negative-inventory",
+        "x-required-scopes": [
+          "reporting.cost.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/open-commitments": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-open-commitments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Open commitments (V-07; additive — view exists with no baseline path)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/open-commitments",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/pending-fulfillment": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-pending-fulfillment",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Pending fulfilment (V-09)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/pending-fulfillment",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/planning-workbench": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-planning-workbench",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Planning workbench (V-14)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/planning-workbench",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/profitability": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-profitability",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Profitability inputs (V-12)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/profitability",
+        "x-required-scopes": [
+          "reporting.cost.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/purchase-history": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-purchase-history",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Purchase history (V-15)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/purchase-history",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/quality-inspections": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-quality-inspections",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inspection status (V-20)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/quality-inspections",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/serial-history": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-serial-history",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Serial movement history (V-18)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/serial-history",
+        "x-required-scopes": [
+          "reporting.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/stock-ledger": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-stock-ledger",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Stock ledger (V-01)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/stock-ledger",
+        "x-required-scopes": [
+          "reporting.read",
+          "reporting.cost.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/turnover": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-turnover",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Turnover inputs (V-11)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/turnover",
+        "x-required-scopes": [
+          "reporting.cost.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reports/{report}/export": {
+      "get": {
+        "operationId": "fs15_get_api-v1-reports-report-export",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Paged export (CSV/NDJSON; additive)",
+        "tags": [
+          "FS-15",
+          "reporting.readmodels"
+        ],
+        "x-contract": [
+          "reporting.readmodels"
+        ],
+        "x-feature-set": "FS-15",
+        "x-fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+        "x-original-path": "/v1/reports/{report}/export",
+        "x-required-scopes": [
+          "reporting.export"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 24,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "reporting.readmodels",
+      "event": "reporting.refresh.failed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "reporting.readmodels",
+      "event": "reporting.view.refreshed",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "reporting.reconcile_readmodels",
+    "reporting.refresh_views"
+  ]
+}

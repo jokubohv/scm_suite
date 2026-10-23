@@ -1,0 +1,107 @@
+====================================================================================================
+INDEPENDENT PHASE-A RECHECK  --  96 PASS / 0 FAIL
+====================================================================================================
+PASS  manifest schema_version is 1.0
+PASS  manifest plan_version is 1.2.0 (Δ-MT + Δ-RBAC amendments)
+PASS  manifest has 16 feature sets
+PASS  ids are FS-00..FS-15
+PASS  ids unique
+PASS  all sets phase=1 (ints) and backend_only=true
+PASS  waves are exactly 0A,0B,0C,1A..1F,2
+PASS  116 dependency edges (individual records)
+PASS  86 unique FS-provider pairs
+PASS  21 provided contracts, names unique
+PASS  every edge resolves to a provided contract version inside its declared range
+PASS  DAG acyclic (topological sort covers 16)
+PASS  manifest declaration order is a valid topological order
+PASS  only FS-00 is a root
+PASS  all 16 sets reach FS-00
+PASS  phase/wave monotonic
+PASS  required manifest fields present/non-empty (section 4 rules 7-8)
+PASS  all 16 sets have runnable entry (check-env) / exit (migrations+record) gate commands
+PASS  migration revisions are contiguous 0001..0030
+PASS  DATA-MODEL section 21.1 lists 16 migration groups
+PASS  catalogs contain 1,348 topics (412 iri + 936 mpw)
+PASS  catalog ids are exactly iri-001..412 and mpw-001..936
+PASS  coverage keys equal catalog ids (no missing/extra)
+PASS  coverage has 1,348 entries
+PASS  all dispositions valid
+PASS  all dispositions have a non-empty reason
+PASS  every feature set owns >=1 topic
+PASS  SCM Mobile exclusion count is 0
+PASS  in-scope=769 deferred=579 total=1348
+PASS  coverage totals metadata consistent
+PASS  no catalog topic has an SCM Mobile root area
+PASS  the SCM Mobile book URL is never a catalog topic url
+PASS  mpw-342 (Installing SCM Mobile Bundle) is catalogued inside Manufacturing Mobile and DEFERRED-MOBILE
+PASS  classification totals match PLAN section 14 claims (885/204/126/49/59/22/3)
+PASS  per-area catalog counts 194/218/415/376/145
+PASS  every core-backend catalog topic is either owned or explicitly deferred
+PASS  coverage JSON core_backend_class_by_fs sums to 692
+PASS  FEATURE-COVERAGE section 5.2 class totals row arithmetic (742/27)
+PASS  FEATURE-SETS section 1 table has 16 rows
+PASS  FEATURE-SETS section 1: contracts/wave/catalog-topic counts match manifest+coverage
+PASS  DATA-MODEL section 21 ownership table has 16 rows
+PASS  DATA-MODEL section 21 wave column matches manifest
+PASS  FEATURE-SETS section 1 table counts match DATA-MODEL section 21
+PASS  DATA-MODEL table counts sum to 277 base tables
+PASS  PLAN/FEATURE-SETS totals (273 base + finance_journal_intent + 3 Δ-MT) == DATA-MODEL 277
+PASS  FS-15 owns 21 reporting views and 0 base tables
+PASS  DATA-MODEL section 2 context counts sum to 277
+PASS  PLAN auto feature-set table has 16 rows
+PASS  PLAN auto table matches manifest (waves, contracts, topic counts)
+PASS  PLAN auto table source-topic total is 769
+PASS  FEATURE-SETS section 2.2 edge table documents 116 contract edges
+PASS  FEATURE-SETS section 2.2 (dependent, provider, contract) set matches manifest
+PASS  FEATURE-SETS section 2.2 covers 86 unique FS pairs
+PASS  FEATURE-SETS section 3 wave table composition matches manifest
+PASS  PLAN section 6 wave table composition matches manifest (order-insensitive)
+PASS  ARCHITECTURE posting matrix has T-01..T-31
+PASS  DATA-MODEL posting rules have the same T-01..T-31 set
+PASS  DATA-MODEL declares 31 posting transaction types + 6 non-posting commands
+PASS  ARCHITECTURE non-posting control commands are C-01..C-06
+PASS  ARCHITECTURE invariant catalogue has INV-01..INV-31
+PASS  FEATURE-SETS section 9 cross-set invariant citation present
+PASS  FEATURE-SETS section 9 cites INV catalogue to ARCHITECTURE 7.3 and DM-GLOBAL to DATA-MODEL 20
+PASS  DATA-MODEL scoped-rule counts sum to 140 (150 incl. 10 global)
+PASS  DATA-MODEL stated total rules equals 10 global + 140 scoped = 150
+PASS  ARCHITECTURE documents all 7 costing methods
+PASS  DATA-MODEL item cost-method enum lists the same 7 methods
+PASS  FEATURE-SETS FS-05 scope names all 7 costing methods
+PASS  ARCHITECTURE lock ranks are contiguous 0..6
+PASS  longest dependency chain is 10 sets / 9 edges
+PASS  longest chain matches the FEATURE-SETS section 4 claim
+PASS  wave-gated deployment: 14 steps = 13 sequential + 1 parallel group (FEATURE-SETS section 4)
+PASS  PLAN status table has 16 rows, all environments '—'
+PASS  PLAN section 13 has 8 acceptance items (7 checked + 1 annotated PARTIAL)
+PASS  PLAN records SCM Mobile exclusion and source-URL interpretation
+PASS  framework stack pinned (Python 3.12 / FastAPI / PostgreSQL 16 / Redis 7 / Docker Compose)
+PASS  framework DoD section 7 present
+PASS  framework validation rules 1-8 present
+PASS  PLAN environment claim: Docker 27+ available
+PASS  PLAN environment claim: Docker Compose v2 available
+PASS  PLAN environment claim: Python 3.12 available
+PASS  DATA-MODEL section 21 dependency omissions are exactly the 4 documented deltas R-1..R-4
+PASS  FEATURE-SETS section 8.2 documents R-1..R-4 deltas
+PASS  DATA-MODEL documents Delta-1 finance_journal_intent (table + rules + ownership)
+PASS  DATA-MODEL M00 revision names match manifest FS-00 migrations
+PASS  plan-package artifacts referenced by PLAN section 2 / README exist
+PASS  feature-set specs snapshot: at least 14/16 present in Phase A (FS-13/14 pending for Phase B)
+PASS  PLAN records locked decisions D1-D8 + deltas Delta-1..Delta-3
+PASS  PLAN/README table counts reconcile (277 base tables = 273 + finance_journal_intent + 3 Δ-MT, 21 views)
+PASS  PLAN statistics section states 769 in-scope / 579 deferred / 1,348 total
+PASS  PLAN generated tables are current (tools/render_plan_tables.py --check exits 0)
+PASS  README quickstart commands exist in tools/feature_sets.py CLI
+PASS  ARCHITECTURE section 9 traceability references all 5 in-scope source areas
+PASS  R-3 (FS-10->FS-06) evidenced in DATA-MODEL 22.2 G11 row (allocation_result -> lot/serial)
+PASS  R-1 (FS-08->FS-06) evidenced: item_receipt_detail Ext-deps include lot/serial_number
+PASS  R-2 (FS-09->FS-06) evidenced: assembly_build / wip_transaction_line Ext-deps include lot/serial_number
+PASS  R-4 (FS-12->FS-03) substance: quality tables carry FS-03-owned location refs and the hold->status bridge (DM-QA-02)
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+FINDINGS (1):
+[INFO] F-A-10: 50 of 141 manifest gate commands are fully executable inside the plan package today (tools/feature_sets.py / render_plan_tables.py); the remaining 91 reference the future implementation repo (pytest app/tests/..., docker compose, scripts/deploy_set.sh). This is expected for a plan, but PLAN section 13's 'runbook commands are executable from a clean checkout' can only be fully verified once the implementation repo exists; Phase B audits the referenced spec test files instead.
+----------------------------------------------------------------------------------------------------
+Derived: 16 sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, topo=FS-00 FS-01 FS-02 FS-03 FS-04 FS-05 FS-06 FS-07 FS-08 FS-09 FS-10 FS-11 FS-12 FS-13 FS-14 FS-15
+Coverage: 1348 topics = 769 in-scope + 579 deferred; core-backend catalog=885, owned=692, deferred=193
+Longest dependency chain: FS-00 -> FS-01 -> FS-02 -> FS-04 -> FS-05 -> FS-06 -> FS-08 -> FS-09 -> FS-10 -> FS-15

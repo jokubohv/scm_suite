@@ -1,0 +1,58 @@
+PASS  plan_version is 1.2.0 in manifest and permissions.json
+PASS  catalogue: 255 scopes = 241 assignable + 13 service-only + 1 platform-only
+PASS  platform-only scope is platform.tenant.manage and is never assignable
+PASS  alias platform.user.manage -> platform.users.manage exists only in aliases (not seeded)
+PASS  counts metadata matches recomputed catalogue
+PASS  18 requires_approval; 6 global rules; public 9 / self-service 6 allowlists
+PASS  self-service allowlist includes GET /api/v1/me/effective-permissions
+PASS  exactly 7 role templates with the documented scope counts
+PASS  admin template = exactly all 241 assignable scopes
+PASS  all role templates are non-editable/cloneable system templates with catalogued scopes
+PASS  14 SoD pairs reference valid, distinct catalogue scopes
+PASS  no non-admin role template combines an SoD pair (admin is audited break-glass)
+PASS  ARCHITECTURE §0 counts: 287/34/21/31+6/146+10=156/INV-33/255/241/13/1/7/14
+PASS  ARCHITECTURE §5.2 RBAC model: catalogue authority, 7 templates, deny-by-default, guards, SoD, effective permissions
+PASS  ARCHITECTURE §5.2 allowlists: public 9 + self-service 6 incl. effective-permissions
+PASS  ARCHITECTURE §7.3 INV-31 authorization-completeness + §8 D-30 + §10 G-14 + §11 A-17
+PASS  ARCHITECTURE counts: 287 tables (280 + Δ-CFG/Δ-REUSE 7); 116 edges; 21 contracts
+PASS  DATA-MODEL permission_scope gains is_platform_only/is_assignable/owner_feature_set; role gains is_template/is_editable
+PASS  DATA-MODEL rbac namespace + catalogue/role/assignment seeds
+PASS  DATA-MODEL DM-RBAC-01/02/03 + INV-31/INV-33 present with required semantics
+PASS  DATA-MODEL rule counts: platform 20, scoped 146, total 156 (10 global)
+PASS  DATA-MODEL totals: 287 base tables / platform 34 / 21 views
+FAIL  FS-00 banner/§4.3 state 255 scopes = 241 assignable + 13 service-only + 1 platform-only
+PASS  FS-00 §4.3 lists the 7 role templates and 14 SoD pairs + approval-required count
+PASS  FS-00: 34 tables / 102 endpoint rows / 33 event rows stated consistently
+PASS  FS-00 §11 reproduces all 14 manifest gate commands verbatim (incl. permissions + route/role/SoD tests)
+PASS  FS-00 DM-RBAC-01..03 + INV-31 + RBAC APIs/use cases/tests present
+FAIL  FS-00 role table scope counts match the catalogue
+PASS  FS-01 GET reference reads use items.read (five fixed cells; location settings is the only remaining manage read)
+PASS  FEATURE-SETS plan version 1.5.0 + §7.1 Δ-RBAC paragraph (deny-by-default, DM-RBAC, INV-31; Δ-SSO paragraph present)
+PASS  FEATURE-SETS §7.1 FS-00 exit block mirrors the 17 manifest gate commands
+PASS  manifest: plan_version 1.5.0; FS-00 exit_checks 17 (unchanged) + FS-09 exit 8
+PASS  manifest: only FS-00 exit_checks changed (edges 116/86, contracts 21, waves 10, entry 49, exit 92)
+PASS  PLAN header plan v1.5.0 (Δ-CFG/Δ-REUSE, audit pending) + Δ-RBAC decision row D-30 + §4.3/§4.4 sections
+PASS  PLAN §4.3/§12 document counts 255/241/146/156/INV-33 + deny-by-default/SoD/effective permissions
+PASS  PLAN generated tables current (287 tables / 21 views; FS-00 34 tables)
+PASS  README carries the current catalogue line (255-scope catalogue / 7 templates / 14 hard SoD) and status
+PASS  PLAN header/README carry the Δ-RBAC VERIFIED PASS stamp (or pending wording pre-verdict)
+PASS  PLAN rules+invariant counts current (146 scoped + 10 global = 156; INV-01..INV-33)
+PASS  addendum binding/EXT marking, plan v1.2.0, resolved clarifications §10 present
+PASS  addendum model: capability scope naming, deny-by-default, data scopes, approval separation
+PASS  addendum role lifecycle: 7 non-editable/cloneable templates, assignments, effective permissions, safety guards
+PASS  addendum enforcement/verification: route-scope coverage, permissions gate, scope/role/SoD tests
+PASS  addendum §10: 249 catalogue, alias not seeded, admin-only SoD, next-request permissions
+PASS  addendum doc-update map lists all amended artifacts (ARCH/DATA-MODEL/FS-00/FS-01/FEATURE-SETS/manifest/PLAN/README/report)
+PASS  no stale current-state scope/rule/invariant/role-count references
+PASS  all 16 spec endpoint scope cells reference only catalogue scopes (0 unknown)
+PASS  spec endpoint scan reached all 16 specs and >700 endpoint rows
+PASS  every public/self-service allowlist labelled route is present in the corresponding allowlist
+PASS  unreferenced catalogue scopes are reported as a non-blocking WARN (approval/job/read scopes referenced in prose)
+PASS  DATA-MODEL DM-RBAC-01 allowlist counts match the catalogue (public 6 / self-service 6)
+==============================================================================================================
+RBAC DELTA AUDIT  --  49 PASS / 2 FAIL / 0 findings
+==============================================================================================================
+--------------------------------------------------------------------------------------------------------------
+Catalogue: scopes=255 (assignable=241, service-only=13, platform-only=1), requires_approval=18, roles=7, SoD=14, global_rules=6, public_allowlist=9, self_service_allowlist=6
+Spec reconciliation: 791 endpoint rows / 188 catalogue scope references / 0 unknown / 67 unreferenced (WARN)
+Rules: 140 scoped + 10 global = 150; invariants INV-01..INV-31; plan_version=1.5.0

@@ -1,0 +1,88 @@
+{
+  "contracts": [
+    {
+      "contract": "wms.execution",
+      "depends_on": [
+        "counts.engine",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "wms",
+      "events": [
+        {
+          "event": "wms.inbound_shipment.arrived",
+          "schema": "contracts/events/wms.execution/wms.inbound_shipment.arrived.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.inbound_shipment.created",
+          "schema": "contracts/events/wms.execution/wms.inbound_shipment.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.pack.completed",
+          "schema": "contracts/events/wms.execution/wms.pack.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.receiving.reversed",
+          "schema": "contracts/events/wms.execution/wms.receiving.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.replenishment.generated",
+          "schema": "contracts/events/wms.execution/wms.replenishment.generated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.completed",
+          "schema": "contracts/events/wms.execution/wms.task.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.created",
+          "schema": "contracts/events/wms.execution/wms.task.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.exception",
+          "schema": "contracts/events/wms.execution/wms.task.exception.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.reversed",
+          "schema": "contracts/events/wms.execution/wms.task.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.watchdog.alert",
+          "schema": "contracts/events/wms.execution/wms.task.watchdog.alert.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-11",
+      "fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+      "version": "1.0.0",
+      "wave": "1E"
+    }
+  ],
+  "dir": "wms",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/wms/openapi.fragment.json",
+  "feature_set": "FS-11",
+  "fragments": [
+    "contracts/openapi/fragments/FS-11.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1E"
+}

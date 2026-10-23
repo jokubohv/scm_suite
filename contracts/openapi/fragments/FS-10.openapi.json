@@ -1,0 +1,2693 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-10 — Replenishment and Planning (AIM, demand, supply/MRP, DRP, allocation, ATP) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "replenishment.planning",
+        "dir": "replenishment",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-10",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1D"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/allocation-runs": {
+      "get": {
+        "operationId": "fs10_get_api-v1-allocation-runs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List runs",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/allocation-runs",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-allocation-runs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/execute allocation run",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/allocation-runs",
+        "x-required-scopes": [
+          "replenishment.run"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/allocation-runs/{id}": {
+      "get": {
+        "operationId": "fs10_get_api-v1-allocation-runs-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read run + counts",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/allocation-runs/{id}",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/allocation-runs/{id}/cancel": {
+      "post": {
+        "operationId": "fs10_post_api-v1-allocation-runs-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel run",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/allocation-runs/{id}/cancel",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/allocation-runs/{id}/exceptions": {
+      "get": {
+        "operationId": "fs10_get_api-v1-allocation-runs-id-exceptions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Uncovered demand",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/allocation-runs/{id}/exceptions",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/allocation-runs/{id}/results": {
+      "get": {
+        "operationId": "fs10_get_api-v1-allocation-runs-id-results",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Allocation results (lot/serial FEFO)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/allocation-runs/{id}/results",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/allocation-strategies": {
+      "get": {
+        "operationId": "fs10_get_api-v1-allocation-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List strategies",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/allocation-strategies",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-allocation-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create allocation strategy",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/allocation-strategies",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/allocation-strategies/{id}": {
+      "patch": {
+        "operationId": "fs10_patch_api-v1-allocation-strategies-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update strategy",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/allocation-strategies/{id}",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/allocation-strategies/{id}/rules": {
+      "get": {
+        "operationId": "fs10_get_api-v1-allocation-strategies-id-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List rules",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/allocation-strategies/{id}/rules",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs10_put_api-v1-allocation-strategies-id-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace ordering rules",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/allocation-strategies/{id}/rules",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/atp": {
+      "get": {
+        "operationId": "fs10_get_api-v1-atp",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Availability check / earliest date",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/atp",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/atp/projection": {
+      "get": {
+        "operationId": "fs10_get_api-v1-atp-projection",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Per-bucket ATP projection",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/atp/projection",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/atp/rebuild": {
+      "post": {
+        "operationId": "fs10_post_api-v1-atp-rebuild",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Force projection rebuild (admin/job)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/atp/rebuild",
+        "x-required-scopes": [
+          "replenishment.run"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bills-of-distribution": {
+      "get": {
+        "operationId": "fs10_get_api-v1-bills-of-distribution",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List BODs",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/bills-of-distribution",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-bills-of-distribution",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create BOD version",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/bills-of-distribution",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bills-of-distribution/{id}/levels": {
+      "get": {
+        "operationId": "fs10_get_api-v1-bills-of-distribution-id-levels",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List arcs",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/bills-of-distribution/{id}/levels",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs10_put_api-v1-bills-of-distribution-id-levels",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace arcs",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/bills-of-distribution/{id}/levels",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-history": {
+      "get": {
+        "operationId": "fs10_get_api-v1-demand-history",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Query demand history",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/demand-history",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-demand-history",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Backfill/manual demand rows (`EXT`)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/demand-history",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-plans": {
+      "get": {
+        "operationId": "fs10_get_api-v1-demand-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List demand plans",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/demand-plans",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-demand-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create demand plan",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/demand-plans",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-plans/{id}": {
+      "get": {
+        "operationId": "fs10_get_api-v1-demand-plans-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read plan + status",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/demand-plans/{id}",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs10_patch_api-v1-demand-plans-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update draft/calculated plan metadata",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/demand-plans/{id}",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-plans/{id}/approve": {
+      "post": {
+        "operationId": "fs10_post_api-v1-demand-plans-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve plan",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/demand-plans/{id}/approve",
+        "x-required-scopes": [
+          "replenishment.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-plans/{id}/archive": {
+      "post": {
+        "operationId": "fs10_post_api-v1-demand-plans-id-archive",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Archive plan",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/demand-plans/{id}/archive",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-plans/{id}/calculate": {
+      "post": {
+        "operationId": "fs10_post_api-v1-demand-plans-id-calculate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Run calculation (job enqueue or sync small scope)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/demand-plans/{id}/calculate",
+        "x-required-scopes": [
+          "replenishment.run"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-plans/{id}/lines": {
+      "get": {
+        "operationId": "fs10_get_api-v1-demand-plans-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Plan lines",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/demand-plans/{id}/lines",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/demand-plans/{id}/lines/{line_id}": {
+      "patch": {
+        "operationId": "fs10_patch_api-v1-demand-plans-id-lines-line-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manual override",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/demand-plans/{id}/lines/{line_id}",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/distribution-categories": {
+      "get": {
+        "operationId": "fs10_get_api-v1-distribution-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List categories",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/distribution-categories",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-distribution-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create distribution category",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/distribution-categories",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/distribution-categories/{id}/members": {
+      "put": {
+        "operationId": "fs10_put_api-v1-distribution-categories-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace category items",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/distribution-categories/{id}/members",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/drp/networks": {
+      "get": {
+        "operationId": "fs10_get_api-v1-drp-networks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List networks",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/drp/networks",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-drp-networks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create DRP network",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/drp/networks",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/drp/networks/{id}": {
+      "get": {
+        "operationId": "fs10_get_api-v1-drp-networks-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read network + members",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/drp/networks/{id}",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs10_patch_api-v1-drp-networks-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update network",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/drp/networks/{id}",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/drp/networks/{id}/members": {
+      "get": {
+        "operationId": "fs10_get_api-v1-drp-networks-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List members",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/drp/networks/{id}/members",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs10_put_api-v1-drp-networks-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace members/hierarchy",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/drp/networks/{id}/members",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning-action-messages": {
+      "get": {
+        "operationId": "fs10_get_api-v1-planning-action-messages",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List exceptions/action messages",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/planning-action-messages",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning-action-messages/{id}/acknowledge": {
+      "post": {
+        "operationId": "fs10_post_api-v1-planning-action-messages-id-acknowledge",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Acknowledge",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/planning-action-messages/{id}/acknowledge",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning-action-messages/{id}/ignore": {
+      "post": {
+        "operationId": "fs10_post_api-v1-planning-action-messages-id-ignore",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Ignore",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/planning-action-messages/{id}/ignore",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning-action-messages/{id}/resolve": {
+      "post": {
+        "operationId": "fs10_post_api-v1-planning-action-messages-id-resolve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Resolve",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/planning-action-messages/{id}/resolve",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning-rules": {
+      "get": {
+        "operationId": "fs10_get_api-v1-planning-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List rules",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/planning-rules",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-planning-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create planning rule",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/planning-rules",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning-rules/{id}": {
+      "patch": {
+        "operationId": "fs10_patch_api-v1-planning-rules-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update rule",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/planning-rules/{id}",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning-rules/{id}/scopes": {
+      "get": {
+        "operationId": "fs10_get_api-v1-planning-rules-id-scopes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read scopes",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/planning-rules/{id}/scopes",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs10_put_api-v1-planning-rules-id-scopes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace rule scopes",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/planning-rules/{id}/scopes",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning/preferences": {
+      "get": {
+        "operationId": "fs10_get_api-v1-planning-preferences",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read planning settings + policy registry",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/planning/preferences",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs10_patch_api-v1-planning-preferences",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update planning settings/policy versions",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/planning/preferences",
+        "x-required-scopes": [
+          "replenishment.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning/signals": {
+      "get": {
+        "operationId": "fs10_get_api-v1-planning-signals",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Planning signal feed for a future Control Tower (`EXT`, no UI)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/planning/signals",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/planning/workbench": {
+      "get": {
+        "operationId": "fs10_get_api-v1-planning-workbench",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Planning workbench data feeder (`EXT`; FS-15 read model source)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/planning/workbench",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-calculations": {
+      "get": {
+        "operationId": "fs10_get_api-v1-replenishment-calculations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List AIM calculations",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/replenishment-calculations",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-replenishment-calculations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create AIM calculation (job enqueue)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/replenishment-calculations",
+        "x-required-scopes": [
+          "replenishment.run"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-calculations/{id}": {
+      "get": {
+        "operationId": "fs10_get_api-v1-replenishment-calculations-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read calculation + formula_version",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/replenishment-calculations/{id}",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-calculations/{id}/apply": {
+      "post": {
+        "operationId": "fs10_post_api-v1-replenishment-calculations-id-apply",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Apply APPLY lines (manual invocation; still requires auto_calculate_planning=true)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/replenishment-calculations/{id}/apply",
+        "x-required-scopes": [
+          "replenishment.run"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-calculations/{id}/lines": {
+      "get": {
+        "operationId": "fs10_get_api-v1-replenishment-calculations-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Calculated lines",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/replenishment-calculations/{id}/lines",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment/order-items": {
+      "get": {
+        "operationId": "fs10_get_api-v1-replenishment-order-items",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Order Items data (quantity to order)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/replenishment/order-items",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment/reorder-reminders": {
+      "get": {
+        "operationId": "fs10_get_api-v1-replenishment-reorder-reminders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reorder reminders (derived view)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/replenishment/reorder-reminders",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans": {
+      "get": {
+        "operationId": "fs10_get_api-v1-supply-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List supply plans",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/supply-plans",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-supply-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create supply plan",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/supply-plans",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}": {
+      "get": {
+        "operationId": "fs10_get_api-v1-supply-plans-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read plan + status + counts",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/supply-plans/{id}",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}/approve": {
+      "post": {
+        "operationId": "fs10_post_api-v1-supply-plans-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve calculated plan",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/supply-plans/{id}/approve",
+        "x-required-scopes": [
+          "replenishment.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}/cancel": {
+      "post": {
+        "operationId": "fs10_post_api-v1-supply-plans-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel queued/running plan",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/supply-plans/{id}/cancel",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}/create-orders": {
+      "post": {
+        "operationId": "fs10_post_api-v1-supply-plans-id-create-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bulk draft PO/WO/TO creation",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/supply-plans/{id}/create-orders",
+        "x-required-scopes": [
+          "replenishment.convert"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}/lines": {
+      "get": {
+        "operationId": "fs10_get_api-v1-supply-plans-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Projected lines",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/supply-plans/{id}/lines",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}/run": {
+      "post": {
+        "operationId": "fs10_post_api-v1-supply-plans-id-run",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Execute plan (job enqueue; explicit run_key)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/supply-plans/{id}/run",
+        "x-required-scopes": [
+          "replenishment.run"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}/suggestions": {
+      "get": {
+        "operationId": "fs10_get_api-v1-supply-plans-id-suggestions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Suggestions",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/supply-plans/{id}/suggestions",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/supply-plans/{id}/suggestions/{suggestion_id}/dismiss": {
+      "post": {
+        "operationId": "fs10_post_api-v1-supply-plans-id-suggestions-suggestion-id-dismiss",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Dismiss suggestion",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/supply-plans/{id}/suggestions/{suggestion_id}/dismiss",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/time-fences": {
+      "get": {
+        "operationId": "fs10_get_api-v1-time-fences",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List fences",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/time-fences",
+        "x-required-scopes": [
+          "replenishment.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs10_post_api-v1-time-fences",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/update time fence",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/time-fences",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/time-fences/{id}": {
+      "delete": {
+        "operationId": "fs10_delete_api-v1-time-fences-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Deactivate fence (soft)",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/time-fences/{id}",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs10_patch_api-v1-time-fences-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update fence",
+        "tags": [
+          "FS-10",
+          "replenishment.planning"
+        ],
+        "x-contract": [
+          "replenishment.planning"
+        ],
+        "x-feature-set": "FS-10",
+        "x-fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+        "x-original-path": "/v1/time-fences/{id}",
+        "x-required-scopes": [
+          "replenishment.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 72,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "replenishment.planning",
+      "event": "allocation.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "allocation.exception.raised",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "atp.updated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "plan.approved",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "plan.demand.calculated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "plan.generated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "plan.suggestion.converted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "plan.suggestion.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "plan.supply.calculated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "planning.exception.raised",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "planning.exception.resolved",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "replenishment.below_reorder_point",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "replenishment.calculated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "replenishment.order_items.calculated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "replenishment.planning",
+      "event": "replenishment.preferences.changed",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "atp.rebuild",
+    "planning.allocation.run",
+    "planning.demand.calculate",
+    "planning.supply.run",
+    "replenishment.aim",
+    "replenishment.ordering"
+  ]
+}

@@ -1,0 +1,3266 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-08 — Procurement (vendor master, P2P documents, receipts, bills, returns) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "procurement.p2p",
+        "dir": "procurement",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-08",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1B"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/item-receipts": {
+      "get": {
+        "operationId": "fs08_get_api-v1-item-receipts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List receipts",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-receipts",
+        "x-required-scopes": [
+          "procurement.receipt.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-item-receipts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create receipt (draft or pending posting)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-receipts",
+        "x-required-scopes": [
+          "procurement.receipt.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-receipts/unbilled": {
+      "get": {
+        "operationId": "fs08_get_api-v1-item-receipts-unbilled",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Received-not-billed accrual view",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-receipts/unbilled",
+        "x-required-scopes": [
+          "procurement.receipt.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-receipts/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-item-receipts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Receipt detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-receipts/{id}",
+        "x-required-scopes": [
+          "procurement.receipt.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs08_patch_api-v1-item-receipts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Edit unposted receipt",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-receipts/{id}",
+        "x-required-scopes": [
+          "procurement.receipt.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-receipts/{id}/post": {
+      "post": {
+        "operationId": "fs08_post_api-v1-item-receipts-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-01 through FS-04",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-receipts/{id}/post",
+        "x-required-scopes": [
+          "procurement.receipt.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-receipts/{id}/reverse": {
+      "post": {
+        "operationId": "fs08_post_api-v1-item-receipts-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse posted receipt (T-02)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-receipts/{id}/reverse",
+        "x-required-scopes": [
+          "procurement.receipt.reverse"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-vendors": {
+      "get": {
+        "operationId": "fs08_get_api-v1-item-vendors",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Item–vendor associations",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-vendors",
+        "x-required-scopes": [
+          "procurement.vendor.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-item-vendors",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Associate item with vendor",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-vendors",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-vendors/{id}": {
+      "patch": {
+        "operationId": "fs08_patch_api-v1-item-vendors-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update association",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-vendors/{id}",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-vendors/{id}/prices": {
+      "get": {
+        "operationId": "fs08_get_api-v1-item-vendors-id-prices",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Vendor price list",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-vendors/{id}/prices",
+        "x-required-scopes": [
+          "procurement.vendor.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-item-vendors-id-prices",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add/update vendor price break",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/item-vendors/{id}/prices",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List POs",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders",
+        "x-required-scopes": [
+          "procurement.po.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create PO draft (also FS-10 draft-order path)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders",
+        "x-required-scopes": [
+          "procurement.po.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-orders-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "PO detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}",
+        "x-required-scopes": [
+          "procurement.po.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs08_patch_api-v1-purchase-orders-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Edit draft/approved PO (recall required if approved)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}",
+        "x-required-scopes": [
+          "procurement.po.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/approve": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-orders-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve PO",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/approve",
+        "x-required-scopes": [
+          "procurement.po.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/cancel": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-orders-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel unposted PO",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/cancel",
+        "x-required-scopes": [
+          "procurement.po.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/close": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-orders-id-close",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Close PO/lines after guard",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/close",
+        "x-required-scopes": [
+          "procurement.po.close"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/history": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-orders-id-history",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "PO lifecycle history",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/history",
+        "x-required-scopes": [
+          "procurement.po.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/reject": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-orders-id-reject",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reject PO approval",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/reject",
+        "x-required-scopes": [
+          "procurement.po.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/releases": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-orders-id-releases",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List releases",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/releases",
+        "x-required-scopes": [
+          "procurement.po.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-orders-id-releases",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create blanket release → standard PO",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/releases",
+        "x-required-scopes": [
+          "procurement.po.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/status": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-orders-id-status",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "PO status/open-qty API",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/status",
+        "x-required-scopes": [
+          "procurement.po.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-orders/{id}/submit": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-orders-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Submit for approval",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-orders/{id}/submit",
+        "x-required-scopes": [
+          "procurement.po.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requests": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-requests",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List purchase requests",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requests",
+        "x-required-scopes": [
+          "procurement.request.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-requests",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create purchase request",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requests",
+        "x-required-scopes": [
+          "procurement.request.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requests/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-requests-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Purchase request detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requests/{id}",
+        "x-required-scopes": [
+          "procurement.request.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requests/{id}/approve": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-requests-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve purchase request",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requests/{id}/approve",
+        "x-required-scopes": [
+          "procurement.request.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requests/{id}/convert-to-po": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-requests-id-convert-to-po",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Convert approved request to draft PO",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requests/{id}/convert-to-po",
+        "x-required-scopes": [
+          "procurement.request.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requisitions": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-requisitions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List requisitions",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requisitions",
+        "x-required-scopes": [
+          "procurement.requisition.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-requisitions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create requisition",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requisitions",
+        "x-required-scopes": [
+          "procurement.requisition.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requisitions/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-purchase-requisitions-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Requisition detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requisitions/{id}",
+        "x-required-scopes": [
+          "procurement.requisition.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs08_patch_api-v1-purchase-requisitions-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update draft",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requisitions/{id}",
+        "x-required-scopes": [
+          "procurement.requisition.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requisitions/{id}/approve": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-requisitions-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve/reject requisition",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requisitions/{id}/approve",
+        "x-required-scopes": [
+          "procurement.requisition.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requisitions/{id}/order": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-requisitions-id-order",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Convert approved requisition to draft PO(s)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requisitions/{id}/order",
+        "x-required-scopes": [
+          "procurement.requisition.order"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/purchase-requisitions/{id}/submit": {
+      "post": {
+        "operationId": "fs08_post_api-v1-purchase-requisitions-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Submit for approval",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/purchase-requisitions/{id}/submit",
+        "x-required-scopes": [
+          "procurement.requisition.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/rfqs": {
+      "get": {
+        "operationId": "fs08_get_api-v1-rfqs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List RFQs",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs",
+        "x-required-scopes": [
+          "procurement.rfq.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-rfqs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create RFQ",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs",
+        "x-required-scopes": [
+          "procurement.rfq.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/rfqs/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-rfqs-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "RFQ detail + responses",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs/{id}",
+        "x-required-scopes": [
+          "procurement.rfq.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/rfqs/{id}/award": {
+      "post": {
+        "operationId": "fs08_post_api-v1-rfqs-id-award",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Award quote and create draft PO/contract",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs/{id}/award",
+        "x-required-scopes": [
+          "procurement.rfq.award"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/rfqs/{id}/close": {
+      "post": {
+        "operationId": "fs08_post_api-v1-rfqs-id-close",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Close bidding",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs/{id}/close",
+        "x-required-scopes": [
+          "procurement.rfq.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/rfqs/{id}/open": {
+      "post": {
+        "operationId": "fs08_post_api-v1-rfqs-id-open",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Open RFQ for bidding",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs/{id}/open",
+        "x-required-scopes": [
+          "procurement.rfq.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/rfqs/{id}/responses": {
+      "get": {
+        "operationId": "fs08_get_api-v1-rfqs-id-responses",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List quotes",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs/{id}/responses",
+        "x-required-scopes": [
+          "procurement.rfq.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-rfqs-id-responses",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Record vendor quote",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/rfqs/{id}/responses",
+        "x-required-scopes": [
+          "procurement.rfq.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/special-order-links": {
+      "get": {
+        "operationId": "fs08_get_api-v1-special-order-links",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List special-order/drop-ship links",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/special-order-links",
+        "x-required-scopes": [
+          "procurement.po.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-special-order-links",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create drop-ship/special-order link",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/special-order-links",
+        "x-required-scopes": [
+          "procurement.dropship.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/special-order-links/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-special-order-links-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Link detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/special-order-links/{id}",
+        "x-required-scopes": [
+          "procurement.po.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/special-order-links/{id}/fulfil": {
+      "post": {
+        "operationId": "fs08_post_api-v1-special-order-links-id-fulfil",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-28 value-only drop-ship fulfilment",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/special-order-links/{id}/fulfil",
+        "x-required-scopes": [
+          "procurement.dropship.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-bills",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List bills",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills",
+        "x-required-scopes": [
+          "procurement.bill.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-bills",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create bill (from PO/receipt/standalone/expense)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills",
+        "x-required-scopes": [
+          "procurement.bill.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-bills-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bill detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}",
+        "x-required-scopes": [
+          "procurement.bill.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs08_patch_api-v1-vendor-bills-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Edit unposted bill (clears match)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}",
+        "x-required-scopes": [
+          "procurement.bill.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills/{id}/approve": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-bills-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve bill (standard approval)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}/approve",
+        "x-required-scopes": [
+          "procurement.bill.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills/{id}/cancel": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-bills-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel pending bill",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}/cancel",
+        "x-required-scopes": [
+          "procurement.bill.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills/{id}/match": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-bills-id-match",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Run/refresh 3-way match",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}/match",
+        "x-required-scopes": [
+          "procurement.bill.match"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills/{id}/post": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-bills-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-04/T-06 (+landed hook)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}/post",
+        "x-required-scopes": [
+          "procurement.bill.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills/{id}/submit": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-bills-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Submit for approval",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}/submit",
+        "x-required-scopes": [
+          "procurement.bill.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-bills/{id}/variances": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-bills-id-variances",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bill variances",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-bills/{id}/variances",
+        "x-required-scopes": [
+          "procurement.bill.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-categories": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List categories",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-categories",
+        "x-required-scopes": [
+          "procurement.vendor.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create category",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-categories",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-categories/{id}": {
+      "patch": {
+        "operationId": "fs08_patch_api-v1-vendor-categories-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update category",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-categories/{id}",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-contracts": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-contracts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List contracts",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts",
+        "x-required-scopes": [
+          "procurement.contract.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-contracts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create contract/blanket order",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts",
+        "x-required-scopes": [
+          "procurement.contract.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-contracts/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-contracts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Contract detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts/{id}",
+        "x-required-scopes": [
+          "procurement.contract.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs08_patch_api-v1-vendor-contracts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update contract",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts/{id}",
+        "x-required-scopes": [
+          "procurement.contract.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-contracts/{id}/activate": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-contracts-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activate contract",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts/{id}/activate",
+        "x-required-scopes": [
+          "procurement.contract.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-contracts/{id}/approve": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-contracts-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve contract",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts/{id}/approve",
+        "x-required-scopes": [
+          "procurement.contract.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-contracts/{id}/close": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-contracts-id-close",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Close/expire contract",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts/{id}/close",
+        "x-required-scopes": [
+          "procurement.contract.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-contracts/{id}/submit": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-contracts-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Submit for approval",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-contracts/{id}/submit",
+        "x-required-scopes": [
+          "procurement.contract.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-credits": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-credits",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List credits",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-credits",
+        "x-required-scopes": [
+          "procurement.credit.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-credits",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create credit (standalone/from bill/from return)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-credits",
+        "x-required-scopes": [
+          "procurement.credit.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-credits/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-credits-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Credit detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-credits/{id}",
+        "x-required-scopes": [
+          "procurement.credit.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-credits/{id}/apply": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-credits-id-apply",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Apply credit to open bill(s)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-credits/{id}/apply",
+        "x-required-scopes": [
+          "procurement.credit.apply"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-credits/{id}/post": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-credits-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-05",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-credits/{id}/post",
+        "x-required-scopes": [
+          "procurement.credit.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-returns": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-returns",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List vendor returns",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-returns",
+        "x-required-scopes": [
+          "procurement.return.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-returns",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create vendor return authorization",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-returns",
+        "x-required-scopes": [
+          "procurement.return.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-returns/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendor-returns-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Return detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-returns/{id}",
+        "x-required-scopes": [
+          "procurement.return.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-returns/{id}/approve": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-returns-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve RA",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-returns/{id}/approve",
+        "x-required-scopes": [
+          "procurement.return.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-returns/{id}/close": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-returns-id-close",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Close RA/lines",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-returns/{id}/close",
+        "x-required-scopes": [
+          "procurement.return.close"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-returns/{id}/credit": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-returns-id-credit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Link vendor credit to return",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-returns/{id}/credit",
+        "x-required-scopes": [
+          "procurement.return.credit"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendor-returns/{id}/ship": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendor-returns-id-ship",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Ship return (T-03)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendor-returns/{id}/ship",
+        "x-required-scopes": [
+          "procurement.return.ship"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendors": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendors",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search vendors",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendors",
+        "x-required-scopes": [
+          "procurement.vendor.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs08_post_api-v1-vendors",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create vendor",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendors",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendors/{id}": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendors-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Vendor detail",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendors/{id}",
+        "x-required-scopes": [
+          "procurement.vendor.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs08_patch_api-v1-vendors-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update vendor",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendors/{id}",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendors/{id}/inactivate": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendors-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Soft-inactivate vendor",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendors/{id}/inactivate",
+        "x-required-scopes": [
+          "procurement.vendor.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendors/{id}/merge": {
+      "post": {
+        "operationId": "fs08_post_api-v1-vendors-id-merge",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Merge source vendor into target (audited)",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendors/{id}/merge",
+        "x-required-scopes": [
+          "procurement.vendor.merge"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/vendors/{id}/purchase-history": {
+      "get": {
+        "operationId": "fs08_get_api-v1-vendors-id-purchase-history",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Vendor purchase history",
+        "tags": [
+          "FS-08",
+          "procurement.p2p"
+        ],
+        "x-contract": [
+          "procurement.p2p"
+        ],
+        "x-feature-set": "FS-08",
+        "x-fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+        "x-original-path": "/v1/vendors/{id}/purchase-history",
+        "x-required-scopes": [
+          "procurement.vendor.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 89,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "procurement.p2p",
+      "event": "dropship.fulfilled",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "inventory.receipt.posted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "inventory.receipt.reversed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "po.approved",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "po.billed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "po.closed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "po.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "po.receipted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "vendor_bill.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "vendor_bill.posted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "vendor_bill.variance_created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "vendor_bill.variance_posted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "vendor_credit.posted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "vendor_return.credited",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "procurement.p2p",
+      "event": "vendor_return.shipped",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "procurement.match.run",
+    "procurement.partition.maintenance",
+    "procurement.po.close_overdue",
+    "procurement.receipt.reconcile"
+  ]
+}

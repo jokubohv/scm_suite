@@ -1,0 +1,31 @@
+D3-CLOSURE RE-CHECK SUMMARY  2026-10-21T14:04:09-04:00
+Change under test: PLAN.md only (D3 Option A fix)
+
+== hash diff vs previous snapshot ==
+changed: PLAN.md only (report updated after this check)
+
+== D3 fix evidence ==
+PLAN §7.2 step 7 
+# 7) WAVE CLOSE -- golden end-to-end workflow pass, then promote the wave
+#    purchase -> receive -> stock -> [manufacture] -> commit -> fulfill -> replenish suggestion,
+#    using the stage subset available at this wave + seeded boundary demand (see §4.1).
+#    Mandatory before promoting a wave; a failure blocks the next wave's entry gates.
+grep: \*\*wave-close: No such file or directory
+grep: step: No such file or directory
+grep: 7": No such file or directory
+PLAN §4.1 line: p" PLAN.md)
+PLAN §7 'golden' occurrences: 1
+
+== re-run results ==
+=== validate ===
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+  ids unique, deps resolve, no self-deps, DAG acyclic, phase/wave monotonic, semver ranges satisfiable
+  warnings: 0
+rc=0
+
+rc=0
+links OK
+links OK
+rc=0
+independent_checks: INDEPENDENT PHASE-A RECHECK  --  95 PASS / 0 FAIL
+spec/PLAN audit: AUDIT RESULT: PASS -- 0 findings, 0 check failures (703 checks passed)

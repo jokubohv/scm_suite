@@ -1,0 +1,5 @@
+WARN W-DEP-DUP: FS-04: duplicate dependency edge FS-03/traceability.registry declared more than once
+ERROR E-SEMVER-UNSAT: FS-04 -> FS-03: version range '>=2.0.0 <1.0.0' is unsatisfiable
+ERROR E-DEP-RANGE: FS-04 -> FS-03: FS-03 provides traceability.registry 1.0.0 which does not satisfy declared range '>=2.0.0 <1.0.0'
+VALIDATE FAILED: 2 error(s), 1 warning(s) | sets=16 edges=117 contracts=21
+rc=2

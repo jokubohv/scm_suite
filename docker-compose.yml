@@ -1,0 +1,248 @@
+# Inventory Platform — local/dev compose stack (S0-02).
+#
+# Shape (framework §3 / ARCHITECTURE §7.7): one application image with three entrypoints
+# (api / worker / outbox-relay) plus postgres:16, redis:7, minio (attachments/S3-compatible
+# object store) and a shared **Dex** dev issuer for SSO. Deployment stays wave-ordered; this file
+# only provisions the local/dev/staging-shape stack (prod uses managed Postgres + one isolated Dex
+# issuer per ACTIVE tenant SSO connection — see ops/dex/README.md).
+#
+# Usage (preferred, per-builder isolated — Δ-PAR §7):
+#   scripts/up.sh --profile dev --wait          # COMPOSE_PROJECT_NAME defaults to inv-dev
+#   scripts/down.sh                             # add --volumes to destroy local data
+#
+# Makefile (S0-01) targets these same files: `make up`, `make migrate`, `make seed`.
+#
+# Secrets: this file contains **dev-only placeholders** as interpolation defaults so that CI's
+# `docker compose config -q` and a fresh `scripts/up.sh` work without a committed secret. Real
+# environments override them via the process environment/secret manager (`.env` is gitignored;
+# `.env.example` documents every variable). No real credential, key or token is committed here.
+# See .env.example for the full list and the "DEV ONLY" markers.
+#
+# Healthchecks: every service defines one; `scripts/up.sh --wait` and `docker compose ps` consume
+# them. Application services build the `dev` Dockerfile target by default in this local stack;
+# staging/prod override APP_BUILD_TARGET=runtime (dev target adds test tooling for L3 exit gates).
+
+x-app-build: &app-build
+  context: .
+  dockerfile: Dockerfile
+  target: ${APP_BUILD_TARGET:-runtime}
+
+x-app-environment: &app-environment
+  # Identity/environment
+  ENV: ${ENV:-dev}
+  APP_NAME: ${APP_NAME:-inventory-platform}
+  API_PREFIX: ${API_PREFIX:-/api/v1}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  # PostgreSQL — the app uses async SQLAlchemy (postgresql+asyncpg://); host `postgres` is the service.
+  DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://${POSTGRES_USER:-inventory}:${POSTGRES_PASSWORD:-inventory-dev-password}@postgres:5432/${POSTGRES_DB:-inventory}}
+  # Redis (RQ queues + outbox relay streams)
+  REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+  # Platform JWT/refresh sessions (Δ-SSO: Dex authenticates, the platform issues its own tokens)
+  JWT_SECRET: ${JWT_SECRET:-dev-only-insecure-jwt-signing-secret-change-me}
+  JWT_ISSUER: ${JWT_ISSUER:-inventory-platform}
+  ACCESS_TOKEN_TTL_SECONDS: ${ACCESS_TOKEN_TTL_SECONDS:-900}
+  REFRESH_TOKEN_TTL_SECONDS: ${REFRESH_TOKEN_TTL_SECONDS:-1209600}
+  # Shared dev Dex issuer (per-tenant issuers are provisioned in prod by scripts/provision_sso_dex.sh)
+  DEX_ISSUER: ${DEX_ISSUER:-http://localhost:5556/dex}
+  DEX_CLIENT_ID: ${DEX_CLIENT_ID:-inventory-platform}
+  DEX_CLIENT_SECRET: ${DEX_CLIENT_SECRET:-dev-only-insecure-dex-client-secret-change-me}
+  # MinIO / S3-compatible object storage (attachment bytes; metadata lives in Postgres)
+  S3_ENDPOINT: ${S3_ENDPOINT:-http://minio:9000}
+  S3_ACCESS_KEY: ${S3_ACCESS_KEY:-inventory-minio}
+  S3_SECRET_KEY: ${S3_SECRET_KEY:-dev-only-insecure-minio-secret-change-me}
+  S3_BUCKET: ${S3_BUCKET:-inventory}
+
+x-app-service: &app-service
+  build: *app-build
+  image: ${INVENTORY_IMAGE:-inventory-platform-api:local}
+  # Optional local override file (gitignored). Compose also auto-loads `.env` for interpolation.
+  env_file:
+    - path: .env
+      required: false
+  environment: *app-environment
+  restart: unless-stopped
+  networks:
+    - inventory
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+    minio:
+      condition: service_healthy
+    dex:
+      condition: service_healthy
+
+services:
+  # ------------------------------------------------------------------------------------------
+  # Infrastructure
+  # ------------------------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    command:
+      - postgres
+      - -c
+      - max_connections=200
+      - -c
+      - shared_buffers=256MB
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-inventory}
+      POSTGRES_USER: ${POSTGRES_USER:-inventory}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-inventory-dev-password}
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # First-init only: creates the `dex` database used by the shared dev issuer.
+      - ./ops/dex/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - inventory
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes", "--save", "60", "1"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - inventory
+
+  minio:
+    # NOTE (S0-02): MinIO stopped publishing its official community images on Docker Hub/Quay in
+    # 2025; the public image below is the Bitnami-legacy mirror of MinIO. It is S3-compatible and
+    # dev-only; production object storage is supplied by the deployment platform (S3-compatible),
+    # overridable here via MINIO_IMAGE. The MinIO Python client (pyproject `minio`) is unaffected.
+    image: ${MINIO_IMAGE:-bitnamilegacy/minio:2025.7.23-debian-12-r5}
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-inventory-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-dev-only-insecure-minio-secret-change-me}
+      # Bitnami entrypoint creates listed buckets on first start (idempotent).
+      MINIO_DEFAULT_BUCKETS: ${S3_BUCKET:-inventory}
+      MINIO_API_PORT_NUMBER: "9000"
+      MINIO_CONSOLE_PORT_NUMBER: "9001"
+      MINIO_BROWSER: "on"
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - miniodata:/bitnami/minio/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:9000/minio/health/live || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - inventory
+
+  # ------------------------------------------------------------------------------------------
+  # Dex — shared dev/test OIDC issuer (see ops/dex/README.md for the per-tenant prod model)
+  # ------------------------------------------------------------------------------------------
+  dex:
+    image: ${DEX_IMAGE:-ghcr.io/dexidp/dex:v2.41.1}
+    # Image default command (`dex serve /etc/dex/config.docker.yaml`) is kept; the image entrypoint
+    # renders our gomplate template with the environment below before starting Dex.
+    environment:
+      DEX_ISSUER: ${DEX_ISSUER:-http://localhost:5556/dex}
+      DEX_WEB_HTTP: ${DEX_WEB_HTTP:-0.0.0.0:5556}
+      DEX_ALLOWED_ORIGIN: ${DEX_ALLOWED_ORIGIN:-http://localhost:8000}
+      DEX_CLIENT_ID: ${DEX_CLIENT_ID:-inventory-platform}
+      # Dev placeholder; the platform/Dex containers get the same value from this environment.
+      # Production: secret-manager resolution at deploy (never in files, DB, logs or images).
+      DEX_CLIENT_SECRET: ${DEX_CLIENT_SECRET:-dev-only-insecure-dex-client-secret-change-me}
+      DEX_REDIRECT_URI: ${DEX_REDIRECT_URI:-http://localhost:8000/api/v1/auth/sso/callback}
+      DEX_STATIC_EMAIL: ${DEX_STATIC_EMAIL:-dev@example.com}
+      DEX_STATIC_USERNAME: ${DEX_STATIC_USERNAME:-dev}
+      DEX_STATIC_USER_ID: ${DEX_STATIC_USER_ID:-dev-user-0001}
+      DEX_DB_HOST: ${DEX_DB_HOST:-postgres}
+      DEX_DB_PORT: ${DEX_DB_PORT:-5432}
+      DEX_DB_NAME: ${DEX_DB_NAME:-dex}
+      DEX_DB_USER: ${DEX_DB_USER:-inventory}
+      DEX_DB_PASSWORD: ${DEX_DB_PASSWORD:-${POSTGRES_PASSWORD:-inventory-dev-password}}
+      DEX_DB_SSL_MODE: ${DEX_DB_SSL_MODE:-disable}
+      DEX_LOG_LEVEL: ${DEX_LOG_LEVEL:-info}
+    ports:
+      # The issuer contract is host-local http://localhost:5556/dex (Lead-pinned).
+      - "${DEX_PORT:-5556}:5556"
+    volumes:
+      # Render source for the image entrypoint (gomplate template). Read-only; no secrets inside.
+      - ./ops/dex/config.docker.yaml:/etc/dex/config.docker.yaml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:5556/dex/.well-known/openid-configuration || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 20s
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - inventory
+
+  # ------------------------------------------------------------------------------------------
+  # Application (one image, three entrypoints — D-01)
+  # ------------------------------------------------------------------------------------------
+  api:
+    <<: *app-service
+    command: ${API_COMMAND:-uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=*}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=5).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  worker:
+    <<: *app-service
+    # RQ worker (queues are extended by FS-00/feature sets; app/workers/worker.py is the entrypoint).
+    command: ${WORKER_COMMAND:-python -m app.workers.worker}
+    healthcheck:
+      # Process liveness (the worker has no HTTP surface). Override the match if WORKER_COMMAND changes.
+      test: ["CMD", "python", "-c", "import glob,os,sys; needle=os.environ.get('WORKER_HEALTHCHECK_MATCH','app.workers.worker'); sys.exit(0 if any(needle in open(f,'rb').read().decode('utf-8','ignore') for f in glob.glob('/proc/[0-9]*/cmdline')) else 1)"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 15s
+
+  outbox-relay:
+    <<: *app-service
+    # Placeholder until FS-00 adds the dedicated relay entrypoint (`app/core` outbox relay):
+    # the scaffold image only has the RQ worker bootstrap, so for NOW this service runs the same
+    # entrypoint to keep the S0 stack healthy. FS-00 will set, e.g.:
+    #   OUTBOX_RELAY_COMMAND=python -m app.core.outbox_relay
+    command: ${OUTBOX_RELAY_COMMAND:-python -m app.workers.worker}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import glob,os,sys; needle=os.environ.get('OUTBOX_RELAY_HEALTHCHECK_MATCH','app.workers.worker'); sys.exit(0 if any(needle in open(f,'rb').read().decode('utf-8','ignore') for f in glob.glob('/proc/[0-9]*/cmdline')) else 1)"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 15s
+
+networks:
+  inventory:
+    driver: bridge
+
+volumes:
+  pgdata:
+  redisdata:
+  miniodata:

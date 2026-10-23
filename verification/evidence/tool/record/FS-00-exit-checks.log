@@ -1,0 +1,4 @@
+[fixture evidence] alembic upgrade head: OK
+[fixture evidence] pytest app/tests/integration/platform -q: 42 passed
+[fixture evidence] pytest app/tests/invariants/test_rls_tenant_isolation.py: 3 passed
+[fixture evidence] record --status verified: allowed

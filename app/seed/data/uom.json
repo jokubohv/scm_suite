@@ -1,0 +1,124 @@
+{
+  "datasets": [
+    "uom_types",
+    "uom_units"
+  ],
+  "records": {
+    "uom_types": [
+      {
+        "base_uom_code": "EA",
+        "code": "EA_TYPE",
+        "is_active": true,
+        "name": "Default (Each)"
+      },
+      {
+        "base_uom_code": "KG",
+        "code": "WEIGHT",
+        "is_active": true,
+        "name": "Weight"
+      },
+      {
+        "base_uom_code": "L",
+        "code": "VOLUME",
+        "is_active": true,
+        "name": "Volume"
+      },
+      {
+        "base_uom_code": "HR",
+        "code": "TIME",
+        "is_active": true,
+        "name": "Time"
+      }
+    ],
+    "uom_units": [
+      {
+        "code": "EA",
+        "conversion_factor": "1",
+        "is_base": true,
+        "name": "Each",
+        "rounding_precision": 0,
+        "uom_type_code": "EA_TYPE"
+      },
+      {
+        "code": "DZ",
+        "conversion_factor": "12",
+        "is_base": false,
+        "name": "Dozen",
+        "rounding_precision": 0,
+        "uom_type_code": "EA_TYPE"
+      },
+      {
+        "code": "CS",
+        "conversion_factor": "24",
+        "is_base": false,
+        "name": "Case (24)",
+        "rounding_precision": 0,
+        "uom_type_code": "EA_TYPE"
+      },
+      {
+        "code": "PACK",
+        "conversion_factor": "10",
+        "is_base": false,
+        "name": "Pack (10)",
+        "rounding_precision": 0,
+        "uom_type_code": "EA_TYPE"
+      },
+      {
+        "code": "KG",
+        "conversion_factor": "1",
+        "is_base": true,
+        "name": "Kilogram",
+        "rounding_precision": 3,
+        "uom_type_code": "WEIGHT"
+      },
+      {
+        "code": "G",
+        "conversion_factor": "0.001",
+        "is_base": false,
+        "name": "Gram",
+        "rounding_precision": 0,
+        "uom_type_code": "WEIGHT"
+      },
+      {
+        "code": "LB",
+        "conversion_factor": "0.45359237",
+        "is_base": false,
+        "name": "Pound",
+        "rounding_precision": 3,
+        "uom_type_code": "WEIGHT"
+      },
+      {
+        "code": "L",
+        "conversion_factor": "1",
+        "is_base": true,
+        "name": "Litre",
+        "rounding_precision": 3,
+        "uom_type_code": "VOLUME"
+      },
+      {
+        "code": "ML",
+        "conversion_factor": "0.001",
+        "is_base": false,
+        "name": "Millilitre",
+        "rounding_precision": 0,
+        "uom_type_code": "VOLUME"
+      },
+      {
+        "code": "HR",
+        "conversion_factor": "1",
+        "is_base": true,
+        "name": "Hour",
+        "rounding_precision": 3,
+        "uom_type_code": "TIME"
+      },
+      {
+        "code": "MIN",
+        "conversion_factor": "0.016666666667",
+        "is_base": false,
+        "name": "Minute",
+        "rounding_precision": 0,
+        "uom_type_code": "TIME"
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "contracts": [
+    {
+      "contract": "order.demand",
+      "depends_on": [],
+      "dir": "order_boundary",
+      "events": [
+        {
+          "event": "order.demand.changed",
+          "schema": "contracts/events/order.demand/order.demand.changed.schema.json",
+          "version": "0.1.0"
+        }
+      ],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "0.1.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "order.supply",
+      "depends_on": [],
+      "dir": "order_boundary",
+      "events": [],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "0.1.0",
+      "wave": "0A"
+    }
+  ],
+  "dir": "order_boundary",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/order_boundary/openapi.fragment.json",
+  "feature_set": "FS-00",
+  "fragments": [
+    "contracts/openapi/fragments/FS-00.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "0A"
+}

@@ -1,0 +1,2331 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-05 — Costing and Valuation Engine (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "costing.engine",
+        "dir": "costing",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-05",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "0C"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/cogs-adjustments": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cogs-adjustments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cogs-adjustments",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cogs-adjustments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create COGS adjustment (T-25)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cogs-adjustments",
+        "x-required-scopes": [
+          "costing.cogs_adjustment.create"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cogs-adjustments/{id}": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cogs-adjustments-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cogs-adjustments/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cogs-adjustments-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cogs-adjustments/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cogs-adjustments/{id}/approve": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cogs-adjustments-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve manual adjustment",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cogs-adjustments/{id}/approve",
+        "x-required-scopes": [
+          "costing.cogs_adjustment.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cogs-adjustments/{id}/post": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cogs-adjustments-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-25",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cogs-adjustments/{id}/post",
+        "x-required-scopes": [
+          "costing.cogs_adjustment.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cogs-adjustments/{id}/reverse": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cogs-adjustments-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse T-25",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cogs-adjustments/{id}/reverse",
+        "x-required-scopes": [
+          "costing.cogs_adjustment.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-categories": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create cost categories",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/cost-categories",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create cost categories",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/cost-categories",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-categories/{id}": {
+      "patch": {
+        "operationId": "fs05_patch_api-v1-cost-categories-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/inactivate category",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-categories/{id}",
+        "x-required-scopes": [
+          "costing.cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-revaluations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-revaluations",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-revaluations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create revaluation (T-24; caller supplies item/location and/or `work_order_id` lines — WIP scope is computed by the caller, e.g. FS-09)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-revaluations",
+        "x-required-scopes": [
+          "costing.revaluation.create"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations/approve": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-revaluations-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approval flow",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-revaluations/approve",
+        "x-required-scopes": [
+          "costing.revaluation.create",
+          "costing.revaluation.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations/v1/cost-revaluations/{id}/submit": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-revaluations-v1-cost-revaluations-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approval flow",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-revaluations/v1/cost-revaluations/{id}/submit",
+        "x-required-scopes": [
+          "costing.revaluation.create",
+          "costing.revaluation.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations/{id}": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-revaluations-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-revaluations/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations/{id}/approve": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-revaluations-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approval flow",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-revaluations/{id}/approve",
+        "x-required-scopes": [
+          "costing.revaluation.create",
+          "costing.revaluation.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations/{id}/post": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-revaluations-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-24",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-revaluations/{id}/post",
+        "x-required-scopes": [
+          "costing.revaluation.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations/{id}/reverse": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-revaluations-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse T-24",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-revaluations/{id}/reverse",
+        "x-required-scopes": [
+          "costing.revaluation.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-revaluations/{id}/v1/cost-revaluations/{id}/submit": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-revaluations-id-v1-cost-revaluations-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approval flow",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-revaluations/{id}/v1/cost-revaluations/{id}/submit",
+        "x-required-scopes": [
+          "costing.revaluation.create",
+          "costing.revaluation.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-rollups": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-rollups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read rollup runs",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-rollups",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-rollups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Run multi-level rollup",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-rollups",
+        "x-required-scopes": [
+          "costing.standard.rollup"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-rollups/{id}": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-rollups-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read rollup runs",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-rollups/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-rollups/{id}/lines": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-rollups-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Rollup results",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-rollups/{id}/lines",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-templates": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-templates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create inventory cost templates",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/cost-templates",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-templates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create inventory cost templates",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/cost-templates",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-templates/{id}": {
+      "patch": {
+        "operationId": "fs05_patch_api-v1-cost-templates-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update template/lines (pre-effective)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-templates/{id}",
+        "x-required-scopes": [
+          "costing.cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-variances": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-variances",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Variance list/read model",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-variances",
+        "x-required-scopes": [
+          "costing.variance.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-versions": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-versions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read versions",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-versions",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-versions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create cost version (PLANNED)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-versions",
+        "x-required-scopes": [
+          "costing.standard.activate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-versions/{id}": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-versions-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read versions",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/cost-versions/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-versions/{id}/activate": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-versions-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activate version → effective `standard_cost` + revaluation scope",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-versions/{id}/activate",
+        "x-required-scopes": [
+          "costing.standard.activate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-versions/{id}/approve": {
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-versions-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve planned standards (bulk)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/cost-versions/{id}/approve",
+        "x-required-scopes": [
+          "costing.standard.activate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/cost-versions/{id}/planned-standards": {
+      "get": {
+        "operationId": "fs05_get_api-v1-cost-versions-id-planned-standards",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/enter planned standards",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/cost-versions/{id}/planned-standards",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.standard.activate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-cost-versions-id-planned-standards",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/enter planned standards",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/cost-versions/{id}/planned-standards",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.standard.activate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/costs/item-costs": {
+      "get": {
+        "operationId": "fs05_get_api-v1-costs-item-costs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Current cost state per cost object",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/costs/item-costs",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/costs/item-costs/{id}": {
+      "get": {
+        "operationId": "fs05_get_api-v1-costs-item-costs-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cost object detail",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/costs/item-costs/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/costs/item-costs/{id}/layers": {
+      "get": {
+        "operationId": "fs05_get_api-v1-costs-item-costs-id-layers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Open/consumed layers",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/costs/item-costs/{id}/layers",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/costs/pending-recalculations": {
+      "get": {
+        "operationId": "fs05_get_api-v1-costs-pending-recalculations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Recalc backlog/status",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/costs/pending-recalculations",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/costs/recalculations": {
+      "post": {
+        "operationId": "fs05_post_api-v1-costs-recalculations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Request recalculation (admin, audited)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/costs/recalculations",
+        "x-required-scopes": [
+          "costing.recalc.run"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/costs/valuation": {
+      "get": {
+        "operationId": "fs05_get_api-v1-costs-valuation",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Valuation summary (read model)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/costs/valuation",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/costs/valuation/by-layer": {
+      "get": {
+        "operationId": "fs05_get_api-v1-costs-valuation-by-layer",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Layer-level valuation detail",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/costs/valuation/by-layer",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/estimated-landed-cost-templates": {
+      "get": {
+        "operationId": "fs05_get_api-v1-estimated-landed-cost-templates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create templates (T-27)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/estimated-landed-cost-templates",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.estimated_landed_cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-estimated-landed-cost-templates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create templates (T-27)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/estimated-landed-cost-templates",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.estimated_landed_cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/estimated-landed-cost-templates/{id}": {
+      "patch": {
+        "operationId": "fs05_patch_api-v1-estimated-landed-cost-templates-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update template",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/estimated-landed-cost-templates/{id}",
+        "x-required-scopes": [
+          "costing.estimated_landed_cost.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/group-average-balances": {
+      "get": {
+        "operationId": "fs05_get_api-v1-group-average-balances",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Group average read model",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/group-average-balances",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/landed-costs": {
+      "get": {
+        "operationId": "fs05_get_api-v1-landed-costs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/landed-costs",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-landed-costs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create landed cost (T-26)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/landed-costs",
+        "x-required-scopes": [
+          "costing.landed_cost.create"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/landed-costs/{id}": {
+      "get": {
+        "operationId": "fs05_get_api-v1-landed-costs-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/landed-costs/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/landed-costs/{id}/allocations": {
+      "get": {
+        "operationId": "fs05_get_api-v1-landed-costs-id-allocations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Allocation preview/result",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/landed-costs/{id}/allocations",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/landed-costs/{id}/allocations/approve": {
+      "post": {
+        "operationId": "fs05_post_api-v1-landed-costs-id-allocations-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approval flow",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/landed-costs/{id}/allocations/approve",
+        "x-required-scopes": [
+          "costing.landed_cost.create",
+          "costing.landed_cost.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/landed-costs/{id}/allocations/v1/landed-costs/{id}/submit": {
+      "post": {
+        "operationId": "fs05_post_api-v1-landed-costs-id-allocations-v1-landed-costs-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approval flow",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/landed-costs/{id}/allocations/v1/landed-costs/{id}/submit",
+        "x-required-scopes": [
+          "costing.landed_cost.create",
+          "costing.landed_cost.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/landed-costs/{id}/post": {
+      "post": {
+        "operationId": "fs05_post_api-v1-landed-costs-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Allocate + post T-26",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/landed-costs/{id}/post",
+        "x-required-scopes": [
+          "costing.landed_cost.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/landed-costs/{id}/reverse": {
+      "post": {
+        "operationId": "fs05_post_api-v1-landed-costs-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse T-26",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/landed-costs/{id}/reverse",
+        "x-required-scopes": [
+          "costing.landed_cost.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/location-costing-groups": {
+      "get": {
+        "operationId": "fs05_get_api-v1-location-costing-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read groups",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/location-costing-groups",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-location-costing-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create group",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/location-costing-groups",
+        "x-required-scopes": [
+          "costing.group.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/location-costing-groups/{id}": {
+      "get": {
+        "operationId": "fs05_get_api-v1-location-costing-groups-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/read groups",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/location-costing-groups/{id}",
+        "x-required-scopes": [
+          "costing.cost.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/location-costing-groups/{id}/inactivate": {
+      "post": {
+        "operationId": "fs05_post_api-v1-location-costing-groups-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inactivate group (all balances zero)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/location-costing-groups/{id}/inactivate",
+        "x-required-scopes": [
+          "costing.group.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/location-costing-groups/{id}/members": {
+      "post": {
+        "operationId": "fs05_post_api-v1-location-costing-groups-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add member location",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/location-costing-groups/{id}/members",
+        "x-required-scopes": [
+          "costing.group.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/location-costing-groups/{id}/members/{location_id}": {
+      "delete": {
+        "operationId": "fs05_delete_api-v1-location-costing-groups-id-members-location-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove member (balance guard)",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-original-path": "/v1/location-costing-groups/{id}/members/{location_id}",
+        "x-required-scopes": [
+          "costing.group.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/standard-costs": {
+      "get": {
+        "operationId": "fs05_get_api-v1-standard-costs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List effective standards / create manual standard",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/standard-costs",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.standard.activate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs05_post_api-v1-standard-costs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List effective standards / create manual standard",
+        "tags": [
+          "FS-05",
+          "costing.engine"
+        ],
+        "x-contract": [
+          "costing.engine"
+        ],
+        "x-feature-set": "FS-05",
+        "x-fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+        "x-idempotency": "POST required",
+        "x-original-path": "/v1/standard-costs",
+        "x-required-scopes": [
+          "costing.cost.read",
+          "costing.standard.activate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 61,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "costing.engine",
+      "event": "cogs.recorded",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.adjustment.posted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.engine.status",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.layer.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.layer.updated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.recalculation.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.recalculation.queued",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.reconciliation.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.revaluation.posted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.rollup.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.underwater.trued_up",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "cost.variance.posted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "landed_cost.applied",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "landed_cost.estimated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "costing.engine",
+      "event": "standard_cost.revalued",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "costing.checkpoint.build",
+    "costing.cogs_adjust",
+    "costing.layers.expire",
+    "costing.recalculate",
+    "costing.reconcile_costs",
+    "costing.rollup",
+    "costing.underwater.true_up"
+  ]
+}

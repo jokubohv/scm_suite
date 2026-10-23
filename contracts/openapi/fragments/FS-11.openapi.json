@@ -1,0 +1,3680 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-11 — Warehouse Management Execution (server-side tasks only) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "wms.execution",
+        "dir": "wms",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-11",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1E"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/bin-blocks": {
+      "get": {
+        "operationId": "fs11_get_api-v1-bin-blocks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list blocked bins",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/bin-blocks",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-bin-blocks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list blocked bins",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/bin-blocks",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bin-blocks/{id}/release": {
+      "post": {
+        "operationId": "fs11_post_api-v1-bin-blocks-id-release",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Release blocked bin",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/bin-blocks/{id}/release",
+        "x-required-scopes": [
+          "wms.setup.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/carrier-service-levels": {
+      "get": {
+        "operationId": "fs11_get_api-v1-carrier-service-levels",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Carrier service levels",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/carrier-service-levels",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-carrier-service-levels",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Carrier service levels",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/carrier-service-levels",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inbound-shipments": {
+      "get": {
+        "operationId": "fs11_get_api-v1-inbound-shipments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list ASN/inbound shipment orders",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/inbound-shipments",
+        "x-required-scopes": [
+          "wms.receive",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-inbound-shipments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list ASN/inbound shipment orders",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/inbound-shipments",
+        "x-required-scopes": [
+          "wms.receive",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inbound-shipments/{id}": {
+      "get": {
+        "operationId": "fs11_get_api-v1-inbound-shipments-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Get ASN + received quantities",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/inbound-shipments/{id}",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inbound-shipments/{id}/arrive": {
+      "post": {
+        "operationId": "fs11_post_api-v1-inbound-shipments-id-arrive",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ARRIVED transition",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/inbound-shipments/{id}/arrive",
+        "x-required-scopes": [
+          "wms.receive"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inbound-shipments/{id}/cancel": {
+      "post": {
+        "operationId": "fs11_post_api-v1-inbound-shipments-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel before receiving",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/inbound-shipments/{id}/cancel",
+        "x-required-scopes": [
+          "wms.receive"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-process-assignments": {
+      "get": {
+        "operationId": "fs11_get_api-v1-item-process-assignments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Item→group mapping",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-process-assignments",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-item-process-assignments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Item→group mapping",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-process-assignments",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-process-families": {
+      "get": {
+        "operationId": "fs11_get_api-v1-item-process-families",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage process families",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-process-families",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-item-process-families",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage process families",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-process-families",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-process-groups": {
+      "get": {
+        "operationId": "fs11_get_api-v1-item-process-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage process groups",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-process-groups",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-item-process-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage process groups",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-process-groups",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-stock-locations": {
+      "get": {
+        "operationId": "fs11_get_api-v1-item-stock-locations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Stocking rules (min/max/primary/replenish source)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-stock-locations",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs11_patch_api-v1-item-stock-locations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Stocking rules (min/max/primary/replenish source)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-stock-locations",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-item-stock-locations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Stocking rules (min/max/primary/replenish source)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/item-stock-locations",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/order-types": {
+      "get": {
+        "operationId": "fs11_get_api-v1-order-types",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Order types",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/order-types",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-order-types",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Order types",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/order-types",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pack-tasks": {
+      "get": {
+        "operationId": "fs11_get_api-v1-pack-tasks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list pack tasks",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/pack-tasks",
+        "x-required-scopes": [
+          "wms.pack",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-pack-tasks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list pack tasks",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/pack-tasks",
+        "x-required-scopes": [
+          "wms.pack",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pack-tasks/{id}/cartons": {
+      "post": {
+        "operationId": "fs11_post_api-v1-pack-tasks-id-cartons",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add carton/pallet",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/pack-tasks/{id}/cartons",
+        "x-required-scopes": [
+          "wms.pack"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pack-tasks/{id}/complete": {
+      "post": {
+        "operationId": "fs11_post_api-v1-pack-tasks-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "PACKED (no inventory effect)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/pack-tasks/{id}/complete",
+        "x-required-scopes": [
+          "wms.pack"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pick-strategies": {
+      "get": {
+        "operationId": "fs11_get_api-v1-pick-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Pick strategies + nested rules (`rules[]`)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/pick-strategies",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs11_patch_api-v1-pick-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Pick strategies + nested rules (`rules[]`)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/pick-strategies",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-pick-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Pick strategies + nested rules (`rules[]`)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/pick-strategies",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pick-tasks": {
+      "get": {
+        "operationId": "fs11_get_api-v1-pick-tasks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Pick queue",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/pick-tasks",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pick-tasks/{id}": {
+      "get": {
+        "operationId": "fs11_get_api-v1-pick-tasks-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Get pick task + recommended bins",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/pick-tasks/{id}",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pick-tasks/{id}/assign": {
+      "post": {
+        "operationId": "fs11_post_api-v1-pick-tasks-id-assign",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Assign/reassign picker",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/pick-tasks/{id}/assign",
+        "x-required-scopes": [
+          "wms.pick"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pick-tasks/{id}/complete": {
+      "post": {
+        "operationId": "fs11_post_api-v1-pick-tasks-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Complete WO/vendor-return/transfer pick; bridge posting",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/pick-tasks/{id}/complete",
+        "x-required-scopes": [
+          "wms.pick"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pick-tasks/{id}/reverse": {
+      "post": {
+        "operationId": "fs11_post_api-v1-pick-tasks-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse pick before shipment",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/pick-tasks/{id}/reverse",
+        "x-required-scopes": [
+          "wms.pick"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pick-tasks/{id}/start": {
+      "post": {
+        "operationId": "fs11_post_api-v1-pick-tasks-id-start",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Start pick",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/pick-tasks/{id}/start",
+        "x-required-scopes": [
+          "wms.pick"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-strategies": {
+      "get": {
+        "operationId": "fs11_get_api-v1-putaway-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Putaway strategies + nested rules",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/putaway-strategies",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs11_patch_api-v1-putaway-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Putaway strategies + nested rules",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/putaway-strategies",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-putaway-strategies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Putaway strategies + nested rules",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/putaway-strategies",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks": {
+      "get": {
+        "operationId": "fs11_get_api-v1-putaway-tasks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List queue (filters status/warehouse/assignee/cart)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/putaway-tasks",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks/generate": {
+      "post": {
+        "operationId": "fs11_post_api-v1-putaway-tasks-generate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Generate putaway tasks from received stock",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/putaway-tasks/generate",
+        "x-required-scopes": [
+          "wms.putaway"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks/{id}": {
+      "get": {
+        "operationId": "fs11_get_api-v1-putaway-tasks-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Get task + lines",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/putaway-tasks/{id}",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks/{id}/assign": {
+      "post": {
+        "operationId": "fs11_post_api-v1-putaway-tasks-id-assign",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Assign to user/cart",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/putaway-tasks/{id}/assign",
+        "x-required-scopes": [
+          "wms.putaway"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks/{id}/cancel": {
+      "post": {
+        "operationId": "fs11_post_api-v1-putaway-tasks-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel pre-completion",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/putaway-tasks/{id}/cancel",
+        "x-required-scopes": [
+          "wms.putaway"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks/{id}/complete": {
+      "post": {
+        "operationId": "fs11_post_api-v1-putaway-tasks-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-29 bin moves",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/putaway-tasks/{id}/complete",
+        "x-required-scopes": [
+          "wms.putaway"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks/{id}/exception": {
+      "post": {
+        "operationId": "fs11_post_api-v1-putaway-tasks-id-exception",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Record directed exception",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/putaway-tasks/{id}/exception",
+        "x-required-scopes": [
+          "wms.putaway"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/putaway-tasks/{id}/start": {
+      "post": {
+        "operationId": "fs11_post_api-v1-putaway-tasks-id-start",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ASSIGNED→IN_PROGRESS",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/putaway-tasks/{id}/start",
+        "x-required-scopes": [
+          "wms.putaway"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/receiving-orders": {
+      "get": {
+        "operationId": "fs11_get_api-v1-receiving-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list receiving orders",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/receiving-orders",
+        "x-required-scopes": [
+          "wms.receive",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-receiving-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list receiving orders",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/receiving-orders",
+        "x-required-scopes": [
+          "wms.receive",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/receiving-orders/{id}": {
+      "get": {
+        "operationId": "fs11_get_api-v1-receiving-orders-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Get receiving order + line progress",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/receiving-orders/{id}",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/receiving-orders/{id}/cancel": {
+      "post": {
+        "operationId": "fs11_post_api-v1-receiving-orders-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel before complete",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/receiving-orders/{id}/cancel",
+        "x-required-scopes": [
+          "wms.receive"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/receiving-orders/{id}/complete": {
+      "post": {
+        "operationId": "fs11_post_api-v1-receiving-orders-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Receive, create/post item receipt, generate putaway tasks",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/receiving-orders/{id}/complete",
+        "x-required-scopes": [
+          "wms.receive"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/receiving-orders/{id}/reverse-receipt": {
+      "post": {
+        "operationId": "fs11_post_api-v1-receiving-orders-id-reverse-receipt",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse receipt + putaway postings (orchestrated)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/receiving-orders/{id}/reverse-receipt",
+        "x-required-scopes": [
+          "wms.receive"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/receiving-orders/{id}/start": {
+      "post": {
+        "operationId": "fs11_post_api-v1-receiving-orders-id-start",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "CREATED→IN_PROGRESS",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/receiving-orders/{id}/start",
+        "x-required-scopes": [
+          "wms.receive"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-plans": {
+      "get": {
+        "operationId": "fs11_get_api-v1-replenishment-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list bin-replenishment plans",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/replenishment-plans",
+        "x-required-scopes": [
+          "wms.replenish",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-replenishment-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list bin-replenishment plans",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/replenishment-plans",
+        "x-required-scopes": [
+          "wms.replenish",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-plans/{id}/approve": {
+      "post": {
+        "operationId": "fs11_post_api-v1-replenishment-plans-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "APPROVED + generate tasks",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/replenishment-plans/{id}/approve",
+        "x-required-scopes": [
+          "wms.replenish"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-tasks": {
+      "get": {
+        "operationId": "fs11_get_api-v1-replenishment-tasks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List replenishment queue",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/replenishment-tasks",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/replenishment-tasks/{id}/complete": {
+      "post": {
+        "operationId": "fs11_post_api-v1-replenishment-tasks-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-29 bulk→primary bin",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/replenishment-tasks/{id}/complete",
+        "x-required-scopes": [
+          "wms.replenish"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ship-manifests": {
+      "get": {
+        "operationId": "fs11_get_api-v1-ship-manifests",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list manifest records",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/ship-manifests",
+        "x-required-scopes": [
+          "wms.ship",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-ship-manifests",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list manifest records",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/ship-manifests",
+        "x-required-scopes": [
+          "wms.ship",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ship-manifests/{id}/send": {
+      "post": {
+        "operationId": "fs11_post_api-v1-ship-manifests-id-send",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Hand off to `wms.ShippingPort` (null adapter → 409 CARRIER_BOUNDARY_UNAVAILABLE)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/ship-manifests/{id}/send",
+        "x-required-scopes": [
+          "wms.ship"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/shipments": {
+      "get": {
+        "operationId": "fs11_get_api-v1-shipments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list shipments",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/shipments",
+        "x-required-scopes": [
+          "wms.ship",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-shipments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list shipments",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/shipments",
+        "x-required-scopes": [
+          "wms.ship",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/shipments/{id}/cancel": {
+      "post": {
+        "operationId": "fs11_post_api-v1-shipments-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel before SHIPPED",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/shipments/{id}/cancel",
+        "x-required-scopes": [
+          "wms.ship"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/shipments/{id}/confirm": {
+      "post": {
+        "operationId": "fs11_post_api-v1-shipments-id-confirm",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Confirm customer shipment (mpw-934)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/shipments/{id}/confirm",
+        "x-required-scopes": [
+          "wms.ship"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/shipments/{id}/ready": {
+      "post": {
+        "operationId": "fs11_post_api-v1-shipments-id-ready",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "DRAFT→READY when packed",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/shipments/{id}/ready",
+        "x-required-scopes": [
+          "wms.ship"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/shipments/{id}/ship": {
+      "post": {
+        "operationId": "fs11_post_api-v1-shipments-id-ship",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manual ship (Quick Ship): post fulfilment(s) + SHIPPED",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/shipments/{id}/ship",
+        "x-required-scopes": [
+          "wms.ship"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/status-change-tasks": {
+      "post": {
+        "operationId": "fs11_post_api-v1-status-change-tasks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create directed status-change task",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/status-change-tasks",
+        "x-required-scopes": [
+          "wms.inventory"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/status-change-tasks/{id}/complete": {
+      "post": {
+        "operationId": "fs11_post_api-v1-status-change-tasks-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-30 status change",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/status-change-tasks/{id}/complete",
+        "x-required-scopes": [
+          "wms.inventory"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/system-rules": {
+      "get": {
+        "operationId": "fs11_get_api-v1-system-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "System-rule catalogue",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/system-rules",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ucc-code-formats": {
+      "get": {
+        "operationId": "fs11_get_api-v1-ucc-code-formats",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "UCC formats",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/ucc-code-formats",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-ucc-code-formats",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "UCC formats",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/ucc-code-formats",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warehouses": {
+      "get": {
+        "operationId": "fs11_get_api-v1-warehouses",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List warehouses",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/warehouses",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-warehouses",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create WMS warehouse extension",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warehouses",
+        "x-required-scopes": [
+          "wms.setup.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warehouses/{id}": {
+      "get": {
+        "operationId": "fs11_get_api-v1-warehouses-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Get warehouse",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/warehouses/{id}",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs11_patch_api-v1-warehouses-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update defaults/active",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/warehouses/{id}",
+        "x-required-scopes": [
+          "wms.setup.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warehouses/{id}/cycle-count-requests": {
+      "post": {
+        "operationId": "fs11_post_api-v1-warehouses-id-cycle-count-requests",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Delegate cycle-count creation to FS-07",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warehouses/{id}/cycle-count-requests",
+        "x-required-scopes": [
+          "wms.inventory"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warehouses/{id}/inventory": {
+      "get": {
+        "operationId": "fs11_get_api-v1-warehouses-id-inventory",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inventory search projection",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/warehouses/{id}/inventory",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-warehouses-id-inventory",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create inventory (T-07 adjustment via ledger)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warehouses/{id}/inventory",
+        "x-required-scopes": [
+          "wms.inventory"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warehouses/{id}/item-bin-assignments": {
+      "put": {
+        "operationId": "fs11_put_api-v1-warehouses-id-item-bin-assignments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bulk item↔bin assignment (\"move existing items to bins\")",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/warehouses/{id}/item-bin-assignments",
+        "x-required-scopes": [
+          "wms.setup.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/warehouses/{id}/system-rules/{code}": {
+      "put": {
+        "operationId": "fs11_put_api-v1-warehouses-id-system-rules-code",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Set per-warehouse override",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/warehouses/{id}/system-rules/{code}",
+        "x-required-scopes": [
+          "wms.setup.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wave-release-schedules": {
+      "get": {
+        "operationId": "fs11_get_api-v1-wave-release-schedules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage scheduled releases (criteria `filter` JSONB)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/wave-release-schedules",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs11_patch_api-v1-wave-release-schedules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage scheduled releases (criteria `filter` JSONB)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/wave-release-schedules",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-wave-release-schedules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage scheduled releases (criteria `filter` JSONB)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/wave-release-schedules",
+        "x-required-scopes": [
+          "wms.setup.write",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wave-release-schedules/{id}/run-now": {
+      "post": {
+        "operationId": "fs11_post_api-v1-wave-release-schedules-id-run-now",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Run schedule immediately",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/wave-release-schedules/{id}/run-now",
+        "x-required-scopes": [
+          "wms.wave"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/waves": {
+      "get": {
+        "operationId": "fs11_get_api-v1-waves",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list wave from released order lines",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/waves",
+        "x-required-scopes": [
+          "wms.wave",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-waves",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list wave from released order lines",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/waves",
+        "x-required-scopes": [
+          "wms.wave",
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/waves/{id}": {
+      "get": {
+        "operationId": "fs11_get_api-v1-waves-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Wave status + line pick/ship progression",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/waves/{id}",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/waves/{id}/cancel": {
+      "post": {
+        "operationId": "fs11_post_api-v1-waves-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel when no task started",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/waves/{id}/cancel",
+        "x-required-scopes": [
+          "wms.wave"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/waves/{id}/release": {
+      "post": {
+        "operationId": "fs11_post_api-v1-waves-id-release",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Release wave → generate pick tasks exactly once",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/waves/{id}/release",
+        "x-required-scopes": [
+          "wms.wave"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/carts": {
+      "get": {
+        "operationId": "fs11_get_api-v1-wms-carts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/open backend cart containers (`EXT`)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/wms/carts",
+        "x-required-scopes": [
+          "wms.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs11_post_api-v1-wms-carts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/open backend cart containers (`EXT`)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/wms/carts",
+        "x-required-scopes": [
+          "wms.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/carts/{id}": {
+      "patch": {
+        "operationId": "fs11_patch_api-v1-wms-carts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Assign user / close cart",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/wms/carts/{id}",
+        "x-required-scopes": [
+          "wms.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/device-sessions": {
+      "post": {
+        "operationId": "fs11_post_api-v1-wms-device-sessions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Register backend session container (`EXT`; not a device protocol)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/wms/device-sessions",
+        "x-required-scopes": [
+          "wms.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/device-sessions/{id}/end": {
+      "post": {
+        "operationId": "fs11_post_api-v1-wms-device-sessions-id-end",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "End session",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/wms/device-sessions/{id}/end",
+        "x-required-scopes": [
+          "wms.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/device-sessions/{id}/heartbeat": {
+      "patch": {
+        "operationId": "fs11_patch_api-v1-wms-device-sessions-id-heartbeat",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update `last_seen_at`",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/wms/device-sessions/{id}/heartbeat",
+        "x-required-scopes": [
+          "wms.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/fulfillment-generations": {
+      "get": {
+        "operationId": "fs11_get_api-v1-wms-fulfillment-generations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Fulfilment-generation status/failures (mpw-897/898)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/wms/fulfillment-generations",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/order-release-status": {
+      "get": {
+        "operationId": "fs11_get_api-v1-wms-order-release-status",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Released-order monitoring (mpw-911)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/wms/order-release-status",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wms/tasks": {
+      "get": {
+        "operationId": "fs11_get_api-v1-wms-tasks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Unified server-side task queue (all task types)",
+        "tags": [
+          "FS-11",
+          "wms.execution"
+        ],
+        "x-contract": [
+          "wms.execution"
+        ],
+        "x-feature-set": "FS-11",
+        "x-fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+        "x-original-path": "/v1/wms/tasks",
+        "x-required-scopes": [
+          "wms.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 98,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "wms.execution",
+      "event": "wms.inbound_shipment.arrived",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.inbound_shipment.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.pack.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.receiving.reversed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.replenishment.generated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.task.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.task.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.task.exception",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.task.reversed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "wms.execution",
+      "event": "wms.task.watchdog.alert",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "wms.backorder.release",
+    "wms.device_session.purge",
+    "wms.fulfillment.post_retry",
+    "wms.putaway.assign",
+    "wms.replenishment.generate",
+    "wms.shipment.manifest.reconcile",
+    "wms.task.watchdog",
+    "wms.wave.release_schedule"
+  ]
+}

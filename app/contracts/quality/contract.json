@@ -1,0 +1,50 @@
+{
+  "contracts": [
+    {
+      "contract": "quality.management",
+      "depends_on": [
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "quality",
+      "events": [
+        {
+          "event": "quality.derived_field.evaluated",
+          "schema": "contracts/events/quality.management/quality.derived_field.evaluated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "quality.inspection.completed",
+          "schema": "contracts/events/quality.management/quality.inspection.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "quality.inspection.created",
+          "schema": "contracts/events/quality.management/quality.inspection.created.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-12",
+      "fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+      "version": "1.0.0",
+      "wave": "1F"
+    }
+  ],
+  "dir": "quality",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/quality/openapi.fragment.json",
+  "feature_set": "FS-12",
+  "fragments": [
+    "contracts/openapi/fragments/FS-12.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1F"
+}

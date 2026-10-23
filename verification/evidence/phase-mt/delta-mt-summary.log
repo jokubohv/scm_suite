@@ -1,0 +1,36 @@
+Δ-MT (MULTI-TENANT USERS) DELTA SUMMARY  2026-10-21T14:51:18-04:00
+Plan version: 1.1.0 (v1.0.0 verified PASS -> Δ-MT amendment)
+
+== hash-diff scope (vs v1.0.0 sign-off snapshot) ==
+new: design/MULTI-TENANT-USERS-ADDENDUM.md (221 lines, binding; §9b: D-29, canonical /api/v1, user_session.identity_id no-FK, globally-unique refresh hash)
+amended: design/ARCHITECTURE.md, design/DATA-MODEL.md, design/FEATURE-SETS.md, feature-sets/FS-00.md, design/feature-sets.json, PLAN.md, README.md, tools/render_plan_tables.py
+unchanged: other 15 specs, research catalogs, feature-coverage.json/json, tools/feature_sets.py
+
+== manifest delta (only these) ==
+plan_version: 1.1.0
+FS-00 exit_checks: 10 | Δ-MT tests: ['pytest app/tests/invariants/test_mt_tenant_user_isolation.py -q', 'pytest app/tests/integration/platform/test_mt_auth_flows.py -q', 'pytest app/tests/integration/platform/test_mt_invitations_sessions.py -q', 'pytest app/tests/invariants/test_mt_identity_rules.py -q']
+edges: 116 | unique pairs: 86 | contracts: 21 | waves: 10
+
+== counts (independently re-derived) ==
+base tables 277 (platform 31 = 27 + finance_journal_intent + 3 Δ-MT); views 21; posting types T-01..T-31 + C-01..C-06 unchanged; rules 137 scoped + 10 global = 147; invariants INV-01..INV-30; state machines 41/50; FS-00 31 tables / 77 endpoints / 21 events
+
+== tenant-model verification ==
+user_identity global auth-only (no tenant_id/RLS, email unique, EXT); app_user per-tenant membership (identity_id, membership_status, joined_at, invited_by, token_version, unique(tenant_id,identity_id)); tenant_invitation single-use/expiring/hashed; user_session hashed rotating refresh token + replay/revocation + globally unique hash + identity_id logical no-FK; JWT sub/uid/tid/tv/jti, active tenant only from verified tid; TENANT_SELECTION_REQUIRED + select/switch-tenant + /me + /me/tenants; platform-admin tenant.manage/SYSTEM_TENANT_ID vs tenant-admin users/invitations/sessions scopes; DM-PLAT-12/13/14 + INV-30; isolation matrix endpoint classes x cross-tenant probe -> 404; jobs/events/storage tenant-keyed
+
+== re-run results (v1.1.0 tree) ==
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+COVERAGE OK: 1348/1348 catalog topics accounted (iri=412, mpw=936); 769 in-scope + 579 deferred; 0 missing, 0 extra, 0 duplicates
+order sets: 16
+render_plan_tables --check: rc=0
+unit/adversarial tests: OK
+independent_checks: INDEPENDENT PHASE-A RECHECK  --  96 PASS / 0 FAIL
+spec/PLAN audit: AUDIT RESULT: PASS -- 0 findings, 0 check failures (703 checks passed)
+Δ-MT audit: Δ-MT (MULTI-TENANT USERS) DELTA AUDIT  --  48 PASS / 2 FAIL / 6 findings
+
+== findings (text-only) ==
+[MINOR] MT-D1 (README.md line 19): README read-order table step 5 still says '273+1 tables' (v1.0.0 count); current-state counts are 277 base tables (platform 31) + 21 views. The same README later states 277 tables, so it is internally inconsistent.
+[MINOR] MT-D2 (FEATURE-SETS.md §7.1 (FS-00 exit checks block)): The FS-00 §7.1 exit-checks block lists only the six v1.0.0 commands; the manifest and FS-00 §11 now include four Δ-MT L3 commands before 'record' (test_mt_*). §7.1 is the only summary still showing the pre-Δ-MT gate list. +3
+[MINOR] MT-D3 (PLAN.md §12 item 9): PLAN §12 item 9 still says 'Locked decisions D1–D8 and deltas Δ-1…Δ-3 are part of the baseline' and omits the Δ-MT amendment (and D-29). Δ-MT is binding and recorded in §3.1/§4.2, so the change-control baseline list is stale.
+[MINOR] MT-D4 (design/ARCHITECTURE.md §8 D-29 row): The D-29 decision row says '(Addendum §10 labels this decision "D-24"; …)', but the final addendum §9b/§10 records the decision id as **D-29** and states that D-24 was an earlier draft label that collides with the existing WMS/mobile decision. The parenthetical cites the addendum incorrectly.
+[MINOR] MT-D5 (design/ARCHITECTURE.md §5.9 vs addendum §9b / PLAN §12 item 13): ARCHITECTURE §5.9 still declares the URL version as `/v1` and says business resource APIs remain `/v1/...` while the Δ-MT namespace is 'the only namespace with the `/api` prefix'. The binding addendum §9b and PLAN §12 item 13 state the opposite convention: **canonical base path is `/api/v1`**, with `/v1` only accepted as non-normative shorthand in domain docs. The architecture text should match the binding convention.
+[INFO] MT-D6 (design/ARCHITECTURE.md / design/DATA-MODEL.md / design/FEATURE-SETS.md headers): Design-doc version headers still read 1.0 / 1.0.0 after the binding v1.1.0 amendment (manifest, PLAN and README are at 1.1.0; the addendum is the binding override). Content is correct; the version line is informational.

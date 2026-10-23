@@ -1,0 +1,2115 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-01 — Item Master and UoM Engine (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "item.master",
+        "dir": "item_master",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-01",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "0B"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/item-categories": {
+      "get": {
+        "operationId": "fs01_get_api-v1-item-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Category tree/flat list",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-item-categories",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create category",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.category.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-categories/{category_id}": {
+      "get": {
+        "operationId": "fs01_get_api-v1-item-categories-category-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Category detail",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs01_patch_api-v1-item-categories-category-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update category",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.category.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-categories/{category_id}/move": {
+      "post": {
+        "operationId": "fs01_post_api-v1-item-categories-category-id-move",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Re-parent category",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.category.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-types": {
+      "get": {
+        "operationId": "fs01_get_api-v1-item-types",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Taxonomy list",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-types/{code}": {
+      "get": {
+        "operationId": "fs01_get_api-v1-item-types-code",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "One type + eligibility map",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search items",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-items",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create item (+ extensions inline)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.create"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/resolve/alias": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-resolve-alias",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Alias resolution (WMS)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/resolve/barcode": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-resolve-barcode",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Scanner resolution",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Item detail + extensions + matrix parent",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs01_patch_api-v1-items-item-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update header/description/category",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/accounting": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-accounting",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Account refs",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs01_put_api-v1-items-item-id-accounting",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Upsert account refs (opaque, finance-validated)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/aliases": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-aliases",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List aliases",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-aliases",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add alias",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/availability-settings": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-availability-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Availability-affecting settings (not quantities)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/barcodes": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-barcodes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List barcodes",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-barcodes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add barcode",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.barcode.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/barcodes/{barcode_id}": {
+      "patch": {
+        "operationId": "fs01_patch_api-v1-items-item-id-barcodes-barcode-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate barcode",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.barcode.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/inactivate": {
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inactivate (guarded)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.inactivate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/inventory": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-inventory",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inventory/costing/stock settings",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs01_put_api-v1-items-item-id-inventory",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Upsert inventory settings (immutable fields rejected)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/kit-members": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-kit-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Kit/group composition",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-kit-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add member",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/kit-members/{member_id}": {
+      "delete": {
+        "operationId": "fs01_delete_api-v1-items-item-id-kit-members-member-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove member (parent not yet used in posted docs)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs01_patch_api-v1-items-item-id-kit-members-member-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update qty/uom/optional/sort",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/locations": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-locations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Per-location settings",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs01_put_api-v1-items-item-id-locations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Upsert per-location settings (list)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.location.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/locations/{location_id}": {
+      "patch": {
+        "operationId": "fs01_patch_api-v1-items-item-id-locations-location-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Patch one location's settings",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.location.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/locations/{location_id}/planning-values": {
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-locations-location-id-planning-values",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**FIX-1** contract write path (per-location `item_location` planning values; FS-10 consumer)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.planning.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/matrix-children": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-matrix-children",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List children + option mapping",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/matrix-children/generate": {
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-matrix-children-generate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Generate children from combinations",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.matrix.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/matrix-children/link": {
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-matrix-children-link",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Link existing child to parent",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.matrix.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/matrix-options": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-matrix-options",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Matrix option definitions + values",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-matrix-options",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create option (+values)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.matrix.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/matrix-options/{option_id}/values": {
+      "put": {
+        "operationId": "fs01_put_api-v1-items-item-id-matrix-options-option-id-values",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace option values",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.matrix.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/planning-values": {
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-planning-values",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**FIX-1** contract write path (item-level `item_inventory` planning values; FS-10 consumer)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.planning.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/purchasing": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-purchasing",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Purchasing defaults",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs01_put_api-v1-items-item-id-purchasing",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Upsert purchasing defaults",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/reactivate": {
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-reactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reactivate",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.inactivate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/related": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-related",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List related items",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-items-item-id-related",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add related item",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/related/{related_id}": {
+      "delete": {
+        "operationId": "fs01_delete_api-v1-items-item-id-related-related-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove relation row",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/sales": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-sales",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Sales/shipping defaults",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs01_put_api-v1-items-item-id-sales",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Upsert sales defaults",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.update"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/uoms": {
+      "get": {
+        "operationId": "fs01_get_api-v1-items-item-id-uoms",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Item UoM assignments",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs01_put_api-v1-items-item-id-uoms",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace assignments",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.uom.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/uom-conversions": {
+      "get": {
+        "operationId": "fs01_get_api-v1-uom-conversions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Units-type conversion overrides",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-uom-conversions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/override conversion",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.uom.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/uom-conversions/resolve": {
+      "post": {
+        "operationId": "fs01_post_api-v1-uom-conversions-resolve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Convert quantity (golden UoM API)",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/uom-conversions/{conversion_id}": {
+      "delete": {
+        "operationId": "fs01_delete_api-v1-uom-conversions-conversion-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove override",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.uom.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/uom-types": {
+      "get": {
+        "operationId": "fs01_get_api-v1-uom-types",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Units type list",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-uom-types",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create units type",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.uom.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/uom-types/{uom_type_id}": {
+      "patch": {
+        "operationId": "fs01_patch_api-v1-uom-types-uom-type-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate units type",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.uom.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/uoms": {
+      "get": {
+        "operationId": "fs01_get_api-v1-uoms",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "UoM list",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs01_post_api-v1-uoms",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create UoM",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "items.uom.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/uoms/{uom_id}": {
+      "patch": {
+        "operationId": "fs01_patch_api-v1-uoms-uom-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate UoM",
+        "tags": [
+          "FS-01",
+          "item.master"
+        ],
+        "x-contract": [
+          "item.master"
+        ],
+        "x-feature-set": "FS-01",
+        "x-fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+        "x-required-scopes": [
+          "items.uom.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 59,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "item.master",
+      "event": "item.barcode.added",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "item.master",
+      "event": "item.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "item.master",
+      "event": "item.inactivated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "item.master",
+      "event": "item.matrix.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "item.master",
+      "event": "item.planning_values.updated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "item.master",
+      "event": "item.uom.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "item.master",
+      "event": "item.updated",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "item.inventory.defaults.repair",
+    "item.reference.validate"
+  ]
+}

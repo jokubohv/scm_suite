@@ -1,0 +1,716 @@
+/Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/phase_b_audit.py:563: SyntaxWarning: invalid escape sequence '\|'
+  "grep -n 'inventory.transaction.posted\|purchase_order\.\*\|item_receipt\.\*' PLAN.md; "
+/Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/phase_b_audit.py:564: SyntaxWarning: invalid escape sequence '\|'
+  "grep -n 'po.receipted\|inventory.receipt.posted\|inventory.committed.changed\|inventory.fulfilled' "
+==============================================================================================================
+PHASE-B SPEC + PLAN AUDIT  --  703 PASS / 0 FAIL / 0 findings
+==============================================================================================================
+PASS  all 16 specs exist (feature-sets/FS-00..FS-15.md)
+PASS  [FS-00] header table complete (7 template fields)
+PASS  [FS-00] header FS id matches file name
+PASS  [FS-00] phase/wave matches manifest
+PASS  [FS-00] size matches FEATURE-SETS section 1
+PASS  [FS-00] status is a valid lifecycle value
+PASS  [FS-00] all 14 template sections present
+PASS  [FS-00] section headings map to the 14 template sections
+PASS  [FS-00] declares backend-only build scope
+PASS  [FS-00] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-00] provided contracts table matches manifest
+PASS  [FS-00] root set header declares no dependencies
+PASS  [FS-00] header Provides mentions every provided contract
+PASS  [FS-00] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-00] stated catalog-topic count matches coverage disposition count
+PASS  [FS-00] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-00] DATA-MODEL section 21 table count matches spec header (31)
+PASS  [FS-00] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-00] section 4 claims no table owned by another feature set
+PASS  [FS-00] manifest migration ids all present in spec
+PASS  [FS-00] manifest feature flag(s) wired in spec
+PASS  [FS-00] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-00] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-00] cites at least one invariant/rule id
+PASS  [FS-00] API surface section non-empty (>=3 endpoints)
+PASS  [FS-00] API base path /api/v1 declared
+PASS  [FS-00] events table non-empty
+PASS  [FS-00] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-00] events/jobs consumers/components named
+PASS  [FS-00] test plan covers unit layer
+PASS  [FS-00] test plan covers invariant layer
+PASS  [FS-00] test plan covers contract layer
+PASS  [FS-00] test plan covers migration layer
+PASS  [FS-00] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-00] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-00] section 11 includes deploy + evidence + record steps
+PASS  [FS-00] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-00] definition-of-done checklist has >=7 items
+PASS  [FS-00] DoD covers framework section 7 requirements
+PASS  [FS-00] open-questions/assumptions section populated
+PASS  [FS-00] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-00] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-00] no positive mobile/UI build verbs in scope
+PASS  FS-00 accounts for 31 platform tables incl finance_journal_intent + 3 Δ-MT tables
+PASS  [FS-01] header table complete (7 template fields)
+PASS  [FS-01] header FS id matches file name
+PASS  [FS-01] phase/wave matches manifest
+PASS  [FS-01] size matches FEATURE-SETS section 1
+PASS  [FS-01] status is a valid lifecycle value
+PASS  [FS-01] all 14 template sections present
+PASS  [FS-01] section headings map to the 14 template sections
+PASS  [FS-01] declares backend-only build scope
+PASS  [FS-01] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-01] provided contracts table matches manifest
+PASS  [FS-01] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-01] header Provides mentions every provided contract
+PASS  [FS-01] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-01] stated catalog-topic count matches coverage disposition count
+PASS  [FS-01] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-01] DATA-MODEL section 21 table count matches spec header (21)
+PASS  [FS-01] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-01] section 4 claims no table owned by another feature set
+PASS  [FS-01] manifest migration ids all present in spec
+PASS  [FS-01] manifest feature flag(s) wired in spec
+PASS  [FS-01] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-01] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-01] cites at least one invariant/rule id
+PASS  [FS-01] API surface section non-empty (>=3 endpoints)
+PASS  [FS-01] API base path /api/v1 declared
+PASS  [FS-01] events table non-empty
+PASS  [FS-01] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-01] events/jobs consumers/components named
+PASS  [FS-01] test plan covers unit layer
+PASS  [FS-01] test plan covers invariant layer
+PASS  [FS-01] test plan covers contract layer
+PASS  [FS-01] test plan covers migration layer
+PASS  [FS-01] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-01] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-01] section 11 includes deploy + evidence + record steps
+PASS  [FS-01] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-01] definition-of-done checklist has >=7 items
+PASS  [FS-01] DoD covers framework section 7 requirements
+PASS  [FS-01] open-questions/assumptions section populated
+PASS  [FS-01] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-01] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-01] no positive mobile/UI build verbs in scope
+PASS  [FS-02] header table complete (7 template fields)
+PASS  [FS-02] header FS id matches file name
+PASS  [FS-02] phase/wave matches manifest
+PASS  [FS-02] size matches FEATURE-SETS section 1
+PASS  [FS-02] status is a valid lifecycle value
+PASS  [FS-02] all 14 template sections present
+PASS  [FS-02] section headings map to the 14 template sections
+PASS  [FS-02] declares backend-only build scope
+PASS  [FS-02] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-02] provided contracts table matches manifest
+PASS  [FS-02] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-02] header Provides mentions every provided contract
+PASS  [FS-02] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-02] stated catalog-topic count matches coverage disposition count
+PASS  [FS-02] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-02] DATA-MODEL section 21 table count matches spec header (17)
+PASS  [FS-02] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-02] section 4 claims no table owned by another feature set
+PASS  [FS-02] manifest migration ids all present in spec
+PASS  [FS-02] manifest feature flag(s) wired in spec
+PASS  [FS-02] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-02] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-02] cites at least one invariant/rule id
+PASS  [FS-02] API surface section non-empty (>=3 endpoints)
+PASS  [FS-02] API base path /api/v1 declared
+PASS  [FS-02] events table non-empty
+PASS  [FS-02] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-02] events/jobs consumers/components named
+PASS  [FS-02] test plan covers unit layer
+PASS  [FS-02] test plan covers invariant layer
+PASS  [FS-02] test plan covers contract layer
+PASS  [FS-02] test plan covers migration layer
+PASS  [FS-02] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-02] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-02] section 11 includes deploy + evidence + record steps
+PASS  [FS-02] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-02] definition-of-done checklist has >=7 items
+PASS  [FS-02] DoD covers framework section 7 requirements
+PASS  [FS-02] open-questions/assumptions section populated
+PASS  [FS-02] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-02] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-02] no positive mobile/UI build verbs in scope
+PASS  [FS-03] header table complete (7 template fields)
+PASS  [FS-03] header FS id matches file name
+PASS  [FS-03] phase/wave matches manifest
+PASS  [FS-03] size matches FEATURE-SETS section 1
+PASS  [FS-03] status is a valid lifecycle value
+PASS  [FS-03] all 14 template sections present
+PASS  [FS-03] section headings map to the 14 template sections
+PASS  [FS-03] declares backend-only build scope
+PASS  [FS-03] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-03] provided contracts table matches manifest
+PASS  [FS-03] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-03] header Provides mentions every provided contract
+PASS  [FS-03] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-03] stated catalog-topic count matches coverage disposition count
+PASS  [FS-03] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-03] DATA-MODEL section 21 table count matches spec header (4)
+PASS  [FS-03] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-03] section 4 claims no table owned by another feature set
+PASS  [FS-03] manifest migration ids all present in spec
+PASS  [FS-03] manifest feature flag(s) wired in spec
+PASS  [FS-03] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-03] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-03] cites at least one invariant/rule id
+PASS  [FS-03] API surface section non-empty (>=3 endpoints)
+PASS  [FS-03] API base path /api/v1 declared
+PASS  [FS-03] events table non-empty
+PASS  [FS-03] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-03] events/jobs consumers/components named
+PASS  [FS-03] test plan covers unit layer
+PASS  [FS-03] test plan covers invariant layer
+PASS  [FS-03] test plan covers contract layer
+PASS  [FS-03] test plan covers migration layer
+PASS  [FS-03] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-03] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-03] section 11 includes deploy + evidence + record steps
+PASS  [FS-03] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-03] definition-of-done checklist has >=7 items
+PASS  [FS-03] DoD covers framework section 7 requirements
+PASS  [FS-03] open-questions/assumptions section populated
+PASS  [FS-03] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-03] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-03] no positive mobile/UI build verbs in scope
+PASS  [FS-04] header table complete (7 template fields)
+PASS  [FS-04] header FS id matches file name
+PASS  [FS-04] phase/wave matches manifest
+PASS  [FS-04] size matches FEATURE-SETS section 1
+PASS  [FS-04] status is a valid lifecycle value
+PASS  [FS-04] all 14 template sections present
+PASS  [FS-04] section headings map to the 14 template sections
+PASS  [FS-04] declares backend-only build scope
+PASS  [FS-04] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-04] provided contracts table matches manifest
+PASS  [FS-04] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-04] header Provides mentions every provided contract
+PASS  [FS-04] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-04] stated catalog-topic count matches coverage disposition count
+PASS  [FS-04] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-04] DATA-MODEL section 21 table count matches spec header (22)
+PASS  [FS-04] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-04] section 4 claims no table owned by another feature set
+PASS  [FS-04] manifest migration ids all present in spec
+PASS  [FS-04] manifest feature flag(s) wired in spec
+PASS  [FS-04] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-04] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-04] cites at least one invariant/rule id
+PASS  [FS-04] API surface section non-empty (>=3 endpoints)
+PASS  [FS-04] API base path /api/v1 declared
+PASS  [FS-04] events table non-empty
+PASS  [FS-04] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-04] events/jobs consumers/components named
+PASS  [FS-04] test plan covers unit layer
+PASS  [FS-04] test plan covers invariant layer
+PASS  [FS-04] test plan covers contract layer
+PASS  [FS-04] test plan covers migration layer
+PASS  [FS-04] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-04] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-04] section 11 includes deploy + evidence + record steps
+PASS  [FS-04] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-04] definition-of-done checklist has >=7 items
+PASS  [FS-04] DoD covers framework section 7 requirements
+PASS  [FS-04] open-questions/assumptions section populated
+PASS  [FS-04] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-04] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-04] no positive mobile/UI build verbs in scope
+PASS  [FS-05] header table complete (7 template fields)
+PASS  [FS-05] header FS id matches file name
+PASS  [FS-05] phase/wave matches manifest
+PASS  [FS-05] size matches FEATURE-SETS section 1
+PASS  [FS-05] status is a valid lifecycle value
+PASS  [FS-05] all 14 template sections present
+PASS  [FS-05] section headings map to the 14 template sections
+PASS  [FS-05] declares backend-only build scope
+PASS  [FS-05] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-05] provided contracts table matches manifest
+PASS  [FS-05] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-05] header Provides mentions every provided contract
+PASS  [FS-05] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-05] stated catalog-topic count matches coverage disposition count
+PASS  [FS-05] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-05] DATA-MODEL section 21 table count matches spec header (25)
+PASS  [FS-05] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-05] section 4 claims no table owned by another feature set
+PASS  [FS-05] manifest migration ids all present in spec
+PASS  [FS-05] manifest feature flag(s) wired in spec
+PASS  [FS-05] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-05] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-05] cites at least one invariant/rule id
+PASS  [FS-05] API surface section non-empty (>=3 endpoints)
+PASS  [FS-05] API base path /api/v1 declared
+PASS  [FS-05] events table non-empty
+PASS  [FS-05] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-05] events/jobs consumers/components named
+PASS  [FS-05] test plan covers unit layer
+PASS  [FS-05] test plan covers invariant layer
+PASS  [FS-05] test plan covers contract layer
+PASS  [FS-05] test plan covers migration layer
+PASS  [FS-05] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-05] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-05] section 11 includes deploy + evidence + record steps
+PASS  [FS-05] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-05] definition-of-done checklist has >=7 items
+PASS  [FS-05] DoD covers framework section 7 requirements
+PASS  [FS-05] open-questions/assumptions section populated
+PASS  [FS-05] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-05] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-05] no positive mobile/UI build verbs in scope
+PASS  [FS-06] header table complete (7 template fields)
+PASS  [FS-06] header FS id matches file name
+PASS  [FS-06] phase/wave matches manifest
+PASS  [FS-06] size matches FEATURE-SETS section 1
+PASS  [FS-06] status is a valid lifecycle value
+PASS  [FS-06] all 14 template sections present
+PASS  [FS-06] section headings map to the 14 template sections
+PASS  [FS-06] declares backend-only build scope
+PASS  [FS-06] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-06] provided contracts table matches manifest
+PASS  [FS-06] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-06] header Provides mentions every provided contract
+PASS  [FS-06] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-06] stated catalog-topic count matches coverage disposition count
+PASS  [FS-06] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-06] DATA-MODEL section 21 table count matches spec header (3)
+PASS  [FS-06] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-06] section 4 claims no table owned by another feature set
+PASS  [FS-06] manifest migration ids all present in spec
+PASS  [FS-06] manifest feature flag(s) wired in spec
+PASS  [FS-06] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-06] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-06] cites at least one invariant/rule id
+PASS  [FS-06] API surface section non-empty (>=3 endpoints)
+PASS  [FS-06] API base path /api/v1 declared
+PASS  [FS-06] events table non-empty
+PASS  [FS-06] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-06] events/jobs consumers/components named
+PASS  [FS-06] test plan covers unit layer
+PASS  [FS-06] test plan covers invariant layer
+PASS  [FS-06] test plan covers contract layer
+PASS  [FS-06] test plan covers migration layer
+PASS  [FS-06] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-06] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-06] section 11 includes deploy + evidence + record steps
+PASS  [FS-06] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-06] definition-of-done checklist has >=7 items
+PASS  [FS-06] DoD covers framework section 7 requirements
+PASS  [FS-06] open-questions/assumptions section populated
+PASS  [FS-06] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-06] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-06] no positive mobile/UI build verbs in scope
+PASS  [FS-07] header table complete (7 template fields)
+PASS  [FS-07] header FS id matches file name
+PASS  [FS-07] phase/wave matches manifest
+PASS  [FS-07] size matches FEATURE-SETS section 1
+PASS  [FS-07] status is a valid lifecycle value
+PASS  [FS-07] all 14 template sections present
+PASS  [FS-07] section headings map to the 14 template sections
+PASS  [FS-07] declares backend-only build scope
+PASS  [FS-07] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-07] provided contracts table matches manifest
+PASS  [FS-07] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-07] header Provides mentions every provided contract
+PASS  [FS-07] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-07] stated catalog-topic count matches coverage disposition count
+PASS  [FS-07] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-07] DATA-MODEL section 21 table count matches spec header (6)
+PASS  [FS-07] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-07] section 4 claims no table owned by another feature set
+PASS  [FS-07] manifest migration ids all present in spec
+PASS  [FS-07] manifest feature flag(s) wired in spec
+PASS  [FS-07] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-07] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-07] cites at least one invariant/rule id
+PASS  [FS-07] API surface section non-empty (>=3 endpoints)
+PASS  [FS-07] API base path /api/v1 declared
+PASS  [FS-07] events table non-empty
+PASS  [FS-07] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-07] events/jobs consumers/components named
+PASS  [FS-07] test plan covers unit layer
+PASS  [FS-07] test plan covers invariant layer
+PASS  [FS-07] test plan covers contract layer
+PASS  [FS-07] test plan covers migration layer
+PASS  [FS-07] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-07] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-07] section 11 includes deploy + evidence + record steps
+PASS  [FS-07] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-07] definition-of-done checklist has >=7 items
+PASS  [FS-07] DoD covers framework section 7 requirements
+PASS  [FS-07] open-questions/assumptions section populated
+PASS  [FS-07] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-07] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-07] no positive mobile/UI build verbs in scope
+PASS  [FS-08] header table complete (7 template fields)
+PASS  [FS-08] header FS id matches file name
+PASS  [FS-08] phase/wave matches manifest
+PASS  [FS-08] size matches FEATURE-SETS section 1
+PASS  [FS-08] status is a valid lifecycle value
+PASS  [FS-08] all 14 template sections present
+PASS  [FS-08] section headings map to the 14 template sections
+PASS  [FS-08] declares backend-only build scope
+PASS  [FS-08] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-08] provided contracts table matches manifest
+PASS  [FS-08] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-08] header Provides mentions every provided contract
+PASS  [FS-08] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-08] stated catalog-topic count matches coverage disposition count
+PASS  [FS-08] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-08] DATA-MODEL section 21 table count matches spec header (29)
+PASS  [FS-08] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-08] section 4 claims no table owned by another feature set
+PASS  [FS-08] manifest migration ids all present in spec
+PASS  [FS-08] manifest feature flag(s) wired in spec
+PASS  [FS-08] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-08] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-08] cites at least one invariant/rule id
+PASS  [FS-08] API surface section non-empty (>=3 endpoints)
+PASS  [FS-08] API base path /api/v1 declared
+PASS  [FS-08] events table non-empty
+PASS  [FS-08] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-08] events/jobs consumers/components named
+PASS  [FS-08] test plan covers unit layer
+PASS  [FS-08] test plan covers invariant layer
+PASS  [FS-08] test plan covers contract layer
+PASS  [FS-08] test plan covers migration layer
+PASS  [FS-08] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-08] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-08] section 11 includes deploy + evidence + record steps
+PASS  [FS-08] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-08] definition-of-done checklist has >=7 items
+PASS  [FS-08] DoD covers framework section 7 requirements
+PASS  [FS-08] open-questions/assumptions section populated
+PASS  [FS-08] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-08] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-08] no positive mobile/UI build verbs in scope
+PASS  [FS-09] header table complete (7 template fields)
+PASS  [FS-09] header FS id matches file name
+PASS  [FS-09] phase/wave matches manifest
+PASS  [FS-09] size matches FEATURE-SETS section 1
+PASS  [FS-09] status is a valid lifecycle value
+PASS  [FS-09] all 14 template sections present
+PASS  [FS-09] section headings map to the 14 template sections
+PASS  [FS-09] declares backend-only build scope
+PASS  [FS-09] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-09] provided contracts table matches manifest
+PASS  [FS-09] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-09] header Provides mentions every provided contract
+PASS  [FS-09] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-09] stated catalog-topic count matches coverage disposition count
+PASS  [FS-09] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-09] DATA-MODEL section 21 table count matches spec header (35)
+PASS  [FS-09] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-09] section 4 claims no table owned by another feature set
+PASS  [FS-09] manifest migration ids all present in spec
+PASS  [FS-09] manifest feature flag(s) wired in spec
+PASS  [FS-09] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-09] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-09] cites at least one invariant/rule id
+PASS  [FS-09] API surface section non-empty (>=3 endpoints)
+PASS  [FS-09] API base path /api/v1 declared
+PASS  [FS-09] events table non-empty
+PASS  [FS-09] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-09] events/jobs consumers/components named
+PASS  [FS-09] test plan covers unit layer
+PASS  [FS-09] test plan covers invariant layer
+PASS  [FS-09] test plan covers contract layer
+PASS  [FS-09] test plan covers migration layer
+PASS  [FS-09] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-09] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-09] section 11 includes deploy + evidence + record steps
+PASS  [FS-09] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-09] definition-of-done checklist has >=7 items
+PASS  [FS-09] DoD covers framework section 7 requirements
+PASS  [FS-09] open-questions/assumptions section populated
+PASS  [FS-09] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-09] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-09] no positive mobile/UI build verbs in scope
+PASS  [FS-10] header table complete (7 template fields)
+PASS  [FS-10] header FS id matches file name
+PASS  [FS-10] phase/wave matches manifest
+PASS  [FS-10] size matches FEATURE-SETS section 1
+PASS  [FS-10] status is a valid lifecycle value
+PASS  [FS-10] all 14 template sections present
+PASS  [FS-10] section headings map to the 14 template sections
+PASS  [FS-10] declares backend-only build scope
+PASS  [FS-10] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-10] provided contracts table matches manifest
+PASS  [FS-10] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-10] header Provides mentions every provided contract
+PASS  [FS-10] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-10] stated catalog-topic count matches coverage disposition count
+PASS  [FS-10] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-10] DATA-MODEL section 21 table count matches spec header (24)
+PASS  [FS-10] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-10] section 4 claims no table owned by another feature set
+PASS  [FS-10] manifest migration ids all present in spec
+PASS  [FS-10] manifest feature flag(s) wired in spec
+PASS  [FS-10] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-10] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-10] cites at least one invariant/rule id
+PASS  [FS-10] API surface section non-empty (>=3 endpoints)
+PASS  [FS-10] API base path /api/v1 declared
+PASS  [FS-10] events table non-empty
+PASS  [FS-10] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-10] events/jobs consumers/components named
+PASS  [FS-10] test plan covers unit layer
+PASS  [FS-10] test plan covers invariant layer
+PASS  [FS-10] test plan covers contract layer
+PASS  [FS-10] test plan covers migration layer
+PASS  [FS-10] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-10] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-10] section 11 includes deploy + evidence + record steps
+PASS  [FS-10] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-10] definition-of-done checklist has >=7 items
+PASS  [FS-10] DoD covers framework section 7 requirements
+PASS  [FS-10] open-questions/assumptions section populated
+PASS  [FS-10] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-10] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-10] no positive mobile/UI build verbs in scope
+PASS  [FS-11] header table complete (7 template fields)
+PASS  [FS-11] header FS id matches file name
+PASS  [FS-11] phase/wave matches manifest
+PASS  [FS-11] size matches FEATURE-SETS section 1
+PASS  [FS-11] status is a valid lifecycle value
+PASS  [FS-11] all 14 template sections present
+PASS  [FS-11] section headings map to the 14 template sections
+PASS  [FS-11] declares backend-only build scope
+PASS  [FS-11] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-11] provided contracts table matches manifest
+PASS  [FS-11] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-11] header Provides mentions every provided contract
+PASS  [FS-11] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-11] stated catalog-topic count matches coverage disposition count
+PASS  [FS-11] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-11] DATA-MODEL section 21 table count matches spec header (38)
+PASS  [FS-11] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-11] section 4 claims no table owned by another feature set
+PASS  [FS-11] manifest migration ids all present in spec
+PASS  [FS-11] manifest feature flag(s) wired in spec
+PASS  [FS-11] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-11] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-11] cites at least one invariant/rule id
+PASS  [FS-11] API surface section non-empty (>=3 endpoints)
+PASS  [FS-11] API base path /api/v1 declared
+PASS  [FS-11] events table non-empty
+PASS  [FS-11] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-11] events/jobs consumers/components named
+PASS  [FS-11] test plan covers unit layer
+PASS  [FS-11] test plan covers invariant layer
+PASS  [FS-11] test plan covers contract layer
+PASS  [FS-11] test plan covers migration layer
+PASS  [FS-11] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-11] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-11] section 11 includes deploy + evidence + record steps
+PASS  [FS-11] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-11] definition-of-done checklist has >=7 items
+PASS  [FS-11] DoD covers framework section 7 requirements
+PASS  [FS-11] open-questions/assumptions section populated
+PASS  [FS-11] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-11] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-11] no positive mobile/UI build verbs in scope
+PASS  [FS-12] header table complete (7 template fields)
+PASS  [FS-12] header FS id matches file name
+PASS  [FS-12] phase/wave matches manifest
+PASS  [FS-12] size matches FEATURE-SETS section 1
+PASS  [FS-12] status is a valid lifecycle value
+PASS  [FS-12] all 14 template sections present
+PASS  [FS-12] section headings map to the 14 template sections
+PASS  [FS-12] declares backend-only build scope
+PASS  [FS-12] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-12] provided contracts table matches manifest
+PASS  [FS-12] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-12] header Provides mentions every provided contract
+PASS  [FS-12] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-12] stated catalog-topic count matches coverage disposition count
+PASS  [FS-12] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-12] DATA-MODEL section 21 table count matches spec header (10)
+PASS  [FS-12] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-12] section 4 claims no table owned by another feature set
+PASS  [FS-12] manifest migration ids all present in spec
+PASS  [FS-12] manifest feature flag(s) wired in spec
+PASS  [FS-12] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-12] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-12] cites at least one invariant/rule id
+PASS  [FS-12] API surface section non-empty (>=3 endpoints)
+PASS  [FS-12] API base path /api/v1 declared
+PASS  [FS-12] events table non-empty
+PASS  [FS-12] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-12] events/jobs consumers/components named
+PASS  [FS-12] test plan covers unit layer
+PASS  [FS-12] test plan covers invariant layer
+PASS  [FS-12] test plan covers contract layer
+PASS  [FS-12] test plan covers migration layer
+PASS  [FS-12] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-12] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-12] section 11 includes deploy + evidence + record steps
+PASS  [FS-12] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-12] definition-of-done checklist has >=7 items
+PASS  [FS-12] DoD covers framework section 7 requirements
+PASS  [FS-12] open-questions/assumptions section populated
+PASS  [FS-12] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-12] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-12] no positive mobile/UI build verbs in scope
+PASS  [FS-13] header table complete (7 template fields)
+PASS  [FS-13] header FS id matches file name
+PASS  [FS-13] phase/wave matches manifest
+PASS  [FS-13] size matches FEATURE-SETS section 1
+PASS  [FS-13] status is a valid lifecycle value
+PASS  [FS-13] all 14 template sections present
+PASS  [FS-13] section headings map to the 14 template sections
+PASS  [FS-13] declares backend-only build scope
+PASS  [FS-13] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-13] provided contracts table matches manifest
+PASS  [FS-13] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-13] header Provides mentions every provided contract
+PASS  [FS-13] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-13] stated catalog-topic count matches coverage disposition count
+PASS  [FS-13] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-13] DATA-MODEL section 21 table count matches spec header (5)
+PASS  [FS-13] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-13] section 4 claims no table owned by another feature set
+PASS  [FS-13] manifest migration ids all present in spec
+PASS  [FS-13] manifest feature flag(s) wired in spec
+PASS  [FS-13] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-13] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-13] cites at least one invariant/rule id
+PASS  [FS-13] API surface section non-empty (>=3 endpoints)
+PASS  [FS-13] API base path /api/v1 declared
+PASS  [FS-13] events table non-empty
+PASS  [FS-13] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-13] events/jobs consumers/components named
+PASS  [FS-13] test plan covers unit layer
+PASS  [FS-13] test plan covers invariant layer
+PASS  [FS-13] test plan covers contract layer
+PASS  [FS-13] test plan covers migration layer
+PASS  [FS-13] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-13] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-13] section 11 includes deploy + evidence + record steps
+PASS  [FS-13] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-13] definition-of-done checklist has >=7 items
+PASS  [FS-13] DoD covers framework section 7 requirements
+PASS  [FS-13] open-questions/assumptions section populated
+PASS  [FS-13] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-13] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-13] no positive mobile/UI build verbs in scope
+PASS  [FS-14] header table complete (7 template fields)
+PASS  [FS-14] header FS id matches file name
+PASS  [FS-14] phase/wave matches manifest
+PASS  [FS-14] size matches FEATURE-SETS section 1
+PASS  [FS-14] status is a valid lifecycle value
+PASS  [FS-14] all 14 template sections present
+PASS  [FS-14] section headings map to the 14 template sections
+PASS  [FS-14] declares backend-only build scope
+PASS  [FS-14] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-14] provided contracts table matches manifest
+PASS  [FS-14] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-14] header Provides mentions every provided contract
+PASS  [FS-14] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-14] stated catalog-topic count matches coverage disposition count
+PASS  [FS-14] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-14] DATA-MODEL section 21 table count matches spec header (7)
+PASS  [FS-14] section 4 lists every DATA-MODEL-owned table
+PASS  [FS-14] section 4 claims no table owned by another feature set
+PASS  [FS-14] manifest migration ids all present in spec
+PASS  [FS-14] manifest feature flag(s) wired in spec
+PASS  [FS-14] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-14] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-14] cites at least one invariant/rule id
+PASS  [FS-14] API surface section non-empty (>=3 endpoints)
+PASS  [FS-14] API base path /api/v1 declared
+PASS  [FS-14] events table non-empty
+PASS  [FS-14] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-14] events/jobs consumers/components named
+PASS  [FS-14] test plan covers unit layer
+PASS  [FS-14] test plan covers invariant layer
+PASS  [FS-14] test plan covers contract layer
+PASS  [FS-14] test plan covers migration layer
+PASS  [FS-14] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-14] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-14] section 11 includes deploy + evidence + record steps
+PASS  [FS-14] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-14] definition-of-done checklist has >=7 items
+PASS  [FS-14] DoD covers framework section 7 requirements
+PASS  [FS-14] open-questions/assumptions section populated
+PASS  [FS-14] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-14] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-14] no positive mobile/UI build verbs in scope
+PASS  [FS-15] header table complete (7 template fields)
+PASS  [FS-15] header FS id matches file name
+PASS  [FS-15] phase/wave matches manifest
+PASS  [FS-15] size matches FEATURE-SETS section 1
+PASS  [FS-15] status is a valid lifecycle value
+PASS  [FS-15] all 14 template sections present
+PASS  [FS-15] section headings map to the 14 template sections
+PASS  [FS-15] declares backend-only build scope
+PASS  [FS-15] section 3 dependency table matches manifest exactly (id+contract+range)
+PASS  [FS-15] provided contracts table matches manifest
+PASS  [FS-15] header Depends-on summary mentions every dependency set + contract
+PASS  [FS-15] header Provides mentions every provided contract
+PASS  [FS-15] section 1 catalog ids match FEATURE-COVERAGE.json exactly
+PASS  [FS-15] stated catalog-topic count matches coverage disposition count
+PASS  [FS-15] section 1 source URLs are official Oracle NetSuite docs
+PASS  [FS-15] owns 0 base tables and 21 reporting views
+PASS  [FS-15] manifest migration ids all present in spec
+PASS  [FS-15] manifest feature flag(s) wired in spec
+PASS  [FS-15] cited INV-* ids exist in ARCHITECTURE section 7.3
+PASS  [FS-15] cited DM-* rules exist in DATA-MODEL
+PASS  [FS-15] cites at least one invariant/rule id
+PASS  [FS-15] API surface section non-empty (>=3 endpoints)
+PASS  [FS-15] API base path /api/v1 declared
+PASS  [FS-15] events table non-empty
+PASS  [FS-15] jobs table present and non-empty (or explicit 'no jobs')
+PASS  [FS-15] events/jobs consumers/components named
+PASS  [FS-15] test plan covers unit layer
+PASS  [FS-15] test plan covers invariant layer
+PASS  [FS-15] test plan covers contract layer
+PASS  [FS-15] test plan covers migration layer
+PASS  [FS-15] section 11 reproduces ALL manifest entry-gate commands verbatim
+PASS  [FS-15] section 11 reproduces ALL manifest exit-gate commands verbatim
+PASS  [FS-15] section 11 includes deploy + evidence + record steps
+PASS  [FS-15] rollback covers flag-off/additive-migrations/compensation/dependant blocking
+PASS  [FS-15] definition-of-done checklist has >=7 items
+PASS  [FS-15] DoD covers framework section 7 requirements
+PASS  [FS-15] open-questions/assumptions section populated
+PASS  [FS-15] in-scope section contains no UI/mobile/analytics build scope
+PASS  [FS-15] API surface exposes no UI/mobile/analytics endpoints
+PASS  [FS-15] no positive mobile/UI build verbs in scope
+PASS  spec catalog ownership union equals all 769 in-scope topics
+PASS  specs do not claim deferred/excluded topics
+PASS  spec catalog assignment has no duplicated topics (each id in exactly one spec)
+PASS  all 16 feature sets have a spec with substantive content (>=20KB)
+PASS  PLAN generated tables current (render_plan_tables.py --check)
+PASS  PLAN generated feature-set table has 16 rows
+PASS  PLAN feature-set table matches manifest + coverage
+PASS  PLAN totals row: 116 edges / 21 contracts / 769 topics / 277 tables / 21 views
+PASS  PLAN wave table lists 10 waves matching manifest composition
+PASS  PLAN wave 1F composition is FS-12/13/14 (parallel or ordered)
+PASS  PLAN section 3.1 records locked decisions D1-D8 + deltas Delta-1..3
+PASS  PLAN states amended totals (277 base tables / 31 platform tables / INV-01..INV-30)
+PASS  PLAN section 6.1 milestones present
+PASS  PLAN section 7 runbook present with per-FS workflow commands
+PASS  PLAN section 11 environment status table has 16 rows, all environments pending ('—')
+PASS  PLAN section 13 has 8 acceptance items (7 checked + 1 annotated PARTIAL as recommended)
+PASS  PLAN excludes SCM Mobile and interprets the supplied source URL explicitly
+PASS  PLAN source-area table = 194/218/415/376/145 = 1,348 topics
+PASS  README states 16 sets / 10 waves / 1,348 topics / 277 tables (platform 31)
+PASS  README lists a verification report placeholder path
+PASS  all relative markdown links in PLAN/README/specs resolve to existing files
+PASS  PLAN section 4.1 documents the Inventory Workflow cycle for iri-214
+PASS  iri-214 coverage disposition unchanged (FS-04) — narrative cross-set coverage is intended, not a coverage change
+PASS  PLAN section 4.1 posting-type/command references exist in ARCHITECTURE and DATA-MODEL
+PASS  PLAN section 4.1 stage→feature-set/wave references match the manifest
+PASS  D3 fix: PLAN section 7.2 carries the wave-close golden end-to-end step 7 and section 4.1 re-points to it
+PASS  PLAN section 4.1 has no contradiction with ARCHITECTURE section 9 inventory-workflow mapping
+PASS  PLAN section 4.1 stage mapping is consistent with DATA-MODEL posting types and FEATURE-SETS section 7.x / FS-04/08/09/10/11 specs
+PASS  README deliverable-status section consistent with the independent verdict (PASS, 0 BLOCKER/MAJOR)
+PASS  PLAN + README relative links resolve after the section 4.1 delta
+PASS  PLAN environment claims verified: Docker 27+ / Compose v2 / Python 3.12
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+spec matrix: FS-00=118KB/deps=0/tables=31, FS-01=66KB/deps=2/tables=21, FS-02=70KB/deps=3/tables=17, FS-03=62KB/deps=3/tables=4, FS-04=154KB/deps=7/tables=22, FS-05=106KB/deps=6/tables=25, FS-06=40KB/deps=6/tables=3, FS-07=41KB/deps=8/tables=6, FS-08=75KB/deps=9/tables=29, FS-09=99KB/deps=11/tables=35, FS-10=89KB/deps=11/tables=24, FS-11=77KB/deps=11/tables=38, FS-12=43KB/deps=8/tables=10, FS-13=38KB/deps=9/tables=5, FS-14=42KB/deps=5/tables=7, FS-15=46KB/deps=17/tables=0
+--------------------------------------------------------------------------------------------------------------
+AUDIT RESULT: PASS -- 0 findings, 0 check failures (703 checks passed)

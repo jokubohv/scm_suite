@@ -1,0 +1,71 @@
+{
+  "contracts": [
+    {
+      "contract": "consigned.inventory",
+      "depends_on": [
+        "costing.engine",
+        "inventory.ledger",
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "consigned",
+      "events": [
+        {
+          "event": "consigned.adjusted",
+          "schema": "contracts/events/consigned.inventory/consigned.adjusted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.consumed",
+          "schema": "contracts/events/consigned.inventory/consigned.consumed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.guard.rejected",
+          "schema": "contracts/events/consigned.inventory/consigned.guard.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.owned",
+          "schema": "contracts/events/consigned.inventory/consigned.owned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.received",
+          "schema": "contracts/events/consigned.inventory/consigned.received.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.returned",
+          "schema": "contracts/events/consigned.inventory/consigned.returned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.reversed",
+          "schema": "contracts/events/consigned.inventory/consigned.reversed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-13",
+      "fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+      "version": "1.0.0",
+      "wave": "1F"
+    }
+  ],
+  "dir": "consigned",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/consigned/openapi.fragment.json",
+  "feature_set": "FS-13",
+  "fragments": [
+    "contracts/openapi/fragments/FS-13.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1F"
+}

@@ -1,0 +1,55 @@
+{
+  "datasets": [
+    "tenant_settings"
+  ],
+  "records": [
+    {
+      "key": "negative_inventory_policy",
+      "namespace": "inventory",
+      "value": "BLOCK",
+      "value_type": "STRING"
+    },
+    {
+      "key": "rounding_mode",
+      "namespace": "inventory",
+      "value": "PER_MOVEMENT",
+      "value_type": "STRING"
+    },
+    {
+      "key": "multi_location_enabled",
+      "namespace": "inventory",
+      "value": true,
+      "value_type": "BOOL"
+    },
+    {
+      "key": "uom_enabled",
+      "namespace": "inventory",
+      "value": true,
+      "value_type": "BOOL"
+    },
+    {
+      "key": "retention_ledger_years",
+      "namespace": "inventory",
+      "value": 7,
+      "value_type": "NUMBER"
+    },
+    {
+      "key": "sod_enforcement",
+      "namespace": "rbac",
+      "value": "HARD",
+      "value_type": "STRING"
+    },
+    {
+      "key": "local_login_enabled",
+      "namespace": "auth",
+      "value": true,
+      "value_type": "BOOL"
+    },
+    {
+      "key": "approval_definitions_required",
+      "namespace": "policy",
+      "value": true,
+      "value_type": "BOOL"
+    }
+  ]
+}

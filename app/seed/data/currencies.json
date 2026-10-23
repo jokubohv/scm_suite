@@ -1,0 +1,824 @@
+{
+  "datasets": [
+    "currencies"
+  ],
+  "note": "Initial ISO-4217 active set (global SYSTEM_TENANT rows). Extend additively; code PK must stay unique.",
+  "records": [
+    {
+      "code": "USD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 840,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "EUR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 978,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "GBP",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 826,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "JPY",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 392,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "CHF",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 756,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "CAD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 124,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "AUD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 36,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "NZD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 554,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "CNY",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 156,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "HKD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 344,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "SGD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 702,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "INR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 356,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BRL",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 986,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MXN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 484,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "ARS",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 32,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "CLP",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 152,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "COP",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 170,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "PEN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 604,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "UYU",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 858,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BOB",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 68,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "PYG",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 600,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "VES",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 928,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "ZAR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 710,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "NGN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 566,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "KES",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 404,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "GHS",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 936,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "EGP",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 818,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MAD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 504,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "TND",
+      "is_active": true,
+      "minor_units": 3,
+      "numeric_code": 788,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "DZD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 12,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "LYD",
+      "is_active": true,
+      "minor_units": 3,
+      "numeric_code": 434,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "XOF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 952,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "XAF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 950,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "XPF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 953,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "KMF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 174,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "DJF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 262,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "GNF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 324,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BIF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 108,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "RWF",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 646,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "UGX",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 800,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "TZS",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 834,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "ETB",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 230,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MZN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 943,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "ZMW",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 967,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BWP",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 72,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "NAD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 516,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MUR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 480,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MWK",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 454,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "SZL",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 748,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "LSL",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 426,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "AOA",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 973,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "CDF",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 976,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MGA",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 969,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "SCR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 690,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "SEK",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 752,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "NOK",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 578,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "DKK",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 208,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "ISK",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 352,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "PLN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 985,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "CZK",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 203,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "HUF",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 348,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "RON",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 946,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BGN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 975,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "HRK",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 191,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "RSD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 941,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "TRY",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 949,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "ILS",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 376,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "AED",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 784,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "SAR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 682,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "QAR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 634,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "KWD",
+      "is_active": true,
+      "minor_units": 3,
+      "numeric_code": 414,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BHD",
+      "is_active": true,
+      "minor_units": 3,
+      "numeric_code": 48,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "OMR",
+      "is_active": true,
+      "minor_units": 3,
+      "numeric_code": 512,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "JOD",
+      "is_active": true,
+      "minor_units": 3,
+      "numeric_code": 400,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "LBP",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 422,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "IQD",
+      "is_active": true,
+      "minor_units": 3,
+      "numeric_code": 368,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "IRR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 364,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "AFN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 971,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "PKR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 586,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BDT",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 50,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "LKR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 144,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "NPR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 524,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MMK",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 104,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "THB",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 764,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "VND",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 704,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "IDR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 360,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MYR",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 458,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "PHP",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 608,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "TWD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 901,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "KRW",
+      "is_active": true,
+      "minor_units": 0,
+      "numeric_code": 410,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "KZT",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 398,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "UZS",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 860,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "AZN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 944,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "GEL",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 981,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "AMD",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 51,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "BYN",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 933,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "UAH",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 980,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MDL",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 498,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "MNT",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 496,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "KGS",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 417,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "TJS",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 972,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "code": "TMT",
+      "is_active": true,
+      "minor_units": 2,
+      "numeric_code": 934,
+      "owner_feature_set": "FS-00",
+      "tenant_scope": "SYSTEM"
+    }
+  ]
+}

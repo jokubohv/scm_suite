@@ -1,0 +1,1138 @@
+# Manufacturing + Vendors/Purchasing/Receiving + Warehouse Management Feature Catalog
+
+Structured crawl of the official NetSuite help areas for manufacturing, vendor/procurement, and warehouse management. This catalog feeds the executable feature-set plan (it is not the plan itself).
+
+## Sources and coverage
+
+- Manufacturing: <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_1506002637.html>
+- Vendors, Purchasing, and Receiving (help set): <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/set_N2360130.html>
+  - Vendors book: <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2360175.html>
+  - Purchasing and Receiving book: <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2393897.html>
+- Warehouse Management: <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_156356229851.html>
+- Crawl date: 2026-10-21
+- Retrieval: the suite-level table of contents (<https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/toc.htm>) was parsed to enumerate every title/href in the three subtrees; each of the 936 topic pages was then fetched (HTTP 200) to extract its intro sentences; 14 `web_fetch` calls additionally covered the area TOCs and representative chapters (Manufacturing overview/assembly items/work orders, WMS overview/inbound/inventory/outbound, vendor records, purchase contracts). No external links were followed.
+- Coverage: Manufacturing 415/415 TOC topics (1 book + 17 top-level chapters/parts + 109 sections + 288 deeper topics); Vendors, Purchasing, and Receiving 376/376 topics (1 set + 2 books + 18 chapters + 355 deeper topics); Warehouse Management 145/145 topics (1 book + 7 chapters + 36 sections + 101 deeper topics). All 42 chapter/part TOC entries are represented. Depth captured: 2-6 levels (book > chapter > section > article > sub-article).
+- Summaries: 936/936 topics carry a 1-2 sentence intro; 11 pages had no extractable intro paragraph (book/set landing pages, `Vendor Records`, `Requisitions`, `Landed Cost`, WMS shipping workflow chart), so their summaries were synthesized from their first child topics or hand-written from the TOC/page heading.
+- Classified out of scope / not expanded: SCM Mobile book (`book_161557401927`) was never crawled per instructions. Pages that document mobile-device workflows (Manufacturing Mobile suite, WMS mobile app/scanner/cart/tablet procedures) are catalogued and classified `mobile` but not expanded beyond their titles + intro. "General Notices" boilerplate pages are excluded.
+- Gaps: none. 0 HTTP 404s / fetch failures across all 936 topic pages. The only content not captured is article body detail below the intro sentence (not needed for the feature set) and pages outside the three requested help areas.
+
+Counts: **936 topics** (article 256, book 4, chapter 49, faq 2, part 1, section 623, set 1); chapter/section-level summaries are shown in the trees below; deeper topics list title + URL only.
+
+## Manufacturing
+
+Source: <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_1506002637.html>
+
+*Manufacturing help book: assembly items and BOMs, work orders, WIP, routing, scheduling, outsourced manufacturing, engineering change orders, and Manufacturing Mobile.*
+
+- **Manufacturing Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1506100009.html> — *Manufacturing processes help organizations create finished goods from raw or semi-finished materials using some combination of labor and machinery. Finished goods are then sold, at a profit, to other manufacturers, wholesalers, or retailer…*
+- **Assembly Items** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2319010.html> — *An assembly item is an inventory item made up of several components, but identified as a single item. Assemblies are manufactured by combining raw materials that you stock.*
+  - **Enabling Assembly Items** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2319428.html> — *Before you can create and use assembly items, an administrator must enable the Assembly Items and Inventory features. Go to Setup > Company > Setup Tasks > Enable Features (Administrator).*
+  - **Assembly Item Records** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2319594.html> — *You can create an assembly item record to track each assembly and its component items. The assembly record details member items and the quantity of each member required for each assembly. For more information, see Building Assembly Items.*
+  - **Assemblies on Purchase Transactions, Web Sites, and Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161487042976.html> — *NetSuite lets you make assembly items available in other product areas. To make assemblies available to purchase transactions, go to Setup > Accounting > Preferences > Accounting Preferences. On the Order Management subtab, check the Allow…*
+  - **Matrix Assemblies** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4249789892.html> — *To use Matrix Assemblies, an administrator must enable the Matrix Items feature. With the Assembly Items and Matrix Items features, you can create assembly item records that contain matrix options. These options help improve assembly item…*
+    - Creating Matrix Assembly Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4249901059.html>
+    - Updating Matrix Assembly Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4250673263.html>
+    - Matrix Assemblies on Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4250688519.html>
+  - **Phantom Assemblies** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4714298883.html> — *A phantom assembly is typically a non-stocked assembly that groups the components needed to produce a subassembly. For example, compare a phantom assembly to folders on a computer. The folder represents the phantom and the individual files…*
+    - Creating a Phantom Assembly — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161486914160.html>
+    - Phantom Bill of Materials on Assembly and Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4714322165.html>
+    - Phantoms with Manufacturing Routing and Demand Planning — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4724775678.html>
+  - **Assemblies and Units of Measure** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2320172.html> — *To identify units of measure on assembly item records, the Multiple Units of Measure and the Assembly Items features must be enabled. After you select a basic unit type on an assembly record you can define a default unit for the item on a…*
+  - **Building Assembly Items** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2321340.html> — *Each time you physically manufacture assemblies in a production run, you increase your stock of the assembled items. Record each production run and update stock levels by entering an assembly build record.*
+  - **Unbuilding Assembly Items** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2321882.html> — *After you complete an inventory build, you may need to unbuild some assemblies. For example, Wolfe Manufacturing receives an order for one hundred mountain bikes. When building the bicycles, the customer cancels the order. Wolfe unbuilds t…*
+    - Unbuilding an Assembly from the Assembly Build Transaction — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161494911575.html>
+    - Unbuilding as Assembly From a New Unbuild Transaction — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161495064459.html>
+    - Assembly Unbuild Variance Posting — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161495038125.html>
+    - Assembly Unbuilds and the Adjust Inventory Worksheet — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161495027719.html>
+    - Unbuilding Assemblies and Purchased Assembly Costing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161495292660.html>
+      - Entering an Inventory Adjustment Before the Unbuild — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_161520832743.html>
+      - Entering an Inventory Adjustment Rather Than an Assembly Unbuild — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_161520846793.html>
+  - **Editing an Assembly Build or Unbuild Transaction** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0210042848.html> — *You can update details of an assembly build or unbuild transaction in response to changes in your production process as well as find information about those transactions.*
+  - **Marking Work Orders Built** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2322811.html> — *NetSuite enables you to show work order items as assembled without completing all the steps. When you mark an order as built, the required items are marked built and added to inventory.*
+    - Marking Work Orders Closed — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2323037.html>
+  - **Printing an Item Bill of Materials** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2323540.html> — *A Bill of Materials (BOM) lists all the components of your assembly item, the assembly quantity, and the total quantity for each. If one of the components of your assembly item is an assembly item, each item subcomponent appears. Each subc…*
+  - **Bill of Materials Inquiry** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2324073.html> — *If you use Assembly Items, the Bill of Materials (BOM) Inquiry enables you to see the build requirements for an assembly item. The BOM Inquiry displays the member components of the assembly, and the number of each component needed for each…*
+    - Costed Bill of Materials Inquiry — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3721110359.html>
+  - **Costed Bill of Materials** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160730538.html> — *The Costed Bill of Materials SuiteApp calculates the total cost of an assembly based on a bill of materials revision, manufacturing routing, and cost templates used. The cost is calculated by adding up the costs of the components.*
+    - Installing Costed Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425052001.html>
+      - Prerequisites for Installing Costed Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425052049.html>
+      - Creating or Customizing Roles and Permissions to Use Costed Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425052150.html>
+        - Enabling Manufacturing Routing And Work Center Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425052304.html>
+        - Enabling Multiple Currency Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425052333.html>
+    - Supported Browsers for Costed Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425051930.html>
+    - Creating Costed Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425051834.html>
+    - Material Costs Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425051746.html>
+    - Top Level Costs Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425051557.html>
+    - Fully Exploded Costs Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0425051455.html>
+    - Cost Types for Material Cost Calculation — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0614023928.html>
+      - Per Costing Method — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0614024050.html>
+      - Per Purchase Price — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0614024111.html>
+      - Per Item Default — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0614024121.html>
+    - Conversion Cost Calculations for Top Level Costs and Fully Exploded Costs Subtabs — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0614023841.html>
+  - **Cost Variance Analysis** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9110926175.html> — *The Cost Variance Analysis SuiteApp analyzes the variances that happen while you're running work orders. These variances are associated with quantity and cost between the planned values for the work order and the actual values recorded aga…*
+    - Installing Cost Variance Analysis — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510093158.html>
+      - Prerequisites for Installing Cost Variance Analysis — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510093328.html>
+      - Creating or Customizing Roles and Permissions to Use Cost Variance Analysis — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510093623.html>
+      - Supported Browsers for Cost Variance Analysis — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510100406.html>
+    - Creating Cost Variance Analysis — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510100735.html>
+    - Work Order Summary Section — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510102938.html>
+    - Summary Section — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510104757.html>
+      - Cost Category Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510112208.html>
+      - Component Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510112706.html>
+      - Conversion Costs Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0510120738.html>
+  - **Printing Assembly Item Materials on Transactions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2324339.html> — *You can print all the members of an assembly item, including display names, quantities, descriptions, and rates on an invoice or other transaction form. Alternatively, you can print only the description and amount of the assembly item on t…*
+  - **Printing Assembly Labels** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2324547.html> — *The following procedure describes how to print labels for assembly member items and the assembly item. Go to Transactions > Management > Print Checks and Forms.*
+  - **Running the Component Where Used Inquiry** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1511882961.html> — *The Component Where Used Inquiry enables you to view where components are used in assembly items, including parent assembly and sub-assembly items.*
+- **Assembly Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2328390.html> — *When you enable the Work Orders feature, you can use assembly work orders for your assembly items. Assembly work orders track the production of assembly items needed for stock, or to fill orders. Work orders track the quantities of assembl…*
+  - **Two Types of Assembly Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161538863125.html> — *There are two types of assembly work orders you can use: Special order work orders track assemblies to be built for a particular sale. The work order can be linked to the originating sale.*
+  - **Enabling the Work Orders Feature** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538373436.html> — *An administrator can use the following procedure to enable the Work Orders feature. In the Inventory section, check the Work Orders box.*
+  - **Entering an Individual Work Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2329173.html> — *Enter work orders to track the production of assembly items needed for stock or to fill open orders. A work order is considered a non-posting transaction.*
+    - Entering a Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538823664.html>
+    - Actual Production Start or End Dates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157832628099.html>
+      - Overriding Actual Production Dates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538805149.html>
+      - Disabling Actual Production Dates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538802076.html>
+    - Adding Custom Fields to Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538457253.html>
+  - **Mass Creating Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2330082.html> — *You enter work orders to track the production of assembly items needed either for stock or to fill orders. The work order lists the members, or components, of the assembly item to be built. A work order is a non-posting transaction.*
+  - **Marking Assemblies to Create Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2330700.html> — *When you use the Work Orders feature, you can create work orders for assembly items from sales orders. You can mark items to create work orders in two ways. You can mark the item when you create the sales order, or you can mark the item re…*
+    - Creating Work Orders From a Sales Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538656149.html>
+    - Creating Work Orders From Item Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538684793.html>
+  - **Planned Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3872474232.html> — *You can enter work orders that have a status of Planned. A planned work order operates as follows: doesn't commit items until the work order is released…*
+    - Manually Entering Planned Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538623291.html>
+    - Automatically Generating Planned Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538619446.html>
+    - Marking Work Orders Firmed — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538611138.html>
+    - Marking Work Orders Released — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538605076.html>
+  - **Component Yield Preferences** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3727093231.html> — *Assembly Component preferences can help you with component requirement calculations. To use these component preferences, enable the Work Orders feature and adjust your item records settings that are available on the following:*
+    - Setting the Use Component Yield Preference — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538552887.html>
+    - Setting the Round Up Quantity as Component Preference — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538564488.html>
+    - Component Yield Examples — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161538576470.html>
+  - **Editing a Work Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2331050.html> — *You can update details of a work order in response to changes in your production process as well as find information about a work order. To learn information about a Work Order, go to Transactions > Manufacturing > Enter Work Orders > List.*
+  - **Reopening a Closed non-WIP Work Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0120045923.html> — *If you accidentally closed a non-WIP work order, you can reopen it using one of the following methods: Selecting the new Reopen action in the Actions menu on the Work Order page.*
+  - **Class and Department Fields on Manufacturing Transaction Lines** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0114111428.html> — *If you enable classifications such as departments and classes, a field for each classification shows in the header of transaction forms. You can also use per-line classifications to select a different classification on each transaction lin…*
+  - **Printing a Work Order Bill of Materials** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2331127.html> — *For work orders you have entered, you can print a Bill of Materials (BOM). The BOM shows the types and quantities of items you need to complete the work order.*
+  - **Appending a PDF File to Print with the Bill of Materials** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2331613.html> — *If you print your bills of materials (BOM) in PDF format, you can append the PDF file to print additional materials with the BOM. These additional materials are for use when picking and assembling the item. For example, you can print a dia…*
+  - **Building Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2331860.html> — *To close a work order, you must complete a build that assembles the necessary items. Go to Transactions > Manufacturing > Build Work Orders.*
+  - **Voiding Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0312032232.html> — *To void a work order, disable the Void Transactions Using Reversing Journals preference (for more information, see Void Transactions Using Reversing Journals Preference).*
+  - **Work Orders and Demand Planning** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2332170.html> — *When you use the Work Orders and Demand Planning features, you can create work orders to replenish stock, based on demand for assembly items. These work orders use information from item records to calculate lead times for orders.*
+- **Production Control Board** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_2013601906.html> — *The Production Control Board lets you review key work order information in one place. You can monitor production progress, identify work orders that need attention, and take available actions from one page.*
+- **Supply 360** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_6162726284.html> — *The Supply 360 SuiteApp analyzes component shortages across work orders based on the selected location and date filters. You can also view planned supplies of any shortage component.*
+  - **Installing Supply 360 SuiteApp** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704050009.html> — *The Supply 360 SuiteApp requires a NetSuite OneWorld account. Only users with Administrator role can install the SuiteApp. For more information about installing a SuiteApp, see Installing from the SuiteApp Marketplace and SuiteApp Marketpl…*
+    - Prerequisites for Installing Supply 360 — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704050204.html>
+    - Creating or Customizing Roles and Permissions to Use Supply 360 — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704050411.html>
+    - Supported Browsers for Supply 360 — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704051003.html>
+  - **Supply 360 Overview Subtab** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704051655.html> — *The Overview subtab is the default page the SuiteApp takes you to. This subtab shows the total number of work orders, components, and assemblies with insufficient inventory, along with related alerts.*
+  - **Shortages by Work Order Subtab** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704052722.html> — *The Shortages by Work Order subtab shows a list of work orders and their related assemblies that has potential shortages. The results are based on the dates chosen in the Date Range field. You can modify the date range based on your busine…*
+  - **Shortages by Component Subtab** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704061124.html> — *The Shortages by Component subtab shows a list of components used in multiple work orders that might have shortages. The results are based on the dates you enter in the Date Range filter. Components with back ordered quantity greater than…*
+  - **All Components Requirements Subtab** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0704063533.html> — *The All Components Requirements subtab displays the list of all components used in work orders. The results are displayed based on the dates you provide in the Date Range field. These results can also be filtered based on the component.*
+- **Available To Build** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_7162547625.html> — *The Available To Build (ATB) SuiteApp helps manufacturers see how many assemblies and kits they can make with their current on-hand inventory. The SuiteApp evaluates based on end assembly and sub-assembly component inventory, helping manuf…*
+  - **Installing Available to Build SuiteApp** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0912030009.html> — *The Available to Build SuiteApp requires a NetSuite OneWorld account. Only users with Administrator role can install the SuiteApp. For more information about installing a SuiteApp, see the help topics Installing from the SuiteApp Marketpla…*
+    - Prerequisites for Installing Available to Build — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0912030329.html>
+    - Creating or Customizing Roles and Permissions to Use Available to Build SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0912062232.html>
+    - Supported Browsers for Available to Build — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0912064522.html>
+  - **General Preferences for Available to Build** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0912065402.html> — *You can manage on how you want to view the Available to Build values from the Custom Preferences subtab. The General subtab is found under Setup > Company > General Preferences > Custom Preferences subtab.*
+  - **Available to Build Calculation** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0915091826.html> — *The following graphic provides a use case on how available to build is calculated: For each component at each level, the quantity required is 1.*
+  - **Calculating Available to Build on Sales Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0915093710.html> — *The ATB details for assembly items and kits are shown on the Sales Order page. You can calculate ATB for an assembly item or kit at top level or all levels. On the Sales Order page, under Item subtab, select the items for which you want to…*
+  - **Viewing Available to Build on Item 360 SuiteApp Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0915094459.html> — *You'll see ATB details for assembly items and kits in the Item 360 SuiteApp dashboard portlets. The Manufacturing and Sales page of the Item 360 dashboard are enabled with the Available to Build portlet.*
+  - **Using Available to Build Without Advanced Bill of Materials** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0915094856.html> — *If the Advanced Bill of Materials feature is disabled, the sublevel items of an assembly item are not considered when calculating ATB. In this scenario, the ATB value for an assembly item is calculated from the on-hand quantity. For more i…*
+  - **Available To Build Glossary** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0916043023.html> — *The All levels approach considers the entire BOM hierarchy including sub-assemblies and their respective components. The ATB value is calculated at all levels by considering both immediate components and multilevel components, including su…*
+- **Advanced Bill of Materials** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1501506444.html> — *A Bill of Materials (BOM) lists the quantities of raw materials, assemblies, sub-components, and parts you need to manufacture a product. A BOM can be used to communicate between manufacturing partners, multiple facilities within the organ…*
+  - **Enabling Advanced BOM** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1497967586.html> — *An administrator must use the following procedure to enable the Advanced Bill of Materials (BOM) feature. Bill of Materials impacts many areas within NetSuite. Before making Advanced BOM available to your organization, test it in your sand…*
+    - Viewing Legacy BOM Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161555455410.html>
+    - Enabling Legacy BOM Editing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161555507442.html>
+  - **Create a BOM** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1497967801.html> — *You can create a BOM using one of the following methods:*
+    - Creating a New BOM Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161555549809.html>
+    - Creating a BOM From an Assembly — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161555568117.html>
+    - Copying a BOM Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1498745960.html>
+    - Default BOM Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1499190407.html>
+  - **Creating BOM Revisions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1497970924.html> — *A BOM revision let you update a BOM's details throughout the product lifecycle. A BOM revision also provides an accessible revisions history. Use revisions to compare and track cost savings when many BOM revisions are used in production.*
+    - Copying BOM Revisions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1498746224.html>
+    - Updating BOM Revision Record Dates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1518447156.html>
+    - Customizing the BOM Revision Component Sublist — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1518448995.html>
+  - **Linking Assemblies and BOMs** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161581308634.html> — *After you create BOM records and revisions, you can link them to individual assemblies. You can also link BOM records to multiple assemblies. For more information, see Linking a BOM to an Assembly and Linking Assemblies to BOM Records.*
+    - Linking a BOM to an Assembly — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1517860901.html>
+    - Linking Assemblies to BOM Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1518448516.html>
+  - **Creating a Manufacturing Routing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1498757185.html> — *In Advanced BOM, routings are associated with a Bill of Materials. This association enables you to define default routings for multiple BOMs.*
+    - Copying a Manufacturing Routing Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1518444493.html>
+  - **Running a BOM Inquiry** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1498757236.html> — *A Bill of Materials Inquiry enables you to review the build requirements for an assembly item. The BOM displays the assembly components and the number of each component needed for each assembly.*
+    - Costed Bill of Materials Inquiry — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1498763833.html>
+  - **Matrix Items** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1498757253.html> — *Matrix items consist of multiple combinations of product styles and variations with their respective bill of materials and routings. During production, matrix assemblies can be created using work orders and assembly builds.*
+- **Bill of Materials Member Control for Assembly Items** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2332509.html> — *BOM controls ensure builds include the right component revisions inside effective dates; covers revision control on assemblies and revision records for BOM control.*
+  - **Setting Up BOM Control on Assembly Item Records** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2334154.html> — *With the release of NetSuite 2023.1 Bills of Materials, where components are embedded to an Assembly Item, will no longer be supported. Only business critical issues will be fixed. To continue working with this functionality you should tra…*
+    - Using Effective Date BOM Management — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161589846245.html>
+    - Revision Control BOM Management — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2334515.html>
+  - **Setting an Assembly to Use Revision Control** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2334812.html> — *With the release of NetSuite 2023.1 Bills of Materials, where components are embedded to an Assembly Item, will no longer be supported. Only business critical issues will be fixed. To continue working with this functionality you should tra…*
+  - **Creating Revision Records for BOM Control** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2335150.html> — *With the release of NetSuite 2023.1 Bills of Materials, where components are embedded to an Assembly Item, will no longer be supported. Only business critical issues will be fixed. To continue working with this functionality you should tra…*
+- **Manufacturing Work In Process (WIP)** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2335392.html> — *Manufacturers often use work orders to assemble the materials needed to produce an item. Manufacturing Work In Process lets manufactures track work orders through the production process, from gathering materials, through shop floor assembl…*
+  - **Enabling the WIP Feature** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2335702.html> — *Before you can work with Manufacturing Work in Process (WIP), you must also enable Assemblies and Work Orders. For more information, see Enabling Assembly Items and Assembly Work Orders.*
+  - **Setting Default WIP Accounts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161607056275.html> — *NetSuite WIP enables you to set default preferences for new item records. To set preferences, , and then Go to Setup > Accounting > Accounting Preferences.*
+  - **Setting Up Items as WIP Assemblies** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2335987.html> — *After your administrator enables the Manufacturing Work In Process (WIP) feature, you can set up assembly items to use WIP. Click Edit next to the existing assembly item record.*
+  - **Using WIP on Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2337938.html> — *The following procedure provides instructions for using WIP on work orders. Go to Transactions > Manufacturing > Enter Work Orders.*
+    - Entering Work Order Issues — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2338862.html>
+      - Issuing Components for an Individual Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161607524041.html>
+    - Entering Work Order Completions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2339352.html>
+    - Entering Work Order Closes — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2340152.html>
+      - Entering a Close for an Individual Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161607541480.html>
+  - **Associating Components with Operations** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4165324435.html> — *Use the Manufacturing Work In Process (WIP) feature to assign and issue components at the operation level for items you assemble. Associating components with specific operations can benefit operations that take a long time to complete. Som…*
+  - **Entering a Completion for an Individual Work Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2339540.html> — *You can enter a completion for a single work order. Go to Transactions > Manufacturing > Enter Work Orders > List.*
+    - Entering a Completion With Backflush — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161607563571.html>
+  - **WIP and Inventory Costing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2340709.html> — *Only assemblies using standard cost and average cost are compatible with the Manufacturing Work In Process (WIP) feature. Assembly component members can use LIFO/FIFO, standard, average, or actual costing. Assemblies using LIFO/FIFO/specif…*
+- **Manufacturing Routing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2341076.html> — *Manufacturing Routing and Work Center lets you schedule and record manufacturing operational activities against a work order that requires multiple employees, or work centers. For example, you may have a set of operations for the following:*
+  - **Setting Up Manufacturing Routing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2341463.html> — *To enable the feature, see Enabling the Manufacturing Routing Feature. To set preferences, see Setting Routing Preferences.*
+    - Enabling the Manufacturing Routing Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2341773.html>
+    - Setting Routing Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3950900044.html>
+    - Defining Cost Categories for Manufacturing Routing and Work Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2342063.html>
+    - Defining a Manufacturing Charge Item — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2343650.html>
+    - Creating Manufacturing Cost Templates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2344013.html>
+    - Updating Costs for Manufacturing Charges — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0407024030.html>
+    - Creating Manufacturing Work Centers or Groups — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2344727.html>
+  - **Work Center Calendars** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3911875603.html> — *For each work center, you can create a need-specific work calendar that represents the times the center is available to process work orders. Specified work center calendars enable you to manufacture products efficiently within time and res…*
+    - Setting Up a Work Center Calendar — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_161650519089.html>
+    - Assigning a Work Calendar to a Work Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_161650530183.html>
+  - **Creating a Manufacturing Routing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2345383.html> — *A manufacturing routing is a template that contains a list of steps required to build an assembly item. Each step is in the order necessary to complete the operational sequence for completing the assembly.*
+    - Standard Costing for Manufacturing Routing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2345796.html>
+  - **Manufacturing Routing and Work Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2346224.html> — *If you use manufacturing routing and work centers, you can use routings on work orders to manage your assembly process. The routing you use on a work order is a template that describes the required steps to build an assembly item. The rout…*
+  - **Manufacturing Operation Tasks** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2346668.html> — *After you save a WIP work order that has a designated routing, manufacturing operation tasks are created based on the routing. Each of these tasks is a step that must be done for the assembly process to finish. After work for the task has…*
+    - Operations Overlap — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4048453519.html>
+    - Manufacturing Operation Task — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2347042.html>
+    - Work Centers and Manufacturing Operations Tasks — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2349668.html>
+  - **Rough-Cut Capacity Planning** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0707031656.html> — *Rough-Cut Capacity Planning (RCCP) helps manufacturing planners compare the capacity available at manufacturing work centers with the capacity required by work orders and planned work orders. RCCP provides a mid- to long-term view of criti…*
+  - **Supply Planning and Routing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2349847.html> — *If you use the Demand Planning and Manufacturing Routing and Work Center features, routings on work orders can affect your supply planning. This is because supply planning uses backwards scheduling to meet manufacturing due dates.*
+  - **Production Scheduling Methods Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4000988757.html> — *When you use the Routing and Demand Planning features to generate supply work orders, you choose the method NetSuite uses to calculate production requirements. These calculations assess the time, materials, and resources required to comple…*
+    - Setting a Default Scheduling Method — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4001087864.html>
+    - Backward Scheduling — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4001085919.html>
+  - **Manufacturing Routing Completions and Time Entry** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2350143.html> — *For work orders that use manufacturing routings, enter time and completions against the operation tasks to track assembly process and monitor scheduling and costs. The following help topics provide details about completions and time entry:*
+    - Routing Work Order Completions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2350305.html>
+      - Enter a Completion from a Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_N2350408.html>
+      - Enter a Completion on a Task Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_N2350561.html>
+      - Completion Validation Preference — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161658811663.html>
+    - Routing Completion Labor and Machine Time Entry — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2350729.html>
+    - Time and Status Updates on Tasks — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2351146.html>
+  - **Manufacturing Routing Costing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2351557.html> — *Values for assets and expenses associated with a routing work order post to the designated Work In Process (WIP) account during the assembly process.*
+  - **Work Instructions and Traveler** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9135201182.html> — *Work Instructions and Traveler SuiteApp helps you to generate traveler reports of required work orders. Using these reports, the shop floor personnel can perform day to day assembly operations. Each report includes details like required co…*
+    - Installing Work Instructions and Traveler SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620050950.html>
+      - Prerequisites for Installing Work Instructions and Traveler SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620054650.html>
+      - Supported Browsers for Work Instructions and Traveler SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620054733.html>
+      - Setting Up Work Instructions and Traveler SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0705104737.html>
+        - Verifying the Custom Form of Work Instructions Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0705105231.html>
+        - Creating or Customizing Roles and Permissions to Use Work Instructions and Traveler SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0705105521.html>
+    - Updating Traveler Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620054852.html>
+      - Creating Custom Template for Traveler Report — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620072542.html>
+    - Providing Work Instructions Subtab in Manufacturing Routing Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620083301.html>
+      - Providing Additional Work Instructions in Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0117112230.html>
+      - Import Work Instructions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0621094031.html>
+    - Generating Traveler Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620092553.html>
+      - Printing Traveler Report in Work Order Transaction — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620093526.html>
+- **Manufacturing Scheduler** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_5212015722.html> — *The Manufacturing Scheduler SuiteApp offers a graphical interface, enabling you to efficiently oversee and manage operational tasks assigned to a work center. This SuiteApp facilitates production planners and operations managers with real-…*
+  - **Installing Manufacturing Scheduler** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223101646.html> — *The Manufacturing Scheduler SuiteApp requires a NetSuite OneWorld account. Only users with the Administrator role can install the SuiteApp. For more information about installing a SuiteApp, see Installing from the SuiteApp Marketplace and…*
+  - **Prerequisites for Installing Manufacturing Scheduler** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223102730.html> — *To use the Manufacturing Scheduler SuiteApp, enable the features in the following table. For more information, see Enabling Features. You cannot install the SuiteApp if any of the following roles are inactive.*
+  - **Creating or Customizing Roles and Permissions to Use Manufacturing Scheduler** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223104112.html> — *If you are an administrator, you can create new roles or customize roles for using the Manufacturing Scheduler SuiteApp. For more information, see Assigning Roles to an Employee and Customizing or Creating NetSuite Roles.*
+  - **Supported Browsers for Manufacturing Scheduler** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223113914.html> — *The Manufacturing Scheduler SuiteApp supports the following browsers and operating systems:*
+  - **Manufacturing Scheduler Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223104719.html> — *The Manufacturing Scheduler page provides work order data associated with a work center presented in a chart. You can track the current status of manufacturing operations that are mapped to a work order. Each operation status is shown, fol…*
+  - **Operation View** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224045245.html> — *The default operation view displays all work orders with either of these statuses: In Process or Released. It also shows the work centers linked to the subsidiary of the currently logged-in user. Use the default view or create a custom vie…*
+  - **Time Periods** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224052321.html> — *On the Manufacturing Scheduler page, you can view manufacturing operations for different time periods, such as Daily, Weekly, and Monthly. Click any of these period options to change the current chart view. Changing the time period adjusts…*
+  - **Manage Work Center and Work Order Operations** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0304025448.html> — *On the Manufacturing Scheduler page, you can view the list of work centers or work orders through work views. Based on the selected work view, the left pane shows the operations mapped under that view. By default, the left pane displays th…*
+  - **Searching for Work Centers** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224062013.html> — *In the Work Center view, use the search field to search for a work center that does not appear on the current page. On the Manufacturing Scheduler page > Work Center view, in the search field, enter minimum of three characters of a work ce…*
+  - **Understanding Legend Colors** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224113953.html> — *The color of the task bar indicates the current status of an operation as seen in its operation task record. The bar updates automatically to reflect any status changes based on the work order and task statuses. The legend bar provides the…*
+- **Outsourced Manufacturing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_157833700001.html> — *Outsourced Manufacturing helps customers manage their subcontracted manufacturing processes by purchasing outsourced assembly production from vendors. This feature enables NetSuite to automatically consume production components and transfe…*
+  - **Setting up Outsourced Manufacturing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157833742278.html> — *Before the Outsourced Manufacturing feature can be enabled, an administrator must enable prerequisite features, if they are not already enabled. After the prerequisite features are enabled, an administrator can then enable Outsource Manufa…*
+    - Configuring Outsourced Manufacturing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157833761244.html>
+    - Creating an Outsourced Manufacturing Item — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157833855885.html>
+  - **Outsourcing Production** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157833959430.html> — *NetSuite enables customers to outsource their manufacturing efforts to vendors. Customers can outsource from either a purchase order or from a work order.*
+    - The Assembly Build Helper — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157834029593.html>
+    - Outsourcing Production from a Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157834068556.html>
+      - Outsourced Manufacturing Consolidator — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_161183731844.html>
+- **Manufacturing Preferences Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_159112534056.html> — *Manufacturing preferences control default build behavior such as component commit options, WIP, backflush, component yield/rounding and which transactions feed demand calculations.*
+  - **Manufacturing Preferences** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159112709448.html> — *To set manufacturing preferences, use the following procedure. Go to Setup > Manufacturing > Manufacturing Preferences.*
+- **SuiteAnalytics Manufacturing Workbook** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1549896702.html> — *SuiteAnalytics Workbook offers many workbook and dataset templates, each with predefined source data, criteria, pivot tables, and charts. This chapter contains the information for the SuiteAnalytics Manufacturing workbook in NetSuite. For…*
+  - **Manufacturing Dataset** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1552910961.html> — *This Manufacturing dataset combines fields from the Manufacturing Transaction record type and one custom formula. This dataset enables you to analyze the status of bills received during the last month. It forms the source data for the Manu…*
+  - **Manufacturing Workbook** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1549896896.html> — *NetSuite provides a Manufacturing Transaction data source, which introduces the analytics transactions concept for manufacturing-specific transactions. The following transaction record types are available in the Manufacturing Transaction d…*
+    - Manufacturing Transaction — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161676405745.html>
+    - Creating a Manufacturing Workbook — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161676395230.html>
+  - **Manufacturing Analytical Record Types** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_160802696279.html> — *The Manufacturing workbook offers two analytical record types:*
+    - Manufacturing Transaction Analytical Record Type — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_160588044297.html>
+    - Manufacturing Component Analytical Record Type — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_160612742532.html>
+- **Advanced Manufacturing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/preface_1506521222.html> — *SuiteApp extending manufacturing routing into an Advanced Manufacturing Work Bench: work centers/work benches, travelers, capacity planning, finite/infinite scheduling and shop-floor data collection.*
+  - **Advanced Manufacturing Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1506368304.html> — *The Advanced Manufacturing SuiteApp extends your NetSuite manufacturing routing into the Advanced Manufacturing Work Bench. This connection enables manufacturers to define work instructions, associate material usage, compare resource suppl…*
+  - **Configuring Advanced Manufacturing Prerequisites** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491500607.html> — *Your NetSuite Professional Services Consultant works with your administrator to set up and configure the Advanced Manufacturing SuiteApp to leverage important NetSuite data.*
+    - Advanced Manufacturing Best Practices — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0825025531.html>
+    - Enabling Prerequisite Features and Setting Accounting Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508351408.html>
+    - Prerequisite Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508351491.html>
+    - Configuring CSV File Uploads For Advanced Manufacturing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508331837.html>
+  - **Defining Administration Settings** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491500827.html> — *After prerequisite features and preferences are enabled, in Advanced Manufacturing SuiteApp Administration Settings, define how your employees interact with Advanced Manufacturing.*
+    - Creating Advanced Manufacturing Administration Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508351656.html>
+    - Adding Work Order Management Images — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508351711.html>
+    - Configuring Work Order Completion Settings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508351779.html>
+    - Assigning Work Center Assets to Work Bench Records in Mass — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508336234.html>
+    - Enabling Work Bench Validation — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508351935.html>
+    - Setting Language Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1543591052.html>
+    - Mobile Devices — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1494011284.html>
+      - Tablets — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789181492.html>
+        - Creating a Tablet Data Configuration Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789193998.html>
+        - Assigning a Tablet Role to an Employee — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789200196.html>
+          - Enabling Express Production — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789150744.html>
+      - Scanners — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789223254.html>
+        - Setting Up the Scanner URL — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789259077.html>
+        - Setting Up Employees for Scanners — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789274813.html>
+        - Configuring a Scanner Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789287363.html>
+        - Assigning an Employee Data Scanner Access — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789303397.html>
+      - Enabling LPN Action — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161789125030.html>
+    - Setting Up Conventional Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1542658554.html>
+  - **Configuring Assemblies and Routings** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1497874223.html> — *A manufacturing routing is a list of steps required to build an assembly item. Advanced Manufacturing refers to NetSuite routings to determine the work center, cost template, labor resources, and machine resources required in the manufactu…*
+    - Creating an Advanced Manufacturing Location — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508336969.html>
+    - Creating an Advanced Manufacturing Work Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508337023.html>
+      - Editing an Advanced Manufacturing Work Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_163900441626.html>
+      - Completing the Assets Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_163900102490.html>
+      - Completing the Shop Calendar Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_163900089875.html>
+      - Completing the RCP Parameters Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_163900093736.html>
+    - Creating Manufacturing Work Benches — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508337105.html>
+      - Completing the Planning Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161832191658.html>
+      - Completing the Assets Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161832216512.html>
+      - Completing the Labor Requirement Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161832225448.html>
+      - Completing the Work Instructions Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161832222654.html>
+      - Completing the Quality / Inspection Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161832271099.html>
+    - Conventional Work Order Plug-ins — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1542983918.html>
+      - Assembly Item Plug-ins — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_163891507558.html>
+      - Bill of Materials (BOM) Item Plug-ins — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_163891557075.html>
+  - **Creating Advanced Manufacturing Records** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1494532830.html> — *Advanced Manufacturing records collect shop floor data to help managers and planners review how efficient the manufacturing process is. Then, they can decide if they need to make changes to improve the process.*
+    - Creating Downtime Categories and Reasons — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508337293.html>
+    - Creating Material Loss Categories and Reasons — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508337355.html>
+    - Creating Labor Codes — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508337404.html>
+    - Creating Travelers — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508337467.html>
+      - Defining Traveler Bar Code Size — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161840365654.html>
+      - Verifying Traveler Generation Errors — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161840377122.html>
+      - Increasing Traveler Parameter Settings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161840409310.html>
+  - **Production Planning** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491580253.html> — *Production planning enables companies to optimize their manufacturing processes through the efficient use of available resources. The Advanced Manufacturing SuiteApp lets planners create capacity plans that capture and analyze an organizat…*
+    - Creating Rough Cut Capacity Planning — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338018.html>
+      - Adding Planned Demand Details — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161901753237.html>
+      - Adding or Editing Resource Supply Details — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161901761642.html>
+    - Creating Capacity Planning Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338128.html>
+    - Scheduling Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338167.html>
+  - **Scheduling Production** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491579770.html> — *Production scheduling enables you to arrange, control, and optimize production or manufacturing workloads over a fixed period of time. Scheduling allocates machine resources to efficiently finish work orders based on a FIFO sequence set up…*
+    - Infinite Capacity Scheduling — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338236.html>
+    - Finite Scheduling — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338278.html>
+    - Releasing Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338324.html>
+      - Reviewing and Editing Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161952890818.html>
+  - **Managing the Shop Floor** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491580781.html> — *Shop floor management prioritizes, tracks, and reports against production orders and schedules. This management activity includes evaluating current resources, labor and machine use, and other relevant details where work happens.*
+    - Working With Shop Floor Travelers — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918227316.html>
+      - Generating a Work Order Traveler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918382761.html>
+      - Printing a Work Order Traveler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918370301.html>
+      - Searching For a Work Order Traveler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918357994.html>
+      - Viewing a Work Order Traveler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918349811.html>
+    - Viewing Documents — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918284624.html>
+  - **Collecting Data** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491586236.html> — *Use the Advanced Manufacturing SuiteApp to record and collect tactical data. This information can help an organization review and adjust their manufacturing and production processes.*
+    - Tracking Production Results — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161892639389.html>
+    - Recording Material Loss — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161892657736.html>
+    - Recording Downtime — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161892668069.html>
+    - Recording Labor — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161892677403.html>
+    - Using the Scanner to Enter Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1508353591.html>
+      - Manufacturing Action — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338895.html>
+        - Initiating a Manufacturing Action — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161892889118.html>
+          - Record Production — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338947.html>
+          - Record Downtime — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508338999.html>
+          - Record Loss (Scrap) — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339043.html>
+          - Record Labor — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339066.html>
+          - Issue Material — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339094.html>
+          - End Job — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339121.html>
+      - Inventory Action — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339151.html>
+        - Receiving a Purchase Order Using a Scanner — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339186.html>
+        - Receiving Lot Controlled Purchase Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339222.html>
+        - Transferring Non-Controlled Bins — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339266.html>
+        - Transferring Lot Controlled Bins — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339305.html>
+      - Shipping Action — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339373.html>
+        - Entering Sales Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339413.html>
+    - Entering Tablet Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1508353648.html>
+      - Defining Tablet Settings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339573.html>
+      - Defining Tablet Filter Settings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339608.html>
+      - Logging In to the Tablet — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339643.html>
+      - Working in Normal Mode — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339688.html>
+      - Working in Real Time Mode — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508339760.html>
+      - Working With a Conventional Work Order Tablet — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1542904756.html>
+  - **Managing Reports** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491586106.html> — *The Advanced Manufacturing SuiteApp offers a variety of reports that you can use to present and analyze real-time manufacturing results. Each report appears in a separate window where you can preview results and refine your criteria before…*
+    - Administrative Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508342105.html>
+      - Reviewing the WOs That Didn't Schedule Report — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918039475.html>
+      - Reviewing the Production Data Entry Errors Report — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918084257.html>
+    - Production Planning Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508342615.html>
+      - Creating a Planning Report — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918191274.html>
+      - Creating Material Shortage Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161918150778.html>
+    - Shop Floor Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508342965.html>
+    - Operating Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1508343204.html>
+  - **Advanced Manufacturing Administration Glossary** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1491501431.html> — *An assembly item is an inventory item made of several components, but identified as a single item. Assemblies are manufactured by combining raw materials you stock.*
+- **Manufacturing Mobile** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/part_158644016906.html> — *SuiteApp that lets production operators use mobile scanners to report shop-floor data (consumption, production, downtime, labor) against work orders.*
+  - **Manufacturing Mobile Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_158404038909.html> — *The NetSuite Manufacturing Mobile SuiteApp enables production operators with little ERP knowledge to use mobile scanners to report manufacturing shop floor data. This mobile solution improves performance, scalability, supports customizatio…*
+  - **Manufacturing Mobile for Administrators** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_158404110084.html> — *Before you can use the NetSuite Manufacturing Mobile SuiteApp to record shop floor data, complete the following set up procedures: Removing Manufacturing Mobile Imported Process Roles…*
+    - Set Up the Manufacturing Mobile SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_164338784839.html>
+      - Manufacturing Mobile Administrator's Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0815011151.html>
+        - Adding Custom Fields — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1004091039.html>
+      - Manufacturing Mobile Best Practices — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_92140216977.html>
+      - Requesting Sandbox Access — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_164338837533.html>
+      - Installing the SCM Mobile Bundle — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158404168719.html>
+      - Installing the Manufacturing Mobile Bundle — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_164338778846.html>
+      - Setting Up Manufacturing Mobile — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158410865709.html>
+      - Creating a WIP Bin for Manufacturing Mobile — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0622023514.html>
+      - Activating the Allow Over-picking for Work Orders System Rule — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_28140403345.html>
+      - Creating a Static Employee Group — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158618203997.html>
+      - Setting Up a Manufacturing Mobile Custom Role — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0728050037.html>
+      - Manufacturing Mobile Auto-Issue — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0318023619.html>
+    - Manufacturing Mobile Administration/Setup — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0209100802.html>
+    - Default Work Order Location and Work Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164251913513.html>
+      - Assigning a Default Work Order Location and Work Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164251916913.html>
+    - Manufacturing Mobile Component Backflush — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0208122806.html>
+    - Removing Manufacturing Mobile Imported Process Roles — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_161160749493.html>
+    - Accessing the Mobile Device Login Page URL — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_161643943091.html>
+      - Manually Accessing the Mobile Device Login Page URL — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164338905411.html>
+    - Manufacturing Mobile Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164365063743.html>
+    - Mobile Device Requirements and Customizations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158410833903.html>
+  - **Manufacturing Mobile Basics** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161618003380.html> — *The NetSuite Manufacturing Mobile SuiteApp uses the internet browser on your mobile device to let you complete transactions wirelessly in your warehouse. As you complete transactions, NetSuite posts real-time updates to your NetSuite accou…*
+    - Logging In and Out of Manufacturing Mobile — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161960311222.html>
+    - Manufacturing Mobile Interface — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161641857271.html>
+    - Manufacturing Order Types and Features — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162151693542.html>
+    - Creating a Manufacturing Mobile Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158618332264.html>
+  - **Manufacturing Mobile for Production Operators** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_158410924229.html> — *The production operator is the person in a manufacturing facility who uses equipment to manufacture, assemble, and package items on a production line.*
+    - Collecting Mobile Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158411067554.html>
+      - Mobile Scanner Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158619216291.html>
+      - Manufacturing Mobile Work IDs — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164262584744.html>
+      - Recording an Assignment — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158411124920.html>
+      - Selecting a Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158411459472.html>
+    - Reporting Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619484068.html>
+      - Reporting Consumption — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_162091339776.html>
+      - Consumption Reporting Details — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_164252589726.html>
+      - Reporting Production — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_162091564313.html>
+      - Reporting Data for Standalone Assembly Build — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158619613344.html>
+      - Reporting Data for Standalone Assembly Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0320032739.html>
+      - Label Printing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0717015324.html>
+  - **Manufacturing Mobile for Production Managers** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_158619669428.html> — *Production managers review data entered by production operators and control inventory and financial record updates in the NetSuite Manufacturing Mobile SuiteApp. They can also respond to inaccurate data or errors to initiate processes to c…*
+    - Monitor and Manage Work — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619703399.html>
+      - Work Details — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164746230529.html>
+      - Mfg Mobile - Work Transaction Details — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920093948.html>
+      - Manufacturing Mobile Work Messages — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158619942687.html>
+      - Mfg Mobile - Material Consumption — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920101759.html>
+      - Mfg Mobile - Production Reporting — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920110529.html>
+      - Mfg Mobile - Report Scrap — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920111150.html>
+      - Mfg Mobile - Setup Details — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920111834.html>
+      - Mfg Mobile - Setup Downtime — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920122435.html>
+      - Mfg Mobile - Run Details — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920123121.html>
+      - Mfg Mobile - Run Downtime — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0920123458.html>
+      - Validating Reported Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158620011316.html>
+    - Correct Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164392049205.html>
+      - Correcting Reported Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158620092390.html>
+      - Correcting Material Consumption Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_161643351765.html>
+      - Correcting Production Reporting Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_161643482325.html>
+    - Generated Builds for Reported Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_158620120128.html>
+      - Enabling an Ad Hoc Build — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164252426008.html>
+      - Disabling a Real Time Build — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164252428816.html>
+  - **Backend Processing Logic** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161643551755.html> — *The NetSuite Manufacturing Mobile SuiteApp provides the following backend processing logic:*
+    - Trigger Builds — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164373970028.html>
+    - WIP Work Orders with Routing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164251896831.html>
+    - Backflush Logic — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164251905118.html>
+    - Resolving a Build Failure — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0802040319.html>
+    - Updating Actual Production Dates in Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164251910456.html>
+- **Engineering Change Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1531288763.html> — *The Engineering Change Order feature is included in the Supply Chain Management SuiteApp starting version 4.0. For more information, see Installing the Supply Chain Management SuiteApp.*
+  - **Engineering Change Order Considerations** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1120035122.html> — *Review the following points before you use the Engineering Change Order (ECO) feature: You can use Engineering Change Order only with inventory and assembly items.*
+  - **Setting Up Engineering Change Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1531289055.html> — *Make sure you've completed the setup requirements before using the Engineering Change Order feature. For more information, see the following help topics:*
+    - Enabling Engineering Change Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1531289393.html>
+    - Customizing Roles for Engineering Change Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1531289591.html>
+    - Configuring Script Deployments for Engineering Change Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_78094148793.html>
+    - Setting the Engineering Change Order Preference — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1531289899.html>
+  - **Setting Up Engineering Change Order Types** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1531289991.html> — *With Engineering Change Order, you can manage change processes across your organization. An issue may involve a product change, component update, document revision, or changes to work instructions. You can record these issues so their chan…*
+  - **Using Engineering Change Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1531291128.html> — *See the following help topics to learn how to use an engineering change order.*
+    - Creating Engineering Change Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1531291168.html>
+    - Copying an Engineering Change Order Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162912133553.html>
+    - Implementing Engineering Change Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1531291499.html>
+    - Viewing Implementation Status — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1531291564.html>
+
+## Vendors, Purchasing, and Receiving
+
+Source: <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/set_N2360130.html>
+
+*Help set covering the vendor lifecycle (records, bills, payments, prepayments, credits, returns, payment runs) and purchasing/receiving (requisitions, RFQs, contracts, POs, receipts, expenses).*
+
+- **Vendors** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2360175.html> — *Vendors book: vendor master data plus vendor bills, payments, prepayments, returns, credits, and payment runs.*
+  - **Vendors** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/preface_3714113773.html> — *Landing page for the Vendors book; starts the vendor-record and bill-to-payment lifecycle.*
+  - **Vendor Records** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2360272.html> — *Vendors supply goods or services; vendor records hold contact, financial, tax, currency, credit-limit and purchasing defaults used by POs, bills, payments and returns.*
+    - **Vendor Records Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2360495.html> — *Vendors supply you with goods or services you need to run your business. For each vendor you purchase from, use vendor records to do the following:*
+    - **Vendor Record Management** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161951406143.html> — *To view the list of vendor records, go to Lists > Relationships > Vendors. To manage your vendor records, see the following topics:*
+      - Creating a Vendor Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2362161.html>
+      - Creating a Tax Agency Vendor Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2365187.html>
+      - Editing a Vendor Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4443197067.html>
+      - Inactivating Vendor Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4443201053.html>
+      - Deleting a Vendor Record — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4443213535.html>
+      - Merging Vendor Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4443233738.html>
+      - Vendor Dashboards — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4849482517.html>
+      - Printing Mailing Labels for Vendors — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2368875.html>
+    - **Vendor Record Configuration** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161952107343.html> — *To learn how to configure your vendor records, see the following topics:*
+      - Enabling the Vendor Access Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161952527878.html>
+      - The Vendor Center Role — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2369118.html>
+      - Assigning a Role to a Vendor — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2363606.html>
+      - Manually Setting a Vendor's Password — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162341016930.html>
+      - Giving Vendors Access to Time Tracking — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2364581.html>
+      - Vendor Records for 1099 Contractors — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2364122.html>
+        - Making a Vendor 1099 Eligible — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161959846727.html>
+        - Associating an Expense Account with 1099-MISC Categories — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161960062509.html>
+      - Vendor Credit Limits — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2365918.html>
+        - Setting Vendor Credit Limits — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161960732270.html>
+        - Vendor Credit Limit Warnings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161960739869.html>
+          - Setting Company Preferences to Receive Vendor Credit Limit Warnings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161960744012.html>
+          - Setting Individual Preferences for Vendor Credit Limit Warnings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161960744896.html>
+      - Associating a Vendor With an Item — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2367376.html>
+      - Associating a Vendor With a Payroll Item — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2367472.html>
+        - Assigning a Vendor to the Tax Agency Category — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162151358618.html>
+      - Importing a Vendor Price List — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2368077.html>
+      - Preferred Transaction Delivery on Vendor Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2368449.html>
+      - The Multiple Vendors Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2369578.html>
+        - Enabling the Multiple Vendors Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2369744.html>
+        - Associating an Item With Multiple Vendors — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2369863.html>
+        - Multiple Vendors Saved Search — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4115931525.html>
+  - **Vendor Bills** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2370131.html> — *Enter vendor bills to record payables, with approval routing, bill capture, PO/receipt matching, vendor bill variances and payment scheduling.*
+    - **Entering a Vendor Bill** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161968486146.html> — *Track your payables by entering bills as they arrive from vendors and pay them from the payables list as they are due. This assures you have an accurate picture of your payables at any point during the billing cycle.*
+    - **Bill Capture** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_164726334180.html> — *Using Bill Capture, you can email or upload vendor bill files to create NetSuite vendor bills. This feature minimizes the data entry effort and reduces manual errors and inconsistencies that can occur when entering vendor bills. NetSuite a…*
+      - Prerequisites for Bill Capture — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1021104845.html>
+      - Bill Capture Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0120015107.html>
+      - Uploading Vendor Bills Into NetSuite — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1021105256.html>
+      - Working with Bill Capture Templates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1217105627.html>
+      - Bill Capture Considerations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0417034348.html>
+      - Transaction Email Capture SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9121955260.html>
+        - Transaction Email Capture Prerequisites — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114011947.html>
+        - Installing the Transaction Email Capture SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114013251.html>
+        - Setting Up Transaction Email Capture — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114020511.html>
+          - Creating or Customizing Roles to Use Transaction Email Capture — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0609063607.html>
+          - Enabling the Email Capture Plug-in — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114020734.html>
+          - Setting Up Transaction Email Capture Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114023845.html>
+          - Managing Vendor Email Addresses Using Transaction Email Capture — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114024729.html>
+        - Sending Vendor Bills to NetSuite — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114030021.html>
+        - Transaction Email Capture Considerations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114032632.html>
+        - Transaction Email Capture Error Messages — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1114030542.html>
+    - **Differences Between Bills and Checks** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2370776.html> — *You can choose between two ways to track your expenditures: with bills or with checks. If you choose to enter bills, you can track paid and unpaid vendor bills, and pricing for particular products you buy. You enter bills when they arrive…*
+    - **Receiving Inventory in Advance of a Bill** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2370995.html> — *If you maintain inventory, you can indicate that items have been received without entering a bill. You can select All to show all purchase orders with a Pending Receipt status.*
+    - **Canceling a Vendor Bill** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2375066.html> — *You can review a vendor bill and decide it shouldn't be approved for payment. In such cases, you can cancel the bill. The Cancel button only appears on the form in View mode when the status of the bill is Pending Approval.*
+    - **Vendor Bill Printing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161070688350.html> — *After you enable the Advanced PDF/HTML Templates feature, you can print vendor bills. For more information, see Advanced PDF/HTML Templates.*
+      - Printing a Single Bill — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161968557929.html>
+      - Printing Vendor Bills in Bulk — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161968563154.html>
+    - **Vendor Bill Variances** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2371184.html> — *When you enter purchase orders, receipts, and vendor bills for items, each transaction can show a quantity, price, and exchange rate for the items. If there are any discrepancies between the quantity, price, or exchange rate, a remaining v…*
+      - Posting Vendor Bill Variances — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2372745.html>
+      - Vendor Bill Variance Journals — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2373098.html>
+      - Mass Updates for Variance Accounts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2373402.html>
+    - **Vendor Bill Approvals** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2373552.html> — *You can require approval for vendor bill processing. When you require approval before payment is issued, you can verify the billed amounts and quantities. To manage billing variances, you can compare amounts and quantities shown on vendor…*
+      - Setting the Default Vendor Approval Status — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2374176.html>
+      - Approving Vendor Bills With Standard Vendor Bill Approval — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2374450.html>
+      - Bulk Approving Vendor Bills With Standard Vendor Bill Approval — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2374794.html>
+      - Standard Vendor Bill Approval FAQ — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2375312.html>
+    - **Vendor Bill Approval Workflow** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2376194.html> — *Install the Vendor Bill Approval Workflow as part of NetSuite Approvals Workflow SuiteApp to use a pre-built custom workflow for managing vendor bill approvals. The workflow helps you identify discrepancies between vendor bills you enter a…*
+      - Installing the Vendor Bill Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2380890.html>
+      - Customizing for the Vendor Bill Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2381204.html>
+    - **3 Way Match Vendor Bill Approval Workflow** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4096219721.html> — *The 3 Way Match Vendor Bill Approval Workflow checks the vendor bill for discrepancies before it is processed for payment. It validates the details of a vendor bill against the details of its corresponding purchase order and item receipt.…*
+      - Setting Up 3 Way Match Vendor Bill Approval — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4096250993.html>
+      - 3 Way Match Vendor Bill Approval States — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4096454192.html>
+      - 3 Way Match Vendor Bill Approval Exception Criteria — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4096471509.html>
+      - Customizing the 3 Way Match Vendor Bill Approval — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4096447107.html>
+        - Customizing a Workflow State — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4096481101.html>
+        - Disabling Exception Criteria — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4096490752.html>
+        - Setting Tolerance and Difference Limits — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4168980481.html>
+        - Best Practices When Using the Tolerance and Difference Limits — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4212033610.html>
+    - **Vendor Bill Approvals in the Employee Center** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157528106765.html> — *Users with the Employee Center role can review and approve vendor bills using the standard vendor bill approval process. These users can also review and approve vendor bills using a vendor bill approval workflow in SuiteFlow.*
+      - Configuring Vendor Bill Approvals in the Employee Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157528129125.html>
+      - Configuring a Reminder for Bills Pending Approval in the Employee Center Dashboard — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157528136729.html>
+        - If the Reminders Portlet doesn't Show the Expected Information — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157544849918.html>
+      - Approving Vendor Bills in the Employee Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157528153371.html>
+  - **Vendor Payments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2381615.html> — *Pay vendor bills, track payment status, manage installments, default payment accounts and payment printing; covers workflow-based payment approvals.*
+    - **Vendor Payments Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2381751.html> — *After you enter vendor bills, you pay them in NetSuite when they are due. The payment posts to the general ledger as an expense and the amount of the payment is deducted from your accounts payable total. This helps you track expenditures a…*
+    - **Default Vendor Payment Accounts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161037364692.html> — *You can set a Vendor Payment Account preference. After you set the Vendor Payment Account preference, NetSuite automatically sets the Account field on vendor prepayments and bill payments to your preferred account.*
+      - Setting a Company Level Default Vendor Payment Account — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315349034.html>
+      - Setting a Default Vendor Payment Account for a Single Subsidiary — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315354749.html>
+      - Setting a Default Vendor Payment Account for a Single Vendor — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315364436.html>
+    - **Paying Bills to a Single Vendor** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2381924.html> — *Use the Pay Single Vendor transaction to pay for outstanding payables to one vendor. You can also select an employee in the Payee field to pay employee expenses.*
+    - **Paying Bills to Multiple Vendors** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2383803.html> — *Use NetSuite to process payments to several vendors at one time. You can"t make payments to inactive vendors. For more information, see Inactivating Vendor Records.*
+    - **Checking the Status of a Bill Payment** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4401801571.html> — *Follow this procedure to check the status of a bill payment. To expand the available filters, click Filters. By default, the filter is set to today's date.*
+    - **Editing a Bill Payment** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2384435.html> — *If there is a change to a bill you have already paid, you must change the bill payment. Go to Transactions > Payables > Pay Single Vendor > List.*
+    - **Correcting Bill Payment Applications** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2385178.html> — *You may need to change the application of a bill payment. Go to Transactions > Payables > Enter Bills > List.*
+    - **Printing Bill Payments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2384738.html> — *To print a bill payment, use the same procedure as printing a check. To print checks, you need Adobe® Reader®. Visit the Adobe Web site to download the latest version at no charge.*
+    - **Printing Bill Payment Vouchers** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2384154.html> — *Payment vouchers give detailed information about the payment you send to a vendor. You can print a payment voucher for bill payments that you make.*
+    - **Vendor Payment Installments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1550603013.html> — *When you enter a purchase order, you may want to identify installments that reflect negotiated terms of payment. Use the Installments feature to divide the total amount of a vendor bill into several parts to be paid in installments. This e…*
+      - Vendor Payment Installments Setup — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1550603187.html>
+        - Enabling Vendor Payment Installments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161978767792.html>
+        - Setting Preferences for Vendor Payment Installments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161978780357.html>
+        - Creating Terms for Vendor Payment Installments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161978785528.html>
+      - Billing a Purchase Order With Installments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1550607926.html>
+      - Paying Vendor Bills in Installments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1551288993.html>
+    - **In-Transit Payments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1535398724.html> — *Use the In-Transit Payments feature to accurately recognize payment deposits when they occur. An in-transit payment distinguishes that payment transactions occur across time. It first records the date of your intent to pay funds, and then…*
+      - In-Transit Payments Setup — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315035085.html>
+        - Enabling the In-Transit Payments Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1535467996.html>
+        - Creating a Cash In-Transit (CIT) Clearing Account — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1535485844.html>
+      - Setting Preferences for In-Transit Payments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1535560702.html>
+        - Setting Accounting Preferences for In-Transit Payments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315127002.html>
+        - Setting Subsidiary Preferences for In-Transit Payments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315152200.html>
+        - Setting Approval Routing Preferences for In-Transit Payments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315157956.html>
+        - Setting Up a Checking Account for In-Transit Payments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315167928.html>
+      - Creating an In-Transit Vendor Payment Without Approval Routing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1535672734.html>
+      - Confirming an In-Transit Payment — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1539969060.html>
+      - Declining an In-Transit Payment — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1539968733.html>
+      - In-Transit Payments with Approval Routing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1537056839.html>
+        - Approving an In-Transit Payment With Standard Vendor Payment Approval — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315241414.html>
+        - Approving In-Transit Payments Standard Vendor Payment Approval in Bulk — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162315241867.html>
+      - Viewing In-Transit Payment Balances — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1539714613.html>
+      - In-Transit Payment Statuses — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1536092800.html>
+    - **Custom Workflow-Based Approvals for Vendor Payments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1554290907.html> — *You can choose to use SuiteFlow to create your own custom workflow to process vendor payments. SuiteFlow workflows can be used for vendor payments to provide additional flexibility to review and evaluate vendor payments before approving or…*
+  - **Vendor Prepayments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162332227021.html> — *Prepay vendors before bills exist or against purchase orders; apply, review and refund prepayments and route prepayment approvals.*
+    - **Vendor Prepayments Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156378588624.html> — *The Vendor Prepayments feature records and tracks payments to vendors before they accept a purchase order for a good or service. You can apply these prepayment amounts against open bills for the vendor. Vendor Prepayments enables you to re…*
+    - **Vendor Prepayments Setup** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156379910175.html> — *You must complete the following setup procedures before entering prepayments for your vendors:*
+      - Enabling the Vendor Prepayments Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162333116098.html>
+      - Configuring a Default Vendor Prepayment Account — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162333140031.html>
+      - Configuring Permissions for Vendor Prepayments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162333147276.html>
+      - Configuring Vendor Prepayments With Auto-Apply — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162333158540.html>
+      - Disabling the Vendor Prepayments Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156380221183.html>
+    - **Entering Vendor Prepayments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156395631899.html> — *You start providing deposits to your vendor by entering a new vendor prepayment. When the prepayment is applied, the status of the transaction is paid. The bank or credit card account is credited, while the prepayment account is debited.*
+    - **Entering Vendor Prepayments From a Purchase Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157311209466.html> — *You can enter and associate a vendor prepayment and a purchase order from the Purchase Order page. NetSuite autofills some information in the new vendor prepayment page using the purchase order data. The information automatically filled in…*
+    - **Reviewing the Vendor Prepayments Associated With a Purchase Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157924651955.html> — *You can review the vendor prepayments associated with a purchase order from the Purchase Order page. Go to Transactions > Purchases > Enter Purchase Orders > List.*
+    - **Vendor Prepayment Application** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157294424267.html> — *After you enter a prepayment for a vendor, you must apply the prepayment against your vendor bills. Applying a vendor prepayment posts in the general ledger. The Prepayment account is credited, offsetting the Accounts Payable account. The…*
+      - Applying Vendor Prepayments With Auto-Apply — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157372109804.html>
+      - Applying Vendor Prepayments Manually — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156396257383.html>
+      - Editing a Vendor Bill After the Vendor Prepayment Application — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156760027582.html>
+    - **Vendor Prepayment Approvals** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159479922545.html> — *You can require approvals for vendor prepayment processing. When you enable the vendor prepayment approvals preference, the Vendor Prepayment page includes Approval Status and Next Approver fields. When using a role that includes the Vendo…*
+      - Setting Preferences for Vendor Prepayment Approvals — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159480389738.html>
+      - Approving Vendor Prepayments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159479931352.html>
+    - **Vendor Prepayment Approvals in the Employee Center** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159583699852.html> — *The Employee Center role can be customized to allow approvals of vendor prepayment transactions. Users with the customized Employee Center role can review and approve vendor prepayments using the standard vendor prepayment approval process.*
+      - Verifying Prerequisites for Vendor Prepayment Approvals in the Employee Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159584574236.html>
+      - Configuring Vendor Prepayment Approvals in the Employee Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159583875046.html>
+      - Adding a Reminder for Vendor Prepayment Approvals to the Employee Center Dashboard — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159584658445.html>
+      - Approving Vendor Prepayments in the Employee Center — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159592118318.html>
+    - **Viewing the List of Vendor Prepayment Transactions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156389791838.html> — *You can view the list of your vendor prepayments and vendor prepayment applications in the Vendor Prepayments list. For vendor prepayment transactions, this list includes a transaction status. A vendor prepayment can be in one of the follo…*
+    - **Editing or Deleting Vendor Prepayment Transactions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156380292896.html> — *You may need to update or delete a vendor prepayment transaction. See Configuring Permissions for Vendor Prepayments to verify you have the required permissions for these actions.*
+    - **Voiding a Vendor Prepayment Transaction** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159541401977.html> — *You have the option to void vendor prepayment transactions after payment. If you have permission to edit vendor prepayments a Void button is available when you view a paid vendor prepayment transaction.*
+    - **Printing Vendor Prepayment Vouchers** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157242190523.html> — *Vendor prepayment vouchers provide detailed and printable information about the prepayments authorized for your vendors. You can print and email vouchers for the vendor prepayments you make.*
+    - **Customizing Vendor Prepayment Vouchers** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157588136487.html> — *NetSuite provides a default template for vendor prepayment vouchers. If you do not create a customized template, all vendor prepayment transactions use the default template. This template includes all the necessary details of your company…*
+  - **Vendor Returns** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2386193.html> — *Vendor return authorizations ship goods back to vendors (from POs or standalone, including drop-ship), track return status and credit the returned goods.*
+    - **Vendor Return Authorization Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2386202.html> — *When you track vendor returns using authorizations, you know the status of each return and you can track accurate information about each return you process. The vendor return workflow includes obtaining Return Materials Authorization (RMA)…*
+    - **Creating a Vendor Return Authorization** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2386460.html> — *NetSuite offers two ways to create a vendor return authorization: Create a vendor return authorization from an existing purchase order.*
+    - **Creating a Vendor Return Authorization From an Existing Purchase Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162003965369.html> — *Follow this procedure to create a vendor return authorization from an existing purchase order. Go to Transactions > Purchases > Enter Purchase Orders.*
+    - **Approving a Vendor Return Authorization** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2387067.html> — *You can use the vendor return authorizations approval process to keep track of what is being returned and why. For example, a supervisor can review a return authorization entered by an employee to determine if the item really needs to be r…*
+    - **Canceling a Vendor Return** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162004032986.html> — *Go to Transactions > Purchases > Enter Vendor Return Authorizations. Click View next to the return authorization you are canceling.*
+    - **Shipping Authorized Vendor Returns** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2387332.html> — *When you ship items to a vendor for an authorized return, mark the item as shipped. This status lets you track the progress of the order through the return process.*
+    - **Viewing the Status of a Vendor Return Authorization** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2387708.html> — *Each vendor return authorization has a status that reflects where the return is in the shipping and crediting process. Vendor Return Authorization transactions now support the Advanced PDF/HTML Templates feature.*
+    - **Crediting an Authorized Vendor Return** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2388089.html> — *After a vendor return has been approved, enter a vendor credit, or bill credit, for the amount of the returned items. This enables you to track credit owed to you by a vendor so you can apply the credit to vendor bills.*
+    - **Vendor Returns for Drop-Ship Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2391620.html> — *When your customer wants to return an item that they received directly from the vendor by a drop-shipment, note the following. You can process the return in NetSuite without affecting your inventory records.*
+    - **Closing a Line Item on a Vendor Return Authorization** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2391809.html> — *On vendor returns, you are able to close line items manually when you do not intend to send open items on the order. For example, you return ten widgets to a vendor and have not yet returned five more you expect in the warehouse. You find…*
+  - **Vendor Credits** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2391960.html> — *Vendor credits reduce amounts owed; created standalone or directly from vendor bills/returns and applied to open bills and payments.*
+    - **Entering Vendor Credits** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2392083.html> — *A vendor credit is a transaction to show credit from a vendor that you can apply to your payables account. Vendors might credit your account if you return merchandise to them or negotiate a discount after receiving an invoice.*
+    - **Entering a Vendor Credit Manually** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1493669913.html> — *You can create a credit manually that is not necessarily associated with an existing bill. This could be useful to record credit or a discount negotiated from your vendor either after receiving a bill or independent of any bills.*
+    - **Creating a Vendor Credit Directly From a Vendor Bill** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2392547.html> — *You can create a vendor credit directly from a vendor bill. The Bill Credit opens and automatically enters the items and information from the original bill:*
+    - **Associating a Vendor Credit With a Deposit** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2392806.html> — *In your NetSuite account, you can associate a vendor credit with a bank deposit. If the vendor has sent you a refund by cash or check, you first need to record the deposit.*
+    - **Creating a Vendor Credit Directly From a Vendor Return** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2393090.html> — *You can create a vendor credit directly from a vendor return. Go to Transactions > Payables > Enter Vendor Return Authorizations.*
+    - **Applying a Vendor Credit** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2393276.html> — *You can apply vendor credits to decrease the amount owed to a vendor. When you apply a vendor credit against an open bill, the amount of the credit is deducted from the total amount of the bill.*
+    - **Viewing Vendor Credits** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162341387037.html> — *You can view the list of vendor credits on the Bill Credits page. Go to Transactions > Payables > Enter Vendor Credits > List.*
+    - **Removing Credits From Deleted Vendor Payments** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2393719.html> — *It is important to understand that deleting a vendor bill payment or a customer payment doesn't automatically unapply credits that you have applied. If you need to delete a payment that includes bills or invoices with credits applied, you…*
+    - **Vendor Credit Printing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161107139523.html> — *After you enable the Advanced PDF/HTML Templates feature, you can print vendor credits. See Advanced PDF/HTML Templates. You can print bills in HTML or PDF format. Printing to PDF format requires Adobe® Reader®. Visit the Adobe Web site to…*
+      - Printing a Single Vendor Credit — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162004649120.html>
+      - Printing Vendor Credits in Bulk — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162004656575.html>
+  - **Payment Runs** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327659.html> — *Payment runs are non-posting transactions that enable you to group payable transactions and create vendor payments from a single payment workflow. A payment run lets you select the paying account, choose eligible transactions, review the t…*
+    - **Payment Run Prerequisites and Permissions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327661.html> — *Payment run users must have the Pay Bills permission. They are affected by the user's permission level and available subsidiary, location, employee, and record restrictions.*
+    - **Creating a Payment Run** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327665.html> — *Create a payment run when you want to group payable transactions and prepare payments from a single workflow. Make sure you have access to create payment runs and select the paying account. Eligible payable transactions should already exis…*
+    - **Approving Payment Runs** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0720034617.html> — *Payment run approvals use your established SuiteFlow or SuiteApprovals configurations. If approval routing is enabled, payment run records will include Approval Status and Next Approver fields. The approval statuses are:*
+    - **Creating Payments from Payment Runs** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327666.html> — *Use Create Payments to generate payment records from an approved payment run. Make sure the payment run is saved, approved if approval is required, and has a positive total amount before creating payments.*
+    - **Cancelling or Deleting Payment Runs** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327667.html> — *Any user with edit permission can cancel an open payment run. Canceling the payment run keeps the payment run record and releases the selected payables.*
+    - **Payment Run Results and Errors** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327668.html> — *Review payment run results after payments are created. A run that completes successfully should have related payment records. Failed payment run lines are marked with an error, and processing continues for the other valid transactions. Fai…*
+    - **Payment Run Frequently Asked Questions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327669.html> — *Payment runs are a non-posting transaction that enable you to group payable transactions and create vendor payments from a single payment workflow. A payment run lets you select the paying account, choose eligible transactions, review the…*
+- **Purchasing and Receiving** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_N2393897.html> — *Purchasing and Receiving book: requisitions, purchase requests, RFQs, contracts/blanket orders, purchase orders, receiving, expenses, and procurement analytics.*
+  - **Requisitions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_3875569040.html> — *Requisitions let employees request items before a purchase order exists; approval routes, bulk ordering to POs, and status processing are covered.*
+    - **Requisitions Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162444983707.html> — *When your company needs to make a purchase, the Requisitions feature can help you track pertinent information, such as the following: When an employee or company representative needs something that should be purchased using company funds…*
+    - **Requisitions Setup** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3879054274.html> — *To set up requisitions in your account, see the following help topics: The Requisitions feature can be disabled only if all existing requisitions have a Closed status.*
+      - Enabling the Requisitions Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162011877530.html>
+      - Setting Requisition Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162011885182.html>
+    - **Entering a Requisition** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3873972591.html> — *Enter a requisition form to request items to be purchased. As you add items and expenses to the requisition, the form displays the estimated total. An estimated rate or amount for each line must be entered for approval purposes. After a pu…*
+    - **Ordering Requisitions in Bulk** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3873973062.html> — *The Order Requisitions page enables you to create purchase orders for many requisitions at one time. Select line items in the list to be ordered, then verify the vendor and quantity for each line. After you submit the Order Requisitions pa…*
+    - **Processing a Requisition** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3873972997.html> — *After you have entered requisitions, you can view and process these transactions as part of your purchasing workflow. To order in bulk, use the Order Requisitions page.*
+    - **Requisition Approvals** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3873972662.html> — *You can choose to have a supervisor or an approver assess requisitions that are entered to decide if they are approved for processing. To require approval for requisitions, you must use a SuiteFlow workflow.*
+      - Setting up Suiteflow Workflow-Based Approvals for Requisitions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3909302265.html>
+      - Approving a Requisition Using SuiteFlow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3965424923.html>
+    - **Requisition Approval Workflow** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3960249592.html> — *The Requisition Approval Workflow combines the features of the standard NetSuite approval routing and the flexibility of the NetSuite workflow manager. You can install the Advanced Procurement SuiteApp, which contains the workflow, and use…*
+      - Requisition Approval Workflow Setup — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3970590063.html>
+        - Enabling Requisition Workflow Prerequisites — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162030498543.html>
+        - Installing the Requisition Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162030503365.html>
+        - Running the Requisition Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162436783757.html>
+        - Setting Requisition Approval Workflow Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162436794597.html>
+      - Requisition Approval Workflow States — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4109347847.html>
+      - Customizing the Requisition Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3970591126.html>
+      - Creating a Custom Requisition Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4113690094.html>
+  - **Purchase Requests** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2393987.html> — *A purchase request is a transaction that records a purchase that needs to be made. The request details the item needed and the anticipated price of the item. When the purchase request needs to become a purchase, the request must be convert…*
+    - **Enabling Purchase Requests** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162488295069.html> — *Before you can enter purchase requests, you need to enable the Purchase Requests feature in your account. On the Employees subtab, click the Purchase Requests box.*
+    - **Entering a Purchase Request** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2394196.html> — *Employees with access to purchase requests can enter a request to purchase needed items, material or services from vendors. The employee record must be set up to give the employee access to the Employee Center. For more information, see Gi…*
+    - **Approving a Purchase Request** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2395820.html> — *If you use the Approval Routing feature for purchase approvals, purchases must be approved before they can be processed. Purchase approvals are generally processed through the Employee Center. You must have the Employee Center role to acce…*
+    - **Creating a Purchase Order From a Purchase Request** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2394526.html> — *A purchase request turns into a purchase order when it is approved. When an employee enters a purchase request, it is routed to the employee's immediate supervisor. A request entered by an employee who doesn't have a supervisor automatical…*
+    - **Notifying Supervisors of Purchase Requests** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2394761.html> — *You can notify supervisors by email when there are purchase requests that need to be approved. Purchase requests must be approved before they are turned into purchase orders.*
+  - **Request for Quote** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4189559896.html> — *Request for Quote (RFQ) sends item/price requests to multiple vendors, compares responses and converts accepted quotes into purchase orders.*
+    - **Request for Quote Feature Setup** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4212772813.html> — *To set up the Request for Quote feature, see the following help topics: Setting Preferences for the Request for Quote Feature…*
+      - Enabling the Request for Quote Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162012128770.html>
+      - Setting Preferences for the Request for Quote Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162012132347.html>
+    - **Entering a Request For Quote** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4212822856.html> — *Enter a Request for Quote (RFQ) to define the details of the quote you need and begin the process of requesting quotes from vendors. Go to Transactions > Purchases > Enter Requests for Quote.*
+    - **Vendor Request for Quote** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4213374003.html> — *After you enter a Request for Quote (RFQ), the quote request is emailed to vendors on the bid open date. The email includes the bid open date, bid close date, and a link to the Vendor Center to be used to respond with a quote. The quote ge…*
+    - **Analyzing and Awarding a Request for Quote** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4213373490.html> — *On or after the bid close date, the Request for Quote (RFQ) record displays an Awards subtab. Use the Awards subtab to analyze the vendor responses and award purchase contracts to vendors.*
+  - **Purchase Contracts and Blanket Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4077153711.html> — *The Purchase Contracts feature enables purchasing managers and buyers to use contracted terms, pricing, and delivery schedules when purchasing materials for a company.*
+    - **Purchase Contracts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4077162015.html> — *The Purchase Contracts feature enables purchasing managers and buyers to use contracted terms, pricing, and delivery schedules when purchasing materials for a company. Buyers can automatically take advantage of quantity-based terms and dis…*
+    - **Enabling the Purchase Contracts Feature** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4077183923.html> — *To use purchase contracts, you must enable both the Purchase Orders feature and the Purchase Contracts feature. Go to Setup > Company > Setup Tasks > Enable Features.*
+    - **Creating Purchase Contracts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4077190978.html> — *Enter purchase contract records to define specifics of terms you have negotiated with a vendor for buying an item. Then, the contract can be selected on orders to designate pricing according to the contract.*
+    - **Using Purchase Contracts on Purchase Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4077191337.html> — *After you have created purchase contract records, you can select a Purchase Contract in the form header field when you are entering a purchase order. Then, the purchase order is associated with the contract and the following occurs:*
+    - **Purchase Contract Approval Workflow** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4210416570.html> — *The Purchase Contract Approval Workflow validates a purchase contract and handles its approval routing. The workflow determines the need for approval by comparing the amount on the contract and the purchase limit of the requesting employee.*
+      - Setting up the Purchase Contract Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4210424087.html>
+      - Customizing the Purchase Contract Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4210441527.html>
+        - Purchase Contract Approval Workflow States — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4210443667.html>
+        - Creating a Custom Purchase Contract Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4210457294.html>
+        - Disabling Resubmit for Purchase Contracts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4236239031.html>
+    - **Blanket Purchase Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4077867135.html> — *You can improve buyer efficiency and accuracy and potentially reduce procurement spending by using blanket purchase orders. Blanket purchase orders define a pre-determined price for a set quantity of items you will buy from a vendor during…*
+    - **Setting up the Blanket Purchase Orders Feature** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4083946712.html> — *To use blanket orders, you must enable the feature and set preferences. To use blanket purchase orders, you must enable both the Purchase Orders feature and the Blanket Purchase Orders feature.*
+    - **Creating a Blanket Purchase Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4083950023.html> — *Enter a blanket purchase order to define the items, prices, terms and delivery schedule of an agreement reached with a vendor. A blanket purchase order is a non-posting transaction.*
+    - **Releasing Items on a Blanket Purchase Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4083950994.html> — *To order items that have been scheduled on a blanket purchase order, you must release the items that need ordering. Releasing items can be done either manually or automatically. The method used is based on the setting in the Create Purchas…*
+    - **Blanket Purchase Order Approval Workflow** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4236988757.html> — *The Blanket Purchase Order Approval Workflow manages the validation and approval processing of a blanket purchase order. The workflow validates a blanket purchase order before it is used to order an item. It determines the need for approva…*
+      - Setting up the Blanket Purchase Order Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4236992073.html>
+      - Customizing the Blanket Purchase Order Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4237001148.html>
+        - Blanket Purchase Order Approval Workflow States — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4237001964.html>
+        - Creating a Custom Blanket Purchase Order Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4237009481.html>
+        - Disabling Resubmit for Blanket Purchase Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4237015150.html>
+  - **Purchasing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2399286.html> — *Tracking your purchases is an important step in maintaining your inventory. By knowing what you have on order, how many and when it will be received, you can keep your inventory at an optimum level.*
+    - **Purchase Order Management** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2399585.html> — *Printing a Tax ID or Resale Number on Purchase Orders Purchase orders authorize vendors to provide items, materials or services to your company. When you enter purchase orders, you can track items that you expect to receive, items you do r…*
+      - Setting Purchasing Preferences — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2400174.html>
+      - Entering a Purchase Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2400504.html>
+      - Bulk Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2402825.html>
+      - Ordering Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2403352.html>
+        - Order Items Status — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4714342508.html>
+      - Billing a Purchase Order With Advanced Receiving — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2403862.html>
+      - Editing a Purchase Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2404305.html>
+      - Closing a Purchase Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_163179592993.html>
+      - Viewing the Status of a Purchase Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2408514.html>
+      - Printing a Tax ID or Resale Number on Purchase Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4746558953.html>
+      - Purchase Order Printing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2407704.html>
+        - Printing a Single Purchase Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013355635.html>
+        - Printing Purchase Orders in Bulk — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013361228.html>
+        - Printing Labels for Purchase Order Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013368875.html>
+    - **Purchase Order Approval Workflow SuiteApp** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2398841.html> — *Customizing the Purchase Order Approval Workflow SuiteApp Creating a Custom Purchase Order Approval Workflow…*
+      - Purchase Order Approval Workflow Setup — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2398992.html>
+        - Setting up Purchase Order Approval Workflow SuiteApp Prerequisites — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162617912024.html>
+        - Installing the Purchase Order Approval Workflow SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162617923785.html>
+        - Purchase Order Approval Workflow SuiteApp Roles and Permissions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162617942635.html>
+        - Running the Purchase Order Approval Workflow SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162617947654.html>
+      - Purchase Order Approval Workflow SuiteApp States — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4158616141.html>
+      - Customizing the Purchase Order Approval Workflow SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2399147.html>
+      - Creating a Custom Purchase Order Approval Workflow — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4158624611.html>
+      - Custom Workflow-based Approvals for Purchases — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2396564.html>
+      - Switching From the Approval Routing Feature to SuiteFlow for Purchases — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3960256538.html>
+    - **Accounting for Received Purchase Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2408991.html> — *A purchase order has no accounting impact until the ordered items are received. Using Advanced Receiving, you can receive and bill your purchase orders in separate steps. Your inventory and accounting records are affected when a purchase o…*
+    - **Drop Shipment and Special Order Purchases** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2409296.html> — *You can use the Drop Shipments and Special Orders feature to create purchase orders for items. When a sales order is approved that contains drop ship or special order item, a purchase order is automatically created for the item.*
+    - **Purchase Order History Report** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2409777.html> — *The Purchase Order History report details purchase orders you have entered and helps you assess transactions and items associated with them. You can see how much you have authorized for purchase and at what price. You can also see how many…*
+    - **Centralized Purchasing and Billing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161122386910.html> — *The Centralized Purchasing and Billing feature enables you to receive orders and fulfill vendor returns across multiple subsidiaries and locations. This simplifies the procurement workflow, makes the item receipt process more flexible, and…*
+      - Enabling Centralized Purchasing and Billing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013482787.html>
+      - Cross-Subsidiary Requisitions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162668250799.html>
+        - Ordering Cross-Subsidiary Requisitions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162669071331.html>
+        - Accounting Preference Considerations for Cross-Subsidiary Requisitions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_163421835280.html>
+      - Centralized Purchase Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161124359989.html>
+        - Entering a Centralized Purchase Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013490588.html>
+        - Receiving a Centralized Purchase Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013494148.html>
+        - Centralized Purchase Order Billing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013499344.html>
+      - Centralized Vendor Returns — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161124367379.html>
+        - Creating a Centralized Vendor Return Authorization — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013902966.html>
+        - Shipping Centralized Vendor Returns — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013910683.html>
+        - Crediting a Centralized Vendor Return — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162013917948.html>
+  - **Receiving Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2410585.html> — *Receive purchase orders fully or partially (including before billing and advanced receiving), create item receipts that update inventory and on-order quantities, and handle receipt discrepancies.*
+    - **Receipt Workflow Charts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2411122.html> — *The following workflow diagrams illustrate item receipt without and with Advanced Receiving.*
+    - **Receiving Purchase Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2411320.html> — *When receiving purchase orders, you need to receive the items and create a bill for them. Receiving a purchase order indicates you have received items you ordered from a vendor and added them to your inventory.*
+    - **Partially Receiving a Purchase Order** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2411754.html> — *If you receive only part of a purchase order, you can indicate what was received and bill the order based on those quantities. Complete the form as described in the sections below.*
+    - **Receiving a Purchase Order Before Billing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2415076.html> — *If you use the Advanced Receiving feature, you can receive and bill purchase orders as separate transactions. Enter a receipt to indicate that items have been received without a entering bill.*
+    - **Receiving a Purchase Orders With Advanced Receiving** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2412119.html> — *After items you ordered have arrived, process the purchase order by receiving the items and creating a bill for them. Receiving a purchase order indicates you have received the items you ordered and added them to your inventory.*
+    - **Creating a Bill From an Item Receipt** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162020541497.html> — *When you enable the Advanced Receiving feature, you can create bills directly from item receipts. If the quantities on the item receipt and originating purchase order differ, NetSuite deducts the quantity on the item receipt from the purch…*
+    - **Bulk Receiving Purchase Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2414814.html> — *If you have many purchase orders you want to mark as received, you can bulk process orders. To bulk receive orders, Advanced Receiving must be enabled and Drop Shipments and Special Orders must be disabled.*
+    - **Closing Line Items on Purchase Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2415338.html> — *On purchase orders, you are able to close line items manually when you do not intend to receive open items on the order. For example, you order ten widgets from a vendor and have already received five of them. You find out the item is disc…*
+    - **Deleting an Item Receipt** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_163705803638.html> — *Deleting an item receipts changes the status of the linked purchase order back to Pending Receipt. To delete item receipts, you must have a role that includes the Item Receipt permission with an access level of Edit or Full.*
+    - **Exchange Rates on Item Receipts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2415572.html> — *You can set a preference for how NetSuite defaults to handle exchange rates on item receipts. Choose between using the rate shown on the purchase order or using the rate that is current when the order is received.*
+    - **Printing Labels From Transactions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162626600304.html> — *You can print labels for items directly from a purchase order or item receipt. For example, a warehouse receiving employee views the item receipt for items received on the dock. When he clicks Print Labels on the receipt, a PDF opens with…*
+  - **Expenses** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2415855.html> — *Expense reports and expense transactions with categories, approvals and GL posting; this chapter also hosts landed cost and estimated landed cost features.*
+    - **Creating an Expense Category** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2415916.html> — *Expenses can be grouped into expense categories that are associated with specific expense accounts. When employees enter expense reports, they select a category for each expense, and the expense automatically posts to the associated expens…*
+    - **Creating a Saved Search With Expense Categories** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162020704920.html> — *You may want to analyze expenditure across various expense categories. For example, you may want to create a report that shows month on month expenditure on client entertainment. The following procedure explains how to create a saved searc…*
+    - **Receiving Expenses** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2416180.html> — *A purchase order is your authorization for a vendor to provide items, materials or services to your company. In NetSuite, you can create purchase orders for expenses as well as items.*
+    - **Receiving Expenses With Advanced Receiving** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2416424.html> — *Use the Advanced Receiving feature to receive orders separately from bills. With Advanced Receiving, you can receive items and expenses before receiving a bill.*
+    - **Landed Cost** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2416930.html> — *Landed cost adds freight, duty and other charges to the cost of received items, allocated by weight, quantity, amount or per line.*
+      - Landed Cost Overview — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2417056.html>
+      - Tracking Landed Cost for Items and Expenses — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162642325864.html>
+      - Landed Cost Categories — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2417902.html>
+      - Setting up an Item Record for Landed Cost — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2418189.html>
+      - Creating a Landed Cost Item — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2418506.html>
+      - Entering Landed Cost on a Transaction — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2418831.html>
+      - Landed Cost and Taxation — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1554390337.html>
+      - Landed Cost Examples — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2419793.html>
+        - Landed Cost and Items Billed Separately — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162021551140.html>
+          - Landed Cost Billed Separately With Advanced Receiving — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162021560020.html>
+          - Landed Cost Billed Separately With a Cost Estimate — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162021562398.html>
+        - Landed Cost and Items Billed Together — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162022017017.html>
+          - Landed Cost Billed Together With an Inventory Item on One Bill With Advanced Receiving — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162022023974.html>
+          - Landed Cost Billed Together With an Inventory Item on One Bill Without Advanced Receiving — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162022026857.html>
+        - Landed Cost With Standard Cost Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162022111260.html>
+      - Landed Cost and Commission — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2420792.html>
+      - Landed Cost Allocation per Line — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3728979515.html>
+    - **Estimated Landed Cost** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4576786578.html> — *Estimated Landed Cost automates the calculation of landed cost estimates for each transaction line item. It extends the Landed Cost feature with the use of landed cost templates. You can set up templates with multiple cost categories and a…*
+      - Estimated Landed Cost Setup Requirements — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4683065507.html>
+        - Enabling the Estimated Landed Cost Feature — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4605321070.html>
+        - Configuring Roles and Permissions for Estimated Landed Cost — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4576794756.html>
+      - Estimated Landed Cost Template Setup Guide — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4576788531.html>
+        - Creating Landed Cost Templates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4576805263.html>
+        - Guidelines for Assigning Landed Cost Templates to Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1219073003.html>
+        - Assigning Landed Cost Templates to Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4576811580.html>
+        - Guidelines for Importing Landed Cost Template Mappings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/subsect_52145342005.html>
+        - Importing Landed Cost Template Mappings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4683044177.html>
+        - Viewing Landed Cost Templates on Item Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1219073233.html>
+      - Guidelines for Estimated Landed Cost on Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4576833448.html>
+        - Adding Estimated Landed Cost to Purchase Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4576842700.html>
+        - Applying Estimated Landed Cost on Item Receipts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4576843207.html>
+        - Estimated Landed Cost on Vendor Bills — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4576843713.html>
+        - Viewing Estimated Landed Cost Details on Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4576880316.html>
+        - Guidelines for Updating Transactions with Estimated Landed Cost — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4576884608.html>
+      - Estimated Landed Cost Considerations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_4576788130.html>
+  - **Procurement Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4370304623.html> — *The Procurement Dashboard displays consolidated procurement-related information from transactions and records on one page. Key information is available in the form of reports, reminders, tables, and other monitoring and management tools. F…*
+    - **Setup Requirements for the Procurement Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4370304909.html> — *Go to Setup > Company > Setup Tasks > Enable Features. On the Employees tab, check the box for Approval Routing.*
+    - **Setting Up the Procurement Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4380612316.html> — *Depending on your center, use the Administrator or custom Publisher role to publish the Procurement Dashboard to other roles. For more information about the Publisher roles, see Procurement Dashboard Roles. To publish the dashboard, comple…*
+    - **Using the Procurement Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4370344015.html> — *On the Procurement Center tab, you can see the portlets for transactions that you have access to. Only the administrator has access to all portlets and transactions, if the required features and preferences are enabled in the account. For…*
+    - **Customizing the Procurement Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4373525526.html> — *You can customize the Procurement Dashboard to suit your business needs. You can change the default arrangement of portlets and add dashboard content. To add more portlets, you can choose from standard portlets or create your own. You can…*
+    - **Best Practices for Customizing the Procurement Dashboard** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4373689120.html> — *This section provides best practices when customizing the Procurement Dashboard. To review the limitations of the dashboard, see Procurement Dashboard Limitations. For guidelines when publishing the dashboard, see Publishing the Procuremen…*
+  - **Purchases Workbooks** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156439261857.html> — *SuiteAnalytics Workbook offers many workbook and dataset templates, each with predefined source data, criteria, pivot tables, and charts. This section contains the information for the SuiteAnalytics Purchases workbooks in NetSuite. For mor…*
+    - **Purchases Dataset Templates** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157968760205.html> — *The following SuiteAnalytics dataset templates are available. This dataset combines fields from the Transaction and Transaction Line record types. It lets you analyze the status of bills received during the last month. It forms the source…*
+    - **Purchases Workbook Templates** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156439263265.html> — *The following standard SuiteAnalytics Workbooks are available: The Purchases (Billed) Workbook includes predefined criteria and pivot tables to show you the status of bills received during the last month. These transactions are grouped and…*
+  - **SuiteProcurement** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9112006488.html> — *SuiteApp for punch-out/curated-catalog purchasing with trading partners; covers setup, preferences, vendor-level configuration, purchase-request review and saved searches.*
+    - **SuiteProcurement Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426112435.html> — *The SuiteProcurement SuiteApp lets you streamline and automate indirect procurement processes, from procuring items to creating purchase requests, managing approvals, and processing bills. Indirect procurement involves purchase of goods an…*
+    - **SuiteProcurement Roles and Permissions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1014032958.html> — *If you have the Administrator role, you can set up, install, and work with the SuiteProcurement SuiteApp, and run scripts. Using the employee center role, you can only work with the SuiteApp.*
+    - **Prerequisites for the SuiteProcurement SuiteApp** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426114231.html> — *The following table lists the steps you need to perform in the order specified before you install and start using the SuiteProcurement SuiteApp. You must perform the steps using the role mentioned in the table.*
+    - **Installing the SuiteProcurement SuiteApp** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426121433.html> — *The SuiteProcurement SuiteApp is a paid and managed SuiteApp. To purchase it, contact NetSuite Account Management Organization (AMO) or your Customer Support representative.*
+    - **Tracking Expenses with SuiteProcurement SuiteApp** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0928012501.html> — *The SuiteProcurement SuiteApp includes Default SuiteProcurement Expense Category to record expenses for SuiteProcurement purchases. If you want to post expenses to a particular expense account, you can select an account for the default Sui…*
+    - **Setting Up SuiteProcurement Preferences** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426121447.html> — *The SuiteProcurement Preferences page enables you to set company-level preferences for working with the SuiteApp. These preferences include:*
+      - Setting up Default Item and Expense Categories — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0122065235.html>
+      - Syncing Trading Partners for a Subsidiary — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0928011003.html>
+      - Mapping Trading Partners with NetSuite Vendors — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0928011028.html>
+      - Mapping Item Categories — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1002124423.html>
+        - Creating NetSuite Item Categories for Item Category Mapping — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1002124559.html>
+          - Adding a Trading Partner Category — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1002011604.html>
+        - Importing Item Categories through CSV — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0928011924.html>
+        - Item Category Mappings Limit for Trading Partners — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0428035601.html>
+      - Setting Up SuiteProcurement Preferences at Vendor Level — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0928011918.html>
+      - Multicurrency Support in SuiteProcurement — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0421040050.html>
+    - **Setting Approval Preferences for Purchase Requests** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0403043357.html> — *If you want send your requisitions or purchase requests for approval, use the following steps: You must provision Advanced Procurement in your account to use the Requisition feature.*
+    - **Working with SuiteProcurement** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426121512.html> — *The SuiteProcurement SuiteApp is an indirect procurement solution designed to procure items online from trading partners. For more information about the SuiteApp, see SuiteProcurement Overview.*
+      - Purchasing Items from Trading Partner Stores — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0930111901.html>
+      - Reviewing and Saving SuiteProcurement Purchase Requests — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0930111904.html>
+      - Submitting Purchase Requests to Trading Partners — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1001122927.html>
+      - Receiving Items and Generating Item Receipts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0930111913.html>
+      - Receiving Documents from Trading Partners — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0930111909.html>
+    - **SuiteProcurement Saved Searches** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426121756.html> — *The SuiteProcurement SuiteApp provides the following saved searches: SuiteProcurement Purchase Transactions - You can add this saved search as a portlet to your dashboard. This portlet lets you view all SuiteProcurement purchase requests t…*
+    - **Uninstalling the SuiteProcurement SuiteApp** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426121812.html> — *If you want to uninstall the SuiteProcurement SuiteApp, perform the following steps. Go to Customization > SuiteCloud Development > Installed SuiteApp List.*
+    - **SuiteProcurement Support for Non-curated Trading Partners** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0407041433.html> — *Non-curated trading partners who want to connect with NetSuite customers. NetSuite customers who are willing to procure items from non-curated trading partners.*
+      - Steps to Perform by NetSuite Customers (Buyer) — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0407042954.html>
+      - Steps to Perform by Non-curated Trading Partners (Seller) — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0407043000.html>
+      - Document Formats — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0407051721.html>
+      - Testing and Validation — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0407062941.html>
+
+## Warehouse Management
+
+Source: <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_156356229851.html>
+
+*Warehouse Management help book: WMS setup (warehouse/bin records, strategies, rules, preferences), inbound receiving and putaway, inventory processing (counts, transfers, replenishment, work order picking), outbound wave pick/pack/ship,*
+
+- **NetSuite WMS Overview** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156382517509.html> — *NetSuite Warehouse Management System (WMS) is an important component for the efficient operation of your warehouse. It extends your NetSuite implementation and its inventory and warehouse management capabilities so you can better manage yo…*
+- **NetSuite WMS Setup** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156382465711.html> — *WMS setup: install the WMS SuiteApps, enable features, configure warehouse locations and bins, item process families, putaway/pick strategies, system rules, preferences, roles and mobile app settings.*
+  - **Installing the NetSuite WMS SuiteApps** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156399372911.html> — *Follow the required order to install the two SuiteApps for Warehouse Management: If you do not follow the required order of installation, you will encounter issues with the rest of the set up. First, install the SCM Mobile SuiteApp, and th…*
+  - **Enabling Features for NetSuite WMS** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156399385061.html> — *You must enable prerequisite features first, and then enable the Warehouse Management feature. Depending on your business requirements, you may enable related inventory management features. For the list of features and guidelines, see the…*
+  - **Warehouse Management Roles and Permissions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156520467974.html> — *You can assign NetSuite WMS roles that provide access to records, tasks, and capabilities on the mobile app and the NetSuite UI. You can also update existing custom roles with permissions for inbound, inventory, and outbound processing. Fo…*
+    - Warehouse Management Roles — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156520478173.html>
+    - Specialized User: WMS Role — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0318011053.html>
+    - Warehouse Management Permissions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156520480478.html>
+    - Assigning Custom Roles to Custom Mobile Processes — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161521589524.html>
+  - **Warehouse Management Records and Templates** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156399460732.html> — *To create or update records for your warehouse configuration, see the following topics: To create or update records for warehouse or shipping items and order types, see the following topics:*
+    - Creating Warehouse Locations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433484.html>
+    - Configuring Records for Locations With Bins — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161314312081.html>
+      - Moving Existing Items To Bin Locations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433541.html>
+    - Creating Item Process Families — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433520.html>
+    - Creating Item Process Groups — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433524.html>
+    - Creating Inventory Statuses — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433532.html>
+    - Setting Up Units for Pick Decomposition — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0207111545.html>
+    - Creating Items for NetSuite WMS — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433512.html>
+    - Creating Item Aliases — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433516.html>
+    - Creating Item Stock Locations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159708123882.html>
+    - Creating Order Types — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433528.html>
+    - Defining a UCC Code Format — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_163043489737.html>
+    - Creating Adjustment Reasons — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0207114228.html>
+    - Creating Carrier Service Levels — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433537.html>
+    - Customizing Warehouse Management Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156518474750.html>
+      - Creating Custom Wave Criteria Templates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1550845655.html>
+      - Creating a Custom Pick Ticket Saved Search — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158265656918.html>
+      - Creating Custom Advanced Templates for Pick Tickets — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1560456593.html>
+      - Creating Custom Wave Forms — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1560457967.html>
+      - Setting Up Custom Packing Lists — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159130298718.html>
+  - **Setting Warehouse Management Preferences** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156406848826.html> — *Depending on your business needs, set the following preferences that apply to one or more warehouse processing tasks: Automatically Set to Firm Committed Quantities in a Wave - Automatically checks the Commitment Confirmed box for transact…*
+  - **Warehouse Management Strategies** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156406882224.html> — *Warehouse management strategies define where received items should be put away or where operators should go to pick items. NetSuite WMS uses the sequence number of your strategies to determine which strategy should take priority over other…*
+    - Defining Pick Strategies — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1551132634.html>
+    - Defining Putaway Strategies — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4436271568.html>
+  - **Setting Up Bin Blocking for Order Picking** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0214032203.html> — *For locations that use bins, you can block bins per item as you pick orders using your mobile device. To setup, complete the following procedures:*
+  - **System Rules for NetSuite WMS** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156406918320.html> — *NetSuite WMS provides system rules that add capabilities or enable alternate behavior for warehouse processing tasks on the app. You can activate a system rule that applies to all or specific warehouse locations. For some rules, you can al…*
+  - **Mobile App Setup** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541432880.html> — *NetSuite WMS leverages the mobility and convenience of handheld bar code scanners to process inbound, outbound, and inventory transactions and to post real-time updates to your NetSuite account.*
+    - Configuring Mobile App Settings — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158411380821.html>
+    - Bar Code Setup for NetSuite WMS — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158264895870.html>
+      - Creating Composite Bar Code Templates — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541433231.html>
+      - Setting Up Custom Application Identifiers for GS1 Bar Code Scanning — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158264983840.html>
+      - Adding HIBC Labeler ID Codes — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0214040011.html>
+    - Mobile Printing for NetSuite WMS — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158411462538.html>
+    - Mobile Configuration and Customization — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1550867272.html>
+  - **NetSuite WMS Shipping Integration Setup** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619718289.html> — *NetSuite WMS Shipping Integration provides a connection between NetSuite and your parcel carrier shipping software. This connection enables you to automate some of your outbound processing tasks to streamline the shipping process.*
+    - Installing and Updating the WMS Printer Driver and Carrier Integrator Application — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619782624.html>
+    - Setting Up Your Login Credentials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619799329.html>
+    - Configuring the WMS Printer Driver and Carrier Integrator Application — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619821210.html>
+    - Setting Up and Generating Commodity Shipment Files — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_163482505291.html>
+    - Viewing Logs — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619843850.html>
+    - Starting the WMS Printer Driver and Carrier Integrator Application — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619931981.html>
+  - **Electronic Data Interchange (EDI) Integration** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156840265669.html> — *Electronic Data Interchange (EDI) is the computer-to-computer exchange of business data in standard formats. Using EDI, information is organized according to a specified format set by both parties, allowing an automated computer transactio…*
+- **Mobile Device Basics for NetSuite WMS** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156382508723.html> — *NetSuite WMS uses the internet browser on your mobile device to enable you to complete transactions wirelessly in your warehouse. As you complete transactions, NetSuite WMS posts real-time updates to your NetSuite account, which may depend…*
+  - **Accessing Bins on the App** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1122014929.html> — *On the app, you can primarily access a bin based on its associated warehouse location, which you can specify on the bin record. You can view or select items in bins to process for each location. Depending on the features you use, you can s…*
+  - **Inventory Status on Mobile Devices** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156382535011.html> — *If you use the Inventory Status feature, inventory status information appears on mobile app pages, depending on the mobile process. If you add an item to or remove one from your inventory, NetSuite WMS prompts you to select the associated…*
+  - **Multiple Units of Measure (UOM) on Mobile Devices** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156382534438.html> — *When you pick or receive orders using mobile devices, you can enter item quantities using multiple units of measure (UOM). A units selector appears on picking and receiving screens to enable to you to enter item quantities in the unit set…*
+  - **Mobile Device Transactions** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156382533850.html> — *When you complete warehouse transactions using a mobile device, NetSuite WMS creates records that capture information about the transaction. These records post real-time updates to your NetSuite account as you scan items throughout the war…*
+- **Inbound Processing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541435915.html> — *Inbound processing is the receiving and putaway of items into your warehouse. It includes the receiving, staging, and putaway of items from incoming orders.*
+  - **Receiving Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541435923.html> — *Items might arrive at your warehouse for various reasons, which may include the following: Other warehouse locations transfer items to your warehouse.*
+  - **Receiving Orders by Scanning Through the App** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0416111212.html> — *To receive items from purchase orders, customer returns, or transfer orders, you can scan the item bar code using the app. If you activate the Enable Advanced Barcode Scanning? rule, you can scan specific item bar code types. For more info…*
+  - **Receiving with Actual or Estimated Landed Cost** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0123125926.html> — *If you activate the Set Landed Cost During Receiving rule, you can update landed cost settings on the app only for transactions enabled with landed cost allocation per line. If you track landed cost for an item, you can enter or update the…*
+  - **Receiving Inbound Shipment Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158212308061.html> — *If you use the Inbound Shipment Management feature, you can receive orders and create item receipts for inbound shipments on a mobile device. As you process inbound shipments, NetSuite WMS automatically updates associated transactions and…*
+  - **Item Receipts in NetSuite WMS** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541435993.html> — *An item receipt transaction records the receipt of items into your warehouse and links to the appropriate transfer order, purchase order, or return authorization as a related record. When you post an item receipt, the system marks the item…*
+    - Enabling Deferred Item Receipt Posting — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993564988.html>
+    - Manually Posting Item Receipts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993562169.html>
+    - Reversing Completed Item Receipt Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541436036.html>
+    - Reversing Inbound Shipment Receiving — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0123011407.html>
+  - **Item Putaway in NetSuite WMS** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541436047.html> — *After you receive an item, you need to place the item in the warehouse for storage until you ship it out. This process is called putaway. After you put away an item, its inventory count increases in the appropriate bin locations. If you pu…*
+    - Putaway Strategies — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541436052.html>
+    - Enabling Staging at Receiving — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541436089.html>
+    - Putting Away Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993591245.html>
+  - **Putting Away Items Using Carts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161894286213.html> — *For warehouses with bins, you can load received and staged items onto a cart to move them to their destination bin locations. After you post an item receipt for a purchase order, you can move the items from the inbound staging bin onto a c…*
+- **Inventory Processing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541441780.html> — *Manage received inventory throughout its life cycle within a warehouse. Track any movement between bins or locations. Depending on features you use, you can also track inventory counts, work order processing, and inventory status changes.…*
+  - **Inventory Transfers** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441786.html> — *Bin or inventory transfers enable you to transfer inventory between storage bins or warehouse locations, respectively. For both types of transfers, NetSuite WMS can apply putaway strategies that you define to recommend destination bins for…*
+    - Transferring Items Between Bin Locations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441872.html>
+    - Inventory Transfers Between Warehouse Locations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441894.html>
+    - Bin Transfer via Cart — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0220102704.html>
+  - **Searching for Inventory** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441790.html> — *You can search for inventory within your warehouse by item name, number, or UPC. From the search results, you can view the quantity on hand. For kit/package items, you can view the details for each component.*
+    - Generating an Inventory Report — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442001.html>
+  - **Creating Inventory** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441794.html> — *Create inventory to add item quantities to your warehouse's inventory without a transaction such as a purchase order, transfer order, or customer return. When you create inventory, NetSuite WMS generates an inventory adjustment record to i…*
+  - **Inventory Counts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441798.html> — *If you use the Inventory Count feature, you can create regular, periodic inventory counts of on-hand item quantities to maintain inventory accuracy. For more information, see Inventory Count.*
+    - Creating Manual Inventory Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993279616.html>
+    - Creating Calculated Inventory Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442051.html>
+    - Creating Cycle Count Plans — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442081.html>
+    - Generating and Releasing Inventory Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442042.html>
+    - Generating and Processing Counts on the App — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0807095555.html>
+    - Starting Inventory Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993306635.html>
+    - Performing Inventory Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993309359.html>
+    - Completing Inventory Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993309646.html>
+    - Approving or Rejecting Inventory Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993310131.html>
+    - Recounting Cycle Counts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0807110426.html>
+  - **Work Order Picking** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441803.html> — *On the app, you can pick components of assembly items to stock or fill orders. You can pick component items for one work order at a time. If you use bins, you can choose the bin from which to pick them and stage picked components in bins.…*
+    - Picking Component Items for Work Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993390806.html>
+    - Building Assembly Items for a Work Order — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_155993396614.html>
+    - Reversing Work Order Picking — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0804111823.html>
+  - **Picking Items for Vendor Returns** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0308021958.html> — *On the mobile app, you can record the details of items in your location that you want to pick and return to vendors. You can fully or partially pick items from Vendor Returns type of bins and for standalone vendor returns only. After you p…*
+  - **Replenishment for Warehouse Management** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541441806.html> — *For warehouse locations that use bins, you can replenish inventory at the item level or at the bin level. If you want to drive replenishment based on an item's stocked quantity, you can do so manually using a replenishment report. If you w…*
+    - Generating Replenishment Plans — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442254.html>
+    - Scheduling Bin Replenishments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0807023240.html>
+    - Replenishing Primary Bin Locations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442264.html>
+  - **Replenishing via Carts** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0325032805.html> — *If you use carts, you can place multiple items for replenishment onto them before you put the items away for storage. During the putaway process, you have the option to transfer all the new items into the same storage bin.*
+  - **Changing the Inventory Status of Items** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161894442589.html> — *If you use the Inventory Status feature, you can change the status of items using your mobile device. For warehouses with bins, you can change the status of items in specific bins.*
+- **Outbound Processing** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541442931.html> — *Outbound processing involves releasing orders that you want to process for shipping out of a warehouse. Fulfillment processing of released orders include picking, packing, and shipping items. You can process orders for both warehouses that…*
+  - **Fulfilling Released Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442945.html> — *You may pick, pack, and ship items out of your warehouse for the following reasons To send items customers have ordered - You ship sales order items to a customer to complete a sale.*
+    - Viewing the Status of Fulfillment Generation — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442979.html>
+    - Viewing and Handling Fulfillment Generation Failures — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0305030933.html>
+    - Posting Item Fulfillments for Partially Picked Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443017.html>
+  - **Releasing Orders to the Warehouse** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1548078373.html> — *Releasing orders to the warehouse initiates the outbound processing of orders for fulfillment using wave transactions. It enables you to select and prioritize the orders or order lines you want to include in a wave. When you release a wave…*
+    - Pick Task Decomposition — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0207120728.html>
+    - Creating Wave Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1548078883.html>
+    - Pick Task Assignment — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1548079991.html>
+    - Creating a Wave Release Schedule — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161721775390.html>
+    - Re-releasing Lines with Backorders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0803020225.html>
+    - Printing Pick Tickets from Wave Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1548080686.html>
+    - Handling Changes to Associated Sales or Transfer Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1549308908.html>
+    - Viewing Pick Task Generation Failures — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0331104429.html>
+    - Deleting Waves and Handling Wave Issues — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/bridgehead_1555356988.html>
+    - Pick Task Sorting and Recommended Bins — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1549310986.html>
+    - Monitoring the Status of Released Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1548081071.html>
+  - **Picking Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442950.html> — *Picking an order involves pulling items from your warehouse's inventory to fill an open order. You can pick a single order or multiple orders at a time. When you pick items using a mobile device, NetSuite WMS can guide you through the ware…*
+    - Picking Items for Single Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161618347171.html>
+    - Picking Items for Multiple Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161618492327.html>
+    - Performing Bulk Picking — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161643765683.html>
+    - Marking Partial and Zero Picks Done Through the App — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0123020409.html>
+    - Preventing the Picking of Expired Items — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443212.html>
+    - Picking Orders from a Zone — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443233.html>
+      - Zone Picking for Single Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_164461153402.html>
+      - Zone Picking for Multiple Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_164461269708.html>
+    - Viewing, Updating, or Deleting Pick Tasks — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1548082148.html>
+    - Pick Task Reversal — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443266.html>
+    - Managing Bins Blocked from Order Picking — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0214043924.html>
+    - Showing or Hiding Completed Picks on the App — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443283.html>
+  - **Packing Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442955.html> — *After you pick items for released orders, you can pack them for shipping. Packing enables you update orders and item fulfillments with item and package details. To view the list of supported item types for packing released orders, see Supp…*
+    - Manually Packing Orders and Printing Packing Lists — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443295.html>
+  - **Shipping Orders** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541442959.html> — *After you pick and pack items, you can ship them using either of the following options: NetSuite WMS Shipping Integration - Enables integration with carrier shipping software…*
+    - WMS Ship Manifest Records — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443388.html>
+    - NetSuite WMS Shipping Integration — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443394.html>
+      - Shipping Orders Using the NetSuite WMS Shipping Integration — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443420.html>
+      - NetSuite WMS Shipping Integration Workflow Chart — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443425.html>
+    - Manually Shipping Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443432.html>
+    - Manually Shipping Orders in Pack Cartons or Pallets — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_163034719923.html>
+    - Confirming Customer Shipments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443457.html>
+      - Sending Advance Shipping Notices (ASNs) — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443476.html>
+- **Warehouse Management FAQs** — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_6133902954.html> — *In this section, find the answers to frequently asked questions about setting up or using NetSuite WMS. If you want to undo item picking done through the mobile app, you can perform a pick task reversal. It removes picked quantities from p…*
+
+## Cross-cutting backend capabilities observed
+
+Each capability below is a concrete backend behavior visible in the three help areas, with a dependency hint ("Needs first") and the best NetSuite help link. Ordering follows a plausible build sequence: BOM/assembly foundation, production execution, planning/scheduling, then vendor master, procurement-to-receipt, and finally warehouse execution.
+
+- **Assembly item and BOM data model** — Assembly items are stocked finished goods defined by member components and quantities; the assembly item record plus its BOM members, per-location availability and build cost is the manufacturing master data other features depend on. *Needs first: item master + inventory item types.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2319010.html)
+- **Assembly build / unbuild transaction** — Recording a production run increases the assembly on-hand quantity and decreases component stock (assembly build); unbuild reverses it and posts variance; both are inventory transactions that update stock and GL value. *Needs first: assembly item master + inventory transaction engine.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2321340.html)
+- **Advanced BOM and revisions** — Multi-level BOMs with revisions, component effectivity, matrix-item BOMs, assembly-to-BOM linking, and BOM inquiry/where-used for one or many facilities. *Needs first: assembly item records + item master.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1501506444.html)
+- **BOM member control (revision / date effectivity)** — BOM controls gate which component revisions are included in builds during specified effective/obsolete windows, and revision records drive assembly revision control. *Needs first: Advanced BOM + item revisions.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2332509.html)
+- **Matrix and phantom assemblies** — Matrix assemblies generate child assemblies per option combination; phantom assemblies group non-stocked sub-components that explode into the parent build. *Needs first: matrix items / BOM explosion.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4249789892.html)
+- **Assembly costing, costed BOM and variance** — Cost roll-up of members into assembly cost (material/conversion), costed-BOM breakdown, and cost variance analysis comparing build costs to standard/planned cost. *Needs first: assembly builds + costing methods.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_160730538.html)
+- **Component where-used inquiry** — Reverse BOM inquiry showing every assembly/sub-assembly and work order that consumes a component. *Needs first: BOM data model + work orders.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1511882961.html)
+- **Work order lifecycle** — Work orders track required build quantity and component commitments with statuses Planned, Released, In Process, Built, Closed; two variants (non-WIP and WIP); mass creation, planned work orders, void/reopen, WO linked to sales orders. *Needs first: assembly BOM + inventory commitments.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2328390.html)
+- **Work order demand planning integration** — Open work orders generate component demand (assembly qty x qty per assembly) used by reorder-point/preferred-stock calculations, and define whether work orders/builds count as demand. *Needs first: work orders + Advanced Inventory Management.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2332170.html)
+- **Component yield and quantity rounding** — Per-BOM component yield percentage and round-up behavior determine how much component quantity a build consumes. *Needs first: BOM members + work orders.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_3727093231.html)
+- **Work in process (WIP) manufacturing** — WIP work orders track material through shop-floor operations to completion; completions move value from WIP asset accounts to finished goods, with default WIP accounts, WIP-assembly item setup, and WIP costing rules. *Needs first: work orders + routing + GL accounts.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2335392.html)
+- **Manufacturing routing and work centers** — Routing records define ordered operations, work centers/groups, setup/run times, manufacturing charges and cost templates; operation tasks and completions/time entry capture actual shop-floor time. *Needs first: work orders + WIP + item cost templates.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2341076.html)
+- **Work instructions and traveler (SuiteApp)** — Work-instruction subtabs on routings plus generated/printed travelers with bar-coded work order/operation data; delivered by a separate SuiteApp. *Needs first: routing records + custom forms.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9135201182.html)
+- **Scheduling and capacity planning** — Production scheduling methods (forward/backward, infinite/finite) with rough-cut capacity planning, work-center calendars and operation task dates; the Manufacturing Scheduler SuiteApp visualizes and edits the schedule board. *Needs first: routing/work centers + open work orders.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4000988757.html)
+- **Available-to-build calculation** — Calculates how many additional assemblies can be built from on-hand components (per selected location/items) and exposes that number on sales orders and dashboards; SuiteApp-delivered but the calculation semantics are core planning logic. *Needs first: BOM + inventory availability.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_7162547625.html)
+- **Supply 360 shortages (SuiteApp)** — Work-order shortage analysis by work order and by component, with all-components requirements view, to prioritize build/expedite decisions. *Needs first: work orders + inventory availability.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_6162726284.html)
+- **Outsourced manufacturing** — Subcontracted builds: outsourced-manufacturing item setup, assembly build helper, outsourcing production from a work order, and vendor charges/backflush for the outsourced operation. *Needs first: assembly items + work orders + vendor records.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_157833700001.html)
+- **Engineering change order (ECO)** — ECO records document proposed BOM/assembly changes, carry approval and implementation status, and apply the change to BOM revisions; NetSuite ships it inside the SCM SuiteApp but it is a backend revision-workflow feature. *Needs first: BOM revision control + approval workflow.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1531288763.html)
+- **Manufacturing preferences** — Feature-level defaults (commit/work-order/WIP/backflush, transaction-to-consider for demand, yield and rounding options) that shape how build/planning logic behaves. *Needs first: work orders + WIP + BOM.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_159112534056.html)
+- **Vendor record master data** — Vendor records hold identity/address, currency, tax/1099, category, credit limit, default expense/AP accounts, payment terms and purchasing defaults reused by POs, bills, payments and returns. *Needs first: vendor master + GL/accounting.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2360272.html)
+- **Vendor record configuration** — Configuration features: vendor categories, multiple vendors per entity, 1099 contractor data, credit limits, currency and tax handling. *Needs first: vendor master + accounting preferences.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161952107343.html)
+- **Vendor bills, approvals, matching and variances** — Vendor bills post AP; support approval routing/status, bill capture (OCR/email), item/expense lines, and vendor bill variances (approved vs billed price/qty) with variance posting accounts. *Needs first: purchase orders/receipts + vendor master + GL.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2370131.html)
+- **Vendor payments and installments** — Bill payments (checks/ACH-style disbursements), payment installments, default payment accounts, payment status tracking, and payment printing/vouchers. *Needs first: vendor bills + bank/GL accounts.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2381615.html)
+- **Vendor prepayments** — Prepay vendors before a bill exists (often against a PO), apply prepayments to bills, and track open prepayment applications. *Needs first: vendor records + purchase orders + AP.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162332227021.html)
+- **Payment runs** — Batch creation/approval of vendor payments from grouped bills and generation of payment records in one run. *Needs first: vendor bills + approval workflow.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_1145327659.html)
+- **Vendor credits and returns (vendor RMA)** — Vendor return authorizations ship goods back to a vendor (PO- or standalone-based, drop-ship variants), and vendor credits offset bills; both integrate with inventory and AP. *Needs first: item receipts + vendor bills + inventory.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2386193.html)
+- **Requisitions and requisition approvals** — Pre-PO purchase requests entered by employees, routed through approvals (SuiteFlow), and ordered into purchase orders in bulk. *Needs first: employee/vendor master + approval engine.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_3875569040.html)
+- **Purchase requests** — Purchase requests capture internal demand and convert to purchase orders, with enablement and status handling. *Needs first: requisitions or direct PO creation.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2393987.html)
+- **Request for quote (RFQ)** — RFQ transactions solicit vendor quotes, compare responses, and convert selected quotes to purchase orders. *Needs first: vendor records + purchasing.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4189559896.html)
+- **Purchase contracts and blanket orders** — Contracts hold negotiated terms/pricing/delivery schedules usable on POs; blanket POs pre-define price/quantity for a period and support scheduled releases and approval workflows. *Needs first: vendor master + purchasing + approval workflow.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4077153711.html)
+- **Purchase orders and PO management** — PO creation/approval, line-level item/expense purchase, drop-ship and special-order purchases, centralized purchasing/billing, PO billing variants and PO history reporting. *Needs first: vendor records + item purchasing data + approval workflow.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2399286.html)
+- **Receiving orders and item receipts** — Receive POs fully/partially (including receiving before billing and advanced receiving), create item receipts that increase inventory and on-order/committed quantities, and reverse/handle receipt discrepancies. *Needs first: purchase orders + inventory/bins + landed cost.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2410585.html)
+- **Accounting for received purchase orders** — Received-not-billed accrual handling and PO billing (billing received qty, variance control) so inventory/expense and AP stay consistent when receipt and bill timing differ. *Needs first: receiving + vendor bills + GL.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2408991.html)
+- **Expenses and landed cost** — Expense reports plus landed-cost allocation (freight, duty, other charges) to received item cost by weight/quantity/amount/line, with landed-cost items/categories and estimated landed cost. *Needs first: item receipts + vendor bills + item costing.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_N2415855.html)
+- **Procurement analytics (SuiteApp/workbooks)** — Procurement Dashboard and Purchases Workbooks provide KPIs/workbook datasets over purchase transactions; reporting layer only. *Needs first: transaction data (read models).* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4370304623.html)
+- **SuiteProcurement (SuiteApp)** — Punch-out catalog purchasing between NetSuite and vendor procurement portals, with its own preferences, roles, purchase-request review and saved searches. *Needs first: purchasing + vendor records + external integration.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9112006488.html)
+- **WMS warehouse/bin data model and strategies** — WMS setup creates warehouse records and templates, bin/zone structure, putaway/pick strategies, system rules, preferences and mobile app configuration; requires Advanced Inventory Management. *Needs first: locations/bins + inventory.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156382465711.html)
+- **WMS inbound: receiving, ASN, putaway** — Inbound processing receives POs/inbound shipment orders (ASN-style), records item receipts, and performs directed putaway (putaway strategies, staging at receiving, cart putaway). *Needs first: purchase orders/receipts + bins + WMS setup.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541435915.html)
+- **WMS inventory processing: transfers, counts, replenishment, WO picking** — Inventory transfers/bin transfers, inventory search/creation, cycle-count plans and recounts, work-order component picking, vendor-return picking, replenishment plans/scheduling and inventory-status changes. *Needs first: bins + inventory counts + work orders.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541441780.html)
+- **WMS outbound: release, waves, pick, pack, ship** — Orders are released to the warehouse (wave transactions and wave release schedules) then picked (including partial/zero picks), packed and shipped; includes shipping integration and ASN confirmation. *Needs first: sales orders/fulfillment + bins + carriers.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1541442931.html)
+- **WMS shipping integration and EDI** — Printer-driver/carrier-integrator application, parcel rate/label generation, commodity shipment files, and EDI integration for warehouse shipping documents. *Needs first: WMS outbound + carrier APIs.* [Doc](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619718289.html)
+
+## Classified out of core backend phase
+
+Topics whose `backend_relevance` is `ui-only`, `mobile`, `analytics`, `suiteapp`, `integration` or `unclear`. They are listed in the JSON with the same classification and can be deferred or handled in later phases. For compactness, only the topmost out-of-core subtree roots are shown, with the number of same-classified topics in each subtree.
+
+### ui-only (37 topics, 28 subtree roots)
+
+- Printing an Item Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2323540.html> (1 topic)
+- Printing Assembly Item Materials on Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2324339.html> (1 topic)
+- Printing Assembly Labels — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2324547.html> (1 topic)
+- Printing a Work Order Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2331127.html> (1 topic)
+- Appending a PDF File to Print with the Bill of Materials — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2331613.html> (1 topic)
+- Production Control Board — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_2013601906.html> (1 topic)
+- Verifying the Custom Form of Work Instructions Subtab — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0705105231.html> (1 topic)
+- Creating Custom Template for Traveler Report — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620072542.html> (1 topic)
+- Generating Traveler Reports — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620092553.html> (2 topics)
+- Supported Browsers for Manufacturing Scheduler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223113914.html> (1 topic)
+- Manufacturing Scheduler Dashboard — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223104719.html> (1 topic)
+- Operation View — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224045245.html> (1 topic)
+- Time Periods — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224052321.html> (1 topic)
+- Manage Work Center and Work Order Operations — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0304025448.html> (1 topic)
+- Searching for Work Centers — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224062013.html> (1 topic)
+- Understanding Legend Colors — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0224113953.html> (1 topic)
+- Printing Mailing Labels for Vendors — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2368875.html> (1 topic)
+- Vendor Bill Printing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161070688350.html> (3 topics)
+- Configuring a Reminder for Bills Pending Approval in the Employee Center Dashboard — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157528136729.html> (2 topics)
+- Printing Bill Payments — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2384738.html> (1 topic)
+- Printing Bill Payment Vouchers — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2384154.html> (1 topic)
+- Adding a Reminder for Vendor Prepayment Approvals to the Employee Center Dashboard — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_159584658445.html> (1 topic)
+- Printing Vendor Prepayment Vouchers — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157242190523.html> (1 topic)
+- Vendor Credit Printing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_161107139523.html> (3 topics)
+- Printing a Tax ID or Resale Number on Purchase Orders — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4746558953.html> (1 topic)
+- Purchase Order Printing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2407704.html> (4 topics)
+- Printing Labels From Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162626600304.html> (1 topic)
+- Printing Pick Tickets from Wave Transactions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1548080686.html> (1 topic)
+
+### mobile (124 topics, 14 subtree roots)
+
+- Mobile Devices — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1494011284.html> (11 topics)
+- Using the Scanner to Enter Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1508353591.html> (16 topics)
+- Entering Tablet Data — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1508353648.html> (7 topics)
+- Manufacturing Mobile — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/part_158644016906.html> (69 topics)
+- Assigning Custom Roles to Custom Mobile Processes — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161521589524.html> (1 topic)
+- Mobile App Setup — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541432880.html> (8 topics)
+- Mobile Device Basics for NetSuite WMS — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156382508723.html> (5 topics)
+- Receiving Orders by Scanning Through the App — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0416111212.html> (1 topic)
+- Putting Away Items Using Carts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_161894286213.html> (1 topic)
+- Bin Transfer via Cart — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0220102704.html> (1 topic)
+- Generating and Processing Counts on the App — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0807095555.html> (1 topic)
+- Replenishing via Carts — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0325032805.html> (1 topic)
+- Marking Partial and Zero Picks Done Through the App — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0123020409.html> (1 topic)
+- Showing or Hiding Completed Picks on the App — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443283.html> (1 topic)
+
+### analytics (23 topics, 9 subtree roots)
+
+- SuiteAnalytics Manufacturing Workbook — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1549896702.html> (8 topics)
+- Vendor Dashboards — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4849482517.html> (1 topic)
+- Multiple Vendors Saved Search — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_4115931525.html> (1 topic)
+- Purchase Order History Report — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2409777.html> (1 topic)
+- Creating a Saved Search With Expense Categories — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_162020704920.html> (1 topic)
+- Procurement Dashboard — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_4370304623.html> (6 topics)
+- Purchases Workbooks — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_156439261857.html> (3 topics)
+- SuiteProcurement Saved Searches — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_0426121756.html> (1 topic)
+- Creating a Custom Pick Ticket Saved Search — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158265656918.html> (1 topic)
+
+### suiteapp (123 topics, 11 subtree roots)
+
+- Supply 360 — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_6162726284.html> (9 topics)
+- Available To Build — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_7162547625.html> (11 topics)
+- Installing Work Instructions and Traveler SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0620050950.html> (5 topics)
+- Installing Manufacturing Scheduler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223101646.html> (1 topic)
+- Prerequisites for Installing Manufacturing Scheduler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223102730.html> (1 topic)
+- Creating or Customizing Roles and Permissions to Use Manufacturing Scheduler — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0223104112.html> (1 topic)
+- Advanced Manufacturing — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/preface_1506521222.html> (72 topics)
+- Transaction Email Capture SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9121955260.html> (2 topics)
+- Purchase Order Approval Workflow SuiteApp — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2398841.html> (7 topics)
+- SuiteProcurement — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_9112006488.html> (13 topics)
+- Installing the NetSuite WMS SuiteApps — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156399372911.html> (1 topic)
+
+### integration (12 topics, 4 subtree roots)
+
+- Import Work Instructions — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_0621094031.html> (1 topic)
+- NetSuite WMS Shipping Integration Setup — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_158619718289.html> (7 topics)
+- Electronic Data Interchange (EDI) Integration — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_156840265669.html> (1 topic)
+- NetSuite WMS Shipping Integration — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_1541443394.html> (3 topics)
+
+### unclear (2 topics, 2 subtree roots)
+
+- Standard Vendor Bill Approval FAQ — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N2375312.html> (1 topic)
+- Warehouse Management FAQs — <https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/article_6133902954.html> (1 topic)
+
+## Counts
+
+| Metric | Value |
+| --- | --- |
+| Total topics | 936 |
+| kind: book | 4 |
+| kind: set | 1 |
+| kind: chapter | 49 |
+| kind: section | 623 |
+| kind: article | 256 |
+| kind: part | 1 |
+| kind: faq | 2 |
+| domain: manufacturing | 415 |
+| domain: vendors | 184 |
+| domain: purchasing-receiving | 192 |
+| domain: warehouse-management | 145 |
+| backend_relevance: core-backend | 615 |
+| backend_relevance: ui-only | 37 |
+| backend_relevance: mobile | 124 |
+| backend_relevance: analytics | 23 |
+| backend_relevance: suiteapp | 123 |
+| backend_relevance: integration | 12 |
+| backend_relevance: unclear | 2 |
+
+Per help area: Manufacturing 415 topics (book: 17 top-level chapters/parts, 109 immediate sections, 288 deeper topics); Vendors, Purchasing, and Receiving 376 topics (2 books, 18 chapters, 132 immediate sections, 224 deeper topics); Warehouse Management 145 topics (7 chapters, 36 immediate sections, 101 deeper topics). All TOC entries captured; no duplicate URLs; every URL is under `https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/`.
+
+Notes: no topics were invented — every entry comes from the official TOC for the three help areas; titles and URLs were cross-checked against each fetched page `<title>` (0 mismatches). SCM Mobile was explicitly excluded; mobile-device topics are classified `mobile`. `General Notices` boilerplate excluded.
+

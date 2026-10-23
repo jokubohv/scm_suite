@@ -1,0 +1,4657 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-09 — Manufacturing (assembly/BOM, work orders, WIP, routing, scheduling inputs) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "manufacturing.execution",
+        "dir": "manufacturing",
+        "version": "1.1.0"
+      }
+    ],
+    "x-feature-set": "FS-09",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1C"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/assemblies": {
+      "get": {
+        "operationId": "fs09_get_api-v1-assemblies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/filter assemblies",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assemblies",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-assemblies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create assembly extension (with FS-01 item linkage)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assemblies",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assemblies/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-assemblies-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read assembly",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assemblies/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-assemblies-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update defaults/accounts (not item identity)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assemblies/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assemblies/{id}/bom-inquiry": {
+      "get": {
+        "operationId": "fs09_get_api-v1-assemblies-id-bom-inquiry",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "BOM inquiry: components/qty per assembly [mpw-130]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assemblies/{id}/bom-inquiry",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assemblies/{id}/costed-bom-inquiry": {
+      "get": {
+        "operationId": "fs09_get_api-v1-assemblies-id-costed-bom-inquiry",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Costed BOM inquiry (values from FS-05)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assemblies/{id}/costed-bom-inquiry",
+        "x-required-scopes": [
+          "manufacturing.cost.view"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assemblies/{id}/explode": {
+      "post": {
+        "operationId": "fs09_post_api-v1-assemblies-id-explode",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read-only BOM explosion preview",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assemblies/{id}/explode",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-builds": {
+      "get": {
+        "operationId": "fs09_get_api-v1-assembly-builds",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List builds",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assembly-builds",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-assembly-builds",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create DRAFT assembly build (T-15)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assembly-builds",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-builds/{id}/post": {
+      "post": {
+        "operationId": "fs09_post_api-v1-assembly-builds-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-15",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assembly-builds/{id}/post",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-builds/{id}/reverse": {
+      "post": {
+        "operationId": "fs09_post_api-v1-assembly-builds-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse posted build",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assembly-builds/{id}/reverse",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-builds/{id}/unbuild": {
+      "post": {
+        "operationId": "fs09_post_api-v1-assembly-builds-id-unbuild",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create unbuild from original build [mpw-018]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assembly-builds/{id}/unbuild",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-unbuilds": {
+      "post": {
+        "operationId": "fs09_post_api-v1-assembly-unbuilds",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create DRAFT unbuild (new path) [mpw-019]; **Δ-REUSE per-line dispositions**",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assembly-unbuilds",
+        "x-required-scopes": [
+          "manufacturing.write",
+          "manufacturing.unbuild.dispose"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-unbuilds/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-assembly-unbuilds-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read unbuild with **per-line dispositions/valuation/status** (Δ-REUSE)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/assembly-unbuilds/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-unbuilds/{id}/post": {
+      "post": {
+        "operationId": "fs09_post_api-v1-assembly-unbuilds-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-16 (+ variance; **Δ-REUSE disposition/valuation stock effects**)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assembly-unbuilds/{id}/post",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/assembly-unbuilds/{id}/reverse": {
+      "post": {
+        "operationId": "fs09_post_api-v1-assembly-unbuilds-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse a posted unbuild (**full only**, disposition-aware, Δ-REUSE)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/assembly-unbuilds/{id}/reverse",
+        "x-required-scopes": [
+          "manufacturing.unbuild.dispose"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/available-to-build": {
+      "get": {
+        "operationId": "fs09_get_api-v1-available-to-build",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ATB calculation (D4 `EXT`)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/available-to-build",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/available-to-build/calculate": {
+      "post": {
+        "operationId": "fs09_post_api-v1-available-to-build-calculate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Batch ATB (deterministic fixtures path)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/available-to-build/calculate",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bom-components/{id}": {
+      "delete": {
+        "operationId": "fs09_delete_api-v1-bom-components-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove component from DRAFT revision",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/bom-components/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-bom-components-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update draft component line",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/bom-components/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bom-components/{id}/control": {
+      "get": {
+        "operationId": "fs09_get_api-v1-bom-components-id-control",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read control rows",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/bom-components/{id}/control",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs09_put_api-v1-bom-components-id-control",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Upsert component control window (effective-date/revision)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/bom-components/{id}/control",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bom-revisions/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-bom-revisions-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read revision",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/bom-revisions/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-bom-revisions-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update draft revision dates/notes",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/bom-revisions/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bom-revisions/{id}/activate": {
+      "post": {
+        "operationId": "fs09_post_api-v1-bom-revisions-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activate revision (overlap/component checks)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/bom-revisions/{id}/activate",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/bom-revisions/{id}/components": {
+      "get": {
+        "operationId": "fs09_get_api-v1-bom-revisions-id-components",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List components (effective control applied)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/bom-revisions/{id}/components",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-bom-revisions-id-components",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add component line (draft revision only)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/bom-revisions/{id}/components",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/boms": {
+      "get": {
+        "operationId": "fs09_get_api-v1-boms",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List BOMs",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/boms",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-boms",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create BOM header",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/boms",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/boms/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-boms-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read BOM + active revision",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/boms/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-boms-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update draft BOM header",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/boms/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/boms/{id}/revisions": {
+      "get": {
+        "operationId": "fs09_get_api-v1-boms-id-revisions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List revisions",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/boms/{id}/revisions",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-boms-id-revisions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create draft revision (optionally copy)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/boms/{id}/revisions",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/capacity-plans": {
+      "get": {
+        "operationId": "fs09_get_api-v1-capacity-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Rough-cut capacity (RCCP)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/capacity-plans",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/component-usage/where-used": {
+      "get": {
+        "operationId": "fs09_get_api-v1-component-usage-where-used",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Component where-used inquiry [mpw-060]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/component-usage/where-used",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ecos": {
+      "get": {
+        "operationId": "fs09_get_api-v1-ecos",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List ECOs",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/ecos",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-ecos",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create ECO with proposed lines",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/ecos",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ecos/{id}/approve": {
+      "post": {
+        "operationId": "fs09_post_api-v1-ecos-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve (FS-00 approval actor)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/ecos/{id}/approve",
+        "x-required-scopes": [
+          "manufacturing.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ecos/{id}/implement": {
+      "post": {
+        "operationId": "fs09_post_api-v1-ecos-id-implement",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Apply approved changes to BOM (effective-dated) [mpw-414]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/ecos/{id}/implement",
+        "x-required-scopes": [
+          "manufacturing.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ecos/{id}/lines": {
+      "get": {
+        "operationId": "fs09_get_api-v1-ecos-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ECO lines/status log [mpw-415]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/ecos/{id}/lines",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/ecos/{id}/submit": {
+      "post": {
+        "operationId": "fs09_post_api-v1-ecos-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Submit for approval",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/ecos/{id}/submit",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/compat-attributes": {
+      "get": {
+        "operationId": "fs09_get_api-v1-items-item-id-compat-attributes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/replace compatibility attribute values on an item/assembly",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "replace: required",
+        "x-original-path": "/v1/items/{item_id}/compat-attributes",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs09_put_api-v1-items-item-id-compat-attributes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/replace compatibility attribute values on an item/assembly",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "replace: required",
+        "x-original-path": "/v1/items/{item_id}/compat-attributes",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing-cost-templates": {
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-cost-templates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create cost template",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/manufacturing-cost-templates",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing-cost-templates/{id}/lines": {
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-cost-templates-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add effective-dated rate line",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/manufacturing-cost-templates/{id}/lines",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing-preferences": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-preferences",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read resolved manufacturing settings + flags",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing-preferences",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-manufacturing-preferences",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update tenant manufacturing settings",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/manufacturing-preferences",
+        "x-required-scopes": [
+          "manufacturing.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/attributes": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-compat-attributes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search typed attributes; create attribute definition (Δ-CFG)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/attributes",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-compat-attributes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search typed attributes; create attribute definition (Δ-CFG)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/attributes",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/attributes/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-compat-attributes-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/update attribute definition (no type change after values exist)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/attributes/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-manufacturing-compat-attributes-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/update attribute definition (no type change after values exist)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/attributes/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/report": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-compat-report",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Compatibility report (violations by rule/component/context; L3 evidence)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/report",
+        "x-required-scopes": [
+          "manufacturing.compat.validate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/rule-sets": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-compat-rule-sets",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search or create rule sets",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-compat-rule-sets",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search or create rule sets",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/rule-sets/{id}": {
+      "delete": {
+        "operationId": "fs09_delete_api-v1-manufacturing-compat-rule-sets-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/update/delete a DRAFT rule set (DELETE = retire/abandon draft)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-compat-rule-sets-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/update/delete a DRAFT rule set (DELETE = retire/abandon draft)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-manufacturing-compat-rule-sets-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read/update/delete a DRAFT rule set (DELETE = retire/abandon draft)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/rule-sets/{id}/activate": {
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-compat-rule-sets-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "DRAFT→ACTIVE (activation validation; content immutable after)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets/{id}/activate",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/rule-sets/{id}/retire": {
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-compat-rule-sets-id-retire",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ACTIVE/DRAFT→RETIRED",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets/{id}/retire",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/rule-sets/{id}/rules": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-compat-rule-sets-id-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List rules in a rule set; add rule (DRAFT only)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets/{id}/rules",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-compat-rule-sets-id-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List rules in a rule set; add rule (DRAFT only)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/rule-sets/{id}/rules",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/rules/{id}": {
+      "delete": {
+        "operationId": "fs09_delete_api-v1-manufacturing-compat-rules-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/remove a DRAFT rule",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/rules/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-manufacturing-compat-rules-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/remove a DRAFT rule",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/rules/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/slots": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-compat-slots",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List slot/capacity definitions; create slot definition (Δ-CFG)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/slots",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-compat-slots",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List slot/capacity definitions; create slot definition (Δ-CFG)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/compat/slots",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/compat/slots/{id}": {
+      "patch": {
+        "operationId": "fs09_patch_api-v1-manufacturing-compat-slots-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update slot definition (capacity/constraints/required/order)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/compat/slots/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/condition-codes": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-condition-codes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List condition/grade registry; create code (Δ-REUSE)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/condition-codes",
+        "x-required-scopes": [
+          "manufacturing.unbuild.dispose"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-condition-codes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List condition/grade registry; create code (Δ-REUSE)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "create: required",
+        "x-original-path": "/v1/manufacturing/condition-codes",
+        "x-required-scopes": [
+          "manufacturing.unbuild.dispose"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/condition-codes/{id}": {
+      "patch": {
+        "operationId": "fs09_patch_api-v1-manufacturing-condition-codes-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/retire condition code",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/condition-codes/{id}",
+        "x-required-scopes": [
+          "manufacturing.unbuild.dispose"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/configurations": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-configurations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/filter validation evidence",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/configurations",
+        "x-required-scopes": [
+          "manufacturing.compat.validate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/configurations/simulate": {
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-configurations-simulate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Dry-run validation with evidence (no gating side effect on documents)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/manufacturing/configurations/simulate",
+        "x-required-scopes": [
+          "manufacturing.compat.validate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/configurations/validate": {
+      "post": {
+        "operationId": "fs09_post_api-v1-manufacturing-configurations-validate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Validate a configuration (dual-scope; HARD blocks / WARN records / override)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/manufacturing/configurations/validate",
+        "x-required-scopes": [
+          "manufacturing.compat.validate",
+          "manufacturing.compat.override"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/manufacturing/configurations/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-manufacturing-configurations-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read immutable validation evidence record",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/manufacturing/configurations/{id}",
+        "x-required-scopes": [
+          "manufacturing.compat.validate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/outsourced-operations": {
+      "get": {
+        "operationId": "fs09_get_api-v1-outsourced-operations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List outsourced operations",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/outsourced-operations",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-outsourced-operations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create outsourced operation",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/outsourced-operations",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/outsourced-operations/consolidate": {
+      "post": {
+        "operationId": "fs09_post_api-v1-outsourced-operations-consolidate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Consolidate ops into draft PO [mpw-217]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/outsourced-operations/consolidate",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/outsourced-operations/{id}/close": {
+      "post": {
+        "operationId": "fs09_post_api-v1-outsourced-operations-id-close",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Close received operation",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/outsourced-operations/{id}/close",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/outsourced-operations/{id}/create-po": {
+      "post": {
+        "operationId": "fs09_post_api-v1-outsourced-operations-id-create-po",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/link draft PO via FS-08",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/outsourced-operations/{id}/create-po",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/outsourced-operations/{id}/receive": {
+      "post": {
+        "operationId": "fs09_post_api-v1-outsourced-operations-id-receive",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Build-helper receipt (consume components, absorb charges)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/outsourced-operations/{id}/receive",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/routing-step-charges/{id}": {
+      "patch": {
+        "operationId": "fs09_patch_api-v1-routing-step-charges-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update charge",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/routing-step-charges/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/routing-steps/{id}": {
+      "patch": {
+        "operationId": "fs09_patch_api-v1-routing-steps-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update step",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/routing-steps/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/routing-steps/{id}/charges": {
+      "post": {
+        "operationId": "fs09_post_api-v1-routing-steps-id-charges",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add charge line",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/routing-steps/{id}/charges",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/routings": {
+      "get": {
+        "operationId": "fs09_get_api-v1-routings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List routings",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/routings",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-routings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create routing",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/routings",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/routings/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-routings-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read routing + steps",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/routings/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-routings-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update draft routing",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/routings/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/routings/{id}/activate": {
+      "post": {
+        "operationId": "fs09_post_api-v1-routings-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Activate routing",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/routings/{id}/activate",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/routings/{id}/steps": {
+      "post": {
+        "operationId": "fs09_post_api-v1-routings-id-steps",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add operation step",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/routings/{id}/steps",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/scheduling-runs": {
+      "post": {
+        "operationId": "fs09_post_api-v1-scheduling-runs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create scheduling run request",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/scheduling-runs",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/scheduling-runs/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-scheduling-runs-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Run status/result summary",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/scheduling-runs/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/scheduling-runs/{id}/apply": {
+      "post": {
+        "operationId": "fs09_post_api-v1-scheduling-runs-id-apply",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Apply planned dates to WOs (audited)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/scheduling-runs/{id}/apply",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/scheduling-runs/{id}/scheduled-operations": {
+      "get": {
+        "operationId": "fs09_get_api-v1-scheduling-runs-id-scheduled-operations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Scheduled operations",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/scheduling-runs/{id}/scheduled-operations",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wip-transactions": {
+      "post": {
+        "operationId": "fs09_post_api-v1-wip-transactions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create DRAFT WIP transaction (ISSUE/COMPLETION/CLOSE)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/wip-transactions",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wip-transactions/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-wip-transactions-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read WIP transaction",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/wip-transactions/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wip-transactions/{id}/post": {
+      "post": {
+        "operationId": "fs09_post_api-v1-wip-transactions-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-17/T-18/T-19",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/wip-transactions/{id}/post",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/wip-transactions/{id}/reverse": {
+      "post": {
+        "operationId": "fs09_post_api-v1-wip-transactions-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse posted WIP transaction",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/wip-transactions/{id}/reverse",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-center-calendars": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-center-calendars",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List calendars",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-center-calendars",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-work-center-calendars",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create calendar",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-center-calendars",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-center-calendars/{id}/days": {
+      "put": {
+        "operationId": "fs09_put_api-v1-work-center-calendars-id-days",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bulk upsert day/shift capacity",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-center-calendars/{id}/days",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-center-groups": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-center-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create group",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-center-groups",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-center-loads": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-center-loads",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Detailed load",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-center-loads",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-centers": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-centers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List work centres",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-centers",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-work-centers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create work centre",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-centers",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-centers/{id}": {
+      "patch": {
+        "operationId": "fs09_patch_api-v1-work-centers-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update work centre",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-centers/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-order-components/{id}": {
+      "patch": {
+        "operationId": "fs09_patch_api-v1-work-order-components-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Edit component qty (pre-release only, audited)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-order-components/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-order-operations/{id}": {
+      "patch": {
+        "operationId": "fs09_patch_api-v1-work-order-operations-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update task (status/dates manual)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-order-operations/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-order-operations/{id}/complete": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-order-operations-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Operation completion + time entry [mpw-177..183]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-order-operations/{id}/complete",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-order-operations/{id}/completions": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-order-operations-id-completions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List completion records",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-order-operations/{id}/completions",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/filter WOs",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-orders",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create WO (snapshot components/operations)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/mass-create": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-mass-create",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Bulk create planned WOs (FS-10 draft-WO path)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/mass-create",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-orders-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read WO (lines/components/ops summary)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-orders/{id}",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs09_patch_api-v1-work-orders-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update planned WO dates/qty",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-orders/{id}",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/backflush": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-backflush",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Explicit remaining-component backflush",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/backflush",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/close": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-close",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Close WO; WIP close (T-19) for WIP WOs",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/close",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/complete": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "WIP completion (T-18)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/complete",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/components": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-orders-id-components",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Component snapshot",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-orders/{id}/components",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/components/pick-requirements": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-orders-id-components-pick-requirements",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**FS-11 interface** — component picking data",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-orders/{id}/components/pick-requirements",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/firm": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-firm",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Firm planned WO [mpw-077]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/firm",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/issue": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-issue",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "WIP issue (T-17)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/issue",
+        "x-required-scopes": [
+          "manufacturing.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/operations": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-orders-id-operations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Operation tasks",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-orders/{id}/operations",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/release": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-release",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Release WO: commitments + operations [mpw-078]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/release",
+        "x-required-scopes": [
+          "manufacturing.release"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/reopen": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-reopen",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reopen closed non-WIP WO [mpw-084]",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/reopen",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/void": {
+      "post": {
+        "operationId": "fs09_post_api-v1-work-orders-id-void",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Void unposted WO (C-06)",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/work-orders/{id}/void",
+        "x-required-scopes": [
+          "manufacturing.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/work-orders/{id}/wip-balance": {
+      "get": {
+        "operationId": "fs09_get_api-v1-work-orders-id-wip-balance",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "WIP read model",
+        "tags": [
+          "FS-09",
+          "manufacturing.execution"
+        ],
+        "x-contract": [
+          "manufacturing.execution"
+        ],
+        "x-feature-set": "FS-09",
+        "x-fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+        "x-original-path": "/v1/work-orders/{id}/wip-balance",
+        "x-required-scopes": [
+          "manufacturing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 125,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "manufacturing.execution",
+      "event": "assembly.built",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "assembly.unbuilt",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "available_to_build.calculated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "component.consumed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "eco.implemented",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "manufacturing.compat.rule_set.activated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "manufacturing.config.validated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "manufacturing.config.violation",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "manufacturing.preferences.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "operation.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "scheduling.run.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "wip.backflushed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "wip.closed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "wip.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "wip.issued",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.built",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.closed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.firmed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.released",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.reopened",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.rescheduled",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "event": "work_order.voided",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "mfg.available_to_build.refresh",
+    "mfg.capacity.rollup",
+    "mfg.scheduling.run",
+    "mfg.wip.reconcile",
+    "mfg.wo.demand.sync"
+  ]
+}

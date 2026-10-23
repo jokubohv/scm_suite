@@ -1,0 +1,45 @@
+PASS  plan_version 1.5.0 in manifest, permissions and parallel-plan
+PASS  FEATURE-SETS header 1.5.0; PLAN header 1.5.0 pending
+PASS  tables 287 (FS-09 42 + platform 34) / views 21 / posting 31+6 unchanged
+PASS  rules: 146 scoped + 10 global = 156; INV-01..INV-33; state machines 44/53
+PASS  catalogue 255 = 241 assignable + 13 service-only + 1 platform-only; roles/SoD/approval/allowlists unchanged
+PASS  catalogue adds exactly 4 assignable Δ-CFG scopes (manage/validate/override + unbuild.dispose)
+PASS  manifest: FS-09 provides manufacturing.execution 1.1.0; exit_checks 8; migrations 3; DAG unchanged
+PASS  contract bump is additive: all consumers require ranges that include 1.1.0 (>=1.0.0 <2.0.0)
+PASS  no new migration/renumbering: FS-09 revisions 0018/0019/0020; new tables inside 0020
+PASS  coverage unchanged 1,348 (769 in-scope / 579 deferred)
+PASS  only FS-03 (seed-only USED/REFURB note) and FS-09 changed among the 16 specs
+PASS  FS-03 change is seed-only (USED/REFURB statuses; tables/capability counts unchanged)
+PASS  addendum binding/EXT, FS-09-only, contract 1.1.0 additive, no DAG/wave/coverage changes
+PASS  7 compatibility/condition tables defined in addendum and DATA-MODEL
+PASS  dual scope: assembly/BOM + order/config/customer/region/channel both apply, deterministic specificity→priority→code
+PASS  configurable enforcement: tenant default HARD, rule-set/rule mode, per-rule, override scope+reason audited
+PASS  immutable validation records/hash/evidence (compat_configuration; ordered rules; result/override)
+PASS  generic applicability matrix covers ALL manufacturing/configuration paths; unbuild exempt; kits/groups out
+PASS  ARCHITECTURE §4.7 engine + §4.5 pointer + T-16 dispositions + INV-33 + D-32 + A-19
+PASS  DATA-MODEL 7 tables + assembly_unbuild_component disposition/valuation columns + DM-MFG-12/13/14 + INV-33
+PASS  DATA-MODEL migration/seed map: 7 tables in existing 0020, condition/status seeds, DMX-29, totals 287/146/156
+PASS  unbuild per-line disposition RETURN_TO_STOCK default/SCRAP/HOLD + optional used/condition/status/resale
+PASS  configurable valuation ORIGINAL_COST default/NRV/MANUAL; tenant/assembly/line policy; NRV CURRENT_COST default
+PASS  serial/lot lifecycle, reversal rules, scrap no stock, REWORK deferred, audit events
+PASS  FS-09 spec: 42 tables / 115 API rows / 24 events / 5 jobs / 3 migrations / 8 exit commands; contract 1.1.0; DM-MFG/INV-33; §11 == manifest
+PASS  FS-09 API surface has 115 row-based entries (grouped GET|POST rows count as one)
+PASS  FS-09 emits 24 events and 5 jobs per spec (compat/unbuild additive events included)
+PASS  FEATURE-SETS: FS-09 42 tables / total 287; §7.10 Δ-CFG paragraph
+PASS  PLAN: v1.5.0 header pending + Δ-CFG/Δ-REUSE decision row + §4.5 + §12.10/§12.18 + generated tables 287/42
+PASS  README: 287 tables (platform 34)/255-scope/146-rule/capability line + pending status
+PASS  parallel-plan plan_version 1.5.0 and validator PASS 22/7/15/16/30/6/7
+FAIL  no stale current-state count references (287/146/156/INV-33/255/241 current) -- [('251 scopes/237 assignable', 'PLAN.md', 49, '| [`design/permissions.json`](design/permissions.json) | **Authoritative machine-readable RBAC catalogue**: 251 capability scopes, 7 system role templates, 14 S'), ('251 scopes/237 assignable', 'PLAN.md', 219, 'reconciled catalogue has **251 scopes** (237 assignable, 1 platform-only `platform.tenant.manage`,'), ('INV-01..INV-32 range', 'feature-sets/FS-00.md', 23, '> rules; invariants **INV-01..INV-32**). No new'), ('280 base/tables', 'feature-sets/FS-00.md', 37, '> 280 base tables**, **251 scopes** (237 assignable + 13 service-only + 1 platform-only; alias not seeded),'), ('251 scopes/237 assignable', 'feature-sets/FS-00.md', 37, '> 280 base tables**, **251 scopes** (237 assignable + 13 service-only + 1 platform-only; alias not seeded),'), ('INV-01..INV-32 range', 'feature-sets/FS-00.md', 38, '> **143/153 rules**, **INV-01..INV-32**, `plan_version=1.3.0`; no DAG/contract-version change.')]
+FAIL  FS-00 spec catalogue counts current (255/241; FS-00 banner/§4.3 updated for Δ-CFG catalogue growth)
+FAIL  PLAN §3.1 decisions table keeps the Δ-PAR row (Δ-CFG edit must not drop prior amendments)
+==============================================================================================================
+CFG DELTA AUDIT  --  31 PASS / 3 FAIL / 5 findings
+==============================================================================================================
+[MINOR] CFG-D1 (design/DATA-MODEL.md:934 (§20 per-context rule counts)): §20 lists manufacturing as 11 rules and the per-context counts sum to 143, while the same paragraph (and ARCHITECTURE/PLAN/DATA-MODEL §24) claim **146 scoped / 156 total** (+DM-MFG-12/13/14 ⇒ manufacturing 14). Internal count inconsistency — the total is right, the manufacturing row is stale.
+[MINOR] CFG-D2 (PLAN.md:49 and PLAN.md:219): PLAN still carries current-state '251 capability scopes'/'251 scopes (237 assignable…)' in the §2 artifact table and RBAC section; v1.5.0 catalogue is **255 scopes / 241 assignable**.
+[MINOR] CFG-D4 (feature-sets/FS-00.md banner + §4.3 role/catalogue counts): FS-00 spec still states the pre-Δ-CFG catalogue counts (251 scopes / 237 assignable; admin 237/readonly 43), while the v1.5.0 catalogue is 255/241 (admin 241). FS-00 was not in the Δ-CFG update map, but it references the catalogue and is now internally inconsistent with ARCHITECTURE/PLAN/permissions.json.
+[MINOR] CFG-D5 (PLAN.md §3.1 decisions table): The Δ-CFG/Δ-REUSE edit dropped the earlier Δ-PAR decision row from PLAN §3.1 (the table now has Δ-CFG/Δ-REUSE but no `| Δ-PAR |` row, although the Δ-PAR amendment remains binding and referenced in §7.5/§12.17).
+[MINOR] CFG-D3 (design/ARCHITECTURE.md D-30 row): D-30 says the catalogue 'closes the 88→251 seed gap'; the v1.5.0 catalogue is 255 (251 was the Δ-SSO count).
+--------------------------------------------------------------------------------------------------------------
+Counts: tables=287 (FS-09=42, platform=34), views=21, posting=31+6, rules=146 scoped +10 = 156, INV=1..33, scopes=255 (assignable=241), roles=7, SoD=14, approval=18, public=9/self=6, plan_version=1.5.0
+FS-09: 42 tables / 115 API rows (115 row-entries incl. grouped) / 24 events / 5 jobs / 3 migrations / 8 exit commands

@@ -1,0 +1,273 @@
+{
+  "phase": 1,
+  "order": [
+    {
+      "seq": 1,
+      "id": "FS-00",
+      "phase": 1,
+      "wave": "0A",
+      "name": "Platform Core (tenancy, identity, audit, events, jobs, boundaries)",
+      "depends_on": []
+    },
+    {
+      "seq": 2,
+      "id": "FS-01",
+      "phase": 1,
+      "wave": "0B",
+      "name": "Item Master and UoM Engine",
+      "depends_on": [
+        "FS-00"
+      ]
+    },
+    {
+      "seq": 3,
+      "id": "FS-02",
+      "phase": 1,
+      "wave": "0B",
+      "name": "Pricing Engine (item pricing + advanced pricing + effective-date updates)",
+      "depends_on": [
+        "FS-00",
+        "FS-01"
+      ]
+    },
+    {
+      "seq": 4,
+      "id": "FS-03",
+      "phase": 1,
+      "wave": "0C",
+      "name": "Storage and Inventory-Status Registry",
+      "depends_on": [
+        "FS-00",
+        "FS-01"
+      ]
+    },
+    {
+      "seq": 5,
+      "id": "FS-04",
+      "phase": 1,
+      "wave": "0C",
+      "name": "Inventory Ledger Core (posting, balances, commitments, transfers, adjustments, imports)",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-02",
+        "FS-03"
+      ]
+    },
+    {
+      "seq": 6,
+      "id": "FS-05",
+      "phase": 1,
+      "wave": "0C",
+      "name": "Costing and Valuation Engine",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04"
+      ]
+    },
+    {
+      "seq": 7,
+      "id": "FS-06",
+      "phase": 1,
+      "wave": "1A",
+      "name": "Numbered Inventory (lots and serials)",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-05"
+      ]
+    },
+    {
+      "seq": 8,
+      "id": "FS-07",
+      "phase": 1,
+      "wave": "1A",
+      "name": "Inventory Counts and Cycle Counts",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-05",
+        "FS-06"
+      ]
+    },
+    {
+      "seq": 9,
+      "id": "FS-08",
+      "phase": 1,
+      "wave": "1B",
+      "name": "Procurement (vendor master, P2P documents, receipts, bills, returns)",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-05",
+        "FS-06"
+      ]
+    },
+    {
+      "seq": 10,
+      "id": "FS-09",
+      "phase": 1,
+      "wave": "1C",
+      "name": "Manufacturing (assembly/BOM, work orders, WIP, routing, scheduling inputs)",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-05",
+        "FS-06",
+        "FS-08"
+      ]
+    },
+    {
+      "seq": 11,
+      "id": "FS-10",
+      "phase": 1,
+      "wave": "1D",
+      "name": "Replenishment and Planning (AIM, demand, supply/MRP, DRP, allocation, ATP)",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-05",
+        "FS-06",
+        "FS-08",
+        "FS-09"
+      ]
+    },
+    {
+      "seq": 12,
+      "id": "FS-11",
+      "phase": 1,
+      "wave": "1E",
+      "name": "Warehouse Management Execution (server-side tasks only)",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-06",
+        "FS-07",
+        "FS-08",
+        "FS-09"
+      ]
+    },
+    {
+      "seq": 13,
+      "id": "FS-12",
+      "phase": 1,
+      "wave": "1F",
+      "name": "Quality Management (specs, inspections, COA) \u2014 SuiteApp semantics backend",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-06",
+        "FS-08",
+        "FS-09"
+      ]
+    },
+    {
+      "seq": 14,
+      "id": "FS-13",
+      "phase": 1,
+      "wave": "1F",
+      "name": "Consigned Inventory Management",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-03",
+        "FS-04",
+        "FS-05",
+        "FS-06",
+        "FS-08"
+      ]
+    },
+    {
+      "seq": 15,
+      "id": "FS-14",
+      "phase": 1,
+      "wave": "1F",
+      "name": "Extensions (warranty, customer part numbers, UPC registry)",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-06",
+        "FS-08"
+      ]
+    },
+    {
+      "seq": 16,
+      "id": "FS-15",
+      "phase": 1,
+      "wave": "2",
+      "name": "Reporting Read Models and Reporting API",
+      "depends_on": [
+        "FS-00",
+        "FS-01",
+        "FS-02",
+        "FS-03",
+        "FS-04",
+        "FS-05",
+        "FS-06",
+        "FS-07",
+        "FS-08",
+        "FS-09",
+        "FS-10",
+        "FS-11",
+        "FS-12",
+        "FS-13",
+        "FS-14"
+      ]
+    }
+  ],
+  "waves": {
+    "0A": [
+      "FS-00"
+    ],
+    "0B": [
+      "FS-01",
+      "FS-02"
+    ],
+    "0C": [
+      "FS-03",
+      "FS-04",
+      "FS-05"
+    ],
+    "1A": [
+      "FS-06",
+      "FS-07"
+    ],
+    "1B": [
+      "FS-08"
+    ],
+    "1C": [
+      "FS-09"
+    ],
+    "1D": [
+      "FS-10"
+    ],
+    "1E": [
+      "FS-11"
+    ],
+    "1F": [
+      "FS-12",
+      "FS-13",
+      "FS-14"
+    ],
+    "2": [
+      "FS-15"
+    ]
+  }
+}
+rc=0

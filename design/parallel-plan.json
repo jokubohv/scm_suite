@@ -1,0 +1,1208 @@
+{
+  "schema_version": "1.0.0",
+  "plan_version": "1.5.0",
+  "strategy": "contract-first parallel build; wave-ordered deployment; S0 scaffold precondition",
+  "execution": {
+    "max_concurrent_fs_builders": 8,
+    "max_durable_teammates": 8,
+    "contract_first": true,
+    "deploy_cadence": "one feature set at a time in manifest wave order (integrator only), except the manifest-specified 1F parallel group (FS-12/13/14)",
+    "merge_train": "daily minimum; integrator resolves shared-file conflicts",
+    "build_definition": "module+migrations+contracts+tests merged, L0/L1 green against frozen contracts",
+    "done_definition": "build-complete + deploy L2 + exit L3 recorded verified"
+  },
+  "roles": [
+    {
+      "id": "scaffolder",
+      "count": 1,
+      "owns": [
+        "S0-01",
+        "S0-02",
+        "S0-03",
+        "S0-06",
+        "CI",
+        "repo toolchain"
+      ]
+    },
+    {
+      "id": "contract-owner",
+      "count": 1,
+      "owns": [
+        "S0-04",
+        "contract freezes C0-C5",
+        "OpenAPI/event schema aggregation"
+      ]
+    },
+    {
+      "id": "platform-builder",
+      "count": 2,
+      "owns": [
+        "PAR-00 (optionally split 00A identity/RBAC/SSO + 00B core/events/jobs)"
+      ]
+    },
+    {
+      "id": "builder",
+      "count": 8,
+      "owns": [
+        "one PAR card each in B4 (B2/B3 as scheduled)"
+      ]
+    },
+    {
+      "id": "integrator",
+      "count": 1,
+      "owns": [
+        "shared app files",
+        "migrations merge train",
+        "deployments",
+        "status updates"
+      ]
+    },
+    {
+      "id": "verifier",
+      "count": 1,
+      "owns": [
+        "independent L1-L3 evidence",
+        "coverage/contract audits",
+        "verification/"
+      ]
+    },
+    {
+      "id": "e2e-owner",
+      "count": 1,
+      "owns": [
+        "cross-set golden journeys",
+        "perf/concurrency smoke after FS-04"
+      ]
+    }
+  ],
+  "shared_ownership": [
+    {
+      "path": "PLAN.md",
+      "owner": "lead",
+      "note": "plan status/stamps only"
+    },
+    {
+      "path": "README.md",
+      "owner": "lead"
+    },
+    {
+      "path": "design/",
+      "owner": "lead",
+      "note": "plan docs incl. framework/addenda/manifest; builders read-only"
+    },
+    {
+      "path": "feature-sets/",
+      "owner": "lead",
+      "note": "implementation specs; builders read-only"
+    },
+    {
+      "path": "research/",
+      "owner": "lead",
+      "note": "read-only catalogs"
+    },
+    {
+      "path": "verification/",
+      "owner": "verifier"
+    },
+    {
+      "path": "tools/",
+      "owner": "lead/verifier",
+      "note": "plan tooling; implementation agents read-only"
+    },
+    {
+      "path": "app/core/",
+      "owner": "platform-builder (B1 exclusive); integrator thereafter",
+      "note": "FS-00 exclusive during B1"
+    },
+    {
+      "path": "app/api/main.py",
+      "owner": "integrator"
+    },
+    {
+      "path": "app/api/registry.py",
+      "owner": "integrator"
+    },
+    {
+      "path": "contracts/openapi/openapi.yaml",
+      "owner": "contract-owner"
+    },
+    {
+      "path": "contracts/events/registry.yaml",
+      "owner": "contract-owner"
+    },
+    {
+      "path": "alembic.ini",
+      "owner": "scaffolder"
+    },
+    {
+      "path": "app/migrations/env.py",
+      "owner": "scaffolder/integrator"
+    },
+    {
+      "path": "app/migrations/versions/",
+      "owner": "integrator",
+      "note": "revision files authored on branches, merged in chain order"
+    },
+    {
+      "path": "app/tests/conftest.py",
+      "owner": "scaffolder/integrator"
+    },
+    {
+      "path": "app/tests/utils/",
+      "owner": "scaffolder/integrator"
+    },
+    {
+      "path": "app/tests/fixtures/",
+      "owner": "scaffolder"
+    },
+    {
+      "path": "app/seed/",
+      "owner": "scaffolder/integrator"
+    },
+    {
+      "path": "pyproject.toml",
+      "owner": "scaffolder"
+    },
+    {
+      "path": "Dockerfile",
+      "owner": "scaffolder"
+    },
+    {
+      "path": "docker-compose.yml",
+      "owner": "scaffolder/integrator"
+    },
+    {
+      "path": ".github/",
+      "owner": "scaffolder"
+    },
+    {
+      "path": "scripts/",
+      "owner": "scaffolder/integrator"
+    },
+    {
+      "path": "ops/dex/",
+      "owner": "scaffolder/integrator"
+    }
+  ],
+  "contract_freezes": [
+    {
+      "id": "C0",
+      "available_phase": "B2",
+      "after_tasks": [
+        "PAR-00"
+      ],
+      "artifacts": [
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "order.demand",
+        "order.supply",
+        "auth/SSO surface"
+      ],
+      "evidence": [
+        "provider contract tests",
+        "OpenAPI/event schema diff",
+        "0A L3 verified"
+      ]
+    },
+    {
+      "id": "C1",
+      "available_phase": "B3",
+      "after_tasks": [
+        "PAR-01",
+        "PAR-02"
+      ],
+      "artifacts": [
+        "item.master",
+        "pricing.engine"
+      ],
+      "evidence": [
+        "contract tests",
+        "0B L3 verified"
+      ]
+    },
+    {
+      "id": "C2a",
+      "available_phase": "B3",
+      "after_tasks": [
+        "PAR-03",
+        "PAR-04"
+      ],
+      "artifacts": [
+        "traceability.registry",
+        "inventory.ledger",
+        "inventory.balances"
+      ],
+      "evidence": [
+        "ledger contract implementation green on PAR-04 branch"
+      ]
+    },
+    {
+      "id": "C2",
+      "available_phase": "B4",
+      "after_tasks": [
+        "PAR-03",
+        "PAR-04",
+        "PAR-05"
+      ],
+      "artifacts": [
+        "inventory.ledger",
+        "inventory.balances",
+        "costing.engine",
+        "traceability.registry"
+      ],
+      "evidence": [
+        "contract tests",
+        "0C L3 verified"
+      ]
+    },
+    {
+      "id": "C3",
+      "available_phase": "B4",
+      "after_tasks": [
+        "PAR-06",
+        "PAR-07",
+        "PAR-08"
+      ],
+      "artifacts": [
+        "traceability.numbered",
+        "counts.engine",
+        "procurement.p2p"
+      ],
+      "evidence": [
+        "provider tests green before 1A/1B deploy",
+        "merge-readiness gate, not a build-start blocker"
+      ]
+    },
+    {
+      "id": "C4",
+      "available_phase": "B4",
+      "after_tasks": [
+        "PAR-09"
+      ],
+      "artifacts": [
+        "manufacturing.execution"
+      ],
+      "evidence": [
+        "provider tests green before 1C deploy"
+      ]
+    },
+    {
+      "id": "C5",
+      "available_phase": "B4",
+      "after_tasks": [
+        "PAR-10",
+        "PAR-11"
+      ],
+      "artifacts": [
+        "replenishment.planning",
+        "wms.execution"
+      ],
+      "evidence": [
+        "provider tests green; report read models contract-ready"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "B0",
+      "name": "scaffold",
+      "entry": [],
+      "exit": [
+        "S0-GATE"
+      ],
+      "max_concurrent": 3,
+      "tasks": [
+        "S0-01",
+        "S0-02",
+        "S0-03",
+        "S0-04",
+        "S0-05",
+        "S0-06",
+        "S0-07"
+      ]
+    },
+    {
+      "id": "B1",
+      "name": "platform",
+      "entry": [
+        "S0-GATE"
+      ],
+      "exit": [
+        "C0",
+        "0A verified"
+      ],
+      "max_concurrent": 2,
+      "tasks": [
+        "PAR-00"
+      ]
+    },
+    {
+      "id": "B2",
+      "name": "master data",
+      "entry": [
+        "C0"
+      ],
+      "exit": [
+        "C1",
+        "0B verified"
+      ],
+      "max_concurrent": 2,
+      "tasks": [
+        "PAR-01",
+        "PAR-02"
+      ]
+    },
+    {
+      "id": "B3",
+      "name": "ledger core",
+      "entry": [
+        "C1"
+      ],
+      "exit": [
+        "C2",
+        "0C verified"
+      ],
+      "max_concurrent": 3,
+      "tasks": [
+        "PAR-03",
+        "PAR-04",
+        "PAR-05"
+      ]
+    },
+    {
+      "id": "B4",
+      "name": "wide parallel build",
+      "entry": [
+        "C2"
+      ],
+      "exit": [
+        "all B4 cards build-complete; deploy waves 1A-1F ordered"
+      ],
+      "max_concurrent": 8,
+      "tasks": [
+        "PAR-06",
+        "PAR-07",
+        "PAR-08",
+        "PAR-09",
+        "PAR-10",
+        "PAR-11",
+        "PAR-12",
+        "PAR-13"
+      ]
+    },
+    {
+      "id": "B5",
+      "name": "reporting",
+      "entry": [
+        "C5"
+      ],
+      "exit": [
+        "deploy wave 2"
+      ],
+      "max_concurrent": 1,
+      "tasks": [
+        "PAR-15"
+      ]
+    }
+  ],
+  "s0_gate": {
+    "required_tasks": [
+      "S0-01",
+      "S0-02",
+      "S0-03",
+      "S0-04",
+      "S0-05",
+      "S0-06",
+      "S0-07"
+    ],
+    "checks": [
+      "repo+CI exists and plan gates run",
+      "compose stack + Dex dev healthy",
+      "migration chain guard green",
+      "16 contract skeletons generated and lint-clean",
+      "test harness green on empty stack",
+      "scripts executable",
+      "seeds idempotent (load twice, no diff)",
+      "write scopes avoid shared files",
+      "migration map matches manifest",
+      "roles+environment isolation documented"
+    ]
+  },
+  "scaffold_expected_paths": [
+    "pyproject.toml",
+    "app/",
+    "scripts/",
+    ".github/workflows/",
+    "docker-compose.yml",
+    "alembic.ini",
+    "contracts/",
+    "ops/dex/",
+    "app/seed/"
+  ],
+  "tasks": [
+    {
+      "id": "S0-01",
+      "kind": "scaffold",
+      "name": "Repo/toolchain/CI",
+      "owner_role": "scaffolder",
+      "depends_on": [],
+      "write_scopes": [
+        "pyproject.toml",
+        ".github/",
+        "Makefile",
+        ".gitignore",
+        "app/__init__.py",
+        "app/api/main.py",
+        "app/api/registry.py"
+      ],
+      "max_parallel_with": [],
+      "exit_checks": [
+        "command runs on empty/local stack",
+        "deterministic/idempotent",
+        "documented in README/runbook"
+      ]
+    },
+    {
+      "id": "S0-02",
+      "kind": "scaffold",
+      "name": "Local stack + Dex dev",
+      "owner_role": "scaffolder",
+      "depends_on": [
+        "S0-01"
+      ],
+      "write_scopes": [
+        "Dockerfile",
+        "docker-compose.yml",
+        "docker-compose.dev.yml",
+        "ops/dex/",
+        ".env.example"
+      ],
+      "max_parallel_with": [],
+      "exit_checks": [
+        "command runs on empty/local stack",
+        "deterministic/idempotent",
+        "documented in README/runbook"
+      ]
+    },
+    {
+      "id": "S0-03",
+      "kind": "scaffold",
+      "name": "Alembic base + chain guard",
+      "owner_role": "scaffolder",
+      "depends_on": [
+        "S0-01"
+      ],
+      "write_scopes": [
+        "alembic.ini",
+        "app/migrations/"
+      ],
+      "max_parallel_with": [],
+      "exit_checks": [
+        "command runs on empty/local stack",
+        "deterministic/idempotent",
+        "documented in README/runbook"
+      ]
+    },
+    {
+      "id": "S0-04",
+      "kind": "scaffold",
+      "name": "Contract-first infrastructure + 16 contract skeletons",
+      "owner_role": "scaffolder",
+      "depends_on": [
+        "S0-01"
+      ],
+      "write_scopes": [
+        "contracts/",
+        "app/contracts/",
+        "app/tests/contracts/base/"
+      ],
+      "max_parallel_with": [],
+      "exit_checks": [
+        "command runs on empty/local stack",
+        "deterministic/idempotent",
+        "documented in README/runbook"
+      ]
+    },
+    {
+      "id": "S0-05",
+      "kind": "scaffold",
+      "name": "Test harness/fixtures",
+      "owner_role": "scaffolder",
+      "depends_on": [
+        "S0-01",
+        "S0-03"
+      ],
+      "write_scopes": [
+        "app/tests/conftest.py",
+        "app/tests/utils/",
+        "app/tests/fixtures/"
+      ],
+      "max_parallel_with": [],
+      "exit_checks": [
+        "command runs on empty/local stack",
+        "deterministic/idempotent",
+        "documented in README/runbook"
+      ]
+    },
+    {
+      "id": "S0-06",
+      "kind": "scaffold",
+      "name": "Scripts/gates/worktree helpers",
+      "owner_role": "scaffolder",
+      "depends_on": [
+        "S0-01",
+        "S0-02"
+      ],
+      "write_scopes": [
+        "scripts/"
+      ],
+      "max_parallel_with": [],
+      "exit_checks": [
+        "command runs on empty/local stack",
+        "deterministic/idempotent",
+        "documented in README/runbook"
+      ]
+    },
+    {
+      "id": "S0-07",
+      "kind": "scaffold",
+      "name": "Seed/reference bootstrap",
+      "owner_role": "scaffolder",
+      "depends_on": [
+        "S0-03",
+        "S0-04"
+      ],
+      "write_scopes": [
+        "app/seed/"
+      ],
+      "max_parallel_with": [],
+      "exit_checks": [
+        "command runs on empty/local stack",
+        "deterministic/idempotent",
+        "documented in README/runbook"
+      ]
+    },
+    {
+      "id": "PAR-00",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-00"
+      ],
+      "build_phase": "B1",
+      "deploy_wave": "0A",
+      "owner_role": "platform-builder",
+      "write_scopes": [
+        "app/api/routers/platform/",
+        "app/contracts/platform/",
+        "app/core/",
+        "app/modules/platform/",
+        "app/tests/contracts/platform/",
+        "app/tests/integration/platform/",
+        "app/tests/invariants/platform/",
+        "app/tests/unit/platform/"
+      ],
+      "migration_revisions": [
+        "0001_platform_core",
+        "0002_platform_security",
+        "0003_platform_events"
+      ],
+      "contract_freezes": [],
+      "start_after_tasks": [],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-01",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-01"
+      ],
+      "build_phase": "B2",
+      "deploy_wave": "0B",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/item_master/",
+        "app/contracts/item_master/",
+        "app/modules/item_master/",
+        "app/tests/contracts/item_master/",
+        "app/tests/integration/item_master/",
+        "app/tests/invariants/item_master/",
+        "app/tests/unit/item_master/"
+      ],
+      "migration_revisions": [
+        "0004_item_master",
+        "0005_item_master_uom"
+      ],
+      "contract_freezes": [
+        "C0"
+      ],
+      "start_after_tasks": [
+        "PAR-00"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-02",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-02"
+      ],
+      "build_phase": "B2",
+      "deploy_wave": "0B",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/pricing/",
+        "app/contracts/pricing/",
+        "app/modules/pricing/",
+        "app/tests/contracts/pricing/",
+        "app/tests/integration/pricing/",
+        "app/tests/invariants/pricing/",
+        "app/tests/unit/pricing/"
+      ],
+      "migration_revisions": [
+        "0006_pricing"
+      ],
+      "contract_freezes": [
+        "C0"
+      ],
+      "start_after_tasks": [
+        "PAR-00"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-03",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-03"
+      ],
+      "build_phase": "B3",
+      "deploy_wave": "0C",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/traceability/",
+        "app/contracts/traceability/",
+        "app/modules/traceability/",
+        "app/tests/contracts/traceability/",
+        "app/tests/integration/traceability/",
+        "app/tests/invariants/traceability/",
+        "app/tests/unit/traceability/"
+      ],
+      "migration_revisions": [
+        "0007_traceability_registry"
+      ],
+      "contract_freezes": [
+        "C1"
+      ],
+      "start_after_tasks": [
+        "PAR-01",
+        "PAR-02"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-04",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-04"
+      ],
+      "build_phase": "B3",
+      "deploy_wave": "0C",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/inventory_ledger/",
+        "app/contracts/inventory_ledger/",
+        "app/modules/inventory_ledger/",
+        "app/tests/contracts/inventory_ledger/",
+        "app/tests/integration/inventory_ledger/",
+        "app/tests/invariants/inventory_ledger/",
+        "app/tests/unit/inventory_ledger/"
+      ],
+      "migration_revisions": [
+        "0008_ledger_core",
+        "0009_ledger_commitment_guards",
+        "0010_ledger_balances"
+      ],
+      "contract_freezes": [
+        "C1"
+      ],
+      "start_after_tasks": [
+        "PAR-03"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-05",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-05"
+      ],
+      "build_phase": "B3",
+      "deploy_wave": "0C",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/costing/",
+        "app/contracts/costing/",
+        "app/modules/costing/",
+        "app/tests/contracts/costing/",
+        "app/tests/integration/costing/",
+        "app/tests/invariants/costing/",
+        "app/tests/unit/costing/"
+      ],
+      "migration_revisions": [
+        "0011_costing",
+        "0012_costing_standard"
+      ],
+      "contract_freezes": [
+        "C2a"
+      ],
+      "start_after_tasks": [
+        "PAR-04"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": "starts once ledger contract tests are green on the PAR-04 branch (C2a), parallel with PAR-04 integration"
+    },
+    {
+      "id": "PAR-06",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-06"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1A",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/numbered_inventory/",
+        "app/contracts/numbered_inventory/",
+        "app/modules/numbered_inventory/",
+        "app/tests/contracts/numbered_inventory/",
+        "app/tests/integration/numbered_inventory/",
+        "app/tests/invariants/numbered_inventory/",
+        "app/tests/unit/numbered_inventory/"
+      ],
+      "migration_revisions": [
+        "0013_numbered_inventory"
+      ],
+      "contract_freezes": [
+        "C2"
+      ],
+      "start_after_tasks": [
+        "PAR-04",
+        "PAR-05"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-07",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-07"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1A",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/counts/",
+        "app/contracts/counts/",
+        "app/modules/counts/",
+        "app/tests/contracts/counts/",
+        "app/tests/integration/counts/",
+        "app/tests/invariants/counts/",
+        "app/tests/unit/counts/"
+      ],
+      "migration_revisions": [
+        "0014_counts"
+      ],
+      "contract_freezes": [
+        "C2"
+      ],
+      "start_after_tasks": [
+        "PAR-05",
+        "PAR-06"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-08",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-08"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1B",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/procurement/",
+        "app/contracts/procurement/",
+        "app/modules/procurement/",
+        "app/tests/contracts/procurement/",
+        "app/tests/integration/procurement/",
+        "app/tests/invariants/procurement/",
+        "app/tests/unit/procurement/"
+      ],
+      "migration_revisions": [
+        "0015_procurement_vendors",
+        "0016_procurement_ordering",
+        "0017_procurement_billing"
+      ],
+      "contract_freezes": [
+        "C2"
+      ],
+      "start_after_tasks": [
+        "PAR-04",
+        "PAR-05"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-09",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-09"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1C",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/manufacturing/",
+        "app/contracts/manufacturing/",
+        "app/modules/manufacturing/",
+        "app/tests/contracts/manufacturing/",
+        "app/tests/integration/manufacturing/",
+        "app/tests/invariants/manufacturing/",
+        "app/tests/unit/manufacturing/"
+      ],
+      "migration_revisions": [
+        "0018_manufacturing_master",
+        "0019_manufacturing_routing",
+        "0020_manufacturing_execution"
+      ],
+      "contract_freezes": [
+        "C2",
+        "C3"
+      ],
+      "start_after_tasks": [
+        "PAR-05",
+        "PAR-06",
+        "PAR-07",
+        "PAR-08"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-10",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-10"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1D",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/replenishment/",
+        "app/contracts/replenishment/",
+        "app/modules/replenishment/",
+        "app/tests/contracts/replenishment/",
+        "app/tests/integration/replenishment/",
+        "app/tests/invariants/replenishment/",
+        "app/tests/unit/replenishment/"
+      ],
+      "migration_revisions": [
+        "0021_planning",
+        "0022_planning_atp"
+      ],
+      "contract_freezes": [
+        "C2",
+        "C3",
+        "C4"
+      ],
+      "start_after_tasks": [
+        "PAR-05",
+        "PAR-06",
+        "PAR-07",
+        "PAR-08",
+        "PAR-09"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-11",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-11"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1E",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/wms/",
+        "app/contracts/wms/",
+        "app/modules/wms/",
+        "app/tests/contracts/wms/",
+        "app/tests/integration/wms/",
+        "app/tests/invariants/wms/",
+        "app/tests/unit/wms/"
+      ],
+      "migration_revisions": [
+        "0023_wms_setup",
+        "0024_wms_inbound",
+        "0025_wms_execution"
+      ],
+      "contract_freezes": [
+        "C2",
+        "C3",
+        "C4"
+      ],
+      "start_after_tasks": [
+        "PAR-05",
+        "PAR-06",
+        "PAR-07",
+        "PAR-08",
+        "PAR-09"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-12",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-12"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1F",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/quality/",
+        "app/contracts/quality/",
+        "app/modules/quality/",
+        "app/tests/contracts/quality/",
+        "app/tests/integration/quality/",
+        "app/tests/invariants/quality/",
+        "app/tests/unit/quality/"
+      ],
+      "migration_revisions": [
+        "0026_quality"
+      ],
+      "contract_freezes": [
+        "C2",
+        "C3",
+        "C4"
+      ],
+      "start_after_tasks": [
+        "PAR-05",
+        "PAR-06",
+        "PAR-07",
+        "PAR-08",
+        "PAR-09"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    },
+    {
+      "id": "PAR-13",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-13",
+        "FS-14"
+      ],
+      "build_phase": "B4",
+      "deploy_wave": "1F",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/consigned/",
+        "app/api/routers/extensions/",
+        "app/contracts/consigned/",
+        "app/contracts/extensions/",
+        "app/modules/consigned/",
+        "app/modules/extensions/",
+        "app/tests/contracts/consigned/",
+        "app/tests/contracts/extensions/",
+        "app/tests/integration/consigned/",
+        "app/tests/integration/extensions/",
+        "app/tests/invariants/consigned/",
+        "app/tests/invariants/extensions/",
+        "app/tests/unit/consigned/",
+        "app/tests/unit/extensions/"
+      ],
+      "migration_revisions": [
+        "0027_consigned",
+        "0028_extensions"
+      ],
+      "contract_freezes": [
+        "C2",
+        "C3"
+      ],
+      "start_after_tasks": [
+        "PAR-05",
+        "PAR-06",
+        "PAR-07",
+        "PAR-08"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": "one builder owns consignment + extensions; disjoint modules"
+    },
+    {
+      "id": "PAR-15",
+      "kind": "fs",
+      "feature_sets": [
+        "FS-15"
+      ],
+      "build_phase": "B5",
+      "deploy_wave": "2",
+      "owner_role": "builder",
+      "write_scopes": [
+        "app/api/routers/reporting/",
+        "app/contracts/reporting/",
+        "app/modules/reporting/",
+        "app/tests/contracts/reporting/",
+        "app/tests/integration/reporting/",
+        "app/tests/invariants/reporting/",
+        "app/tests/unit/reporting/"
+      ],
+      "migration_revisions": [
+        "0029_reporting_views",
+        "0030_rls_grants_verify"
+      ],
+      "contract_freezes": [
+        "C5"
+      ],
+      "start_after_tasks": [
+        "PAR-10",
+        "PAR-11"
+      ],
+      "build_exits": [
+        "rust? no: ruff/mypy clean",
+        "unit+invariant tests green",
+        "provider+consumer contract tests green",
+        "migration upgrade/downgrade on empty DB",
+        "OpenAPI/event contract matches frozen skeleton",
+        "feature_sets.py validate/permissions green"
+      ],
+      "deploy_gate": "manifest wave + check-env L2; integrator deploys and records L3",
+      "notes": ""
+    }
+  ]
+}

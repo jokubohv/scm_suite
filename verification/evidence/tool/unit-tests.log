@@ -1,0 +1,56 @@
+test_check_env_contract_range_mismatch_fails (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_contract_range_mismatch_fails) ... ok
+test_check_env_missing_contract_fails (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_missing_contract_fails) ... ok
+test_check_env_missing_dep_fails (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_missing_dep_fails) ... ok
+test_check_env_pass (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_pass) ... ok
+test_check_env_root_set_passes_on_greenfield (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_root_set_passes_on_greenfield) ... ok
+test_check_env_unknown_set_exit_2 (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_unknown_set_exit_2) ... ok
+test_check_env_unreadable_state_is_gate_failure (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_unreadable_state_is_gate_failure) ... ok
+test_check_env_unverified_dep_fails (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_check_env_unverified_dep_fails) ... ok
+test_record_bad_status_rejected_by_argparse (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_record_bad_status_rejected_by_argparse) ... ok
+test_record_deployed_then_verified_chain (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_record_deployed_then_verified_chain) ... ok
+test_record_failed_without_deps_allowed (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_record_failed_without_deps_allowed) ... ok
+test_record_verified_missing_evidence_file_refused (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_record_verified_missing_evidence_file_refused) ... ok
+test_record_verified_ok_and_state_schema (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_record_verified_ok_and_state_schema) ... ok
+test_record_verified_requires_evidence (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_record_verified_requires_evidence) ... ok
+test_record_verified_with_unverified_dependency_refused (verification.tests.test_feature_sets.TestCheckEnvAndRecord.test_record_verified_with_unverified_dependency_refused) ... ok
+test_coverage_duplicate_key_rejected (verification.tests.test_feature_sets.TestCoverage.test_coverage_duplicate_key_rejected) ... ok
+test_coverage_extra_id_rejected (verification.tests.test_feature_sets.TestCoverage.test_coverage_extra_id_rejected) ... ok
+test_coverage_invalid_disposition_rejected (verification.tests.test_feature_sets.TestCoverage.test_coverage_invalid_disposition_rejected) ... ok
+test_coverage_missing_id_rejected (verification.tests.test_feature_sets.TestCoverage.test_coverage_missing_id_rejected) ... ok
+test_coverage_ok (verification.tests.test_feature_sets.TestCoverage.test_coverage_ok) ... ok
+test_coverage_real_plan (verification.tests.test_feature_sets.TestCoverage.test_coverage_real_plan) ... ok
+test_coverage_totals_mismatch_rejected (verification.tests.test_feature_sets.TestCoverage.test_coverage_totals_mismatch_rejected) ... ok
+test_deploy_order_runbook_table (verification.tests.test_feature_sets.TestOrderAndGraph.test_deploy_order_runbook_table) ... ok
+test_order_cycle_aborts (verification.tests.test_feature_sets.TestOrderAndGraph.test_order_cycle_aborts) ... ok
+test_order_is_topological (verification.tests.test_feature_sets.TestOrderAndGraph.test_order_is_topological) ... ok
+test_order_json_machine_readable (verification.tests.test_feature_sets.TestOrderAndGraph.test_order_json_machine_readable) ... ok
+test_who_depends_on_lists_consumers (verification.tests.test_feature_sets.TestOrderAndGraph.test_who_depends_on_lists_consumers) ... ok
+test_who_depends_on_unknown_contract (verification.tests.test_feature_sets.TestOrderAndGraph.test_who_depends_on_unknown_contract) ... ok
+test_caret_and_tilde (verification.tests.test_feature_sets.TestSemverHelpers.test_caret_and_tilde) ... ok
+test_range_contains (verification.tests.test_feature_sets.TestSemverHelpers.test_range_contains) ... ok
+test_satisfiability (verification.tests.test_feature_sets.TestSemverHelpers.test_satisfiability) ... ok
+test_wave_ranking (verification.tests.test_feature_sets.TestSemverHelpers.test_wave_ranking) ... ok
+test_wildcards (verification.tests.test_feature_sets.TestSemverHelpers.test_wildcards) ... ok
+test_bad_semver_range_rejected (verification.tests.test_feature_sets.TestValidate.test_bad_semver_range_rejected) ... ok
+test_cycle_rejected_with_path (verification.tests.test_feature_sets.TestValidate.test_cycle_rejected_with_path) ... ok
+test_dangling_dependency_rejected (verification.tests.test_feature_sets.TestValidate.test_dangling_dependency_rejected) ... ok
+test_dep_contract_not_provided_by_dep_rejected (verification.tests.test_feature_sets.TestValidate.test_dep_contract_not_provided_by_dep_rejected) ... ok
+test_duplicate_contract_rejected (verification.tests.test_feature_sets.TestValidate.test_duplicate_contract_rejected) ... ok
+test_empty_modules_rejected (verification.tests.test_feature_sets.TestValidate.test_empty_modules_rejected) ... ok
+test_invalid_json_manifest_exit_2 (verification.tests.test_feature_sets.TestValidate.test_invalid_json_manifest_exit_2) ... ok
+test_missing_acceptance_rejected (verification.tests.test_feature_sets.TestValidate.test_missing_acceptance_rejected) ... ok
+test_missing_backend_only_rejected (verification.tests.test_feature_sets.TestValidate.test_missing_backend_only_rejected) ... ok
+test_phase_inversion_rejected (verification.tests.test_feature_sets.TestValidate.test_phase_inversion_rejected) ... ok
+test_phase_string_is_coerced_with_warning (verification.tests.test_feature_sets.TestValidate.test_phase_string_is_coerced_with_warning) ... ok
+test_provided_version_outside_range_rejected (verification.tests.test_feature_sets.TestValidate.test_provided_version_outside_range_rejected) ... ok
+test_real_plan_validates (verification.tests.test_feature_sets.TestValidate.test_real_plan_validates) ... ok
+test_self_dependency_rejected (verification.tests.test_feature_sets.TestValidate.test_self_dependency_rejected) ... ok
+test_unsatisfiable_semver_range_rejected (verification.tests.test_feature_sets.TestValidate.test_unsatisfiable_semver_range_rejected) ... ok
+test_valid_manifest_passes (verification.tests.test_feature_sets.TestValidate.test_valid_manifest_passes) ... ok
+test_wave_inversion_rejected (verification.tests.test_feature_sets.TestValidate.test_wave_inversion_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 50 tests in 2.718s
+
+OK
+rc=0

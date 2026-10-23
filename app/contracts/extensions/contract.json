@@ -1,0 +1,62 @@
+{
+  "contracts": [
+    {
+      "contract": "extensions.registry",
+      "depends_on": [
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered"
+      ],
+      "dir": "extensions",
+      "events": [
+        {
+          "event": "extensions.upc.batch.completed",
+          "schema": "contracts/events/extensions.registry/extensions.upc.batch.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.claim.action.recorded",
+          "schema": "contracts/events/extensions.registry/warranty.claim.action.recorded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.registered",
+          "schema": "contracts/events/extensions.registry/warranty.registered.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.registration.expired",
+          "schema": "contracts/events/extensions.registry/warranty.registration.expired.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.registration.voided",
+          "schema": "contracts/events/extensions.registry/warranty.registration.voided.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.terms.updated",
+          "schema": "contracts/events/extensions.registry/warranty.terms.updated.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-14",
+      "fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+      "version": "1.0.0",
+      "wave": "1F"
+    }
+  ],
+  "dir": "extensions",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/extensions/openapi.fragment.json",
+  "feature_set": "FS-14",
+  "fragments": [
+    "contracts/openapi/fragments/FS-14.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1F"
+}

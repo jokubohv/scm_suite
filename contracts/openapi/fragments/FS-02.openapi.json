@@ -1,0 +1,2278 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-02 — Pricing Engine (item pricing + advanced pricing + effective-date updates) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "pricing.engine",
+        "dir": "pricing",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-02",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "0B"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/coupons": {
+      "get": {
+        "operationId": "fs02_get_api-v1-coupons",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List coupons",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-coupons",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create coupon",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.coupon.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/coupons/validate": {
+      "post": {
+        "operationId": "fs02_post_api-v1-coupons-validate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Validate coupon against context (no side effects)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.resolve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/coupons/{coupon_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-coupons-coupon-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Coupon detail + usage",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-coupons-coupon-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.coupon.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/customer-groups": {
+      "get": {
+        "operationId": "fs02_get_api-v1-customer-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List customer groups",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-customer-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create customer group",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/customer-groups/{customer_group_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-customer-groups-customer-group-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Group + member refs",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-customer-groups-customer-group-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/customer-groups/{customer_group_id}/members": {
+      "get": {
+        "operationId": "fs02_get_api-v1-customer-groups-customer-group-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List external refs",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-customer-groups-customer-group-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add external refs",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/customer-groups/{customer_group_id}/members/{external_customer_ref}": {
+      "delete": {
+        "operationId": "fs02_delete_api-v1-customer-groups-customer-group-id-members-external-customer-ref",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove external ref",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-collections": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-collections",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List collections",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-item-collections",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create collection",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.collection.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-collections/{collection_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-collections-collection-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Collection + members",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-item-collections-collection-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.collection.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-collections/{collection_id}/members": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-collections-collection-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List members",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-item-collections-collection-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add static members",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.collection.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-collections/{collection_id}/members/{item_id}": {
+      "delete": {
+        "operationId": "fs02_delete_api-v1-item-collections-collection-id-members-item-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove static member",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.collection.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-collections/{collection_id}/recompute": {
+      "post": {
+        "operationId": "fs02_post_api-v1-item-collections-collection-id-recompute",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Recompute dynamic members (job)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.collection.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-groups": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List item groups",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-item-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create pricing item group",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-groups/{item_group_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-groups-item-group-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Item group + members",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-item-groups-item-group-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-groups/{item_group_id}/members": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-groups-item-group-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List members",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-item-groups-item-group-id-members",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Add item(s)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-groups/{item_group_id}/members/{item_id}": {
+      "delete": {
+        "operationId": "fs02_delete_api-v1-item-groups-item-group-id-members-item-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Remove member",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-prices": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-prices",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Query prices",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-item-prices",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create price row (band/date)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.price.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-prices/bulk-upsert": {
+      "post": {
+        "operationId": "fs02_post_api-v1-item-prices-bulk-upsert",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Mass create/update prices",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.price.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-prices/purchase-price-updates": {
+      "post": {
+        "operationId": "fs02_post_api-v1-item-prices-purchase-price-updates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Batch purchase-price update (job)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.massupdate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-prices/swap-levels": {
+      "post": {
+        "operationId": "fs02_post_api-v1-item-prices-swap-levels",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Batch level swap (job)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.massupdate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/item-prices/{item_price_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-item-prices-item-price-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Price detail",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-item-prices-item-price-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/end-date/deactivate",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.price.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-levels": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-levels",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List levels",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-price-levels",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create price level",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-levels/{price_level_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-levels-price-level-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Level detail",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-price-levels-price-level-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate/default",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-lists/generate": {
+      "post": {
+        "operationId": "fs02_post_api-v1-price-lists-generate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Backend price-list row generation (no rendering)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-rules": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search rules",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-price-rules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create advanced price rule",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.rule.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-rules/{price_rule_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-rules-price-rule-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Rule + criteria + action",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-price-rules-price-rule-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/disable rule",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.rule.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-rules/{price_rule_id}/actions": {
+      "put": {
+        "operationId": "fs02_put_api-v1-price-rules-price-rule-id-actions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace action row",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.rule.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-rules/{price_rule_id}/criteria": {
+      "put": {
+        "operationId": "fs02_put_api-v1-price-rules-price-rule-id-criteria",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace criteria",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.rule.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-schedules": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-schedules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List schedules",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-price-schedules",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create quantity schedule",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.schedule.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-schedules/{price_schedule_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-schedules-price-schedule-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Schedule + breaks",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-price-schedules-price-schedule-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate schedule",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.schedule.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-schedules/{price_schedule_id}/breaks": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-schedules-price-schedule-id-breaks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List breaks",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs02_put_api-v1-price-schedules-price-schedule-id-breaks",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace breaks (ordered, non-overlapping)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.schedule.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-updates": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-updates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List updates",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-price-updates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create effective-date update",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.update.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-updates/{price_update_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-price-updates-price-update-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update + details + status",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-price-updates-price-update-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Edit pending update",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.update.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-updates/{price_update_id}/apply": {
+      "post": {
+        "operationId": "fs02_post_api-v1-price-updates-price-update-id-apply",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manually apply (inside window)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.update.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-updates/{price_update_id}/cancel": {
+      "post": {
+        "operationId": "fs02_post_api-v1-price-updates-price-update-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel pending update",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.update.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/price-updates/{price_update_id}/revert": {
+      "post": {
+        "operationId": "fs02_post_api-v1-price-updates-price-update-id-revert",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Revert applied update (end/exception)",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.update.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/prices/effective": {
+      "get": {
+        "operationId": "fs02_get_api-v1-prices-effective",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Effective price lookup",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.resolve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/prices/resolve": {
+      "post": {
+        "operationId": "fs02_post_api-v1-prices-resolve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Resolve prices (single/batch) → authoritative priced quote for boundary consumers",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.resolve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pricing-groups": {
+      "get": {
+        "operationId": "fs02_get_api-v1-pricing-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List pricing groups",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs02_post_api-v1-pricing-groups",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Map item group × customer group → level",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/pricing-groups/{pricing_group_id}": {
+      "get": {
+        "operationId": "fs02_get_api-v1-pricing-groups-pricing-group-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Pricing group detail",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs02_patch_api-v1-pricing-groups-pricing-group-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update mapping/discount",
+        "tags": [
+          "FS-02",
+          "pricing.engine"
+        ],
+        "x-contract": [
+          "pricing.engine"
+        ],
+        "x-feature-set": "FS-02",
+        "x-fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+        "x-required-scopes": [
+          "pricing.level.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 64,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "pricing.engine",
+      "event": "pricing.coupon.redeemed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "pricing.engine",
+      "event": "pricing.price.updated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "pricing.engine",
+      "event": "pricing.price_update.applied",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "pricing.engine",
+      "event": "pricing.price_update.reverted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "pricing.engine",
+      "event": "pricing.price_update.superseded",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "pricing.engine",
+      "event": "pricing.rule.changed",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "pricing.apply_effective_updates",
+    "pricing.coupon.expire",
+    "pricing.level_swap",
+    "pricing.mass_price_update",
+    "pricing.purchase_price_update",
+    "pricing.recompute_dynamic_collections"
+  ]
+}

@@ -224,8 +224,8 @@ def validate_chain(
                 result.errors.append(f"cycle detected at revision {cursor!r}")
                 break
             visited.append(cursor)
-            children = [rev for rev, down in downs.items() if down == cursor]
-            cursor = children[0] if len(children) == 1 else None
+            child_revs = [rev for rev, down in downs.items() if down == cursor]
+            cursor = child_revs[0] if len(child_revs) == 1 else None
         missing = sorted(set(downs) - set(visited))
         if missing:
             result.errors.append(f"revisions unreachable from the base: {missing}")

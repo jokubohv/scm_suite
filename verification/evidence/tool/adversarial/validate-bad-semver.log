@@ -1,0 +1,4 @@
+WARN W-DEP-DUP: FS-04: duplicate dependency edge FS-03/traceability.registry declared more than once
+ERROR E-SEMVER-PARSE: FS-04 -> FS-03: bad version range '>=banana' (invalid semver version 'banana')
+VALIDATE FAILED: 1 error(s), 1 warning(s) | sets=16 edges=116 contracts=21
+rc=2

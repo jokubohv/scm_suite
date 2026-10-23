@@ -1,0 +1,23 @@
+{
+  "datasets": [
+    "system_tenant"
+  ],
+  "records": [
+    {
+      "base_currency_code": "USD",
+      "code": "SYSTEM",
+      "id": "00000000-0000-7000-8000-000000000000",
+      "name": "System (global reference tenant)",
+      "negative_inventory_policy": "BLOCK",
+      "owner_feature_set": "FS-00",
+      "retention_ledger_years": 7,
+      "rounding_mode": "PER_MOVEMENT",
+      "settings": {
+        "is_system_tenant": true,
+        "read_only_to_tenants": true
+      },
+      "status": "ACTIVE",
+      "timezone": "UTC"
+    }
+  ]
+}

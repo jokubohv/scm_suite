@@ -1,0 +1,63 @@
+# Inventory Platform — development overlay for docker-compose.yml (S0-02).
+#
+# Applied automatically by scripts/up.sh for profiles dev|test|sso (see scripts/_common.sh):
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml --profile dev up -d --wait
+#
+# It only changes *developer ergonomics*; service topology, ports and production behaviour come
+# from docker-compose.yml. The dev image target adds pytest/ruff/mypy tooling so the manifest L3
+# exit gates can run in-container:
+#   docker compose run --rm api pytest app/tests/integration/... -q
+#   docker compose run --rm api alembic upgrade head
+#   docker compose run --rm api python -m app.seed.cli --tenant system
+#
+# Overrides:
+#   * build target `dev` (adds .[dev] + plan/contract sources) instead of `runtime`;
+#   * hot reload for the api (`--reload`) and source bind-mounts for api/worker/outbox-relay
+#     (read-only; the plan sources stay inside the image);
+#   * DEBUG logging by default.
+#
+# Nothing here is secret: values continue to come from the environment/.env (see .env.example).
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ${APP_BUILD_TARGET:-dev}
+    command: ${API_COMMAND:-uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir app --proxy-headers --forwarded-allow-ips=*}
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-DEBUG}
+    volumes:
+      # Live source for hot reload (read-only: containers never write into the checkout).
+      - ./app:/app/app:ro
+      # In-container gates read the generated contracts and plan sources baked into the dev image;
+      # mount the repo copies so edits are visible without rebuilding.
+      - ./contracts:/app/contracts:ro
+      - ./design:/app/design:ro
+      - ./feature-sets:/app/feature-sets:ro
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ${APP_BUILD_TARGET:-dev}
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-DEBUG}
+    volumes:
+      - ./app:/app/app:ro
+
+  outbox-relay:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ${APP_BUILD_TARGET:-dev}
+    environment:
+      LOG_LEVEL: ${LOG_LEVEL:-DEBUG}
+    volumes:
+      - ./app:/app/app:ro
+
+  dex:
+    # Local Dex template is mounted read-only in the base file; this overlay only lowers the log
+    # level for development troubleshooting.
+    environment:
+      DEX_LOG_LEVEL: ${DEX_LOG_LEVEL:-debug}

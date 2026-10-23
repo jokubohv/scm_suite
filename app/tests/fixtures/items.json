@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0.0",
+  "plan_version": "1.5.0",
+  "note": "Canonical item samples covering the posting-eligibility matrix (FS-01 taxonomy + FS-03/06/09/11 interactions). Ids are deterministic UUIDv7 placeholders generated from the index; they are NOT production ids.",
+  "items": [
+    {
+      "index": 0,
+      "item_number": "INV-1000",
+      "display_name": "Standard inventory item (average cost)",
+      "item_type_code": "INVENTORY",
+      "uom_pair": "eaches",
+      "costing_method": "AVERAGE",
+      "flags": {
+        "is_stockable": true,
+        "is_lot_numbered": false,
+        "is_serialized": false,
+        "requires_expiry": false,
+        "allow_vendor_consignment": true
+      }
+    },
+    {
+      "index": 1,
+      "item_number": "INV-2000",
+      "display_name": "Lot-numbered FEFO item (FIFO cost)",
+      "item_type_code": "LOT_NUMBERED",
+      "uom_pair": "eaches",
+      "costing_method": "FIFO",
+      "flags": {
+        "is_stockable": true,
+        "is_lot_numbered": true,
+        "is_serialized": false,
+        "requires_expiry": true,
+        "allow_vendor_consignment": false
+      }
+    },
+    {
+      "index": 2,
+      "item_number": "SER-3000",
+      "display_name": "Serialized item (specific cost)",
+      "item_type_code": "SERIALIZED",
+      "uom_pair": "eaches",
+      "costing_method": "SPECIFIC",
+      "flags": {
+        "is_stockable": true,
+        "is_lot_numbered": false,
+        "is_serialized": true,
+        "requires_expiry": false,
+        "allow_vendor_consignment": false
+      }
+    },
+    {
+      "index": 3,
+      "item_number": "ASM-4000",
+      "display_name": "Assembly item (standard cost)",
+      "item_type_code": "ASSEMBLY",
+      "uom_pair": "eaches",
+      "costing_method": "STANDARD",
+      "flags": {
+        "is_stockable": true,
+        "is_lot_numbered": false,
+        "is_serialized": false,
+        "requires_bom": true,
+        "allow_vendor_consignment": false
+      }
+    },
+    {
+      "index": 4,
+      "item_number": "WIP-5000",
+      "display_name": "WIP assembly (average cost)",
+      "item_type_code": "WIP",
+      "uom_pair": "eaches",
+      "costing_method": "AVERAGE",
+      "flags": {
+        "is_stockable": true,
+        "is_wip": true,
+        "is_lot_numbered": false,
+        "is_serialized": false,
+        "allow_vendor_consignment": false
+      }
+    },
+    {
+      "index": 5,
+      "item_number": "KIT-6000",
+      "display_name": "Kit item (never stocked)",
+      "item_type_code": "KIT",
+      "uom_pair": "eaches",
+      "costing_method": "AVERAGE",
+      "flags": {
+        "is_stockable": false,
+        "is_kit": true,
+        "is_lot_numbered": false,
+        "is_serialized": false,
+        "allow_vendor_consignment": false
+      }
+    },
+    {
+      "index": 6,
+      "item_number": "SVC-7000",
+      "display_name": "Service item (non-inventory)",
+      "item_type_code": "SERVICE",
+      "uom_pair": "eaches",
+      "costing_method": "AVERAGE",
+      "flags": {
+        "is_stockable": false,
+        "is_lot_numbered": false,
+        "is_serialized": false,
+        "allow_vendor_consignment": false
+      }
+    },
+    {
+      "index": 7,
+      "item_number": "DS-8000",
+      "display_name": "Drop-ship item (never stocked)",
+      "item_type_code": "DROP_SHIP",
+      "uom_pair": "eaches",
+      "costing_method": "AVERAGE",
+      "flags": {
+        "is_stockable": false,
+        "is_drop_ship": true,
+        "is_lot_numbered": false,
+        "is_serialized": false,
+        "allow_vendor_consignment": false
+      }
+    }
+  ]
+}

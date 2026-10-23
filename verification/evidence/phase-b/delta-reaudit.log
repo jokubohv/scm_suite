@@ -1,0 +1,17 @@
+DELTA RE-AUDIT SUMMARY  2026-10-21T13:06:54-04:00
+Lead-applied fixes: F-B-01..F-B-05 (specs only; manifest/coverage/design/PLAN/README/tools hash-identical)
+
+== fix spot checks ==
+F-B-01: 'DM-GLOBAL-20' remaining in FS-01 = 0 ; 'DM-GLOBAL-08' present = 1
+F-B-02: 'Redeploy the previous image' present in 7/7 rollback sections
+F-B-03/F-B-05: scope header blockquote present in 3/3 headers
+F-B-04: flag/tenant/audit/RBAC DoD bullet present in 3/3 specs; invariant/rule DoD bullet in 2/2 specs
+
+== re-run results (final tree) ==
+reproduce.sh: rc=0; VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]; COVERAGE OK: 1348/1348 catalog topics accounted (iri=412, mpw=936); 769 in-scope + 579 deferred; 0 missing, 0 extra, 0 duplicates; unit tests:  OK rc=0 ; render check: rc=0
+independent_checks.py: INDEPENDENT PHASE-A RECHECK  --  95 PASS / 0 FAIL
+phase_b_audit.py: AUDIT RESULT: PASS -- 0 findings, 0 check failures (694 checks passed)
+
+== snapshot ==
+SHA-256 files:       31 (includes updated VERIFICATION-REPORT.md)
+changed since pre-delta snapshot: feature-sets/FS-01.md feature-sets/FS-06.md feature-sets/FS-07.md feature-sets/FS-08.md feature-sets/FS-11.md feature-sets/FS-12.md feature-sets/FS-13.md feature-sets/FS-14.md feature-sets/FS-15.md verification/VERIFICATION-REPORT.md 

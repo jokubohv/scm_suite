@@ -1,0 +1,56 @@
+--- FEATURE-SETS-TABLE ---
+| FS | Feature set | Wave | Size | Depends on | Provided contracts | Source topics | Tables |
+|---|---|---|---|---|---|---|---|
+| **FS-00** | Platform Core (tenancy, identity, audit, events, jobs, boundaries) | 0A | L |  | `platform.core@1.0.0`, `platform.events@1.0.0`, `platform.finance@1.0.0`, `order.demand@0.1.0`, `order.supply@0.1.0` | 4 | 31 |
+| **FS-01** | Item Master and UoM Engine | 0B | M | FS-00 | `item.master@1.0.0` | 57 | 21 |
+| **FS-02** | Pricing Engine (item pricing + advanced pricing + effective-date updates) | 0B | M | FS-00, FS-01 | `pricing.engine@1.0.0` | 50 | 17 |
+| **FS-03** | Storage and Inventory-Status Registry | 0C | S | FS-00, FS-01 | `traceability.registry@1.0.0` | 14 | 4 |
+| **FS-04** | Inventory Ledger Core (posting, balances, commitments, transfers, adjustments, imports) | 0C | L | FS-00, FS-01, FS-02, FS-03 | `inventory.ledger@1.0.0`, `inventory.balances@1.0.0` | 42 | 22 |
+| **FS-05** | Costing and Valuation Engine | 0C | L | FS-00, FS-01, FS-03, FS-04 | `costing.engine@1.0.0` | 88 | 25 |
+| **FS-06** | Numbered Inventory (lots and serials) | 1A | M | FS-00, FS-01, FS-03, FS-04, FS-05 | `traceability.numbered@1.0.0` | 24 | 3 |
+| **FS-07** | Inventory Counts and Cycle Counts | 1A | M | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06 | `counts.engine@1.0.0` | 16 | 6 |
+| **FS-08** | Procurement (vendor master, P2P documents, receipts, bills, returns) | 1B | L | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06 | `procurement.p2p@1.0.0` | 116 | 29 |
+| **FS-09** | Manufacturing (assembly/BOM, work orders, WIP, routing, scheduling inputs) | 1C | L | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06, FS-08 | `manufacturing.execution@1.0.0` | 160 | 35 |
+| **FS-10** | Replenishment and Planning (AIM, demand, supply/MRP, DRP, allocation, ATP) | 1D | L | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06, FS-08, FS-09 | `replenishment.planning@1.0.0` | 52 | 24 |
+| **FS-11** | Warehouse Management Execution (server-side tasks only) | 1E | L | FS-00, FS-01, FS-03, FS-04, FS-06, FS-07, FS-08, FS-09 | `wms.execution@1.0.0` | 89 | 38 |
+| **FS-12** | Quality Management (specs, inspections, COA) — SuiteApp semantics backend | 1F | M | FS-00, FS-01, FS-03, FS-04, FS-06, FS-08, FS-09 | `quality.management@1.0.0` | 16 | 10 |
+| **FS-13** | Consigned Inventory Management | 1F | M | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06, FS-08 | `consigned.inventory@1.0.0` | 9 | 5 |
+| **FS-14** | Extensions (warranty, customer part numbers, UPC registry) | 1F | S | FS-00, FS-01, FS-06, FS-08 | `extensions.registry@1.0.0` | 16 | 7 |
+| **FS-15** | Reporting Read Models and Reporting API | 2 | M | FS-00, FS-01, FS-02, FS-03, FS-04, FS-05, FS-06, FS-07, FS-08, FS-09, FS-10, FS-11, FS-12, FS-13, FS-14 | `reporting.readmodels@1.0.0` | 16 | 0 (21 views) |
+| **Total** | 16 feature sets | 10 waves | — | 116 dependency edges | 21 contracts | **769** | 277 tables / 21 views |
+
+--- WAVES-TABLE ---
+| Wave | Sets (deploy order) | Prerequisite wave state | Wave exit criteria |
+|---|---|---|---|
+| **0A** | FS-00 | empty/greenfield environment | L0 valid; platform migrations at head; RLS/append-only/tenant-isolation invariant suites green; outbox relay+job scheduler healthy; `record --status verified`; `/internal/deps` reports platform versions |
+| **0B** | FS-01 → FS-02 | 0A verified | item master + pricing exit gates green; FS-01 contract consumed by FS-02 consumer tests; UoM/price-resolution golden suites green; both recorded |
+| **0C** | FS-03 → FS-04 → FS-05 | 0B verified | registry, ledger and costing exit gates green; posting invariants (qty/value conservation, balance=Σlines, commitment≤on-hand, recalc-block policy) green; concurrency suite green; all recorded |
+| **1A** | FS-06 → FS-07 | 0C verified | deferred lot/serial FKs validated + orphan check 0; serial projection/history invariant green; count snapshot/variance invariants green; both recorded |
+| **1B** | FS-08 | 1A verified | P2P document state machines, PO open-qty, receipt/bill match and posting consumer tests green; recorded |
+| **1C** | FS-09 | 1B verified | BOM/WO/WIP/build invariants + method-incompatibility guard green; scheduling-input fixtures green; recorded |
+| **1D** | FS-10 | 1C verified | planning-readonly invariant, AIM formula fixtures, ATP clamp, allocation limits green; order-creation creates only drafts; recorded |
+| **1E** | FS-11 | 1D verified (wave gate) | WMS task/wave/receipt/putaway/pick invariants green; no mobile endpoints (D8); recorded |
+| **1F** | FS-12 ∥ FS-13 ∥ FS-14 | 1E verified (wave gate) | quality trigger/hold, consigned ownership conservation, warranty/UPC invariants green; all recorded |
+| **2** | FS-15 | all Phase-1 waves verified | reporting read-only + reconcile-exact invariants green; `feature_sets.py coverage` passes; recorded |
+
+--- STATUS-TABLE ---
+| FS | Feature set | Wave | dev | staging | prod |
+|---|---|---|---|---|---|
+| **FS-00** | Platform Core (tenancy, identity, audit, events, jobs, boundaries) | 0A | — | — | — |
+| **FS-01** | Item Master and UoM Engine | 0B | — | — | — |
+| **FS-02** | Pricing Engine (item pricing + advanced pricing + effective-date updates) | 0B | — | — | — |
+| **FS-03** | Storage and Inventory-Status Registry | 0C | — | — | — |
+| **FS-04** | Inventory Ledger Core (posting, balances, commitments, transfers, adjustments, imports) | 0C | — | — | — |
+| **FS-05** | Costing and Valuation Engine | 0C | — | — | — |
+| **FS-06** | Numbered Inventory (lots and serials) | 1A | — | — | — |
+| **FS-07** | Inventory Counts and Cycle Counts | 1A | — | — | — |
+| **FS-08** | Procurement (vendor master, P2P documents, receipts, bills, returns) | 1B | — | — | — |
+| **FS-09** | Manufacturing (assembly/BOM, work orders, WIP, routing, scheduling inputs) | 1C | — | — | — |
+| **FS-10** | Replenishment and Planning (AIM, demand, supply/MRP, DRP, allocation, ATP) | 1D | — | — | — |
+| **FS-11** | Warehouse Management Execution (server-side tasks only) | 1E | — | — | — |
+| **FS-12** | Quality Management (specs, inspections, COA) — SuiteApp semantics backend | 1F | — | — | — |
+| **FS-13** | Consigned Inventory Management | 1F | — | — | — |
+| **FS-14** | Extensions (warranty, customer part numbers, UPC registry) | 1F | — | — | — |
+| **FS-15** | Reporting Read Models and Reporting API | 2 | — | — | — |
+
+rc=0

@@ -1,0 +1,207 @@
+{
+  "contracts": [
+    {
+      "contract": "platform.core",
+      "depends_on": [],
+      "dir": "platform",
+      "events": [
+        {
+          "event": "auth.login.failed",
+          "schema": "contracts/events/platform.core/auth.login.failed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "auth.tenant_switched",
+          "schema": "contracts/events/platform.core/auth.tenant_switched.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.approved",
+          "schema": "contracts/events/platform.core/document.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.closed",
+          "schema": "contracts/events/platform.core/document.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.rejected",
+          "schema": "contracts/events/platform.core/document.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.reversed",
+          "schema": "contracts/events/platform.core/document.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.submitted",
+          "schema": "contracts/events/platform.core/document.submitted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "identity.linked",
+          "schema": "contracts/events/platform.core/identity.linked.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "membership.activated",
+          "schema": "contracts/events/platform.core/membership.activated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "membership.roles.changed",
+          "schema": "contracts/events/platform.core/membership.roles.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "membership.suspended",
+          "schema": "contracts/events/platform.core/membership.suspended.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.approval.approved",
+          "schema": "contracts/events/platform.core/platform.approval.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.approval.rejected",
+          "schema": "contracts/events/platform.core/platform.approval.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.approval.requested",
+          "schema": "contracts/events/platform.core/platform.approval.requested.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.audit.recorded",
+          "schema": "contracts/events/platform.core/platform.audit.recorded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.flag.changed",
+          "schema": "contracts/events/platform.core/platform.flag.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.cloned",
+          "schema": "contracts/events/platform.core/role.cloned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.created",
+          "schema": "contracts/events/platform.core/role.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.permissions.changed",
+          "schema": "contracts/events/platform.core/role.permissions.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.updated",
+          "schema": "contracts/events/platform.core/role.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sod.violation.blocked",
+          "schema": "contracts/events/platform.core/sod.violation.blocked.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.created",
+          "schema": "contracts/events/platform.core/sso.connection.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.disabled",
+          "schema": "contracts/events/platform.core/sso.connection.disabled.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.error",
+          "schema": "contracts/events/platform.core/sso.connection.error.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.tested",
+          "schema": "contracts/events/platform.core/sso.connection.tested.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.updated",
+          "schema": "contracts/events/platform.core/sso.connection.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.login.failed",
+          "schema": "contracts/events/platform.core/sso.login.failed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "tenant.provisioned",
+          "schema": "contracts/events/platform.core/tenant.provisioned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "tenant.suspended",
+          "schema": "contracts/events/platform.core/tenant.suspended.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "user.invited",
+          "schema": "contracts/events/platform.core/user.invited.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "user.session.revoked",
+          "schema": "contracts/events/platform.core/user.session.revoked.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "1.0.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "platform.events",
+      "depends_on": [],
+      "dir": "platform",
+      "events": [],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "1.0.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "platform.finance",
+      "depends_on": [],
+      "dir": "platform",
+      "events": [
+        {
+          "event": "finance.journal_intent.recorded",
+          "schema": "contracts/events/platform.finance/finance.journal_intent.recorded.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "1.0.0",
+      "wave": "0A"
+    }
+  ],
+  "dir": "platform",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/platform/openapi.fragment.json",
+  "feature_set": "FS-00",
+  "fragments": [
+    "contracts/openapi/fragments/FS-00.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "0A"
+}

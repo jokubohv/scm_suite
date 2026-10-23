@@ -1,0 +1,145 @@
+{
+  "datasets": [
+    {
+      "key": [
+        "id"
+      ],
+      "name": "system_tenant",
+      "owner_feature_set": "FS-00",
+      "source": "data/system_tenant.json",
+      "table": "platform.tenant",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "key": [
+        "code"
+      ],
+      "name": "currencies",
+      "owner_feature_set": "FS-00",
+      "source": "data/currencies.json",
+      "table": "platform.currency",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "key": [
+        "scope"
+      ],
+      "name": "permissions",
+      "owner_feature_set": "FS-00",
+      "source": "design/permissions.json#catalogue",
+      "table": "platform.permission_scope",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "code"
+      ],
+      "name": "role_templates",
+      "owner_feature_set": "FS-00",
+      "source": "design/permissions.json#role_templates",
+      "table": "platform.role",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "role_code",
+        "scope"
+      ],
+      "name": "role_permissions",
+      "owner_feature_set": "FS-00",
+      "source": "design/permissions.json#role_templates",
+      "table": "platform.role_permission",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "a",
+        "b"
+      ],
+      "name": "sod_policy",
+      "owner_feature_set": "FS-00",
+      "reference_only": true,
+      "source": "design/permissions.json#sod_pairs",
+      "table": "catalog.sod_pair",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "namespace",
+        "key"
+      ],
+      "name": "tenant_settings",
+      "owner_feature_set": "FS-00",
+      "source": "data/tenant_settings.json",
+      "table": "platform.tenant_setting",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "flag_key"
+      ],
+      "name": "feature_flags",
+      "owner_feature_set": "FS-00",
+      "source": "data/feature_flags.json",
+      "table": "platform.feature_flag",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "doc_type",
+        "scope_key",
+        "period_key"
+      ],
+      "name": "number_sequences",
+      "owner_feature_set": "FS-00",
+      "source": "data/number_sequences.json",
+      "table": "platform.number_sequence",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "code"
+      ],
+      "name": "transaction_types",
+      "owner_feature_set": "FS-04",
+      "reference_only": true,
+      "source": "data/transaction_types.json",
+      "table": "catalog.transaction_type",
+      "tenant_scope": "SYSTEM"
+    },
+    {
+      "key": [
+        "code"
+      ],
+      "name": "uom_types",
+      "owner_feature_set": "FS-01",
+      "source": "data/uom.json#uom_types",
+      "table": "item_master.uom_type",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "uom_type_code",
+        "code"
+      ],
+      "name": "uom_units",
+      "owner_feature_set": "FS-01",
+      "source": "data/uom.json#uom_units",
+      "table": "item_master.uom",
+      "tenant_scope": "TENANT"
+    },
+    {
+      "key": [
+        "code"
+      ],
+      "name": "inventory_statuses",
+      "owner_feature_set": "FS-03",
+      "source": "data/inventory_statuses.json",
+      "table": "traceability.inventory_status",
+      "tenant_scope": "TENANT"
+    }
+  ],
+  "generated_from": "design/DATA-MODEL.md §21.2, design/FEATURE-SETS.md manifest flags, design/permissions.json, design/ARCHITECTURE.md §2.3",
+  "plan_version": "1.5.0",
+  "schema_version": "1.0.0"
+}

@@ -1,0 +1,592 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-06 — Numbered Inventory (lots and serials) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "traceability.numbered",
+        "dir": "traceability_numbered",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-06",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1A"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/items/{id}/lots": {
+      "get": {
+        "operationId": "fs06_get_api-v1-items-id-lots",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Lots of an item",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/items/{id}/lots",
+        "x-required-scopes": [
+          "inventory.lot.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{id}/serials": {
+      "get": {
+        "operationId": "fs06_get_api-v1-items-id-serials",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Serials of an item",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/items/{id}/serials",
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/lots": {
+      "get": {
+        "operationId": "fs06_get_api-v1-lots",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Search/lots list",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/lots",
+        "x-required-scopes": [
+          "inventory.lot.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs06_post_api-v1-lots",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Register lot master",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/lots",
+        "x-required-scopes": [
+          "inventory.lot.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/lots/{id}": {
+      "get": {
+        "operationId": "fs06_get_api-v1-lots-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Lot detail incl. positions",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/lots/{id}",
+        "x-required-scopes": [
+          "inventory.lot.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs06_patch_api-v1-lots-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update mutable lot fields",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/lots/{id}",
+        "x-required-scopes": [
+          "inventory.lot.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/lots/{id}/inactivate": {
+      "post": {
+        "operationId": "fs06_post_api-v1-lots-id-inactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Soft-inactivate zero-stock lot",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/lots/{id}/inactivate",
+        "x-required-scopes": [
+          "inventory.lot.inactivate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/numbered-inventory/deferred-fks/status": {
+      "get": {
+        "operationId": "fs06_get_api-v1-numbered-inventory-deferred-fks-status",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Migration/ops orphan check",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/numbered-inventory/deferred-fks/status",
+        "x-required-scopes": [
+          "inventory.numbered.reconcile"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/numbered-inventory/fefo-plan": {
+      "post": {
+        "operationId": "fs06_post_api-v1-numbered-inventory-fefo-plan",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read-only FEFO recommendation",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-idempotency": "Not required (read-only, no writes)",
+        "x-original-path": "/v1/numbered-inventory/fefo-plan",
+        "x-required-scopes": [
+          "inventory.lot.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/numbered-inventory/search": {
+      "get": {
+        "operationId": "fs06_get_api-v1-numbered-inventory-search",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Unified traceability search",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/numbered-inventory/search",
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/numbered-inventory/validate": {
+      "post": {
+        "operationId": "fs06_post_api-v1-numbered-inventory-validate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Dry-run validation for posting callers",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/numbered-inventory/validate",
+        "x-required-scopes": [
+          "inventory.numbered.validate"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/serials": {
+      "get": {
+        "operationId": "fs06_get_api-v1-serials",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Traceability serial search",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/serials",
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs06_post_api-v1-serials",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Register serial identity before first receipt (`EXT`; documented \"add new serial numbers\" via adjustment uses T-07 instead)",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/serials",
+        "x-required-scopes": [
+          "inventory.serial.register"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/serials/{id}": {
+      "get": {
+        "operationId": "fs06_get_api-v1-serials-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Serial detail + current position",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/serials/{id}",
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/serials/{id}/history": {
+      "get": {
+        "operationId": "fs06_get_api-v1-serials-id-history",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Append-only serial history (\"customer serial history\")",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-feature-set": "FS-06",
+        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+        "x-original-path": "/v1/serials/{id}/history",
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 15,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "traceability.numbered",
+      "event": "traceability.expiry.warning",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.numbered",
+      "event": "traceability.lot.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.numbered",
+      "event": "traceability.lot.inactivated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.numbered",
+      "event": "traceability.serial.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "traceability.numbered",
+      "event": "traceability.serial.state_changed",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "traceability.deferred_fks.validate",
+    "traceability.expiry.scan"
+  ]
+}

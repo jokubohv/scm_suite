@@ -1,0 +1,48 @@
+PASS  plan_version is 1.4.0 in manifest and permissions.json
+PASS  catalogue: 251 scopes = 237 assignable + 13 service-only + 1 platform-only
+PASS  SSO scopes platform.sso.manage/read are assignable and not platform/service-only
+PASS  alias platform.user.manage is in aliases only (not seeded)
+PASS  role templates: admin = all 237 assignable; documented counts (readonly 44)
+PASS  18 requires_approval; 7 templates; 14 SoD pairs; 6 global rules; public 9 / self-service 6
+PASS  public allowlist contains the 3 Δ-SSO public routes
+PASS  counts metadata matches recomputed catalogue
+PASS  ARCHITECTURE §0 counts: 280/34/21 views/31+6/143+10=153/INV-32/251/237/43/52
+PASS  ARCHITECTURE topology: Dex units + isolated issuer per ACTIVE connection + Dex PostgreSQL storage
+PASS  ARCHITECTURE IdP boundary: Dex authenticates, platform authorizes/token-issues; local fallback/break-glass
+PASS  ARCHITECTURE §5.2 SSO flows: discovery/start/callback state+nonce+PKCE; ID-token validation; linking/JIT/group mapping; enforced-SSO/no silent fallback; scopes
+PASS  ARCHITECTURE §7.3 INV-32 + §8 D-31 + §10 G-15; INV-31/32 test rows
+PASS  ARCHITECTURE runtime envs mention Dex dev/shared and prod isolated
+PASS  ARCHITECTURE allowlists 9/6 (SSO routes explicitly public)
+PASS  DATA-MODEL platform context 34 / base tables total 280 / 21 views
+PASS  DATA-MODEL 3 SSO tables with key columns/constraints/RLS
+PASS  DATA-MODEL DM-SSO-01/02/03 + INV-32 semantics present
+PASS  DATA-MODEL §19 adds 2 SSO state machines (43 specs / 52 aggregates)
+PASS  DATA-MODEL rules: platform 20, scoped 143, total 153
+PASS  DATA-MODEL migration chain unchanged; SSO tables created inside 0002_platform_security (FS-00 3 migrations)
+PASS  DATA-MODEL EXT register DMX-28 + cross-scope FK exception only identity_link
+PASS  FS-00: 34 tables / 102 endpoint rows / 33 event rows / 6 job rows / 3 migrations
+PASS  FS-00 SSO tables/columns/config/events/tests present
+PASS  FS-00 SSO public + admin endpoints listed
+PASS  FS-00 §11 reproduces all 17 manifest exit/entry commands verbatim (incl. 3 SSO tests)
+PASS  FS-00 amendment records C-21/C-22 present (Δ-SSO landed; migration placement/count clarification)
+PASS  FEATURE-SETS plan version 1.4.0 + FS-00 34 tables + totals 280/21 + §7.1 Δ-SSO paragraph
+PASS  FEATURE-SETS migration text: SSO tables inside 0002_platform_security (no renumbering)
+PASS  manifest: plan_version 1.4.0; FS-00 exit_checks 17 incl. 3 SSO tests before record; 3 migrations
+PASS  manifest: only FS-00 exit_checks + plan_version changed (edges 116/86, contracts 21, waves 10, entry 49, exit 95)
+PASS  framework §3 Auth row: Dex OIDC broker + platform JWT/refresh + API keys + local fallback; Deploy row: Dex units/storage
+FAIL  PLAN header plan v1.4.0 (Δ-PAR audit pending) + Δ-SSO decision row D-31 + §4.4 section
+PASS  PLAN counts/assumptions: 280/34/251/143/153/INV-32 + Dex/SSO narrative
+PASS  PLAN generated tables current (280 tables / 21 views; FS-00 34 tables)
+PASS  README carries Dex/SSO auth line + 280/34/251/143/153 counts + pending status
+PASS  addendum binding/EXT, 3 tables in 0002, flows/linking/JIT/group-mapping/deployment/rules/tests present
+PASS  addendum §11 resolved clarifications: Dex=authn not authz; per-company=tenant connection; local fallback/break-glass; SCIM deferred
+PASS  no stale current-state count references (280/34/251/237/143/153/INV-32 current)
+PASS  coverage unchanged: 1,348 topics = 769 in-scope + 579 deferred (0 SCM-mobile)
+PASS  no feature-set spec changed by Δ-PAR (all 16 byte-identical to the v1.3.0 sign-off snapshot)
+==============================================================================================================
+SSO DELTA AUDIT  --  40 PASS / 1 FAIL / 0 findings
+==============================================================================================================
+--------------------------------------------------------------------------------------------------------------
+Counts: tables=280 (platform=34), views=21, posting=31+6, rules=143 scoped + 10 global = 153, INV=1..32, scopes=251 (assignable=237), roles=7, SoD=14, public allowlist=9, self-service=6, plan_version=1.4.0
+FS-00: 34 tables / 102 endpoints / 33 events / 6 jobs / 3 migrations / 17 exit commands
+Coverage: 1348 topics = 769 in-scope + 579 deferred; other 15 specs unchanged

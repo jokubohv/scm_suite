@@ -1,0 +1,1173 @@
+{
+  "contracts": [
+    {
+      "contract": "consigned.inventory",
+      "depends_on": [
+        "costing.engine",
+        "inventory.ledger",
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "consigned",
+      "events": [
+        {
+          "event": "consigned.adjusted",
+          "schema": "contracts/events/consigned.inventory/consigned.adjusted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.consumed",
+          "schema": "contracts/events/consigned.inventory/consigned.consumed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.guard.rejected",
+          "schema": "contracts/events/consigned.inventory/consigned.guard.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.owned",
+          "schema": "contracts/events/consigned.inventory/consigned.owned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.received",
+          "schema": "contracts/events/consigned.inventory/consigned.received.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.returned",
+          "schema": "contracts/events/consigned.inventory/consigned.returned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "consigned.reversed",
+          "schema": "contracts/events/consigned.inventory/consigned.reversed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-13",
+      "fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+      "version": "1.0.0",
+      "wave": "1F"
+    },
+    {
+      "contract": "costing.engine",
+      "depends_on": [
+        "inventory.ledger",
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "traceability.registry"
+      ],
+      "dir": "costing",
+      "events": [
+        {
+          "event": "cogs.recorded",
+          "schema": "contracts/events/costing.engine/cogs.recorded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.adjustment.posted",
+          "schema": "contracts/events/costing.engine/cost.adjustment.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.engine.status",
+          "schema": "contracts/events/costing.engine/cost.engine.status.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.layer.created",
+          "schema": "contracts/events/costing.engine/cost.layer.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.layer.updated",
+          "schema": "contracts/events/costing.engine/cost.layer.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.recalculation.completed",
+          "schema": "contracts/events/costing.engine/cost.recalculation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.recalculation.queued",
+          "schema": "contracts/events/costing.engine/cost.recalculation.queued.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.reconciliation.completed",
+          "schema": "contracts/events/costing.engine/cost.reconciliation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.revaluation.posted",
+          "schema": "contracts/events/costing.engine/cost.revaluation.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.rollup.completed",
+          "schema": "contracts/events/costing.engine/cost.rollup.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.underwater.trued_up",
+          "schema": "contracts/events/costing.engine/cost.underwater.trued_up.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.variance.posted",
+          "schema": "contracts/events/costing.engine/cost.variance.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "landed_cost.applied",
+          "schema": "contracts/events/costing.engine/landed_cost.applied.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "landed_cost.estimated",
+          "schema": "contracts/events/costing.engine/landed_cost.estimated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "standard_cost.revalued",
+          "schema": "contracts/events/costing.engine/standard_cost.revalued.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-05",
+      "fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+      "version": "1.0.0",
+      "wave": "0C"
+    },
+    {
+      "contract": "counts.engine",
+      "depends_on": [
+        "costing.engine",
+        "inventory.ledger",
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "counts",
+      "events": [
+        {
+          "event": "count.approved",
+          "schema": "contracts/events/counts.engine/count.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "count.generated",
+          "schema": "contracts/events/counts.engine/count.generated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "count.rejected",
+          "schema": "contracts/events/counts.engine/count.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "count.variance_posted",
+          "schema": "contracts/events/counts.engine/count.variance_posted.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-07",
+      "fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+      "version": "1.0.0",
+      "wave": "1A"
+    },
+    {
+      "contract": "extensions.registry",
+      "depends_on": [
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered"
+      ],
+      "dir": "extensions",
+      "events": [
+        {
+          "event": "extensions.upc.batch.completed",
+          "schema": "contracts/events/extensions.registry/extensions.upc.batch.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.claim.action.recorded",
+          "schema": "contracts/events/extensions.registry/warranty.claim.action.recorded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.registered",
+          "schema": "contracts/events/extensions.registry/warranty.registered.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.registration.expired",
+          "schema": "contracts/events/extensions.registry/warranty.registration.expired.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.registration.voided",
+          "schema": "contracts/events/extensions.registry/warranty.registration.voided.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "warranty.terms.updated",
+          "schema": "contracts/events/extensions.registry/warranty.terms.updated.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-14",
+      "fragment": "contracts/openapi/fragments/FS-14.openapi.json",
+      "version": "1.0.0",
+      "wave": "1F"
+    },
+    {
+      "contract": "inventory.balances",
+      "depends_on": [
+        "item.master",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "pricing.engine",
+        "traceability.registry"
+      ],
+      "dir": "inventory_balances",
+      "events": [],
+      "feature_set": "FS-04",
+      "fragment": "contracts/openapi/fragments/FS-04.openapi.json",
+      "version": "1.0.0",
+      "wave": "0C"
+    },
+    {
+      "contract": "inventory.ledger",
+      "depends_on": [
+        "item.master",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "pricing.engine",
+        "traceability.registry"
+      ],
+      "dir": "inventory_ledger",
+      "events": [],
+      "feature_set": "FS-04",
+      "fragment": "contracts/openapi/fragments/FS-04.openapi.json",
+      "version": "1.0.0",
+      "wave": "0C"
+    },
+    {
+      "contract": "item.master",
+      "depends_on": [
+        "platform.core",
+        "platform.events"
+      ],
+      "dir": "item_master",
+      "events": [
+        {
+          "event": "item.barcode.added",
+          "schema": "contracts/events/item.master/item.barcode.added.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "item.created",
+          "schema": "contracts/events/item.master/item.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "item.inactivated",
+          "schema": "contracts/events/item.master/item.inactivated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "item.matrix.changed",
+          "schema": "contracts/events/item.master/item.matrix.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "item.planning_values.updated",
+          "schema": "contracts/events/item.master/item.planning_values.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "item.uom.changed",
+          "schema": "contracts/events/item.master/item.uom.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "item.updated",
+          "schema": "contracts/events/item.master/item.updated.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-01",
+      "fragment": "contracts/openapi/fragments/FS-01.openapi.json",
+      "version": "1.0.0",
+      "wave": "0B"
+    },
+    {
+      "contract": "manufacturing.execution",
+      "depends_on": [
+        "costing.engine",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "manufacturing",
+      "events": [
+        {
+          "event": "assembly.built",
+          "schema": "contracts/events/manufacturing.execution/assembly.built.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "assembly.unbuilt",
+          "schema": "contracts/events/manufacturing.execution/assembly.unbuilt.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "available_to_build.calculated",
+          "schema": "contracts/events/manufacturing.execution/available_to_build.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "component.consumed",
+          "schema": "contracts/events/manufacturing.execution/component.consumed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "eco.implemented",
+          "schema": "contracts/events/manufacturing.execution/eco.implemented.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.compat.rule_set.activated",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.compat.rule_set.activated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.config.validated",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.config.validated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.config.violation",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.config.violation.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.preferences.changed",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.preferences.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "operation.completed",
+          "schema": "contracts/events/manufacturing.execution/operation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "scheduling.run.completed",
+          "schema": "contracts/events/manufacturing.execution/scheduling.run.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.backflushed",
+          "schema": "contracts/events/manufacturing.execution/wip.backflushed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.closed",
+          "schema": "contracts/events/manufacturing.execution/wip.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.completed",
+          "schema": "contracts/events/manufacturing.execution/wip.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.issued",
+          "schema": "contracts/events/manufacturing.execution/wip.issued.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.built",
+          "schema": "contracts/events/manufacturing.execution/work_order.built.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.closed",
+          "schema": "contracts/events/manufacturing.execution/work_order.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.created",
+          "schema": "contracts/events/manufacturing.execution/work_order.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.firmed",
+          "schema": "contracts/events/manufacturing.execution/work_order.firmed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.released",
+          "schema": "contracts/events/manufacturing.execution/work_order.released.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.reopened",
+          "schema": "contracts/events/manufacturing.execution/work_order.reopened.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.rescheduled",
+          "schema": "contracts/events/manufacturing.execution/work_order.rescheduled.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.voided",
+          "schema": "contracts/events/manufacturing.execution/work_order.voided.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-09",
+      "fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+      "version": "1.1.0",
+      "wave": "1C"
+    },
+    {
+      "contract": "order.demand",
+      "depends_on": [],
+      "dir": "order_boundary",
+      "events": [
+        {
+          "event": "order.demand.changed",
+          "schema": "contracts/events/order.demand/order.demand.changed.schema.json",
+          "version": "0.1.0"
+        }
+      ],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "0.1.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "order.supply",
+      "depends_on": [],
+      "dir": "order_boundary",
+      "events": [],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "0.1.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "platform.core",
+      "depends_on": [],
+      "dir": "platform",
+      "events": [
+        {
+          "event": "auth.login.failed",
+          "schema": "contracts/events/platform.core/auth.login.failed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "auth.tenant_switched",
+          "schema": "contracts/events/platform.core/auth.tenant_switched.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.approved",
+          "schema": "contracts/events/platform.core/document.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.closed",
+          "schema": "contracts/events/platform.core/document.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.rejected",
+          "schema": "contracts/events/platform.core/document.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.reversed",
+          "schema": "contracts/events/platform.core/document.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "document.submitted",
+          "schema": "contracts/events/platform.core/document.submitted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "identity.linked",
+          "schema": "contracts/events/platform.core/identity.linked.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "membership.activated",
+          "schema": "contracts/events/platform.core/membership.activated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "membership.roles.changed",
+          "schema": "contracts/events/platform.core/membership.roles.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "membership.suspended",
+          "schema": "contracts/events/platform.core/membership.suspended.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.approval.approved",
+          "schema": "contracts/events/platform.core/platform.approval.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.approval.rejected",
+          "schema": "contracts/events/platform.core/platform.approval.rejected.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.approval.requested",
+          "schema": "contracts/events/platform.core/platform.approval.requested.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.audit.recorded",
+          "schema": "contracts/events/platform.core/platform.audit.recorded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "platform.flag.changed",
+          "schema": "contracts/events/platform.core/platform.flag.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.cloned",
+          "schema": "contracts/events/platform.core/role.cloned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.created",
+          "schema": "contracts/events/platform.core/role.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.permissions.changed",
+          "schema": "contracts/events/platform.core/role.permissions.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "role.updated",
+          "schema": "contracts/events/platform.core/role.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sod.violation.blocked",
+          "schema": "contracts/events/platform.core/sod.violation.blocked.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.created",
+          "schema": "contracts/events/platform.core/sso.connection.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.disabled",
+          "schema": "contracts/events/platform.core/sso.connection.disabled.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.error",
+          "schema": "contracts/events/platform.core/sso.connection.error.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.tested",
+          "schema": "contracts/events/platform.core/sso.connection.tested.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.connection.updated",
+          "schema": "contracts/events/platform.core/sso.connection.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "sso.login.failed",
+          "schema": "contracts/events/platform.core/sso.login.failed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "tenant.provisioned",
+          "schema": "contracts/events/platform.core/tenant.provisioned.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "tenant.suspended",
+          "schema": "contracts/events/platform.core/tenant.suspended.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "user.invited",
+          "schema": "contracts/events/platform.core/user.invited.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "user.session.revoked",
+          "schema": "contracts/events/platform.core/user.session.revoked.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "1.0.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "platform.events",
+      "depends_on": [],
+      "dir": "platform",
+      "events": [],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "1.0.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "platform.finance",
+      "depends_on": [],
+      "dir": "platform",
+      "events": [
+        {
+          "event": "finance.journal_intent.recorded",
+          "schema": "contracts/events/platform.finance/finance.journal_intent.recorded.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-00",
+      "fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+      "version": "1.0.0",
+      "wave": "0A"
+    },
+    {
+      "contract": "pricing.engine",
+      "depends_on": [
+        "item.master",
+        "platform.core",
+        "platform.events"
+      ],
+      "dir": "pricing",
+      "events": [
+        {
+          "event": "pricing.coupon.redeemed",
+          "schema": "contracts/events/pricing.engine/pricing.coupon.redeemed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price.updated",
+          "schema": "contracts/events/pricing.engine/pricing.price.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price_update.applied",
+          "schema": "contracts/events/pricing.engine/pricing.price_update.applied.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price_update.reverted",
+          "schema": "contracts/events/pricing.engine/pricing.price_update.reverted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price_update.superseded",
+          "schema": "contracts/events/pricing.engine/pricing.price_update.superseded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.rule.changed",
+          "schema": "contracts/events/pricing.engine/pricing.rule.changed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-02",
+      "fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+      "version": "1.0.0",
+      "wave": "0B"
+    },
+    {
+      "contract": "procurement.p2p",
+      "depends_on": [
+        "costing.engine",
+        "inventory.ledger",
+        "item.master",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "procurement",
+      "events": [
+        {
+          "event": "dropship.fulfilled",
+          "schema": "contracts/events/procurement.p2p/dropship.fulfilled.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "inventory.receipt.posted",
+          "schema": "contracts/events/procurement.p2p/inventory.receipt.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "inventory.receipt.reversed",
+          "schema": "contracts/events/procurement.p2p/inventory.receipt.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.approved",
+          "schema": "contracts/events/procurement.p2p/po.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.billed",
+          "schema": "contracts/events/procurement.p2p/po.billed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.closed",
+          "schema": "contracts/events/procurement.p2p/po.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.created",
+          "schema": "contracts/events/procurement.p2p/po.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "po.receipted",
+          "schema": "contracts/events/procurement.p2p/po.receipted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.created",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.posted",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.variance_created",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.variance_created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_bill.variance_posted",
+          "schema": "contracts/events/procurement.p2p/vendor_bill.variance_posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_credit.posted",
+          "schema": "contracts/events/procurement.p2p/vendor_credit.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_return.credited",
+          "schema": "contracts/events/procurement.p2p/vendor_return.credited.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "vendor_return.shipped",
+          "schema": "contracts/events/procurement.p2p/vendor_return.shipped.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-08",
+      "fragment": "contracts/openapi/fragments/FS-08.openapi.json",
+      "version": "1.0.0",
+      "wave": "1B"
+    },
+    {
+      "contract": "quality.management",
+      "depends_on": [
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "quality",
+      "events": [
+        {
+          "event": "quality.derived_field.evaluated",
+          "schema": "contracts/events/quality.management/quality.derived_field.evaluated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "quality.inspection.completed",
+          "schema": "contracts/events/quality.management/quality.inspection.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "quality.inspection.created",
+          "schema": "contracts/events/quality.management/quality.inspection.created.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-12",
+      "fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+      "version": "1.0.0",
+      "wave": "1F"
+    },
+    {
+      "contract": "replenishment.planning",
+      "depends_on": [
+        "costing.engine",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "replenishment",
+      "events": [
+        {
+          "event": "allocation.completed",
+          "schema": "contracts/events/replenishment.planning/allocation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "allocation.exception.raised",
+          "schema": "contracts/events/replenishment.planning/allocation.exception.raised.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "atp.updated",
+          "schema": "contracts/events/replenishment.planning/atp.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.approved",
+          "schema": "contracts/events/replenishment.planning/plan.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.demand.calculated",
+          "schema": "contracts/events/replenishment.planning/plan.demand.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.generated",
+          "schema": "contracts/events/replenishment.planning/plan.generated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.suggestion.converted",
+          "schema": "contracts/events/replenishment.planning/plan.suggestion.converted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.suggestion.created",
+          "schema": "contracts/events/replenishment.planning/plan.suggestion.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.supply.calculated",
+          "schema": "contracts/events/replenishment.planning/plan.supply.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "planning.exception.raised",
+          "schema": "contracts/events/replenishment.planning/planning.exception.raised.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "planning.exception.resolved",
+          "schema": "contracts/events/replenishment.planning/planning.exception.resolved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.below_reorder_point",
+          "schema": "contracts/events/replenishment.planning/replenishment.below_reorder_point.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.calculated",
+          "schema": "contracts/events/replenishment.planning/replenishment.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.order_items.calculated",
+          "schema": "contracts/events/replenishment.planning/replenishment.order_items.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.preferences.changed",
+          "schema": "contracts/events/replenishment.planning/replenishment.preferences.changed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-10",
+      "fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+      "version": "1.0.0",
+      "wave": "1D"
+    },
+    {
+      "contract": "reporting.readmodels",
+      "depends_on": [
+        "consigned.inventory",
+        "costing.engine",
+        "counts.engine",
+        "extensions.registry",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "platform.core",
+        "platform.events",
+        "pricing.engine",
+        "procurement.p2p",
+        "quality.management",
+        "replenishment.planning",
+        "traceability.numbered",
+        "traceability.registry",
+        "wms.execution"
+      ],
+      "dir": "reporting",
+      "events": [
+        {
+          "event": "reporting.refresh.failed",
+          "schema": "contracts/events/reporting.readmodels/reporting.refresh.failed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "reporting.view.refreshed",
+          "schema": "contracts/events/reporting.readmodels/reporting.view.refreshed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-15",
+      "fragment": "contracts/openapi/fragments/FS-15.openapi.json",
+      "version": "1.0.0",
+      "wave": "2"
+    },
+    {
+      "contract": "traceability.numbered",
+      "depends_on": [
+        "costing.engine",
+        "inventory.ledger",
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "traceability.registry"
+      ],
+      "dir": "traceability_numbered",
+      "events": [
+        {
+          "event": "traceability.expiry.warning",
+          "schema": "contracts/events/traceability.numbered/traceability.expiry.warning.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.lot.created",
+          "schema": "contracts/events/traceability.numbered/traceability.lot.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.lot.inactivated",
+          "schema": "contracts/events/traceability.numbered/traceability.lot.inactivated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.serial.created",
+          "schema": "contracts/events/traceability.numbered/traceability.serial.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.serial.state_changed",
+          "schema": "contracts/events/traceability.numbered/traceability.serial.state_changed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-06",
+      "fragment": "contracts/openapi/fragments/FS-06.openapi.json",
+      "version": "1.0.0",
+      "wave": "1A"
+    },
+    {
+      "contract": "traceability.registry",
+      "depends_on": [
+        "item.master",
+        "platform.core",
+        "platform.events"
+      ],
+      "dir": "traceability",
+      "events": [
+        {
+          "event": "traceability.bin.changed",
+          "schema": "contracts/events/traceability.registry/traceability.bin.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.bootstrap.completed",
+          "schema": "contracts/events/traceability.registry/traceability.bootstrap.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.deferred_fk.checked",
+          "schema": "contracts/events/traceability.registry/traceability.deferred_fk.checked.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.location.created",
+          "schema": "contracts/events/traceability.registry/traceability.location.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.location.inactivated",
+          "schema": "contracts/events/traceability.registry/traceability.location.inactivated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.location.updated",
+          "schema": "contracts/events/traceability.registry/traceability.location.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.status.changed",
+          "schema": "contracts/events/traceability.registry/traceability.status.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.zone.changed",
+          "schema": "contracts/events/traceability.registry/traceability.zone.changed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-03",
+      "fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+      "version": "1.0.0",
+      "wave": "0C"
+    },
+    {
+      "contract": "wms.execution",
+      "depends_on": [
+        "counts.engine",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "wms",
+      "events": [
+        {
+          "event": "wms.inbound_shipment.arrived",
+          "schema": "contracts/events/wms.execution/wms.inbound_shipment.arrived.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.inbound_shipment.created",
+          "schema": "contracts/events/wms.execution/wms.inbound_shipment.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.pack.completed",
+          "schema": "contracts/events/wms.execution/wms.pack.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.receiving.reversed",
+          "schema": "contracts/events/wms.execution/wms.receiving.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.replenishment.generated",
+          "schema": "contracts/events/wms.execution/wms.replenishment.generated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.completed",
+          "schema": "contracts/events/wms.execution/wms.task.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.created",
+          "schema": "contracts/events/wms.execution/wms.task.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.exception",
+          "schema": "contracts/events/wms.execution/wms.task.exception.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.reversed",
+          "schema": "contracts/events/wms.execution/wms.task.reversed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wms.task.watchdog.alert",
+          "schema": "contracts/events/wms.execution/wms.task.watchdog.alert.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-11",
+      "fragment": "contracts/openapi/fragments/FS-11.openapi.json",
+      "version": "1.0.0",
+      "wave": "1E"
+    }
+  ],
+  "counts": {
+    "contracts": 21,
+    "events": 159,
+    "feature_sets": 16
+  },
+  "generated_by": "app.contracts.cli",
+  "plan_version": "1.5.0",
+  "schema_version": "1.0"
+}

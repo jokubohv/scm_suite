@@ -1,0 +1,95 @@
+{
+  "datasets": [
+    "inventory_statuses"
+  ],
+  "records": [
+    {
+      "code": "AVAILABLE",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_consigned": false,
+      "is_default": true,
+      "is_sellable": true,
+      "is_system": true,
+      "name": "Available",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "code": "HOLD",
+      "is_available_for_allocation": false,
+      "is_committable": false,
+      "is_consigned": false,
+      "is_default": false,
+      "is_sellable": false,
+      "is_system": true,
+      "name": "On Hold",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "code": "DAMAGED",
+      "is_available_for_allocation": false,
+      "is_committable": false,
+      "is_consigned": false,
+      "is_default": false,
+      "is_sellable": false,
+      "is_system": true,
+      "name": "Damaged",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "code": "RETURNED",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_consigned": false,
+      "is_default": false,
+      "is_sellable": false,
+      "is_system": true,
+      "name": "Returned",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "code": "CONSIGNED_GOOD",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_consigned": true,
+      "is_default": false,
+      "is_sellable": true,
+      "is_system": true,
+      "name": "Consigned Goods",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "code": "IN_TRANSIT_OWNED",
+      "is_available_for_allocation": false,
+      "is_committable": false,
+      "is_consigned": false,
+      "is_default": false,
+      "is_sellable": false,
+      "is_system": true,
+      "name": "In Transit (Owned)",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "code": "USED",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_consigned": false,
+      "is_default": false,
+      "is_sellable": true,
+      "is_system": true,
+      "name": "Used",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "code": "REFURB",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_consigned": false,
+      "is_default": false,
+      "is_sellable": true,
+      "is_system": true,
+      "name": "Refurbished",
+      "owner_feature_set": "FS-03"
+    }
+  ]
+}

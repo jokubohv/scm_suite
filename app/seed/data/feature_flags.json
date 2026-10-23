@@ -1,0 +1,110 @@
+{
+  "datasets": [
+    "feature_flags"
+  ],
+  "note": "Per-tenant feature flags; every flag defaults OFF (framework §6 / DATA-MODEL §21.2).",
+  "records": [
+    {
+      "default_enabled": false,
+      "description": "FS-13 domain enablement flag",
+      "flag_key": "consigned.inventory.enabled",
+      "owner_feature_set": "FS-13"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-05 domain enablement flag",
+      "flag_key": "costing.engine.enabled",
+      "owner_feature_set": "FS-05"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-14 domain enablement flag",
+      "flag_key": "extensions.registry.enabled",
+      "owner_feature_set": "FS-14"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-07 domain enablement flag",
+      "flag_key": "inventory.counts.enabled",
+      "owner_feature_set": "FS-07"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-01 domain enablement flag",
+      "flag_key": "inventory.item_master.enabled",
+      "owner_feature_set": "FS-01"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-04 domain enablement flag",
+      "flag_key": "inventory.ledger.enabled",
+      "owner_feature_set": "FS-04"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-06 domain enablement flag",
+      "flag_key": "inventory.numbered.enabled",
+      "owner_feature_set": "FS-06"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-03 domain enablement flag",
+      "flag_key": "inventory.storage_registry.enabled",
+      "owner_feature_set": "FS-03"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-09 domain enablement flag",
+      "flag_key": "manufacturing.enabled",
+      "owner_feature_set": "FS-09"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-09 domain enablement flag",
+      "flag_key": "manufacturing.wip.enabled",
+      "owner_feature_set": "FS-09"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-00 domain enablement flag",
+      "flag_key": "platform.core.enabled",
+      "owner_feature_set": "FS-00"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-02 domain enablement flag",
+      "flag_key": "pricing.engine.enabled",
+      "owner_feature_set": "FS-02"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-08 domain enablement flag",
+      "flag_key": "procurement.p2p.enabled",
+      "owner_feature_set": "FS-08"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-12 domain enablement flag",
+      "flag_key": "quality.management.enabled",
+      "owner_feature_set": "FS-12"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-10 domain enablement flag",
+      "flag_key": "replenishment.planning.enabled",
+      "owner_feature_set": "FS-10"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-15 domain enablement flag",
+      "flag_key": "reporting.readmodels.enabled",
+      "owner_feature_set": "FS-15"
+    },
+    {
+      "default_enabled": false,
+      "description": "FS-11 domain enablement flag",
+      "flag_key": "wms.execution.enabled",
+      "owner_feature_set": "FS-11"
+    }
+  ]
+}

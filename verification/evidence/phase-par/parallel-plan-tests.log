@@ -1,0 +1,13 @@
+.......F............
+======================================================================
+FAIL: test_missing_dependency_rejected (verification.tests.test_parallel_plan.TestParallelPlanAdversarial.test_missing_dependency_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/tests/test_parallel_plan.py", line 269, in test_missing_dependency_rejected
+    self.assertEqual(r.returncode, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.600s
+
+FAILED (failures=1)

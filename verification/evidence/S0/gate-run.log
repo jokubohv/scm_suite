@@ -1,0 +1,52 @@
+== S0 gate run 2026-10-23T04:14:37Z ==
+-- compileall
+PASS
+-- ruff
+All checks passed!
+PASS
+-- mypy
+app/migrations/env.py:146: error: Unused "type: ignore" comment  [unused-ignore]
+Found 5 errors in 3 files (checked 86 source files)
+-- pytest
+........................................................................ [ 44%]
+........................................................................ [ 89%]
+.................                                                        [100%]
+-- contract lint
+  WARN  [OP_SCOPE_UNKNOWN] spec scope(s) not in permissions.json catalogue (reconcile with owner): ['extensions.admin'] on GET /api/v1/extensions/settings (contracts/openapi/openapi.json)
+  WARN  [OP_SCOPE_UNKNOWN] spec scope(s) not in permissions.json catalogue (reconcile with owner): ['extensions.admin'] on PATCH /api/v1/extensions/settings (contracts/openapi/openapi.json)
+-- chain guard
+  WARN empty baseline: no revisions in versions/ (valid before FS-00 merges 0001–0003)
+RESULT: OK
+-- shell syntax
+PASS
+-- compose config
+PASS
+-- plan gates
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+  spec reconciliation: 16 specs, 791 endpoint rows scanned, 188 catalogue scope references, 0 unknown, 67 unreferenced warning(s)
+  wide-build concurrency: B4 max 8 builders
+  S0 execution-ready: YES
+-- seed validate
+seed sources valid
+== S0 final gate 2026-10-23T04:16:05Z ==
+-- mypy
+Success: no issues found in 86 source files
+-- ruff
+All checks passed!
+-- pytest
+.................                                                        [100%]
+-- compileall
+PASS
+-- parallel s0
+  wide-build concurrency: B4 max 8 builders
+  S0 execution-ready: YES
+-- plan gates
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+  spec reconciliation: 16 specs, 791 endpoint rows scanned, 188 catalogue scope references, 0 unknown, 67 unreferenced warning(s)
+render OK
+-- chain guard
+RESULT: OK
+-- contract lint
+contract lint: PASS — errors=0 warnings=2
+-- scripts
+bash -n PASS

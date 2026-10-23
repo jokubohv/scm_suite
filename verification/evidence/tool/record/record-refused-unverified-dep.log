@@ -1,0 +1,5 @@
+RECORD REFUSED for FS-01 --status verified: dependencies are not verified
+  FAIL [FS-00 platform.core] dependency set not present in deployment state
+  FAIL [FS-00 platform.events] dependency set not present in deployment state
+  run: python tools/feature_sets.py check-env --set FS-01 --env dev
+rc=3

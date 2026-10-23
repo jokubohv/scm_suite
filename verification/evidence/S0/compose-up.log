@@ -1,0 +1,86 @@
+[up.sh] docker compose project=inv-s0-gate profile=dev --profile dev up -d --remove-orphans --wait
+ Network inv-s0-gate_inventory  Creating
+ Network inv-s0-gate_inventory  Created
+ Volume "inv-s0-gate_redisdata"  Creating
+ Volume "inv-s0-gate_redisdata"  Created
+ Volume "inv-s0-gate_miniodata"  Creating
+ Volume "inv-s0-gate_miniodata"  Created
+ Volume "inv-s0-gate_pgdata"  Creating
+ Volume "inv-s0-gate_pgdata"  Created
+ Container inv-s0-gate-redis-1  Creating
+ Container inv-s0-gate-postgres-1  Creating
+ Container inv-s0-gate-minio-1  Creating
+ Container inv-s0-gate-minio-1  Created
+ Container inv-s0-gate-redis-1  Created
+ Container inv-s0-gate-postgres-1  Created
+ Container inv-s0-gate-dex-1  Creating
+ Container inv-s0-gate-dex-1  Created
+ Container inv-s0-gate-worker-1  Creating
+ Container inv-s0-gate-api-1  Creating
+ Container inv-s0-gate-outbox-relay-1  Creating
+ Container inv-s0-gate-worker-1  Created
+ Container inv-s0-gate-outbox-relay-1  Created
+ Container inv-s0-gate-api-1  Created
+ Container inv-s0-gate-redis-1  Starting
+ Container inv-s0-gate-minio-1  Starting
+ Container inv-s0-gate-postgres-1  Starting
+ Container inv-s0-gate-redis-1  Started
+ Container inv-s0-gate-postgres-1  Started
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-minio-1  Started
+ Container inv-s0-gate-postgres-1  Healthy
+ Container inv-s0-gate-dex-1  Starting
+ Container inv-s0-gate-dex-1  Started
+ Container inv-s0-gate-minio-1  Waiting
+ Container inv-s0-gate-dex-1  Waiting
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-redis-1  Waiting
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-redis-1  Waiting
+ Container inv-s0-gate-minio-1  Waiting
+ Container inv-s0-gate-dex-1  Waiting
+ Container inv-s0-gate-dex-1  Waiting
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-redis-1  Waiting
+ Container inv-s0-gate-minio-1  Waiting
+ Container inv-s0-gate-minio-1  Healthy
+ Container inv-s0-gate-postgres-1  Healthy
+ Container inv-s0-gate-redis-1  Healthy
+ Container inv-s0-gate-minio-1  Healthy
+ Container inv-s0-gate-redis-1  Healthy
+ Container inv-s0-gate-postgres-1  Healthy
+ Container inv-s0-gate-minio-1  Healthy
+ Container inv-s0-gate-redis-1  Healthy
+ Container inv-s0-gate-postgres-1  Healthy
+ Container inv-s0-gate-dex-1  Healthy
+ Container inv-s0-gate-worker-1  Starting
+ Container inv-s0-gate-dex-1  Healthy
+ Container inv-s0-gate-api-1  Starting
+ Container inv-s0-gate-dex-1  Healthy
+ Container inv-s0-gate-outbox-relay-1  Starting
+ Container inv-s0-gate-api-1  Started
+ Container inv-s0-gate-outbox-relay-1  Started
+ Container inv-s0-gate-worker-1  Started
+ Container inv-s0-gate-outbox-relay-1  Waiting
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-redis-1  Waiting
+ Container inv-s0-gate-minio-1  Waiting
+ Container inv-s0-gate-dex-1  Waiting
+ Container inv-s0-gate-api-1  Waiting
+ Container inv-s0-gate-worker-1  Waiting
+ Container inv-s0-gate-minio-1  Healthy
+ Container inv-s0-gate-redis-1  Healthy
+ Container inv-s0-gate-dex-1  Healthy
+ Container inv-s0-gate-postgres-1  Healthy
+ Container inv-s0-gate-outbox-relay-1  Healthy
+ Container inv-s0-gate-api-1  Healthy
+ Container inv-s0-gate-worker-1  Healthy
+[up.sh] stack is up (project=inv-s0-gate); try: scripts/check_env.sh FS-00 dev
+NAME                         IMAGE                                        COMMAND                  SERVICE        CREATED          STATUS                    PORTS
+inv-s0-gate-api-1            inventory-platform-api:local                 "/usr/bin/tini -- uv…"   api            17 seconds ago   Up 5 seconds (healthy)    0.0.0.0:28000->8000/tcp, [::]:28000->8000/tcp
+inv-s0-gate-dex-1            ghcr.io/dexidp/dex:v2.41.1                   "/usr/local/bin/dock…"   dex            17 seconds ago   Up 11 seconds (healthy)   0.0.0.0:25556->5556/tcp, [::]:25556->5556/tcp
+inv-s0-gate-minio-1          bitnamilegacy/minio:2025.7.23-debian-12-r5   "/opt/bitnami/script…"   minio          17 seconds ago   Up 16 seconds (healthy)   0.0.0.0:29000->9000/tcp, [::]:29000->9000/tcp, 0.0.0.0:29001->9001/tcp, [::]:29001->9001/tcp
+inv-s0-gate-outbox-relay-1   inventory-platform-api:local                 "/usr/bin/tini -- py…"   outbox-relay   17 seconds ago   Up 5 seconds (healthy)    8000/tcp
+inv-s0-gate-postgres-1       postgres:16-alpine                           "docker-entrypoint.s…"   postgres       17 seconds ago   Up 16 seconds (healthy)   0.0.0.0:25432->5432/tcp, [::]:25432->5432/tcp
+inv-s0-gate-redis-1          redis:7-alpine                               "docker-entrypoint.s…"   redis          17 seconds ago   Up 16 seconds (healthy)   0.0.0.0:26379->6379/tcp, [::]:26379->6379/tcp
+inv-s0-gate-worker-1         inventory-platform-api:local                 "/usr/bin/tini -- py…"   worker         17 seconds ago   Up 5 seconds (healthy)    8000/tcp

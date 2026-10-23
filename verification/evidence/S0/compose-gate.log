@@ -1,0 +1,22 @@
+== S0 compose gate 2026-10-23T04:15:50Z ==
+-- compose ps
+inv-s0-gate-api-1 Up 11 seconds (healthy)
+inv-s0-gate-dex-1 Up 16 seconds (healthy)
+inv-s0-gate-minio-1 Up 22 seconds (healthy)
+inv-s0-gate-outbox-relay-1 Up 11 seconds (healthy)
+inv-s0-gate-postgres-1 Up 22 seconds (healthy)
+inv-s0-gate-redis-1 Up 22 seconds (healthy)
+inv-s0-gate-worker-1 Up 11 seconds (healthy)
+-- API healthz
+{"status":"ok","version":"0.1.0","env":"dev"}
+-- API readyz
+{"status":"ok","checks":{"database":"configured","redis":"configured"}}
+-- Dex discovery
+issuer http://localhost:25556/dex jwks True
+-- alembic upgrade (empty chain)
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+-- in-container seed validate
+seed sources valid
+-- contract lint
+contract lint: PASS — errors=0 warnings=2

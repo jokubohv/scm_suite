@@ -1,0 +1,42 @@
+PASS  plan_version 1.4.0 in manifest, permissions.json and parallel-plan
+PASS  schema/DAG/counts unchanged: 280 tables/platform 34/21 views; 31+6; 143/153; INV-32; 251/237/13/1/7/14/18/9/6
+PASS  feature-set DAG/contracts/waves unchanged (16/116/86/21/10; entry 49; exit 95; FS-00 exit 17)
+PASS  FEATURE-SETS header 1.4.0; coverage unchanged 1,348 (769 in-scope / 579 deferred)
+PASS  no feature-set spec changed by Δ-PAR (all 16 byte-identical to v1.3.0 sign-off)
+PASS  22 tasks = 7 S0 scaffold + 15 FS cards; all 16 sets covered exactly once
+PASS  S0 cards S0-01..S0-07 + gate requires all seven; expected 9 scaffold paths mapped
+PASS  each expected S0 scaffold path is owned by the documented S0 card
+PASS  S0 coverage: repo/CI, compose+Dex, Alembic, 16 contract skeletons, harness, scripts, seeds
+PASS  phases B0–B5, B4 = 8 cards / max_concurrent 8; B5 = PAR-15 (one card)
+PASS  freeze points C0, C1, C2a, C2, C3, C4, C5 present with available phases
+PASS  every freeze after_task is in the requiring card's transitive start-after closure (C3 fix)
+PASS  C3-dependent cards (PAR-09/10/11/12/13) start after PAR-06 and PAR-07
+PASS  PAR-00 owns app/core (FS-00 exclusive) and B1 shared-file rule is expressible (B1 = 1 FS card)
+PASS  write scopes disjoint per phase; wide-phase (B4) builders own no shared path
+PASS  migrations: 30 revisions contiguous 0001..0030; union == manifest per-FS map
+PASS  per-card migration revisions equal the manifest FS allocations
+PASS  migration allocation matches DATA-MODEL §21.1 (16 FS rows; per-FS revision ranges cover the manifest map)
+PASS  deploy order unchanged (each card wave == manifest wave; wave sequence 0A..2)
+PASS  fleet/roles + max concurrency declared (8 FS builders; scaffold/integrator/verifier/e2e/contract owner)
+PASS  validator PASS: 22 tasks / 7 scaffold / 15 FS cards / 16/16 sets / 30 migrations / 6 phases / 7 freezes
+PASS  validator report counts match the plan
+PASS  --s0 correctly reports execution-ready NO with 9 missing scaffold paths (intentional pre-S0)
+PASS  validator enforces plan_version == manifest and freeze after_task closure; docstring no DATA-MODEL claim
+PASS  validator shared-file rule applies only to wide phases (>1 FS card) — B1 app/core ownership representable
+PASS  addendum: parallel build vs wave-ordered deploy, S0-GATE, C0–C5, write scopes/shared files, migration protocol, env guards, fleet, go/no-go
+PASS  addendum B5 card = PAR-15 and deploy cadence states the 1F parallel exception
+PASS  framework §8 rewritten: parallel build + frozen contracts + wave-ordered deploy + 8 builders; no stale one-FS-at-a-time rule
+PASS  PLAN: v1.4.0 header pending + Δ-PAR decision row + §7.1 S0 precondition + §7.2 note + §7.3 roles + §7.5 + §12.17
+FAIL  PLAN §3.1 decisions table keeps the earlier Δ-SSO/D-31 row (Δ-PAR edit must not drop prior amendments)
+PASS  README carries the Δ-PAR parallel-readiness line + status pending
+FAIL  README/PLAN deploy wording includes the manifest 1F parallel exception (or defers to addendum) -- [('README.md', 49, 'deploy **one feature set at a time** (builds may run in parallel per Δ-PAR), L2 entry gate → additive migrations → deplo'), ('PLAN.md', 128, '- **Environment flow:** dev → staging → prod, one **deployment** at a time (builds may run in parallel per')]
+PASS  adversarial suite: 20 cases (valid + 16 attacking); 19/20 pass, the known validator-crash case is tracked as PAR-D2
+==============================================================================================================
+PAR DELTA AUDIT  --  31 PASS / 2 FAIL / 3 findings
+==============================================================================================================
+[MINOR] PAR-D3 (PLAN.md §3.1 decisions table): The Δ-PAR edit dropped the Δ-SSO decision row from PLAN §3.1 (the table now jumps from Δ-RBAC to a blank line and Δ-PAR; `| Δ-SSO |`/D-31 is gone, though §12 still cites D-31). The v1.3.0 sign-off and the Δ-SSO audit required this row.
+[MINOR] PAR-D1 (README.md:49 / PLAN.md:128 (deploy wording)): The v1.4.0 deploy wording still says 'one feature set at a time'/'one deployment at a time' without the manifest's 1F parallel group exception (FS-12/13/14), while the Δ-PAR addendum §4, framework §8 and JSON execution.deploy_cadence state 'except the manifest-specified 1F parallel group'.
+[MINOR] PAR-D2 (tools/check_parallel_plan.py (start_after_tasks handling)): Validator robustness: a card whose `start_after_tasks` references a scaffold task (no `build_phase`) crashes with KeyError/rc1 instead of reporting a clean exit-2 diagnostic (the current plan is unaffected: all FS cards start after FS cards and freezes after FS cards). The new freeze-closure walker also dereferences unknown start-after ids before the missing-dependency error is printed.
+--------------------------------------------------------------------------------------------------------------
+Parallel plan: tasks=22 scaffold=7 fs_cards=15 sets=16/16 migrations=30 phases=6 freezes=7
+Amendment is execution-only: plan_version 1.4.0; 280/34/21, 31+6, 143/153, INV-32, 251/237/13/1/7/14/18/9/6; 16/116/86/21/10 unchanged; all 16 specs byte-identical.

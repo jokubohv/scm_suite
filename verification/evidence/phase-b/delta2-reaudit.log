@@ -1,0 +1,31 @@
+DOCUMENTATION-DELTA RE-CHECK SUMMARY  2026-10-21T14:01:25-04:00
+Change under test: PLAN.md §4.1 'The inventory workflow' (lines 117-155) + README.md update
+
+== snapshot provenance ==
+pre-delta snapshot retained: verification/evidence/tool/audited-snapshot.sha256 (phase-B + spec-fix delta)
+changed hashes in this delta: PLAN.md, README.md (content), plus this report after update
+
+== consistency checks (PLAN §4.1 vs binding docs) ==
+iri-214 catalog entry: Inventory Workflow | section_N2251098 | coverage disposition FS-04 (unchanged)
+ARCH §9 traceability row for iri-214: 'workflow covers purchasing → receiving → manufacturing → selling → fulfilling → replenishing' -> MATCH
+posting types T-01/T-06/T-12/T-14/T-15/T-19 and commands C-01..C-03 present in ARCHITECTURE §2.3 + DATA-MODEL §18 -> PASS
+stage->FS/wave refs FS-04 0C, FS-08 1B, FS-09 1C, FS-10 1D, FS-11 1E, FS-15 2 -> PASS
+DATA-MODEL §19 state machines / FEATURE-SETS §7.x / FS-04/08/09/10/11 specs -> no contradiction
+PLAN + README relative links -> 0 broken
+
+== re-run results ==
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+COVERAGE OK: 1348/1348 catalog topics accounted (iri=412, mpw=936); 769 in-scope + 579 deferred; 0 missing, 0 extra, 0 duplicates
+unit tests: OK
+render_plan_tables --check: rc=0
+independent_checks: INDEPENDENT PHASE-A RECHECK  --  95 PASS / 0 FAIL
+spec/PLAN audit: AUDIT RESULT: PASS WITH MINOR FINDINGS -- 4 MINOR, 0 check failure(s) documented as MINOR above
+
+== new findings (PLAN text only, all MINOR) ==
+[MINOR] F-D-01 (PLAN.md section 4.1): Section 4.1 uses illustrative event families that do not match the published contract event names: `inventory.transaction.posted`, `purchase_order.`, `item_receipt.`. The contracts define po.created/approved/receipted/billed/closed (FS-08), inventory.receipt.posted|reversed (FS-08/FS-04), inventory.committed.changed, inventory.fulfilled and inventory.issued (FS-04).
+[MINOR] F-D-02 (PLAN.md section 4.1): Section 4.1 says every state-changing step posts synchronously to the inventory ledger. ARCHITECTURE 2.3 defines non-posting control commands C-01..C-06 (commitments, TO approve/close, WO void) and document/approval state machines that never append ledger rows; only inventory-quantity/value-affecting steps post.
+[MINOR] F-D-03 (PLAN.md section 4.1): Section 4.1 states the runbook (section 7) requires a golden end-to-end workflow pass before a wave is promoted, but section 7 contains no such requirement: its per-set workflow runs one golden-path smoke transaction (section 5 deployment-protocol step 4) and wave closure uses the section 6 exit criteria. Either add the requirement to the runbook or reword section 4.1 as a recommendation.
+[MINOR] F-D-04 (PLAN.md section 6.1): Section 6.1 states the sizing as 8 x L, 6 x M, 2 x S, but FEATURE-SETS section 1 (the per-set size authority) is 7 x L, 7 x M, 2 x S (16 sets total). Correct the distribution in the PLAN sentence.
+
+== info ==
+README.md also changed in the same window (Deliverable status section) and is consistent with the report; iri-214 parenthetical references parent chapter iri-213 'Basic Inventory Management'; 'Receipt documents T-01..T-06' groups receipt-to-bill docs; 'FS-04 exposes fiscal periods' is loose (FS-00-owned projection read via FinancePort).

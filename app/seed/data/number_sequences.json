@@ -1,0 +1,251 @@
+{
+  "datasets": [
+    "number_sequences"
+  ],
+  "note": "Sequence templates; FS-00 seeds the physical platform.number_sequence rows per tenant. padding/reset/gap are defaults (ASSUMPTION until FS-00 policy).",
+  "records": [
+    {
+      "doc_type": "PO",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "PO",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "IR",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "IR",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "VB",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "VB",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "VC",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "VC",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "VRA",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "VRA",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "TO",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "TO",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "IT",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "IT",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "IA",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "IA",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "IW",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "IW",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "CNT",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "CNT",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "AB",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "AB",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "AU",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "AU",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "WO",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "WO",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "WIP",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "WIP",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "LC",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "LC",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "REV",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "REV",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "ECN",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "ECN",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "CONS",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "CONS",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "WAVE",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "WAVE",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "SHIP",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "SHIP",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "TASK",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "TASK",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "IMPORT",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "IMP",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "MFGSCH",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "MSCH",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "DP",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "DP",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "SP",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "SP",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "ALC",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "ALC",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    },
+    {
+      "doc_type": "AIM",
+      "gap_policy": "NON_GAPLESS",
+      "owner_feature_set": "FS-00",
+      "padding": 6,
+      "prefix": "AIM",
+      "reset_policy": "NEVER",
+      "scope_key": "TENANT"
+    }
+  ]
+}

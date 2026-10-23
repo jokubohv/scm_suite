@@ -1,0 +1,70 @@
+{
+  "contracts": [
+    {
+      "contract": "traceability.registry",
+      "depends_on": [
+        "item.master",
+        "platform.core",
+        "platform.events"
+      ],
+      "dir": "traceability",
+      "events": [
+        {
+          "event": "traceability.bin.changed",
+          "schema": "contracts/events/traceability.registry/traceability.bin.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.bootstrap.completed",
+          "schema": "contracts/events/traceability.registry/traceability.bootstrap.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.deferred_fk.checked",
+          "schema": "contracts/events/traceability.registry/traceability.deferred_fk.checked.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.location.created",
+          "schema": "contracts/events/traceability.registry/traceability.location.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.location.inactivated",
+          "schema": "contracts/events/traceability.registry/traceability.location.inactivated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.location.updated",
+          "schema": "contracts/events/traceability.registry/traceability.location.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.status.changed",
+          "schema": "contracts/events/traceability.registry/traceability.status.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "traceability.zone.changed",
+          "schema": "contracts/events/traceability.registry/traceability.zone.changed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-03",
+      "fragment": "contracts/openapi/fragments/FS-03.openapi.json",
+      "version": "1.0.0",
+      "wave": "0C"
+    }
+  ],
+  "dir": "traceability",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/traceability/openapi.fragment.json",
+  "feature_set": "FS-03",
+  "fragments": [
+    "contracts/openapi/fragments/FS-03.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "0C"
+}

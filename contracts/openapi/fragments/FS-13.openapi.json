@@ -1,0 +1,944 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-13 — Consigned Inventory Management (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "consigned.inventory",
+        "dir": "consigned",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-13",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1F"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/consigned/balances": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consigned-balances",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Consigned vs owned balance projection (FS-15 input)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consigned/balances",
+        "x-required-scopes": [
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-agreements": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-agreements",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create agreements",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/consignment-agreements",
+        "x-required-scopes": [
+          "consigned.agreement.write",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-agreements",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create agreements",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/consignment-agreements",
+        "x-required-scopes": [
+          "consigned.agreement.write",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-agreements/{id}": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-agreements-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Agreement detail + items",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consignment-agreements/{id}",
+        "x-required-scopes": [
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-agreements/{id}/activate": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-agreements-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "DRAFT→ACTIVE (guard)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-agreements/{id}/activate",
+        "x-required-scopes": [
+          "consigned.agreement.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-agreements/{id}/items": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-agreements-id-items",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/add covered items",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/consignment-agreements/{id}/items",
+        "x-required-scopes": [
+          "consigned.agreement.write",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-agreements-id-items",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/add covered items",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/consignment-agreements/{id}/items",
+        "x-required-scopes": [
+          "consigned.agreement.write",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-agreements/{id}/items/{item_id}": {
+      "patch": {
+        "operationId": "fs13_patch_api-v1-consignment-agreements-id-items-item-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update/deactivate covered item",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consignment-agreements/{id}/items/{item_id}",
+        "x-required-scopes": [
+          "consigned.agreement.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-agreements/{id}/suspend": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-agreements-id-suspend",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ACTIVE→SUSPENDED",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-agreements/{id}/suspend",
+        "x-required-scopes": [
+          "consigned.agreement.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-agreements/{id}/terminate": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-agreements-id-terminate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "→TERMINATED (zero stock/disposition)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-agreements/{id}/terminate",
+        "x-required-scopes": [
+          "consigned.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-consumption": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-consumption",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List consumption audit rows",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consignment-consumption",
+        "x-required-scopes": [
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-consumption",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Consume/sell consigned stock (T-22; optional fulfil)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-consumption",
+        "x-required-scopes": [
+          "consigned.transfer.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-transfers": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-transfers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list ownership-transfer docs (T-21/T-23/return)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/consignment-transfers",
+        "x-required-scopes": [
+          "consigned.transfer.write",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-transfers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create/list ownership-transfer docs (T-21/T-23/return)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/consignment-transfers",
+        "x-required-scopes": [
+          "consigned.transfer.write",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-transfers/{id}": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-transfers-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Transfer detail + postings/bill refs",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consignment-transfers/{id}",
+        "x-required-scopes": [
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-transfers/{id}/approve": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-transfers-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "→APPROVED via FS-00 approval",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-transfers/{id}/approve",
+        "x-required-scopes": [
+          "consigned.transfer.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-transfers/{id}/post": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-transfers-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Post T-21/T-22/T-23 via ledger",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-transfers/{id}/post",
+        "x-required-scopes": [
+          "consigned.transfer.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-transfers/{id}/reverse": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-transfers-id-reverse",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reverse posted transfer (compensating)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-transfers/{id}/reverse",
+        "x-required-scopes": [
+          "consigned.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-transfers/{id}/submit": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-transfers-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "→PENDING_APPROVAL",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-transfers/{id}/submit",
+        "x-required-scopes": [
+          "consigned.transfer.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment-transfers/{id}/void": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-transfers-id-void",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Void unposted transfer",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment-transfers/{id}/void",
+        "x-required-scopes": [
+          "consigned.transfer.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment/eligibility": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-eligibility",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Guard/eligibility check for item+location+vendor",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consignment/eligibility",
+        "x-required-scopes": [
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment/guards/validate": {
+      "post": {
+        "operationId": "fs13_post_api-v1-consignment-guards-validate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Validate tenant configuration against D6 (EXT)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/consignment/guards/validate",
+        "x-required-scopes": [
+          "consigned.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/consignment/settings": {
+      "get": {
+        "operationId": "fs13_get_api-v1-consignment-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Consignment settings (statuses defaults, payment trigger default, guard flag)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consignment/settings",
+        "x-required-scopes": [
+          "consigned.admin",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs13_patch_api-v1-consignment-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Consignment settings (statuses defaults, payment trigger default, guard flag)",
+        "tags": [
+          "FS-13",
+          "consigned.inventory"
+        ],
+        "x-contract": [
+          "consigned.inventory"
+        ],
+        "x-feature-set": "FS-13",
+        "x-fragment": "contracts/openapi/fragments/FS-13.openapi.json",
+        "x-original-path": "/v1/consignment/settings",
+        "x-required-scopes": [
+          "consigned.admin",
+          "consigned.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 24,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "consigned.inventory",
+      "event": "consigned.adjusted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "consigned.inventory",
+      "event": "consigned.consumed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "consigned.inventory",
+      "event": "consigned.guard.rejected",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "consigned.inventory",
+      "event": "consigned.owned",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "consigned.inventory",
+      "event": "consigned.received",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "consigned.inventory",
+      "event": "consigned.returned",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "consigned.inventory",
+      "event": "consigned.reversed",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "consigned.agreement.expiry",
+    "consigned.consumption.reconcile",
+    "consigned.ownership.reconcile",
+    "consigned.stock.guard"
+  ]
+}

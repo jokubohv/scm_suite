@@ -1,0 +1,55 @@
+# Build context hygiene for the Inventory Platform image (S0-02).
+# Keep the context small and free of local state/secrets; the dev image needs source + plan
+# sources that its in-container gates read, so those are NOT ignored.
+
+# VCS / local tooling
+.git
+.gitignore
+.github
+.worktrees
+.editorconfig
+.idea
+.vscode
+
+# Local secrets and environment (only the example template is relevant, and it is not needed
+# inside the image; containers get configuration through the environment).
+.env
+.env.*
+# The example template is copied into the dev image for docs/parity; it contains placeholders only.
+!.env.example
+*.pem
+*.key
+*.crt
+
+# Python / test caches and virtualenvs
+.venv
+venv
+**/__pycache__
+**/*.py[cod]
+**/*.egg-info
+.pytest_cache
+.mypy_cache
+.ruff_cache
+htmlcov
+.coverage
+coverage.xml
+
+# Node/tooling + local runtime state
+node_modules
+*.log
+*.tmp
+tmp
+
+# Plan-package artifacts not needed in the image
+verification
+research
+imp-plan
+PLAN.md
+IMPLEMENTATION-WINDOWS.md
+
+# Compose/Docker files are not needed inside the image context
+docker-compose.yml
+docker-compose.dev.yml
+docker-compose.*.yml
+Dockerfile
+.dockerignore

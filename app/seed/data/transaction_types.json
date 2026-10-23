@@ -1,0 +1,431 @@
+{
+  "datasets": [
+    "transaction_types"
+  ],
+  "note": "Reference catalogue for FS-04 migrations/seeds; no physical table exists yet (data-only at S0).",
+  "records": [
+    {
+      "code": "T-01",
+      "events": [
+        "inventory.receipt.posted",
+        "po.receipted",
+        "cost.layer.created",
+        "inventory.balance.changed"
+      ],
+      "movement_type": "RECEIPT",
+      "name": "PO/advanced-receiving item receipt",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "RCPT",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN",
+      "value_only": false
+    },
+    {
+      "code": "T-02",
+      "events": [
+        "inventory.receipt.reversed",
+        "po.open_restored"
+      ],
+      "movement_type": "RECEIPT_REVERSAL",
+      "name": "Receipt reversal",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "RCPT_REV",
+      "qty_class": "ON_HAND",
+      "qty_effect": "OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-03",
+      "events": [
+        "vendor_return.shipped",
+        "inventory.issued"
+      ],
+      "movement_type": "VENDOR_RETURN",
+      "name": "Vendor return shipment",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "VRET",
+      "qty_class": "ON_HAND",
+      "qty_effect": "OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-04",
+      "events": [
+        "vendor_bill.posted",
+        "vendor_bill.variance_created"
+      ],
+      "movement_type": "VENDOR_BILL",
+      "name": "Vendor bill (advanced receiving; value-only)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "BILL",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-05",
+      "events": [
+        "vendor_credit.posted"
+      ],
+      "movement_type": "VENDOR_CREDIT",
+      "name": "Vendor credit",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "VCRED",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-06",
+      "events": [
+        "vendor_bill.variance_posted"
+      ],
+      "movement_type": "VARIANCE",
+      "name": "Vendor bill variance posting",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "BILLVAR",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-07",
+      "events": [
+        "inventory.adjusted",
+        "inventory.balance.changed"
+      ],
+      "movement_type": "ADJUSTMENT",
+      "name": "Incremental inventory adjustment",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "ADJ",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-08",
+      "events": [
+        "inventory.adjusted"
+      ],
+      "movement_type": "WORKSHEET",
+      "name": "Absolute inventory worksheet",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "ADJ",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-09",
+      "events": [
+        "inventory.transferred"
+      ],
+      "movement_type": "TRANSFER",
+      "name": "One-step location transfer",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "",
+      "qty_class": "ON_HAND",
+      "qty_effect": "MOVE",
+      "value_only": false
+    },
+    {
+      "code": "T-10",
+      "events": [
+        "to.fulfilled",
+        "inventory.in_transit.changed"
+      ],
+      "movement_type": "TO_FULFILLMENT",
+      "name": "Transfer-order fulfilment (to in-transit)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "XFROUT",
+      "qty_class": "ON_HAND_IN_TRANSIT",
+      "qty_effect": "MOVE",
+      "value_only": false
+    },
+    {
+      "code": "T-11",
+      "events": [
+        "to.received"
+      ],
+      "movement_type": "TO_RECEIPT",
+      "name": "Transfer-order receipt (from in-transit)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "XFRIN",
+      "qty_class": "ON_HAND_IN_TRANSIT",
+      "qty_effect": "MOVE",
+      "value_only": false
+    },
+    {
+      "code": "T-12",
+      "events": [
+        "fulfillment.posted",
+        "inventory.issued",
+        "cogs.recorded"
+      ],
+      "movement_type": "FULFILLMENT",
+      "name": "Sales fulfilment",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "COGS",
+      "qty_class": "ON_HAND",
+      "qty_effect": "OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-13",
+      "events": [
+        "return.received",
+        "inventory.returned"
+      ],
+      "movement_type": "RETURN_RECEIPT",
+      "name": "Customer return receipt",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "RET",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN",
+      "value_only": false
+    },
+    {
+      "code": "T-14",
+      "events": [
+        "component.issued"
+      ],
+      "movement_type": "KIT_FULFILLMENT",
+      "name": "Kit/group component fulfilment",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "COGS",
+      "qty_class": "ON_HAND",
+      "qty_effect": "OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-15",
+      "events": [
+        "assembly.built",
+        "component.consumed"
+      ],
+      "movement_type": "ASSEMBLY_BUILD",
+      "name": "Assembly build",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "BLD",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-16",
+      "events": [
+        "assembly.unbuilt"
+      ],
+      "movement_type": "ASSEMBLY_UNBUILD",
+      "name": "Assembly unbuild",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "UNBLD",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-17",
+      "events": [
+        "wip.issued"
+      ],
+      "movement_type": "WIP_ISSUE",
+      "name": "WIP component issue",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "WIPISS",
+      "qty_class": "ON_HAND",
+      "qty_effect": "OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-18",
+      "events": [
+        "wip.completed",
+        "wip.backflushed"
+      ],
+      "movement_type": "WIP_COMPLETION",
+      "name": "WIP completion/backflush",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "WIPCMP",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-19",
+      "events": [
+        "work_order.closed"
+      ],
+      "movement_type": "WIP_CLOSE",
+      "name": "Work order close (value-only true-up)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "WIPCLS",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-20",
+      "events": [
+        "count.approved",
+        "inventory.adjusted",
+        "count.variance_posted"
+      ],
+      "movement_type": "COUNT_VARIANCE",
+      "name": "Approved count variance",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "CNTVAR",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-21",
+      "events": [
+        "consigned.received"
+      ],
+      "movement_type": "CONSIGNED_RECEIPT",
+      "name": "Consigned receipt (ownership=CONSIGNED)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "CONSRCPT",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN",
+      "value_only": false
+    },
+    {
+      "code": "T-22",
+      "events": [
+        "consigned.owned",
+        "vendor_bill.created"
+      ],
+      "movement_type": "CONSIGNED_OWNERSHIP",
+      "name": "Consigned ownership transfer",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "CONSOWN",
+      "qty_class": "ON_HAND",
+      "qty_effect": "MOVE",
+      "value_only": false
+    },
+    {
+      "code": "T-23",
+      "events": [
+        "consigned.adjusted"
+      ],
+      "movement_type": "CONSIGNED_ADJUST",
+      "name": "Consigned adjustment/count",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "CONSADJ",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    },
+    {
+      "code": "T-24",
+      "events": [
+        "standard_cost.revalued"
+      ],
+      "movement_type": "REVALUATION",
+      "name": "Standard-cost revaluation",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "STDREVAL",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-25",
+      "events": [
+        "cost.adjusted",
+        "cost.recalculation.completed"
+      ],
+      "movement_type": "COGS_ADJUST",
+      "name": "System COGS adjustment/true-up",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "COGSADJ",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-26",
+      "events": [
+        "landed_cost.applied",
+        "cost.layer.updated"
+      ],
+      "movement_type": "LANDED_COST",
+      "name": "Actual landed-cost application",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "LANDED",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-27",
+      "events": [
+        "landed_cost.estimated"
+      ],
+      "movement_type": "LANDED_COST_EST",
+      "name": "Estimated landed-cost accrual",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "LANDEDEST",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-28",
+      "events": [
+        "dropship.fulfilled",
+        "po.billed"
+      ],
+      "movement_type": "DROP_SHIP",
+      "name": "Drop-ship/special-order fulfilment (no inventory movement)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "DROPSHIP",
+      "qty_class": "",
+      "qty_effect": "NONE",
+      "value_only": true
+    },
+    {
+      "code": "T-29",
+      "events": [
+        "bin.transferred"
+      ],
+      "movement_type": "BIN_TRANSFER",
+      "name": "Bin transfer (same location)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "",
+      "qty_class": "ON_HAND",
+      "qty_effect": "MOVE",
+      "value_only": false
+    },
+    {
+      "code": "T-30",
+      "events": [
+        "inventory.status_changed",
+        "inventory.availability.changed"
+      ],
+      "movement_type": "STATUS_CHANGE",
+      "name": "Inventory status change (qty-neutral)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "",
+      "qty_class": "ON_HAND",
+      "qty_effect": "MOVE",
+      "value_only": false
+    },
+    {
+      "code": "T-31",
+      "events": [
+        "import.row_posted"
+      ],
+      "movement_type": "IMPORT_ROW",
+      "name": "Import batch row posting (wrapper)",
+      "owner_feature_set": "FS-04",
+      "posting_rule_id": "",
+      "qty_class": "ON_HAND",
+      "qty_effect": "IN_OUT",
+      "value_only": false
+    }
+  ]
+}

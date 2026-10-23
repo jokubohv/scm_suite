@@ -1,0 +1,15 @@
+usage: feature_sets.py record [-h] [--manifest MANIFEST] --set SET --env ENV
+                              --status {deployed,verified,failed}
+                              [--evidence EVIDENCE] [--state STATE]
+
+options:
+  -h, --help            show this help message and exit
+  --manifest MANIFEST   manifest path (default: design/feature-sets.json)
+  --set SET             feature-set id, e.g. FS-00
+  --env ENV             environment name (dev|staging|prod)
+  --status {deployed,verified,failed}
+                        new status
+  --evidence EVIDENCE   exit-check evidence file (required for --status
+                        verified)
+  --state STATE         deployment-state path (default: deployment-
+                        state.<env>.json)

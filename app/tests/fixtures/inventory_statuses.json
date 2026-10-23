@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "plan_version": "1.5.0",
+  "note": "Canonical inventory-status samples (DATA-MODEL §21.2 + Δ-REUSE). Exactly one default; CONSIGNED_GOOD is the consigned status.",
+  "records": [
+    {
+      "code": "AVAILABLE",
+      "name": "Available",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_sellable": true,
+      "is_consigned": false,
+      "is_default": true,
+      "is_system": true
+    },
+    {
+      "code": "HOLD",
+      "name": "On Hold",
+      "is_available_for_allocation": false,
+      "is_committable": false,
+      "is_sellable": false,
+      "is_consigned": false,
+      "is_default": false,
+      "is_system": true
+    },
+    {
+      "code": "DAMAGED",
+      "name": "Damaged",
+      "is_available_for_allocation": false,
+      "is_committable": false,
+      "is_sellable": false,
+      "is_consigned": false,
+      "is_default": false,
+      "is_system": true
+    },
+    {
+      "code": "RETURNED",
+      "name": "Returned",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_sellable": false,
+      "is_consigned": false,
+      "is_default": false,
+      "is_system": true
+    },
+    {
+      "code": "CONSIGNED_GOOD",
+      "name": "Consigned Goods",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_sellable": true,
+      "is_consigned": true,
+      "is_default": false,
+      "is_system": true
+    },
+    {
+      "code": "USED",
+      "name": "Used",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_sellable": true,
+      "is_consigned": false,
+      "is_default": false,
+      "is_system": true
+    },
+    {
+      "code": "REFURB",
+      "name": "Refurbished",
+      "is_available_for_allocation": true,
+      "is_committable": true,
+      "is_sellable": true,
+      "is_consigned": false,
+      "is_default": false,
+      "is_system": true
+    }
+  ]
+}

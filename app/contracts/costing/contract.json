@@ -1,0 +1,108 @@
+{
+  "contracts": [
+    {
+      "contract": "costing.engine",
+      "depends_on": [
+        "inventory.ledger",
+        "item.master",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "traceability.registry"
+      ],
+      "dir": "costing",
+      "events": [
+        {
+          "event": "cogs.recorded",
+          "schema": "contracts/events/costing.engine/cogs.recorded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.adjustment.posted",
+          "schema": "contracts/events/costing.engine/cost.adjustment.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.engine.status",
+          "schema": "contracts/events/costing.engine/cost.engine.status.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.layer.created",
+          "schema": "contracts/events/costing.engine/cost.layer.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.layer.updated",
+          "schema": "contracts/events/costing.engine/cost.layer.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.recalculation.completed",
+          "schema": "contracts/events/costing.engine/cost.recalculation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.recalculation.queued",
+          "schema": "contracts/events/costing.engine/cost.recalculation.queued.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.reconciliation.completed",
+          "schema": "contracts/events/costing.engine/cost.reconciliation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.revaluation.posted",
+          "schema": "contracts/events/costing.engine/cost.revaluation.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.rollup.completed",
+          "schema": "contracts/events/costing.engine/cost.rollup.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.underwater.trued_up",
+          "schema": "contracts/events/costing.engine/cost.underwater.trued_up.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "cost.variance.posted",
+          "schema": "contracts/events/costing.engine/cost.variance.posted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "landed_cost.applied",
+          "schema": "contracts/events/costing.engine/landed_cost.applied.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "landed_cost.estimated",
+          "schema": "contracts/events/costing.engine/landed_cost.estimated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "standard_cost.revalued",
+          "schema": "contracts/events/costing.engine/standard_cost.revalued.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-05",
+      "fragment": "contracts/openapi/fragments/FS-05.openapi.json",
+      "version": "1.0.0",
+      "wave": "0C"
+    }
+  ],
+  "dir": "costing",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/costing/openapi.fragment.json",
+  "feature_set": "FS-05",
+  "fragments": [
+    "contracts/openapi/fragments/FS-05.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "0C"
+}

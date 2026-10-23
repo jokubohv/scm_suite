@@ -1,0 +1,6 @@
+ENTRY GATE FAILED for FS-03 (phase 1, wave 0C) against state file verification/evidence/tool/state/staging-tampered.json
+  FAIL [FS-00 platform.core] dependency status='deployed', expected 'verified'
+  FAIL [FS-00 platform.events] dependency status='deployed', expected 'verified'
+  FAIL [FS-01 item.master] deployed version 2.0.0 does not satisfy required range '>=1.0.0 <2.0.0'
+  3 dependency check(s) failed; deployment must be blocked.
+rc=3

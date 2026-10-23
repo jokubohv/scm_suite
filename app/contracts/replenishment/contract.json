@@ -1,0 +1,113 @@
+{
+  "contracts": [
+    {
+      "contract": "replenishment.planning",
+      "depends_on": [
+        "costing.engine",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "manufacturing.execution",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "replenishment",
+      "events": [
+        {
+          "event": "allocation.completed",
+          "schema": "contracts/events/replenishment.planning/allocation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "allocation.exception.raised",
+          "schema": "contracts/events/replenishment.planning/allocation.exception.raised.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "atp.updated",
+          "schema": "contracts/events/replenishment.planning/atp.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.approved",
+          "schema": "contracts/events/replenishment.planning/plan.approved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.demand.calculated",
+          "schema": "contracts/events/replenishment.planning/plan.demand.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.generated",
+          "schema": "contracts/events/replenishment.planning/plan.generated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.suggestion.converted",
+          "schema": "contracts/events/replenishment.planning/plan.suggestion.converted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.suggestion.created",
+          "schema": "contracts/events/replenishment.planning/plan.suggestion.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "plan.supply.calculated",
+          "schema": "contracts/events/replenishment.planning/plan.supply.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "planning.exception.raised",
+          "schema": "contracts/events/replenishment.planning/planning.exception.raised.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "planning.exception.resolved",
+          "schema": "contracts/events/replenishment.planning/planning.exception.resolved.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.below_reorder_point",
+          "schema": "contracts/events/replenishment.planning/replenishment.below_reorder_point.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.calculated",
+          "schema": "contracts/events/replenishment.planning/replenishment.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.order_items.calculated",
+          "schema": "contracts/events/replenishment.planning/replenishment.order_items.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "replenishment.preferences.changed",
+          "schema": "contracts/events/replenishment.planning/replenishment.preferences.changed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-10",
+      "fragment": "contracts/openapi/fragments/FS-10.openapi.json",
+      "version": "1.0.0",
+      "wave": "1D"
+    }
+  ],
+  "dir": "replenishment",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/replenishment/openapi.fragment.json",
+  "feature_set": "FS-10",
+  "fragments": [
+    "contracts/openapi/fragments/FS-10.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1D"
+}

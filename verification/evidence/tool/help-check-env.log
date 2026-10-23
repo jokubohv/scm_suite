@@ -1,0 +1,12 @@
+usage: feature_sets.py check-env [-h] [--manifest MANIFEST] --set SET --env
+                                 ENV [--state STATE] [--deps-url DEPS_URL]
+
+options:
+  -h, --help           show this help message and exit
+  --manifest MANIFEST  manifest path (default: design/feature-sets.json)
+  --set SET            feature-set id, e.g. FS-04
+  --env ENV            environment name (dev|staging|prod), used for the
+                       default state path
+  --state STATE        deployment-state path (default: deployment-
+                       state.<env>.json)
+  --deps-url DEPS_URL  live /internal/deps URL instead of a state file

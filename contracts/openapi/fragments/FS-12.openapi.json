@@ -1,0 +1,1331 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-12 — Quality Management (specs, inspections, COA) — SuiteApp semantics backend (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "quality.management",
+        "dir": "quality",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-12",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1F"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/quality/coas": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-coas",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create COA (from PASSED inspection)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/coas",
+        "x-required-scopes": [
+          "quality.coa.write",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-coas",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create COA (from PASSED inspection)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/coas",
+        "x-required-scopes": [
+          "quality.coa.write",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/coas/{id}": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-coas-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "COA detail/lines",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-original-path": "/v1/quality/coas/{id}",
+        "x-required-scopes": [
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/coas/{id}/issue": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-coas-id-issue",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "DRAFT→ISSUED",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/coas/{id}/issue",
+        "x-required-scopes": [
+          "quality.coa.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/coas/{id}/revoke": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-coas-id-revoke",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ISSUED→REVOKED (audited)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/coas/{id}/revoke",
+        "x-required-scopes": [
+          "quality.coa.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspection-plans": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-inspection-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage plans",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-plans",
+        "x-required-scopes": [
+          "quality.spec.write",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs12_patch_api-v1-quality-inspection-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage plans",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-plans",
+        "x-required-scopes": [
+          "quality.spec.write",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspection-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage plans",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-plans",
+        "x-required-scopes": [
+          "quality.spec.write",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspection-queues": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-inspection-queues",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage on-demand queues",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-queues",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs12_patch_api-v1-quality-inspection-queues",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage on-demand queues",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-queues",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspection-queues",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage on-demand queues",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-queues",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspection-queues/{id}/items": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-inspection-queues-id-items",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Queue contents (PENDING inspections)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-original-path": "/v1/quality/inspection-queues/{id}/items",
+        "x-required-scopes": [
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspection-triggers": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-inspection-triggers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage triggers + frequency/counters",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-triggers",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs12_patch_api-v1-quality-inspection-triggers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage triggers + frequency/counters",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-triggers",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspection-triggers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Manage triggers + frequency/counters",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/inspection-triggers",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspection-triggers/{id}/reset-counter": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspection-triggers-id-reset-counter",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Scheduled/manual counter reset (iri-381)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspection-triggers/{id}/reset-counter",
+        "x-required-scopes": [
+          "quality.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-inspections",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/search inspections (status/source/item/date)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-original-path": "/v1/quality/inspections",
+        "x-required-scopes": [
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create on-demand inspection (ad hoc, with/without transaction; iri-377)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections",
+        "x-required-scopes": [
+          "quality.inspect"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-inspections-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Inspection detail + results + disposition + hold links",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-original-path": "/v1/quality/inspections/{id}",
+        "x-required-scopes": [
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/cancel": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel pre-completion",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/cancel",
+        "x-required-scopes": [
+          "quality.disposition"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/complete": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-complete",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Derive disposition + close",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/complete",
+        "x-required-scopes": [
+          "quality.disposition"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/hold": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-hold",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Apply quality hold via T-30",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/hold",
+        "x-required-scopes": [
+          "quality.disposition"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/images": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-images",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Attach quality image (iri-380)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/images",
+        "x-required-scopes": [
+          "quality.inspect"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/release-hold": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-release-hold",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Release hold via inverse T-30",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/release-hold",
+        "x-required-scopes": [
+          "quality.disposition"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/results": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-results",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Record/update results (batch)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/results",
+        "x-required-scopes": [
+          "quality.inspect"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/start": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-start",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "PENDING→IN_PROGRESS, assign inspector",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/start",
+        "x-required-scopes": [
+          "quality.inspect"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/inspections/{id}/waive": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-inspections-id-waive",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "FAILED→WAIVED",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/inspections/{id}/waive",
+        "x-required-scopes": [
+          "quality.disposition"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/settings": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "QM parameters/preferences (iri-384)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-original-path": "/v1/quality/settings",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs12_patch_api-v1-quality-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "QM parameters/preferences (iri-384)",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-original-path": "/v1/quality/settings",
+        "x-required-scopes": [
+          "quality.admin",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/specs": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-specs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create quality specs",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/specs",
+        "x-required-scopes": [
+          "quality.spec.write",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-specs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List/create quality specs",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required on POST",
+        "x-original-path": "/v1/quality/specs",
+        "x-required-scopes": [
+          "quality.spec.write",
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/specs/{id}": {
+      "get": {
+        "operationId": "fs12_get_api-v1-quality-specs-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Get spec + lines",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-original-path": "/v1/quality/specs/{id}",
+        "x-required-scopes": [
+          "quality.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/specs/{id}/activate": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-specs-id-activate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "DRAFT→ACTIVE",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/specs/{id}/activate",
+        "x-required-scopes": [
+          "quality.spec.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/specs/{id}/retire": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-specs-id-retire",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "ACTIVE→RETIRED",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/specs/{id}/retire",
+        "x-required-scopes": [
+          "quality.spec.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/quality/specs/{id}/versions": {
+      "post": {
+        "operationId": "fs12_post_api-v1-quality-specs-id-versions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create new version of an ACTIVE spec",
+        "tags": [
+          "FS-12",
+          "quality.management"
+        ],
+        "x-contract": [
+          "quality.management"
+        ],
+        "x-feature-set": "FS-12",
+        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
+        "x-idempotency": "required",
+        "x-original-path": "/v1/quality/specs/{id}/versions",
+        "x-required-scopes": [
+          "quality.spec.write"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 35,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "quality.management",
+      "event": "quality.derived_field.evaluated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "quality.management",
+      "event": "quality.inspection.completed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "quality.management",
+      "event": "quality.inspection.created",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "quality.coa.auto_issue` (EXT)",
+    "quality.derived_field.recalc` (EXT)",
+    "quality.hold.reconcile",
+    "quality.queue.expire",
+    "quality.trigger.counter_reset",
+    "quality.trigger.evaluate"
+  ]
+}

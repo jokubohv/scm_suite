@@ -143,7 +143,7 @@ def _guard_revision_id(rev_id: str) -> None:
         )
 
 
-def process_revision_directives(context, revision, directives):  # type: ignore[no-untyped-def]
+def process_revision_directives(context, revision, directives):
     """Enforce 4-digit revision ids and a single head at generation time (no autogenerate drift)."""
     if not directives:
         return

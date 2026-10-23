@@ -55,7 +55,7 @@ Up to 3 concurrent file-writing agents in S0 (disjoint scopes). Do not exceed 8 
 
 | Window | Start | End | Completed | Gates | Open / next |
 |---|---|---|---|---|---|
-| 1 | 2026-10-23 00:00 | pending | — | — | — |
+| 1 | 2026-10-23 00:00 | 02:00 (scheduled stop) | **S0-01…S0-07 complete + S0-GATE PASS** (repo/CI, Alembic base+chain guard, compose+Dex dev, 16-FS contract skeletons, test harness, scripts/gates, idempotent seeds) | ruff/mypy/pytest green; compose 7/7 healthy; Dex discovery; `alembic upgrade head`; contracts lint PASS; seeds load-twice no-diff; `check_parallel_plan --s0` = YES | **B1 / FS-00** begins: migrations 0001–0003 + platform models (architect-core) and pure security/auth services (spec-wave0a); C0 freeze after FS-00 |
 
 ## Useful commands
 

@@ -1,0 +1,75 @@
+# Dex dev configuration — SHARED DEV/TEST ISSUER ONLY (S0-02).
+#
+# This file is a *gomplate template*: the Dex v2.41 image entrypoint renders it with the
+# container environment (see Dockerfile/README next to this file) before `dex serve` starts.
+# The rendered config is ephemeral; it is never written into the repo.
+#
+# DEV ONLY: the static password hash below is the one-way bcrypt hash of the documented local
+# dev password (`dev-password`, see ops/dex/README.md). It is not a usable secret: it only grants
+# a local dev identity on the shared dev issuer, which is exposed on localhost:5556 exclusively
+# for the compose stack. Production never uses this file — per-tenant issuers are rendered by
+# `scripts/provision_sso_dex.sh` from `tenant_sso_connection` + secret-manager references.
+#
+# Issuer contract (Lead requirement): http://localhost:5556/dex  (the `/dex` path prefix is the
+# canonical issuer path used by the platform `DEX_ISSUER` setting and by discovery/JWKS tests).
+# Dex storage is PostgreSQL (`dex` database on the compose postgres, created by
+# ops/dex/initdb/01-create-dex-db.sql); the platform never reads Dex storage.
+issuer: {{ getenv "DEX_ISSUER" "http://localhost:5556/dex" }}
+
+storage:
+  type: postgres
+  config:
+    host: {{ getenv "DEX_DB_HOST" "postgres" }}
+    port: {{ getenv "DEX_DB_PORT" "5432" }}
+    database: {{ getenv "DEX_DB_NAME" "dex" }}
+    user: {{ getenv "DEX_DB_USER" "inventory" }}
+    password: {{ getenv "DEX_DB_PASSWORD" "inventory-dev-password" }}
+    ssl:
+      mode: {{ getenv "DEX_DB_SSL_MODE" "disable" }}
+
+web:
+  http: {{ getenv "DEX_WEB_HTTP" "0.0.0.0:5556" }}
+  allowedOrigins:
+    - {{ getenv "DEX_ALLOWED_ORIGIN" "http://localhost:8000" }}
+
+# Dev-only expiry values; production rendering (scripts/provision_sso_dex.sh) keeps Dex defaults.
+expiry:
+  signingKeys: 6h
+  idTokens: 24h
+  authRequests: 24h
+  deviceRequests: 5m
+
+logger:
+  level: {{ getenv "DEX_LOG_LEVEL" "info" }}
+  format: text
+
+# Static password connector ("local") — dev only. The password grant is enabled so smoke tests
+# can obtain a Dex token without a browser: see ops/dex/README.md.
+enablePasswordDB: true
+oauth2:
+  passwordConnector: local
+  skipApprovalScreen: true
+  responseTypes: [code]
+
+# OIDC client = the platform API. `secretEnv` makes Dex read the client secret from the process
+# environment at startup; no secret is stored in this file or in the repo.
+staticClients:
+  - id: {{ getenv "DEX_CLIENT_ID" "inventory-platform" }}
+    name: inventory-platform (shared dev issuer)
+    secretEnv: DEX_CLIENT_SECRET
+    redirectURIs:
+      - {{ getenv "DEX_REDIRECT_URI" "http://localhost:8000/api/v1/auth/sso/callback" }}
+
+# Dev identity for local SSO smoke tests (password grant / browser login):
+#   email dev@example.com · username dev · password dev-password
+# Regenerate the hash with: python3 -c 'import bcrypt;print(bcrypt.hashpw(b"dev-password", bcrypt.gensalt()).decode())'
+staticPasswords:
+  - email: {{ getenv "DEX_STATIC_EMAIL" "dev@example.com" }}
+    hash: "$2b$10$JM9HMpLdyuKtkotmFztJzOhpiJPnetdOnTFe0aDDh6INzyA/VvUeW"
+    username: {{ getenv "DEX_STATIC_USERNAME" "dev" }}
+    userID: {{ getenv "DEX_STATIC_USER_ID" "dev-user-0001" }}
+
+# No external IdP connectors in the shared dev issuer. Per-tenant connectors (SAML 2.0 / OIDC /
+# LDAP-AD) are rendered per isolated issuer by scripts/provision_sso_dex.sh in production; dev/test
+# SSO flows use the static password connector above, or add a test connector via docker-compose.dev.yml.
+connectors: []

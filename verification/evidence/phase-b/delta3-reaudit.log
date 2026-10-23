@@ -1,0 +1,41 @@
+FINAL-DELTA RE-CHECK SUMMARY  2026-10-21T14:03:16-04:00
+Change under test: PLAN.md only (D1-D4 + INFO fixes)
+
+== provenance ==
+previous snapshot -> current diff (before report edit): PLAN.md only
+
+== D1 (event names) ==
+Emits `po.created`, `po.approved`
+inventory.receipt.posted`/`inventory.receipt.reversed`
+inventory.committed.changed
+inventory.fulfilled`, `inventory.issued
+== D2 (posting wording) ==
+124:explicit state machines, and **every quantity/value-changing step posts synchronously to the
+== D4 (sizing) ==
+248:Sizing from `design/FEATURE-SETS.md`: 7 × L, 7 × M, 2 × S feature sets. Planning assumption for
+== INFO items ==
+120:in the "Basic Inventory Management" chapter) is a six-process cycle: **Purchasing → Receiving → Manufacturing →
+133:| **Receiving** | Enter item receipt when goods arrive; increases stock and asset value | Receipt and its reversal/return/bill-variance posting types T-01..T-06 via `FS-08` (receipt-to-bill chain), optional WMS inbound/putaway (`FS-11`, 1E); `FS-04` posts signed qty/value to the ledger and updates on-order/on-hand; landed cost in FS-05; lot/serial detail in FS-06; bins/status in FS-03. Emits `inventory.receipt.posted`/`inventory.receipt.reversed` (plus `po.receipted`) | FS-08 (1B) + FS-04 (0C) + FS-05 (0C); FS-11 (1E) adds directed putaway |
+138:| **Assessment** | Item records show real-time on-hand, needed qty and value; reports; period-close inventory checklist | Real-time item/location balances and availability from FS-04 read models, valuation from FS-05, item data from FS-01; reporting views/API in FS-15 (wave 2). Period close itself is a **Finance boundary** (not built); FS-04 records the fiscal period at posting (from the FS-00 `FinancePort` projection) and exposes negative-inventory and mismatch/reconcile data for the checklist | FS-01/04/05 (0B/0C); FS-15 (2) for reporting; analytics workbooks/Item 360 deferred |
+
+== D3 REMAINS ==
+PLAN section 4.1 says:
+For environments, the runbook (§7) uses a **golden end-to-end workflow pass** — purchase → receive →
+stock → (manufacture) → commit → fulfill → replenish suggestion — as the wave-promotion smoke scenario
+once the required stages exist; the mandatory per-set check is the golden-path smoke in §7 step 4/§6
+exit criteria, and because selling/fulfillment can run before receiving/manufacturing waves exist, the
+smoke uses the stage subset available at that wave plus seeded boundary demand.
+PLAN section 7 'golden' hits: 0
+golden-path smoke actual location: PLAN section 5 deployment protocol step 4 (line 217)
+
+== re-run results ==
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+COVERAGE OK: 1348/1348 catalog topics accounted (iri=412, mpw=936); 769 in-scope + 579 deferred; 0 missing, 0 extra, 0 duplicates
+order: 16 sets
+unit tests:  OK rc=0 
+render --check: rc=0
+independent_checks: INDEPENDENT PHASE-A RECHECK  --  95 PASS / 0 FAIL
+spec/PLAN audit: AUDIT RESULT: PASS WITH MINOR FINDINGS -- 1 MINOR, 0 check failure(s) documented as MINOR above
+
+== findings ==
+[MINOR] F-D-03 (PLAN.md section 4.1 vs section 7): D3 REMAINS after the fix attempt: section 4.1 still says 'the runbook (§7) uses a golden end-to-end workflow pass ... as the wave-promotion smoke scenario', but section 7 (lines 271-330) contains no golden end-to-end workflow pass and no wave-promotion smoke step; the mandatory golden-path smoke lives in the section 5 deployment protocol step 4, and the section 6 wave-exit criteria do not require an end-to-end pass either. The new cross-reference 'golden-path smoke in section 7 step 4' is also mis-numbered (that step is 'PR -> CI/merge'; the smoke is section 5 step 4).

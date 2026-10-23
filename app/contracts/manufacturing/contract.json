@@ -1,0 +1,153 @@
+{
+  "contracts": [
+    {
+      "contract": "manufacturing.execution",
+      "depends_on": [
+        "costing.engine",
+        "inventory.balances",
+        "inventory.ledger",
+        "item.master",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "procurement.p2p",
+        "traceability.numbered",
+        "traceability.registry"
+      ],
+      "dir": "manufacturing",
+      "events": [
+        {
+          "event": "assembly.built",
+          "schema": "contracts/events/manufacturing.execution/assembly.built.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "assembly.unbuilt",
+          "schema": "contracts/events/manufacturing.execution/assembly.unbuilt.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "available_to_build.calculated",
+          "schema": "contracts/events/manufacturing.execution/available_to_build.calculated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "component.consumed",
+          "schema": "contracts/events/manufacturing.execution/component.consumed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "eco.implemented",
+          "schema": "contracts/events/manufacturing.execution/eco.implemented.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.compat.rule_set.activated",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.compat.rule_set.activated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.config.validated",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.config.validated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.config.violation",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.config.violation.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "manufacturing.preferences.changed",
+          "schema": "contracts/events/manufacturing.execution/manufacturing.preferences.changed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "operation.completed",
+          "schema": "contracts/events/manufacturing.execution/operation.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "scheduling.run.completed",
+          "schema": "contracts/events/manufacturing.execution/scheduling.run.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.backflushed",
+          "schema": "contracts/events/manufacturing.execution/wip.backflushed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.closed",
+          "schema": "contracts/events/manufacturing.execution/wip.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.completed",
+          "schema": "contracts/events/manufacturing.execution/wip.completed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "wip.issued",
+          "schema": "contracts/events/manufacturing.execution/wip.issued.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.built",
+          "schema": "contracts/events/manufacturing.execution/work_order.built.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.closed",
+          "schema": "contracts/events/manufacturing.execution/work_order.closed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.created",
+          "schema": "contracts/events/manufacturing.execution/work_order.created.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.firmed",
+          "schema": "contracts/events/manufacturing.execution/work_order.firmed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.released",
+          "schema": "contracts/events/manufacturing.execution/work_order.released.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.reopened",
+          "schema": "contracts/events/manufacturing.execution/work_order.reopened.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.rescheduled",
+          "schema": "contracts/events/manufacturing.execution/work_order.rescheduled.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "work_order.voided",
+          "schema": "contracts/events/manufacturing.execution/work_order.voided.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-09",
+      "fragment": "contracts/openapi/fragments/FS-09.openapi.json",
+      "version": "1.1.0",
+      "wave": "1C"
+    }
+  ],
+  "dir": "manufacturing",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/manufacturing/openapi.fragment.json",
+  "feature_set": "FS-09",
+  "fragments": [
+    "contracts/openapi/fragments/FS-09.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "1C"
+}

@@ -1,0 +1,60 @@
+{
+  "contracts": [
+    {
+      "contract": "pricing.engine",
+      "depends_on": [
+        "item.master",
+        "platform.core",
+        "platform.events"
+      ],
+      "dir": "pricing",
+      "events": [
+        {
+          "event": "pricing.coupon.redeemed",
+          "schema": "contracts/events/pricing.engine/pricing.coupon.redeemed.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price.updated",
+          "schema": "contracts/events/pricing.engine/pricing.price.updated.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price_update.applied",
+          "schema": "contracts/events/pricing.engine/pricing.price_update.applied.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price_update.reverted",
+          "schema": "contracts/events/pricing.engine/pricing.price_update.reverted.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.price_update.superseded",
+          "schema": "contracts/events/pricing.engine/pricing.price_update.superseded.schema.json",
+          "version": "1.0.0"
+        },
+        {
+          "event": "pricing.rule.changed",
+          "schema": "contracts/events/pricing.engine/pricing.rule.changed.schema.json",
+          "version": "1.0.0"
+        }
+      ],
+      "feature_set": "FS-02",
+      "fragment": "contracts/openapi/fragments/FS-02.openapi.json",
+      "version": "1.0.0",
+      "wave": "0B"
+    }
+  ],
+  "dir": "pricing",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/pricing/openapi.fragment.json",
+  "feature_set": "FS-02",
+  "fragments": [
+    "contracts/openapi/fragments/FS-02.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "0B"
+}

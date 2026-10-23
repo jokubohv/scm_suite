@@ -1,0 +1,49 @@
+usage: feature_sets.py [-h]
+                       {validate,order,check-env,record,who-depends-on,coverage,permissions,deploy-order}
+                       ...
+
+Executable feature-set plan gate (framework sections 4-6).
+
+positional arguments:
+  {validate,order,check-env,record,who-depends-on,coverage,permissions,deploy-order}
+    validate            L0 static validation (schema, DAG, monotonicity,
+                        semver, contracts, fields)
+    order               topological deployment order
+    check-env           L2 entry gate: dependencies verified and contract
+                        ranges satisfied
+    record              L3 bookkeeping: atomically record status for one set
+                        in one env
+    who-depends-on      consumer impact list for a provided contract
+    coverage            validate feature-coverage.json against the research
+                        catalogs
+    permissions         Δ-RBAC: validate design/permissions.json and reconcile
+                        all 16 spec endpoint auth scopes
+    deploy-order        wave-by-wave runbook table
+
+options:
+  -h, --help            show this help message and exit
+
+exit codes:
+  0  success
+  2  invalid plan / invalid inputs (bad manifest, bad coverage, unknown set/contract)
+  3  deployment gate failure (check-env miss, record refused, unreadable state)
+
+deployment-state schema (deployment-state.<env>.json, default path):
+  {"FS-00": {"status": "verified", "contracts": {"platform.core": "1.0.0"},
+             "evidence": "verification/evidence/FS-00/exit.log",
+             "updated_at": "2026-10-21T16:00:00+00:00", "health": "ok"}}
+  A missing file means an empty/greenfield environment.
+
+live mode (check-env --deps-url URL) expects GET /internal/deps to return
+  {"feature_sets": {"FS-00": {"status": "verified", "contracts": {...}}}}
+  or the same mapping without the "feature_sets" wrapper.
+
+examples:
+  python tools/feature_sets.py validate
+  python tools/feature_sets.py order --phase 1
+  python tools/feature_sets.py check-env --set FS-04 --env dev
+  python tools/feature_sets.py record --set FS-00 --env dev --status verified --evidence verification/evidence/FS-00/exit.log
+  python tools/feature_sets.py who-depends-on --contract inventory.ledger
+  python tools/feature_sets.py coverage
+  python tools/feature_sets.py deploy-order --phase 1
+  python tools/feature_sets.py permissions

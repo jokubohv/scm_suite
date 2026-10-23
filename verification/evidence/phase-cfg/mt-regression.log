@@ -1,0 +1,60 @@
+==============================================================================================================
+Δ-MT (MULTI-TENANT USERS) DELTA AUDIT  --  50 PASS / 0 FAIL / 1 findings
+==============================================================================================================
+PASS  plan_version is 1.5.0
+PASS  schema_version stays 1.0 and 16 feature sets
+PASS  FS-00 owns 34 platform tables (manifest/spec/DATA-MODEL/FEATURE-SETS/ARCH/PLAN)
+PASS  DATA-MODEL totals: platform 34, base 287, views 21
+PASS  ARCHITECTURE totals: 287 base tables / 21 views / 31 posting types / 6 commands
+PASS  rules: 146 scoped + 10 global = 156 in ARCHITECTURE and DATA-MODEL
+PASS  invariants: INV-01..INV-33 catalogued in ARCHITECTURE and referenced by DATA-MODEL
+PASS  state machines: 44 specifications / 53 aggregates in ARCHITECTURE and DATA-MODEL
+PASS  FEATURE-SETS §1 FS-00 row = 34 tables and sums to 287
+PASS  DATA-MODEL §21 per-FS table counts sum to 280
+PASS  FEATURE-SETS §1 per-FS table counts sum to 280
+PASS  PLAN/README state 287 tables / platform 34 / 21 views
+PASS  no stale current-state count references (287/34/146/156/INV-33 current)
+PASS  documented historical count notations present where required (PLAN §3.1 Δ-1/Δ-MT, addendum §6)
+PASS  addendum present and marked binding, EXT, with §9b resolved clarifications
+PASS  addendum §9b: D-29, canonical /api/v1, user_session.identity_id no FK, globally unique refresh hash
+PASS  DATA-MODEL user_identity: global, auth-only, EXT, no tenant_id/RLS, email unique
+PASS  DATA-MODEL app_user membership fields + unique (tenant_id,identity_id)
+PASS  DATA-MODEL tenant_invitation single-use/expiring/hashed/email-bound
+PASS  DATA-MODEL user_session rotating hashed refresh tokens + replay/revocation + global unique hash + no-FK identity_id
+PASS  DATA-MODEL DM-PLAT-12/13/14 + DM-SSO-01..03 + INV-30/INV-32 present with required semantics
+PASS  DATA-MODEL M00 creates Δ-MT tables and platform security migration family
+PASS  DATA-MODEL seeds/EXT register cover Δ-MT scopes and identity tables
+PASS  ARCHITECTURE §5.1 identity model + active-tenant-only-from-token
+PASS  ARCHITECTURE §5.2 token claims sub/uid/tid/tv/jti + login selection/switch + invitations + revocation
+PASS  ARCHITECTURE platform-admin vs tenant-admin separation + provisioning/lifecycle
+PASS  ARCHITECTURE §7.3 INV-30 isolation-matrix test + §8 D-29 + §10 G-13 + §11 A-16
+PASS  ARCHITECTURE no cross-tenant leak paths in jobs/events/storage (tenant-keyed)
+PASS  FS-00: 34 tables incl. Δ-MT/Δ-SSO federation tables
+PASS  FS-00: 102 endpoint rows / 33 event rows and stated done-criteria counts agree
+PASS  FS-00 §11 reproduces every manifest gate command verbatim (incl. 4 Δ-MT L3 commands)
+PASS  FS-00: DM-PLAT-01..14 + DM-RBAC-01..03 + DM-SSO-01..03 + INV-30/INV-31/INV-32 + isolation matrix wording
+PASS  FS-00: canonical /api/v1 normative API table (85 rows); non-canonical /v1 only in explanatory shorthand
+PASS  FS-00: platform-admin vs tenant-admin endpoints + scopes separated
+PASS  FS-00: lifecycle/invitation/session/revocation/audit acceptance coverage present
+PASS  FS-00: cross-document conflicts C-13/C-15/C-16 resolved with Δ-MT detail
+PASS  FEATURE-SETS §1 FS-00 = 34 tables and totals 287/21 views
+PASS  FEATURE-SETS §7.1 scope documents Δ-MT multi-tenant users
+PASS  manifest FS-00 exit_checks = 17 (v1.0.0 base + 4 Δ-MT + 4 Δ-RBAC + 3 Δ-SSO before record)
+PASS  manifest Δ-CFG/Δ-REUSE: only FS-09 exit_checks + contract 1.1.0 + plan_version changed (edges 116/86, contracts 21, entry 49 unchanged)
+PASS  only FS-00 spec changed among the 16 specs (other 15 byte-identical to v1.0.0 sign-off)
+PASS  PLAN header v1.5.0 + all amendment notes + §4.2 tenancy section + §12 items 5/10
+PASS  PLAN §3.1 records Δ-MT decision + Δ-1 change-history notation
+PASS  PLAN generated tables refreshed (FS-00 34, total 287)
+PASS  README: 287/34/21 counts + multi-tenant users capability + Δ-MT read-order entry
+PASS  PLAN/README carry the Δ-MT/Δ-RBAC VERIFIED PASS stamp (or pending wording pre-verdict)
+PASS  tools/render_plan_tables.py --check rc0 (generated tables current after Δ-MT count change)
+PASS  coverage unchanged by Δ-MT: 1,348 topics = 769 in-scope + 579 deferred; no new catalog ids
+PASS  FEATURE-SETS §7.1 exit block matches the manifest gate list
+PASS  relative markdown links resolve in PLAN/README/addendum/ARCH/DATA-MODEL/FEATURE-SETS
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+[INFO] MT-D6 (design/ARCHITECTURE.md / design/DATA-MODEL.md / design/FEATURE-SETS.md headers): Design-doc version headers still read 1.0 / 1.0.0 after the binding v1.1.0 amendment (manifest, PLAN and README are at 1.1.0; the addendum is the binding override). Content is correct; the version line is informational.
+      evidence: head -3 design/ARCHITECTURE.md design/DATA-MODEL.md design/FEATURE-SETS.md
+      fix: Optional: bump headers to 1.1.0 or add 'amended by Δ-MT (v1.1.0)'.
+--------------------------------------------------------------------------------------------------------------
+Counts derived: base tables=287 (platform=['34']), views=21, posting types=31, commands=6, rules=146 scoped + 10 global, INV=1..33, plan_version=1.5.0

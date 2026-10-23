@@ -1,0 +1,884 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-07 — Inventory Counts and Cycle Counts (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "counts.engine",
+        "dir": "counts",
+        "version": "1.0.0"
+      }
+    ],
+    "x-feature-set": "FS-07",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "1A"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/count-plans": {
+      "get": {
+        "operationId": "fs07_get_api-v1-count-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List plans",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/count-plans",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs07_post_api-v1-count-plans",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create plan",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/count-plans",
+        "x-required-scopes": [
+          "inventory.count.plan.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/count-plans/{id}": {
+      "get": {
+        "operationId": "fs07_get_api-v1-count-plans-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Plan detail",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/count-plans/{id}",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs07_patch_api-v1-count-plans-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update plan/filters",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/count-plans/{id}",
+        "x-required-scopes": [
+          "inventory.count.plan.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/count-plans/{id}/archive": {
+      "post": {
+        "operationId": "fs07_post_api-v1-count-plans-id-archive",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Archive plan",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/count-plans/{id}/archive",
+        "x-required-scopes": [
+          "inventory.count.plan.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/count-plans/{id}/generate": {
+      "post": {
+        "operationId": "fs07_post_api-v1-count-plans-id-generate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Generate one count from plan",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/count-plans/{id}/generate",
+        "x-required-scopes": [
+          "inventory.count.create"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/count-plans/{id}/pause": {
+      "post": {
+        "operationId": "fs07_post_api-v1-count-plans-id-pause",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Pause plan",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/count-plans/{id}/pause",
+        "x-required-scopes": [
+          "inventory.count.plan.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/count-plans/{id}/resume": {
+      "post": {
+        "operationId": "fs07_post_api-v1-count-plans-id-resume",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Resume plan",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/count-plans/{id}/resume",
+        "x-required-scopes": [
+          "inventory.count.plan.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts": {
+      "get": {
+        "operationId": "fs07_get_api-v1-inventory-counts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List counts",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/inventory-counts",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create manual/calculated count",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts",
+        "x-required-scopes": [
+          "inventory.count.create"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}": {
+      "get": {
+        "operationId": "fs07_get_api-v1-inventory-counts-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Count detail (blind-safe)",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/inventory-counts/{id}",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/approve": {
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-approve",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Approve count",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/approve",
+        "x-required-scopes": [
+          "inventory.count.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/lines": {
+      "get": {
+        "operationId": "fs07_get_api-v1-inventory-counts-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List count lines",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/inventory-counts/{id}/lines",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-lines",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Batch capture counted quantities",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/lines",
+        "x-required-scopes": [
+          "inventory.count.capture"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/post": {
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-post",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Generate T-20 variance posting",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/post",
+        "x-required-scopes": [
+          "inventory.count.post"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/recalculate-snapshot": {
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-recalculate-snapshot",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Recalculate snapshot before posting",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/recalculate-snapshot",
+        "x-required-scopes": [
+          "inventory.count.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/recount": {
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-recount",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Recount lines",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/recount",
+        "x-required-scopes": [
+          "inventory.count.recount"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/reject": {
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-reject",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Reject count (+snapshot recalc)",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/reject",
+        "x-required-scopes": [
+          "inventory.count.approve"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/snapshot": {
+      "get": {
+        "operationId": "fs07_get_api-v1-inventory-counts-id-snapshot",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Snapshot revision(s)",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/inventory-counts/{id}/snapshot",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/start": {
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-start",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Capture snapshot and open count",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/start",
+        "x-required-scopes": [
+          "inventory.count.capture"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/submit": {
+      "post": {
+        "operationId": "fs07_post_api-v1-inventory-counts-id-submit",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Submit for review",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-original-path": "/v1/inventory-counts/{id}/submit",
+        "x-required-scopes": [
+          "inventory.count.capture"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/inventory-counts/{id}/variance": {
+      "get": {
+        "operationId": "fs07_get_api-v1-inventory-counts-id-variance",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Variance preview",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/inventory-counts/{id}/variance",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/items/{item_id}/next-count": {
+      "get": {
+        "operationId": "fs07_get_api-v1-items-item-id-next-count",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Derived next count date/interval",
+        "tags": [
+          "FS-07",
+          "counts.engine"
+        ],
+        "x-contract": [
+          "counts.engine"
+        ],
+        "x-feature-set": "FS-07",
+        "x-fragment": "contracts/openapi/fragments/FS-07.openapi.json",
+        "x-original-path": "/v1/items/{item_id}/next-count",
+        "x-required-scopes": [
+          "inventory.count.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 23,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "counts.engine",
+      "event": "count.approved",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "counts.engine",
+      "event": "count.generated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "counts.engine",
+      "event": "count.rejected",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "counts.engine",
+      "event": "count.variance_posted",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "counts.generate_cycle_counts",
+    "counts.snapshot.refresh",
+    "counts.stale.cleanup"
+  ]
+}

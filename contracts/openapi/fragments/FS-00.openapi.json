@@ -1,0 +1,4585 @@
+{
+  "info": {
+    "description": "Generated from feature-sets/FS-*.md §6; operations are skeletons (x-todo).",
+    "title": "FS-00 — Platform Core (tenancy, identity, audit, events, jobs, boundaries) (contract skeleton)",
+    "version": "1.5.0",
+    "x-contracts": [
+      {
+        "contract": "platform.core",
+        "dir": "platform",
+        "version": "1.0.0"
+      },
+      {
+        "contract": "platform.events",
+        "dir": "platform",
+        "version": "1.0.0"
+      },
+      {
+        "contract": "platform.finance",
+        "dir": "platform",
+        "version": "1.0.0"
+      },
+      {
+        "contract": "order.demand",
+        "dir": "order_boundary",
+        "version": "0.1.0"
+      },
+      {
+        "contract": "order.supply",
+        "dir": "order_boundary",
+        "version": "0.1.0"
+      }
+    ],
+    "x-feature-set": "FS-00",
+    "x-status": "skeleton",
+    "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
+    "x-wave": "0A"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/admin/api-keys": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-api-keys",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List keys (no secrets)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-api-keys",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create API key (secret returned once)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/api-keys/{key_id}/revoke": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-api-keys-key-id-revoke",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Revoke key",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/approval-definitions": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-approval-definitions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List approval rules",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.approval.definition.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-approval-definitions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create rule",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.approval.definition.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/approval-definitions/{definition_id}": {
+      "patch": {
+        "operationId": "fs00_patch_api-v1-admin-approval-definitions-definition-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Edit rule",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.approval.definition.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/custom-field-values": {
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-custom-field-values",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Upsert values with validation",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.customfield.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/custom-fields": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-custom-fields",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List custom-field defs",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.customfield.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-custom-fields",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Create def",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.customfield.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/custom-fields/{field_def_id}": {
+      "patch": {
+        "operationId": "fs00_patch_api-v1-admin-custom-fields-field-def-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Edit def (data_type immutable)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.customfield.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/feature-flags": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-feature-flags",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List flags + resolved values",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.flag.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/feature-flags/{flag_key}": {
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-feature-flags-flag-key",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Enable/disable flag per tenant",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.flag.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/invitations": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-invitations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** List tenant invitations",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.invitations.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-invitations",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Invite email into tenant with roles (single-use token returned once)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.invitations.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/invitations/{id}/revoke": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-invitations-id-revoke",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Revoke PENDING invitation",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.invitations.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/invitations/{token}/accept": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-invitations-token-accept",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Accept invitation (single-use; creates identity/membership/roles atomically)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "token-single-use",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/job-runs": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-job-runs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List runs",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.job.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/job-runs/{run_id}": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-job-runs-run-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Run detail",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.job.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/job-runs/{run_id}/cancel": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-job-runs-run-id-cancel",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Cancel queued/running run",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.job.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/jobs": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-jobs",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Job catalogue",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.job.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/jobs/{name}/run": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-jobs-name-run",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Trigger job run",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.job.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/number-sequences": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-number-sequences",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List sequences (heads)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sequence.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/number-sequences/{sequence_id}": {
+      "patch": {
+        "operationId": "fs00_patch_api-v1-admin-number-sequences-sequence-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Adjust prefix/padding/reset/gap policy (never decrease next_value)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sequence.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/permissions": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-permissions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Authoritative catalogue list/filter + version",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/roles": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-roles",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** List roles + system templates",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-roles",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Create custom role (templates are clone-only)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/roles/{role_id}": {
+      "delete": {
+        "operationId": "fs00_delete_api-v1-admin-roles-role-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Inactivate role (soft; never hard-delete); templates rejected",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-roles-role-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Role + scope ids + role data scopes",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs00_patch_api-v1-admin-roles-role-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Update custom role (name/description/inactivate); templates immutable",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/roles/{role_id}/clone": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-roles-role-id-clone",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Clone template/custom role into a new editable custom role",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/roles/{role_id}/data-scopes": {
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-roles-role-id-data-scopes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Replace role-level data-scope defaults",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.data_scope.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/roles/{role_id}/permissions": {
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-roles-role-id-permissions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Replace role→scope set (diff-audited)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sod-policy": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-sod-policy",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Effective SoD policy + 14 catalogue pairs",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-sod-policy",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Update tenant SoD mode (`WARN` only downgrades custom-role warnings; approval-time requester≠approver can never be disabled)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.role.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sso-connections": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-sso-connections",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** List tenant SSO connections",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sso.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-sso-connections",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Create company SSO connection (Dex issuer refs generated)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sso-connections/{connection_id}": {
+      "delete": {
+        "operationId": "fs00_delete_api-v1-admin-sso-connections-connection-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Disable/soft-delete connection (only if no ACTIVE links)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-sso-connections-connection-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Connection detail (config refs, no secrets)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sso.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs00_patch_api-v1-admin-sso-connections-connection-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Update config/policy (connector change → TESTING + re-test)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sso-connections/{connection_id}/group-mappings": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-sso-connections-connection-id-group-mappings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** List group→role mappings",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sso.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-sso-connections-connection-id-group-mappings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Replace mappings (assignable roles + SoD validated)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sso-connections/{connection_id}/links": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-sso-connections-connection-id-links",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** List identity links (paginated, no secrets)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sso.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sso-connections/{connection_id}/links/{link_id}": {
+      "delete": {
+        "operationId": "fs00_delete_api-v1-admin-sso-connections-connection-id-links-link-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Revoke identity link + platform sessions",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sso-connections/{connection_id}/rotate-secret": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-sso-connections-connection-id-rotate-secret",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Rotate client/IdP secret in secret manager (write-only)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/sso-connections/{connection_id}/test": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-sso-connections-connection-id-test",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Provision/refresh Dex issuer + discovery/JWKS health test",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/tenant-settings": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-tenant-settings",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List resolved tenant settings",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/tenant-settings/{namespace}/{key}": {
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-tenant-settings-namespace-key",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Set tenant setting",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.admin"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-users",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List **memberships** (identity display read-only)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.users.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-users",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Create membership + invitation for existing identity (or invite new email)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.users.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-users-user-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Membership detail + identity read + roles + data scopes",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.users.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs00_patch_api-v1-admin-users-user-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update membership/profile; suspend/reactivate (last-admin guard); replace roles (guards delegated to assignments)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.users.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}/data-scopes": {
+      "put": {
+        "operationId": "fs00_put_api-v1-admin-users-user-id-data-scopes",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace data-scope rows",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.data_scope.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}/effective-permissions": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-users-user-id-effective-permissions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Resolved effective capability + data scopes for a membership",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.users.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}/identity-links": {
+      "get": {
+        "operationId": "fs00_get_api-v1-admin-users-user-id-identity-links",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** List a member's SSO identity links (no secrets)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.sso.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-users-user-id-identity-links",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Admin link a verified SSO identity to a member (unique keys/tenant checks)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}/identity-links/{link_id}": {
+      "delete": {
+        "operationId": "fs00_delete_api-v1-admin-users-user-id-identity-links-link-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Revoke link + platform sessions",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sso.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}/revoke-sessions": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-users-user-id-revoke-sessions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Revoke all sessions + bump `token_version`",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.sessions.revoke"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}/roles": {
+      "post": {
+        "operationId": "fs00_post_api-v1-admin-users-user-id-roles",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Assign role (effective-dated; escalation/SoD guards)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.users.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/admin/users/{user_id}/roles/{role_id}": {
+      "delete": {
+        "operationId": "fs00_delete_api-v1-admin-users-user-id-roles-role-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** End role assignment (`effective_to=now`; last-admin guard)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.users.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/approvals": {
+      "get": {
+        "operationId": "fs00_get_api-v1-approvals",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List approval requests",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.approval.act"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/approvals/{request_id}": {
+      "get": {
+        "operationId": "fs00_get_api-v1-approvals-request-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Request detail + actions",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.approval.act"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/approvals/{request_id}/actions": {
+      "post": {
+        "operationId": "fs00_post_api-v1-approvals-request-id-actions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Decide: `APPROVE/REJECT/DELEGATE/RECALL`",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.approval.act"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/attachments": {
+      "get": {
+        "operationId": "fs00_get_api-v1-attachments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List attachment metadata",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.attachment.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-attachments",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Register attachment metadata",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.attachment.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/attachments/{attachment_id}": {
+      "get": {
+        "operationId": "fs00_get_api-v1-attachments-attachment-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Attachment metadata + signed URL",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.attachment.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/audit-events": {
+      "get": {
+        "operationId": "fs00_get_api-v1-audit-events",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Query audit trail",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.audit.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "fs00_post_api-v1-auth-login",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Login; single membership → token pair, multiple → tenant selection",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "token-idempotent",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "fs00_post_api-v1-auth-logout",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Revoke current session (or all)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "self-service",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/providers": {
+      "get": {
+        "operationId": "fs00_get_api-v1-auth-providers",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Discover enabled auth methods / tenant SSO routing",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "fs00_post_api-v1-auth-refresh",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Rotate refresh token (replay detection)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "self-service",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "token-rotation",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/select-tenant": {
+      "post": {
+        "operationId": "fs00_post_api-v1-auth-select-tenant",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Exchange selection token + tenant for a token pair",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "token-idempotent",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/sso/callback": {
+      "get": {
+        "operationId": "fs00_get_api-v1-auth-sso-callback",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Validate state/nonce + Dex ID token, link/JIT, issue **platform** token pair",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "state single-use",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/sso/start": {
+      "post": {
+        "operationId": "fs00_post_api-v1-auth-sso-start",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-SSO** Start OIDC authorization (state/nonce/PKCE S256, 5-min TTL)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "token-idempotent",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/auth/switch-tenant": {
+      "post": {
+        "operationId": "fs00_post_api-v1-auth-switch-tenant",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Issue token pair for another ACTIVE membership",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "self-service",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/custom-field-values": {
+      "get": {
+        "operationId": "fs00_get_api-v1-custom-field-values",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Read values for an entity",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.customfield.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/document-links": {
+      "get": {
+        "operationId": "fs00_get_api-v1-document-links",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Query provenance links",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.documentlink.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/finance/journal-intents": {
+      "get": {
+        "operationId": "fs00_get_api-v1-finance-journal-intents",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**D2** read journal-intent rows (read-only)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.finance.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/finance/journal-intents/{id}": {
+      "get": {
+        "operationId": "fs00_get_api-v1-finance-journal-intents-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Journal-intent line detail",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.finance.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/finance/period-status": {
+      "get": {
+        "operationId": "fs00_get_api-v1-finance-period-status",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "FinancePort read: status for a date",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.finance.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "operationId": "fs00_get_api-v1-me",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Current identity + active membership + effective scopes",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "self-service",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/me/effective-permissions": {
+      "get": {
+        "operationId": "fs00_get_api-v1-me-effective-permissions",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-RBAC** Caller's resolved capability/data scopes in the active tenant",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "self-service",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/me/tenants": {
+      "get": {
+        "operationId": "fs00_get_api-v1-me-tenants",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Caller's own memberships only",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "self-service",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/order/demand/open": {
+      "get": {
+        "operationId": "fs00_get_api-v1-order-demand-open",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**D3/FIX-4** read paged OPEN demand from the external order boundary (required-by dated, base-UoM qty, committed flag)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "inventory.balance.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/platform/tenants": {
+      "get": {
+        "operationId": "fs00_get_api-v1-platform-tenants",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "List tenants",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "post": {
+        "operationId": "fs00_post_api-v1-platform-tenants",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Provision tenant (platform admin)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/platform/tenants/{tenant_id}": {
+      "get": {
+        "operationId": "fs00_get_api-v1-platform-tenants-tenant-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Tenant detail",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      },
+      "patch": {
+        "operationId": "fs00_patch_api-v1-platform-tenants-tenant-id",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Update name/timezone/base-currency policy",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/platform/tenants/{tenant_id}/bootstrap-admin": {
+      "post": {
+        "operationId": "fs00_post_api-v1-platform-tenants-tenant-id-bootstrap-admin",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Re-issue bootstrap admin invitation",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/platform/tenants/{tenant_id}/offboard": {
+      "post": {
+        "operationId": "fs00_post_api-v1-platform-tenants-tenant-id-offboard",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Offboarding + export package (soft-state, retains ledger/audit)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/platform/tenants/{tenant_id}/reactivate": {
+      "post": {
+        "operationId": "fs00_post_api-v1-platform-tenants-tenant-id-reactivate",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "**Δ-MT** Reactivate suspended tenant",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/platform/tenants/{tenant_id}/suspend": {
+      "post": {
+        "operationId": "fs00_post_api-v1-platform-tenants-tenant-id-suspend",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Suspend: blocks writes + revokes all sessions",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.tenant.manage"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reference/currencies": {
+      "get": {
+        "operationId": "fs00_get_api-v1-reference-currencies",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Currency list (global)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.reference.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reference/exchange-rates": {
+      "get": {
+        "operationId": "fs00_get_api-v1-reference-exchange-rates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "FX rates",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.reference.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/reference/fiscal-periods": {
+      "get": {
+        "operationId": "fs00_get_api-v1-reference-fiscal-periods",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Period statuses",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.finance.read"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/healthz": {
+      "get": {
+        "operationId": "fs00_get_healthz",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Liveness",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/internal/deps": {
+      "get": {
+        "operationId": "fs00_get_internal-deps",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "L2 gate evidence: set/contract versions, migration head, outbox/job health",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/internal/finance/exchange-rates": {
+      "put": {
+        "operationId": "fs00_put_internal-finance-exchange-rates",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Finance→platform FX sync (upsert by natural key)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-required-scopes": [
+          "platform.finance.sync"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/internal/finance/fiscal-periods": {
+      "put": {
+        "operationId": "fs00_put_internal-finance-fiscal-periods",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Finance→platform period sync (upsert by `period_key`, bump `source_version`)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-required-scopes": [
+          "platform.finance.sync"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/internal/order-boundary/demand-doubles": {
+      "put": {
+        "operationId": "fs00_put_internal-order-boundary-demand-doubles",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replace stub open-demand fixtures (test/dev + `check-env` bootstrap only; internal network)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "required",
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/internal/outbox/replay": {
+      "post": {
+        "operationId": "fs00_post_internal-outbox-replay",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Replay events by id/sequence/aggregate",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-idempotency": "Idempotency-Key` required",
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "operationId": "fs00_get_openapi-json",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "OpenAPI 3.1 document (read-only contract)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/readyz": {
+      "get": {
+        "operationId": "fs00_get_readyz",
+        "responses": {
+          "200": {
+            "description": "TODO(S0-04): response schema pending feature-set implementation."
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "problem+json"
+          }
+        },
+        "summary": "Readiness (DB, Redis, migrations head, outbox age, scheduler)",
+        "tags": [
+          "FS-00",
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-allowlist": "public",
+        "x-contract": [
+          "platform.core",
+          "platform.events",
+          "platform.finance",
+          "order.demand",
+          "order.supply"
+        ],
+        "x-feature-set": "FS-00",
+        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-skeleton": true,
+        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    }
+  },
+  "x-endpoint-count": 102,
+  "x-event-families": [],
+  "x-events": [
+    {
+      "contract": "platform.core",
+      "event": "auth.login.failed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "auth.tenant_switched",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "document.approved",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "document.closed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "document.rejected",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "document.reversed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "document.submitted",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.finance",
+      "event": "finance.journal_intent.recorded",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "identity.linked",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "membership.activated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "membership.roles.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "membership.suspended",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "order.demand",
+      "event": "order.demand.changed",
+      "version": "0.1.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "platform.approval.approved",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "platform.approval.rejected",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "platform.approval.requested",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "platform.audit.recorded",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "platform.flag.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "role.cloned",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "role.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "role.permissions.changed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "role.updated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "sod.violation.blocked",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "sso.connection.created",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "sso.connection.disabled",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "sso.connection.error",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "sso.connection.tested",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "sso.connection.updated",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "sso.login.failed",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "tenant.provisioned",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "tenant.suspended",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "user.invited",
+      "version": "1.0.0"
+    },
+    {
+      "contract": "platform.core",
+      "event": "user.session.revoked",
+      "version": "1.0.0"
+    }
+  ],
+  "x-jobs": [
+    "platform.health.reconcile",
+    "platform.jobs.scheduler",
+    "platform.outbox.relay",
+    "platform.partition.maintenance",
+    "platform.retention.purge",
+    "platform.sso.health.monitor"
+  ]
+}

@@ -1,0 +1,75 @@
+==============================================================================================================
+Δ-MT (MULTI-TENANT USERS) DELTA AUDIT  --  48 PASS / 2 FAIL / 6 findings
+==============================================================================================================
+PASS  plan_version is 1.1.0
+PASS  schema_version stays 1.0 and 16 feature sets
+PASS  FS-00 owns 31 platform tables (manifest/spec/DATA-MODEL/FEATURE-SETS/ARCH/PLAN)
+PASS  DATA-MODEL totals: platform 31, base 277, views 21
+PASS  ARCHITECTURE totals: 277 base tables / 21 views / 31 posting types / 6 commands
+PASS  rules: 137 scoped + 10 global = 147 in ARCHITECTURE and DATA-MODEL
+PASS  invariants: INV-01..INV-30 catalogued in ARCHITECTURE and referenced by DATA-MODEL
+PASS  state machines: 41 specifications / 50 aggregates in ARCHITECTURE and DATA-MODEL
+PASS  FEATURE-SETS §1 FS-00 row = 31 tables and sums to 277
+PASS  DATA-MODEL §21 per-FS table counts sum to 277
+PASS  FEATURE-SETS §1 per-FS table counts sum to 277
+PASS  PLAN/README state 277 tables / platform 31 / 21 views
+PASS  documented historical count notations present where required (PLAN §3.1 Δ-1/Δ-MT, addendum §6)
+PASS  addendum present and marked binding, EXT, with §9b resolved clarifications
+PASS  addendum §9b: D-29, canonical /api/v1, user_session.identity_id no FK, globally unique refresh hash
+PASS  DATA-MODEL user_identity: global, auth-only, EXT, no tenant_id/RLS, email unique
+PASS  DATA-MODEL app_user membership fields + unique (tenant_id,identity_id)
+PASS  DATA-MODEL tenant_invitation single-use/expiring/hashed/email-bound
+PASS  DATA-MODEL user_session rotating hashed refresh tokens + replay/revocation + global unique hash + no-FK identity_id
+PASS  DATA-MODEL DM-PLAT-12/13/14 + INV-30 present with required semantics
+PASS  DATA-MODEL M00 creates Δ-MT tables and platform security migration family
+PASS  DATA-MODEL seeds/EXT register cover Δ-MT scopes and identity tables
+PASS  ARCHITECTURE §5.1 identity model + active-tenant-only-from-token
+PASS  ARCHITECTURE §5.2 token claims sub/uid/tid/tv/jti + login selection/switch + invitations + revocation
+PASS  ARCHITECTURE platform-admin vs tenant-admin separation + provisioning/lifecycle
+PASS  ARCHITECTURE §7.3 INV-30 isolation-matrix test + §8 D-29 + §10 G-13 + §11 A-16
+PASS  ARCHITECTURE no cross-tenant leak paths in jobs/events/storage (tenant-keyed)
+PASS  FS-00: 31 tables incl. user_identity/app_user/tenant_invitation/user_session
+PASS  FS-00: 77 endpoint rows / 21 event rows and stated done-criteria counts agree
+PASS  FS-00 §11 reproduces every manifest gate command verbatim (incl. 4 Δ-MT L3 commands)
+PASS  FS-00: DM-PLAT-01..14 + INV-30 + isolation matrix wording
+PASS  FS-00: canonical /api/v1 normative API table (77 rows); non-canonical /v1 only in explanatory shorthand
+PASS  FS-00: platform-admin vs tenant-admin endpoints + scopes separated
+PASS  FS-00: lifecycle/invitation/session/revocation/audit acceptance coverage present
+PASS  FS-00: cross-document conflicts C-13/C-15/C-16 resolved with Δ-MT detail
+PASS  FEATURE-SETS §1 FS-00 = 31 tables and totals 277/21 views
+PASS  FEATURE-SETS §7.1 scope documents Δ-MT multi-tenant users
+PASS  manifest FS-00 exit_checks = 10 (6 v1.0.0 + 4 Δ-MT before record)
+PASS  manifest Δ-MT gate additions are only FS-00 exit_checks + plan_version (edges/contracts/entry/flags unchanged)
+PASS  only FS-00 spec changed among the 16 specs (other 15 byte-identical to v1.0.0 sign-off)
+PASS  PLAN header v1.1.0 + Δ-MT note + §4.2 tenancy section + §12 items 5/10
+PASS  PLAN §3.1 records Δ-MT decision + Δ-1 change-history notation
+PASS  PLAN generated tables refreshed (FS-00 31, total 277)
+PASS  README: 277/31/21 counts + multi-tenant users capability + Δ-MT read-order entry
+PASS  PLAN/README mark Δ-MT verification as pending (expected pre-verdict) or verified after verdict
+PASS  tools/render_plan_tables.py --check rc0 (generated tables current after Δ-MT count change)
+PASS  coverage unchanged by Δ-MT: 1,348 topics = 769 in-scope + 579 deferred; no new catalog ids
+PASS  relative markdown links resolve in PLAN/README/addendum/ARCH/DATA-MODEL/FEATURE-SETS
+--------------------------------------------------------------------------------------------------------------
+FAIL  no stale current-state count references (277/31/137/147/INV-30 current) -- [('273+1', 'README.md', 19, '| 5 | [`design/ARCHITECTURE.md`](design/ARCHITECTURE.md) + [`design/DATA-MODEL.md`](design/DATA-MODEL.md) | Posting engine, costing, platform; 273+1 t')]
+FAIL  FEATURE-SETS §7.1 exit block matches the manifest gate list -- 4 missing
+--------------------------------------------------------------------------------------------------------------
+[MINOR] MT-D1 (README.md line 19): README read-order table step 5 still says '273+1 tables' (v1.0.0 count); current-state counts are 277 base tables (platform 31) + 21 views. The same README later states 277 tables, so it is internally inconsistent.
+      evidence: grep -n '273+1' README.md
+      fix: Change to '277 tables (platform 31) + 21 views'.
+[MINOR] MT-D2 (FEATURE-SETS.md §7.1 (FS-00 exit checks block)): The FS-00 §7.1 exit-checks block lists only the six v1.0.0 commands; the manifest and FS-00 §11 now include four Δ-MT L3 commands before 'record' (test_mt_*). §7.1 is the only summary still showing the pre-Δ-MT gate list. +3
+      evidence: sed -n '/### 7.1 FS-00/,/### 7.2/p' design/FEATURE-SETS.md | grep -A8 'Exit checks'
+      fix: Add the four Δ-MT test commands (verbatim from the manifest/FS-00 §11) to the §7.1 exit block.
+[MINOR] MT-D3 (PLAN.md §12 item 9): PLAN §12 item 9 still says 'Locked decisions D1–D8 and deltas Δ-1…Δ-3 are part of the baseline' and omits the Δ-MT amendment (and D-29). Δ-MT is binding and recorded in §3.1/§4.2, so the change-control baseline list is stale.
+      evidence: grep -n 'D1–D8 and deltas' PLAN.md
+      fix: Change to 'D1–D8, deltas Δ-1…Δ-3 and Δ-MT (D-29)'.
+[MINOR] MT-D4 (design/ARCHITECTURE.md §8 D-29 row): The D-29 decision row says '(Addendum §10 labels this decision "D-24"; …)', but the final addendum §9b/§10 records the decision id as **D-29** and states that D-24 was an earlier draft label that collides with the existing WMS/mobile decision. The parenthetical cites the addendum incorrectly.
+      evidence: grep -n 'D-29' design/ARCHITECTURE.md; sed -n '/## 9b/,/## 10/p' design/MULTI-TENANT-USERS-ADDENDUM.md
+      fix: Reword: '(Addendum §9b: recorded as D-29; the earlier draft label D-24 collides with the WMS/mobile decision.)'
+[MINOR] MT-D5 (design/ARCHITECTURE.md §5.9 vs addendum §9b / PLAN §12 item 13): ARCHITECTURE §5.9 still declares the URL version as `/v1` and says business resource APIs remain `/v1/...` while the Δ-MT namespace is 'the only namespace with the `/api` prefix'. The binding addendum §9b and PLAN §12 item 13 state the opposite convention: **canonical base path is `/api/v1`**, with `/v1` only accepted as non-normative shorthand in domain docs. The architecture text should match the binding convention.
+      evidence: grep -n 'business resource APIs remain' design/ARCHITECTURE.md; grep -n 'canonical base path' design/MULTI-TENANT-USERS-ADDENDUM.md PLAN.md
+      fix: Update §5.9: canonical base path `/api/v1`; `/v1` is non-normative shorthand used in some domain docs; keep the Δ-MT namespace statement consistent with this convention.
+[INFO] MT-D6 (design/ARCHITECTURE.md / design/DATA-MODEL.md / design/FEATURE-SETS.md headers): Design-doc version headers still read 1.0 / 1.0.0 after the binding v1.1.0 amendment (manifest, PLAN and README are at 1.1.0; the addendum is the binding override). Content is correct; the version line is informational.
+      evidence: head -3 design/ARCHITECTURE.md design/DATA-MODEL.md design/FEATURE-SETS.md
+      fix: Optional: bump headers to 1.1.0 or add 'amended by Δ-MT (v1.1.0)'.
+--------------------------------------------------------------------------------------------------------------
+Counts derived: base tables=277 (platform=['31']), views=21, posting types=31, commands=6, rules=137 scoped + 10 global, INV=1..30, plan_version=1.1.0

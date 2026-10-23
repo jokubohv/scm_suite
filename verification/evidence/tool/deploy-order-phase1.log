@@ -1,0 +1,28 @@
+# Wave-by-wave deployment runbook (generated from design/feature-sets.json)
+
+Pre-flight (every wave): `python tools/feature_sets.py validate`
+
+| Wave | # | FS | Name | Depends on | Entry gate (L2) | First exit check (L3) | Record (L3 last) |
+|---|---|---|---|---|---|---|---|
+| 0A | 1 | FS-00 | Platform Core (tenancy, identity, audit, events, jobs, boundaries) | - | `python tools/feature_sets.py check-env --set FS-00 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-00 --env $ENV --status verified` |
+| 0B | 2 | FS-01 | Item Master and UoM Engine | FS-00 | `python tools/feature_sets.py check-env --set FS-01 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-01 --env $ENV --status verified` |
+| 0B | 3 | FS-02 | Pricing Engine (item pricing + advanced pricing + effective-date updates) | FS-00, FS-01 | `python tools/feature_sets.py check-env --set FS-02 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-02 --env $ENV --status verified` |
+| 0C | 4 | FS-03 | Storage and Inventory-Status Registry | FS-00, FS-01 | `python tools/feature_sets.py check-env --set FS-03 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-03 --env $ENV --status verified` |
+| 0C | 5 | FS-04 | Inventory Ledger Core (posting, balances, commitments, transfers, adjustments, imports) | FS-00, FS-01, FS-02, FS-03 | `python tools/feature_sets.py check-env --set FS-04 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-04 --env $ENV --status verified` |
+| 0C | 6 | FS-05 | Costing and Valuation Engine | FS-00, FS-01, FS-03, FS-04 | `python tools/feature_sets.py check-env --set FS-05 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-05 --env $ENV --status verified` |
+| 1A | 7 | FS-06 | Numbered Inventory (lots and serials) | FS-00, FS-01, FS-03, FS-04, FS-05 | `python tools/feature_sets.py check-env --set FS-06 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-06 --env $ENV --status verified` |
+| 1A | 8 | FS-07 | Inventory Counts and Cycle Counts | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06 | `python tools/feature_sets.py check-env --set FS-07 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-07 --env $ENV --status verified` |
+| 1B | 9 | FS-08 | Procurement (vendor master, P2P documents, receipts, bills, returns) | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06 | `python tools/feature_sets.py check-env --set FS-08 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-08 --env $ENV --status verified` |
+| 1C | 10 | FS-09 | Manufacturing (assembly/BOM, work orders, WIP, routing, scheduling inputs) | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06, FS-08 | `python tools/feature_sets.py check-env --set FS-09 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-09 --env $ENV --status verified` |
+| 1D | 11 | FS-10 | Replenishment and Planning (AIM, demand, supply/MRP, DRP, allocation, ATP) | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06, FS-08, FS-09 | `python tools/feature_sets.py check-env --set FS-10 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-10 --env $ENV --status verified` |
+| 1E | 12 | FS-11 | Warehouse Management Execution (server-side tasks only) | FS-00, FS-01, FS-03, FS-04, FS-06, FS-07, FS-08, FS-09 | `python tools/feature_sets.py check-env --set FS-11 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-11 --env $ENV --status verified` |
+| 1F | 13 | FS-12 | Quality Management (specs, inspections, COA) — SuiteApp semantics backend | FS-00, FS-01, FS-03, FS-04, FS-06, FS-08, FS-09 | `python tools/feature_sets.py check-env --set FS-12 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-12 --env $ENV --status verified` |
+| 1F | 14 | FS-13 | Consigned Inventory Management | FS-00, FS-01, FS-03, FS-04, FS-05, FS-06, FS-08 | `python tools/feature_sets.py check-env --set FS-13 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-13 --env $ENV --status verified` |
+| 1F | 15 | FS-14 | Extensions (warranty, customer part numbers, UPC registry) | FS-00, FS-01, FS-06, FS-08 | `python tools/feature_sets.py check-env --set FS-14 --env $ENV` | `docker compose run --restart=no api alembic upgrade head` | `python tools/feature_sets.py record --set FS-14 --env $ENV --status verified` |
+| 2 | 16 | FS-15 | Reporting Read Models and Reporting API | FS-00, FS-01, FS-02, FS-03, FS-04, FS-05, FS-06, FS-07, FS-08, FS-09, FS-10, FS-11, FS-12, FS-13, FS-14 | `python tools/feature_sets.py check-env --set FS-15 --env $ENV` | `docker compose run --rm api alembic upgrade head` | `python tools/feature_sets.py record --set FS-15 --env $ENV --status verified` |
+
+Wave sequence: 0A -> 0B -> 0C -> 1A -> 1B -> 1C -> 1D -> 1E -> 1F -> 2
+Rule: within a wave deploy rows top-to-bottom; a wave closes only when every set is `verified`.
+Entry gate command form: python tools/feature_sets.py check-env --set FS-XX --env $ENV
+Record command form:       python tools/feature_sets.py record --set FS-XX --env $ENV --status verified --evidence PATH
+rc=0

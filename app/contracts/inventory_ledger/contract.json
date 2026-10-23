@@ -1,0 +1,33 @@
+{
+  "contracts": [
+    {
+      "contract": "inventory.ledger",
+      "depends_on": [
+        "item.master",
+        "order.demand",
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "pricing.engine",
+        "traceability.registry"
+      ],
+      "dir": "inventory_ledger",
+      "events": [],
+      "feature_set": "FS-04",
+      "fragment": "contracts/openapi/fragments/FS-04.openapi.json",
+      "version": "1.0.0",
+      "wave": "0C"
+    }
+  ],
+  "dir": "inventory_ledger",
+  "events_registry": "contracts/events/registry.json",
+  "extension_fragment": "app/contracts/inventory_ledger/openapi.fragment.json",
+  "feature_set": "FS-04",
+  "fragments": [
+    "contracts/openapi/fragments/FS-04.openapi.json"
+  ],
+  "generated_by": "app.contracts.cli",
+  "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
+  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "wave": "0C"
+}

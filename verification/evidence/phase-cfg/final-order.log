@@ -1,0 +1,19 @@
+DEPLOYMENT ORDER (phase <= 1):
+ 1. [wave 0A  phase 1] FS-00  Platform Core (tenancy, identity, audit, events, jobs, boundaries)   deps=-
+ 2. [wave 0B  phase 1] FS-01  Item Master and UoM Engine   deps=FS-00
+ 3. [wave 0B  phase 1] FS-02  Pricing Engine (item pricing + advanced pricing + effective-date updates)   deps=FS-00,FS-01
+ 4. [wave 0C  phase 1] FS-03  Storage and Inventory-Status Registry   deps=FS-00,FS-01
+ 5. [wave 0C  phase 1] FS-04  Inventory Ledger Core (posting, balances, commitments, transfers, adjustments, imports)   deps=FS-00,FS-01,FS-02,FS-03
+ 6. [wave 0C  phase 1] FS-05  Costing and Valuation Engine   deps=FS-00,FS-01,FS-03,FS-04
+ 7. [wave 1A  phase 1] FS-06  Numbered Inventory (lots and serials)   deps=FS-00,FS-01,FS-03,FS-04,FS-05
+ 8. [wave 1A  phase 1] FS-07  Inventory Counts and Cycle Counts   deps=FS-00,FS-01,FS-03,FS-04,FS-05,FS-06
+ 9. [wave 1B  phase 1] FS-08  Procurement (vendor master, P2P documents, receipts, bills, returns)   deps=FS-00,FS-01,FS-03,FS-04,FS-05,FS-06
+10. [wave 1C  phase 1] FS-09  Manufacturing (assembly/BOM, work orders, WIP, routing, scheduling inputs)   deps=FS-00,FS-01,FS-03,FS-04,FS-05,FS-06,FS-08
+11. [wave 1D  phase 1] FS-10  Replenishment and Planning (AIM, demand, supply/MRP, DRP, allocation, ATP)   deps=FS-00,FS-01,FS-03,FS-04,FS-05,FS-06,FS-08,FS-09
+12. [wave 1E  phase 1] FS-11  Warehouse Management Execution (server-side tasks only)   deps=FS-00,FS-01,FS-03,FS-04,FS-06,FS-07,FS-08,FS-09
+13. [wave 1F  phase 1] FS-12  Quality Management (specs, inspections, COA) — SuiteApp semantics backend   deps=FS-00,FS-01,FS-03,FS-04,FS-06,FS-08,FS-09
+14. [wave 1F  phase 1] FS-13  Consigned Inventory Management   deps=FS-00,FS-01,FS-03,FS-04,FS-05,FS-06,FS-08
+15. [wave 1F  phase 1] FS-14  Extensions (warranty, customer part numbers, UPC registry)   deps=FS-00,FS-01,FS-06,FS-08
+16. [wave 2   phase 1] FS-15  Reporting Read Models and Reporting API   deps=FS-00,FS-01,FS-02,FS-03,FS-04,FS-05,FS-06,FS-07,FS-08,FS-09,FS-10,FS-11,FS-12,FS-13,FS-14
+waves: 0A -> 0B -> 0C -> 1A -> 1B -> 1C -> 1D -> 1E -> 1F -> 2
+rc=0
