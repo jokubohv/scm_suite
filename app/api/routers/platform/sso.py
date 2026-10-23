@@ -37,7 +37,7 @@ from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope, scope_registry, token_service
 from app.core.config import get_settings
-from app.core.platform_events import emit_platform_event
+from app.core.platform_events import emit_platform_event, sod_blocked
 from app.core.repositories.auth import AuthRepository, hash_refresh_token
 from app.core.repositories.sso import (
     CONNECTION_PROTOCOLS,
@@ -49,6 +49,7 @@ from app.core.repositories.sso import (
 from app.core.security import authn
 from app.core.security.errors import (
     SecurityError,
+    SodConflict,
     SsoConnectionInvalid,
     SsoDisabled,
     SsoEmailDomainNotAllowed,
@@ -695,9 +696,23 @@ async def sso_callback(
     authorization = authn.validate_callback_state(stored, state=state)
     row = await repo.get_connection_row(authorization.tenant_id, authorization.connection_id)
     if row is None:
+        await emit_platform_event(
+            repo.session, "sso.login.failed", tenant_id=str(authorization.tenant_id),
+            aggregate_type="tenant_sso_connection", aggregate_id=str(authorization.connection_id),
+            payload={"tenant_id": str(authorization.tenant_id),
+                     "connection_id": str(authorization.connection_id), "identity_id": "unknown",
+                     "reason_code": "SSO_CONNECTION_MISSING", "occurred_at": utc_now().isoformat()},
+        )
         raise SsoDisabled("SSO connection no longer exists", details={"connection_id": authorization.connection_id})
     tenant = await repo.get_tenant(authorization.tenant_id)
     if tenant is None or str(tenant.get("status")) != "ACTIVE":
+        await emit_platform_event(
+            repo.session, "sso.login.failed", tenant_id=str(authorization.tenant_id),
+            aggregate_type="tenant_sso_connection", aggregate_id=str(authorization.connection_id),
+            payload={"tenant_id": str(authorization.tenant_id),
+                     "connection_id": str(authorization.connection_id), "identity_id": "unknown",
+                     "reason_code": "TENANT_INACTIVE", "occurred_at": utc_now().isoformat()},
+        )
         raise SsoDisabled("tenant is not active for SSO login")
     default_keys = await _default_role_codes(repo, authorization.tenant_id, row)
     connection = _connection_view(
@@ -713,6 +728,13 @@ async def sso_callback(
     )
     id_token = token_payload.get("id_token") if isinstance(token_payload, Mapping) else None
     if not id_token or not isinstance(id_token, str):
+        await emit_platform_event(
+            repo.session, "sso.login.failed", tenant_id=str(authorization.tenant_id),
+            aggregate_type="tenant_sso_connection", aggregate_id=str(authorization.connection_id),
+            payload={"tenant_id": str(authorization.tenant_id),
+                     "connection_id": str(authorization.connection_id), "identity_id": "unknown",
+                     "reason_code": "ID_TOKEN_MISSING", "occurred_at": utc_now().isoformat()},
+        )
         raise SsoIdTokenInvalid("token endpoint response is missing id_token", details={"reason": "ID_TOKEN_MISSING"})
     raw_claims = await dex.verify_id_token(connection=connection, id_token=id_token)
     claims = authn.validate_id_token_claims(
@@ -1091,7 +1113,15 @@ async def put_group_mappings(
         union: set[str] = set()
         for role_id in role_ids:
             union.update(scope_map.get(role_id, frozenset()))
-        registry.require_no_sod_conflict(union, context=SodContext.ASSIGNMENT)
+        try:
+            registry.require_no_sod_conflict(union, context=SodContext.ASSIGNMENT)
+        except SodConflict as exc:
+            pairs = exc.details.get("pairs") if isinstance(exc.details, dict) else None
+            await sod_blocked(repo.session, tenant_id=principal.tenant_id,
+                              actor_app_user_id=principal.app_user_id, context="ASSIGNMENT",
+                              pair=[str(p) for p in (list(pairs[0]) if pairs else [])],
+                              rule="SOD_PAIR", resource_id=str(row["id"]))
+            raise
     persisted = await repo.replace_group_mappings(principal.tenant_id, row["id"], rows, actor_id=principal.identity_id)
     return {
         "connection_id": str(row["id"]),

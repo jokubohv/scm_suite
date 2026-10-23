@@ -24,11 +24,12 @@ from sqlalchemy import insert, select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope, scope_registry
 from app.core.models import platform as p
-from app.core.platform_events import emit_platform_event
+from app.core.platform_events import emit_platform_event, sod_blocked
 from app.core.repositories.rbac import ALLOWED_SETTING_NAMESPACES, RbacRepository
 from app.core.security.errors import (
     LastAdminLockout,
     RoleInUse,
+    SodConflict,
     TemplateImmutable,
 )
 from app.core.security.scopes import (
@@ -202,8 +203,18 @@ def _require_assignable(registry: ScopeRegistry, scopes: Sequence[str]) -> list[
     return sorted(registry.require_assignable(canonical))
 
 
-def _require_sod(registry: ScopeRegistry, scopes: Sequence[str], *, allow_break_glass: bool = False) -> None:
-    registry.require_no_sod_conflict(scopes, context=SodContext.ROLE_UPDATE, allow_break_glass=allow_break_glass)
+async def _require_sod_or_emit(repo: RbacRepository, principal: PrincipalDep, registry: ScopeRegistry,
+                              scopes: Sequence[str], *, context: str = "ROLE", resource_id: str,
+                              allow_break_glass: bool = False, sod_context: SodContext = SodContext.ROLE_UPDATE) -> None:
+    try:
+        registry.require_no_sod_conflict(scopes, context=sod_context, allow_break_glass=allow_break_glass)
+    except SodConflict as exc:
+        pairs = exc.details.get("pairs") if isinstance(exc.details, dict) else None
+        pair = list(pairs[0]) if pairs else []
+        await sod_blocked(repo.session, tenant_id=principal.tenant_id,
+                          actor_app_user_id=principal.app_user_id, context=context,
+                          pair=[str(p) for p in pair], rule="SOD_PAIR", resource_id=resource_id)
+        raise
 
 
 def _require_grant(registry: ScopeRegistry, actor: EffectivePermissions, scopes: Sequence[str], *, is_platform_admin: bool) -> None:
@@ -319,7 +330,7 @@ async def create_role(
     if await repo.role_code_exists(principal.tenant_id, body.code):
         raise _unprocessable("ROLE_CODE_EXISTS", "role code already exists", role_code=body.code)
     scopes = _require_assignable(registry, body.scope_ids)
-    _require_sod(registry, scopes)
+    await _require_sod_or_emit(repo, principal, registry, scopes, resource_id=body.code)
     _require_grant(registry, actor, scopes, is_platform_admin=is_platform_admin)
     await _scopes_or_422(repo, principal.tenant_id, scopes)
     role = await repo.create_role(
@@ -446,7 +457,7 @@ async def clone_role(
     if body.code in registry.catalogue.templates_by_key or await repo.role_code_exists(principal.tenant_id, body.code):
         raise _unprocessable("ROLE_CODE_EXISTS", "role code already exists", role_code=body.code)
     scopes = _require_assignable(registry, source["scopes"])
-    _require_sod(registry, scopes)
+    await _require_sod_or_emit(repo, principal, registry, scopes, resource_id=role_id)
     _require_grant(registry, actor, scopes, is_platform_admin=await repo.is_platform_admin(principal.identity_id))
     await _scopes_or_422(repo, principal.tenant_id, scopes)
     data_scopes = source["data_scopes"] if body.copy_data_scopes else []
@@ -477,7 +488,7 @@ async def replace_role_permissions(
     role = await _role_or_404(repo, principal.tenant_id, role_id)
     _ensure_role_mutable(registry, role)
     scopes = _require_assignable(registry, body.scope_ids)
-    _require_sod(registry, scopes)
+    await _require_sod_or_emit(repo, principal, registry, scopes, resource_id=role_id)
     _require_grant(registry, actor, scopes, is_platform_admin=await repo.is_platform_admin(principal.identity_id))
     await _scopes_or_422(repo, principal.tenant_id, scopes)
     final, diff = await repo.replace_role_permissions(principal.tenant_id, role_id, scopes, actor_id=principal.identity_id)
@@ -678,7 +689,7 @@ async def patch_user(
         for row in role_rows:
             union_scopes.update(await repo.role_scope_names(principal.tenant_id, row["id"]))
         _require_grant(registry, actor, sorted(union_scopes), is_platform_admin=is_platform_admin)
-        _require_sod(registry, sorted(union_scopes), allow_break_glass="admin" in target_codes)
+        await _require_sod_or_emit(repo, principal, registry, sorted(union_scopes), context="ASSIGNMENT", resource_id=user_id, allow_break_glass="admin" in target_codes, sod_context=SodContext.ASSIGNMENT)
         if was_admin and "admin" not in target_codes and active_admins <= 1:
             raise LastAdminLockout("cannot remove the last active tenant administrator", details={"user_id": user_id})
         current = set(user["roles"])
@@ -723,7 +734,7 @@ async def assign_role(
         if row:
             combined.update(await repo.role_scope_names(principal.tenant_id, row["id"]))
     _require_grant(registry, actor, sorted(combined), is_platform_admin=await repo.is_platform_admin(principal.identity_id))
-    _require_sod(registry, sorted(combined), allow_break_glass=str(role["code"]) == "admin")
+    await _require_sod_or_emit(repo, principal, registry, sorted(combined), context="ASSIGNMENT", resource_id=user_id, allow_break_glass=str(role["code"]) == "admin", sod_context=SodContext.ASSIGNMENT)
     await repo.assign_role(
         principal.tenant_id, user_id, str(role["id"]),
         effective_from=body.effective_from, effective_to=body.effective_to, actor_id=principal.identity_id,
@@ -797,7 +808,7 @@ async def create_invitation(
     for role in roles:
         union.update(await repo.role_scope_names(principal.tenant_id, role["id"]))
     _require_grant(registry, actor, sorted(union), is_platform_admin=await repo.is_platform_admin(principal.identity_id))
-    _require_sod(registry, sorted(union), allow_break_glass=any(str(role["code"]) == "admin" for role in roles))
+    await _require_sod_or_emit(repo, principal, registry, sorted(union), context="ASSIGNMENT", resource_id=body.email, allow_break_glass=any(str(role["code"]) == "admin" for role in roles), sod_context=SodContext.ASSIGNMENT)
     invitation = await repo.create_invitation(
         principal.tenant_id, email=body.email, intended_role_ids=[str(role["id"]) for role in roles],
         invited_by=principal.app_user_id, expires_at=body.expires_at,

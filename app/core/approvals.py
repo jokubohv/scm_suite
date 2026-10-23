@@ -30,7 +30,7 @@ from sqlalchemy import and_, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import platform as p
-from app.core.platform_events import audit_recorded, emit_platform_event
+from app.core.platform_events import audit_recorded, emit_platform_event, sod_blocked
 from app.core.security.errors import SodConflict
 
 APPROVAL_DECISIONS = frozenset({"APPROVE", "REJECT", "DELEGATE", "RECALL"})
@@ -565,6 +565,9 @@ class ApprovalService:
         current_step = int(request["current_step"])
         step = next((item for item in steps if item.step == current_step), steps[-1])
         if str(request["requested_by"]) == str(actor_id):
+            await sod_blocked(self.session, tenant_id=tenant_id, actor_app_user_id=str(actor_id),
+                              context="APPROVAL", pair=["REQUESTER", "APPROVER"],
+                              rule="REQUESTER_NOT_APPROVER", resource_id=request_id)
             raise SodConflict("requester cannot decide their own approval request", details={"request_id": request_id})
         actor_roles = await self._actor_roles(tenant_id, actor_id)
         if not step_is_authorized(step, str(actor_id), actor_roles):
@@ -577,6 +580,9 @@ class ApprovalService:
             if not await self._actor_is_member(tenant_id, str(delegated_to)):
                 raise HTTPException(status_code=422, detail={"code": "DELEGATE_TARGET_INVALID", "message": "delegated_to must be an active tenant member"})
             if str(delegated_to) == str(request["requested_by"]):
+                await sod_blocked(self.session, tenant_id=tenant_id, actor_app_user_id=str(actor_id),
+                                  context="APPROVAL", pair=["REQUESTER", "APPROVER"],
+                                  rule="REQUESTER_NOT_APPROVER", resource_id=request_id)
                 raise SodConflict("requester cannot be the delegate approver", details={"request_id": request_id})
             action = await self._append_action(tenant_id, request_id, current_step, actor_id, "DELEGATE", comment, str(delegated_to))
             await self._audit(tenant_id, actor_id, "approval.delegated", request_id, {"step": current_step, "delegated_to": str(delegated_to)})

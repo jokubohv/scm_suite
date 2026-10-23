@@ -14,6 +14,7 @@ from collections.abc import Mapping
 from functools import cache
 from pathlib import Path
 from typing import Any
+from uuid import NAMESPACE_URL, uuid5
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -66,6 +67,19 @@ async def emit_platform_event(
     )
 
 
+async def sod_blocked(session, *, tenant_id: str, actor_app_user_id: str | None, context: str,
+                     pair: list[str], rule: str, resource_id: str, decision: str = "BLOCKED") -> dict[str, Any]:
+    """Emit ``sod.violation.blocked`` for an enforcement point that blocked a conflict."""
+    return await emit_platform_event(
+        session, "sod.violation.blocked", tenant_id=str(tenant_id), aggregate_type="sod_policy",
+        aggregate_id=str(uuid5(NAMESPACE_URL, f"sod:{resource_id}")),
+        payload={"tenant_id": str(tenant_id), "actor_app_user_id": actor_app_user_id,
+                 "context": {"kind": context}, "pair": {"a": pair[0] if pair else None,
+                                                        "b": pair[1] if len(pair) > 1 else None},
+                 "rule": rule, "resource_id": str(resource_id), "decision": decision},
+    )
+
+
 async def audit_recorded(
     session: AsyncSession,
     *,
@@ -96,4 +110,4 @@ async def audit_recorded(
 
 
 __all__ = ["EVENT_SCHEMA_DIR", "SYSTEM_TENANT_ID", "emit_platform_event", "required_payload_keys",
-           "audit_recorded"]
+           "audit_recorded", "sod_blocked"]

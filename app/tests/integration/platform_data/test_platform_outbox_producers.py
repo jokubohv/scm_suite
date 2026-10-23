@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import uuid
 
+import pytest
 from sqlalchemy import select
 
 from app.core.approvals import ApprovalService
 from app.core.models import platform as p
 from app.core.repositories.platform_admin import PlatformAdminRepository
 from app.core.repositories.rbac import RbacRepository
+from app.core.security.errors import SodConflict
 from app.tests.integration.platform.support import (
     create_identity,
     create_membership,
@@ -114,3 +116,28 @@ async def test_admin_users_create_route_producer(db_session) -> None:
     assert result["membership_status"] == "INVITED"
     events = await _events(db_session, "user.invited")
     assert events and events[-1]["payload"]["data"]["invitation_id"] == result["invitation_id"]
+
+
+async def test_sod_violation_producer(db_session) -> None:
+    from app.api.deps import Principal
+    from app.api.routers.platform.rbac import _require_sod_or_emit
+    from app.core.security.scopes import ScopeRegistry
+
+    tenant_id = await create_tenant(db_session, code="EVT-SOD")
+    identity_id = await create_identity(db_session, email="sod@evt-sod.test")
+    membership = await create_membership(
+        db_session, tenant_id=tenant_id, identity_id=identity_id, email="sod@evt-sod.test",
+        scopes=("platform.role.manage",),
+    )
+    principal = Principal(identity_id=str(identity_id), app_user_id=str(membership["app_user_id"]),
+                          tenant_id=str(tenant_id), token_version=0,
+                          scopes=frozenset({"platform.role.manage"}))
+    pair = ScopeRegistry().catalogue.sod_pairs[0]
+    with pytest.raises(SodConflict):
+        await _require_sod_or_emit(
+            RbacRepository(db_session), principal, ScopeRegistry(), [pair.a, pair.b],
+            resource_id="role-sod-test",
+        )
+    events = await _events(db_session, "sod.violation.blocked")
+    assert events and events[-1]["tenant_id"] == tenant_id
+    assert events[-1]["payload"]["data"]["resource_id"] == "role-sod-test"
