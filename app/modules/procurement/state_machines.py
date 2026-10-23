@@ -78,7 +78,7 @@ ALLOWED_TRANSITIONS: Mapping[str, Mapping[str, frozenset[str]]] = {
         "DRAFT": frozenset({"PENDING_APPROVAL", "APPROVED", "CANCELLED"}),
         "PENDING_APPROVAL": frozenset({"APPROVED", "CANCELLED"}),
         "APPROVED": frozenset({"OPEN", "CANCELLED"}),
-        "OPEN": frozenset({"PAID"}),
+        "OPEN": frozenset({"PAID", "VOID"}),
         "PAID": frozenset(),
         "CANCELLED": frozenset(),
         "VOID": frozenset(),

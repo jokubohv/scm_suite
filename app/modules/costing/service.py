@@ -8,7 +8,7 @@ transactional outbox. All writes are tenant-scoped and idempotent where the spec
 from __future__ import annotations
 
 import uuid
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from datetime import UTC, date, datetime
 from decimal import Decimal
 from typing import Any
@@ -819,6 +819,45 @@ class CostingService:
     # ---------------------------------------------------------------- variances ------------
     async def list_variances(self, **filters: Any) -> dict[str, Any]:
         return await self.repo.list_variances(**filters)
+
+    async def process_landed_cost_absorption_variances(
+        self, *, variance_ids: Sequence[str] | None = None, fiscal_period_id: str | None = None
+    ) -> dict[str, Any]:
+        """Period-close/true-up action: mark OPEN T-06 absorption variances as CLOSED (idempotent).
+
+        The T-06 value-only postings already exist in the ledger; this action only advances the FS-05
+        ``cost_variance.status`` (OPEN→CLOSED) state, which is the documented allowed variance state
+        transition and requires no new table/schema. It is exposed at service level (router/contract
+        exposure is integrator-owned in this residual).
+        """
+        listing = await self.repo.list_variances(
+            variance_type="LANDED_COST_ABSORPTION", fiscal_period_id=fiscal_period_id, status="OPEN", limit=500
+        )
+        candidates = list(listing.get("items") or [])
+        if variance_ids is not None:
+            wanted = {str(item) for item in variance_ids}
+            candidates = [item for item in candidates if str(item["id"]) in wanted]
+        processed: list[dict[str, Any]] = []
+        for item in candidates:
+            detail = dict(item.get("detail") or {})
+            detail.update(
+                {
+                    "status": "CLOSED",
+                    "processed_at": datetime.now(UTC).isoformat(),
+                    "processed_by": "period_close",
+                }
+            )
+            row = await self.repo.update_variance(item["id"], {"status": "CLOSED", "detail": detail})
+            processed.append(row)
+        return {
+            "variance_type": "LANDED_COST_ABSORPTION",
+            "processed": len(processed),
+            "skipped": len(candidates) == 0,
+            "items": processed,
+            "total_amount_base": format(
+                sum((Decimal(str(item["amount_base"])) for item in processed), Decimal("0")), "f"
+            ),
+        }
 
     # ---------------------------------------------------------------- groups --------------
     async def list_groups(self, *, active: bool | None = None) -> dict[str, Any]:

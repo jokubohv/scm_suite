@@ -3097,15 +3097,245 @@ class ProcurementService:
         return {"id": str(bill_id), "status": "APPROVED"}
 
     async def cancel_bill(self, bill_id: Any, reason: str, *, actor_id: str | None = None) -> dict[str, Any]:
-        bill = await self._require_row("vendor_bill", bill_id, "vendor bill")
+        """Cancel a draft bill, or reverse a posted OPEN bill (T-04 + actual T-26 + T-06 variance true-up).
+
+        Posted reversal is only allowed while the bill is unreconciled: fully/partially paid bills,
+        closed/PAID bills, bills with applied vendor credits, and already reversed/cancelled bills are
+        rejected (409) so a second call cannot double-reverse value or landed cost.
+        """
+        bill = await self.get_bill(bill_id)
+        amount_paid = dec(bill.get("amount_paid") or 0)
+        if amount_paid > 0:
+            raise InvalidStateTransition(
+                "partially/fully paid bills cannot be cancelled or reversed",
+                details={"amount_paid": _num(amount_paid), "status": bill["status"]},
+            )
+        if bill["status"] in {"PAID"}:
+            raise InvalidStateTransition("paid bills are closed and cannot be reversed", details={"status": "PAID"})
+        if bill["status"] in {"CANCELLED", "VOID"}:
+            raise InvalidStateTransition(
+                f"bill is {bill['status']}; double cancellation/reversal is not allowed",
+                details={"status": bill["status"]},
+            )
+        if bill["status"] == "OPEN":
+            return await self._reverse_posted_bill(bill, reason, actor_id=actor_id)
         if bill["status"] not in {"DRAFT", "PENDING_APPROVAL"}:
-            raise InvalidStateTransition(f"bill is {bill['status']}; posted corrections use credit/reversal")
+            raise InvalidStateTransition(
+                f"bill is {bill['status']}; only DRAFT/PENDING_APPROVAL cancel or posted OPEN reversal are allowed"
+            )
         await self._exec(
             "UPDATE procurement.vendor_bill SET status = 'CANCELLED', updated_at = now(), version = version + 1 WHERE tenant_id = :tenant_id AND id = :id",
             id=_as_uuid(bill_id),
         )
         await self._audit("vendor_bill.cancelled", "procurement.vendor_bill", bill_id, {"reason": reason}, actor_id)
         return {"id": str(bill_id), "status": "CANCELLED"}
+
+    async def _reverse_posted_bill(self, bill: Mapping[str, Any], reason: str, *, actor_id: Any = None) -> dict[str, Any]:
+        """Reverse a posted OPEN bill: T-04, actual T-26 landed cost and T-06 absorption variance."""
+        from app.modules.inventory_ledger.facade import PostingPort
+
+        bill_id = bill["id"]
+        applied_credits = int(
+            await self._scalar(
+                "SELECT count(*) FROM procurement.vendor_credit WHERE tenant_id = :tenant_id AND vendor_bill_id = :bill "
+                "AND status = 'APPLIED'",
+                bill=_as_uuid(bill_id),
+            )
+            or 0
+        )
+        if applied_credits:
+            raise DependentDocuments(
+                "bill has applied vendor credits; reverse/apply-off the credits before reversing the bill",
+                details={"applied_vendor_credits": applied_credits},
+            )
+        port = PostingPort(self.session, self.tenant_id)
+        reversal = await port.reverse(
+            str(bill["posted_transaction_id"]),
+            reason=reason,
+            idempotency_key=f"vendor-bill:reverse:{bill_id}",
+        )
+        await self._link_reversal_document(
+            link_type="VENDOR_BILL_REVERSAL",
+            from_type="VENDOR_BILL",
+            from_id=bill_id,
+            to_type="INVENTORY_TRANSACTION",
+            to_id=reversal["transaction_id"],
+            amount=dec(bill["total"]),
+            actor_id=actor_id,
+        )
+        landed_cost_reversals = await self._reverse_actual_landed_cost_for_bill(bill, reason=reason, actor_id=actor_id)
+        variance_reversals = await self._reverse_landed_cost_absorption_variance_for_bill(
+            bill, reason=reason, actor_id=actor_id
+        )
+        if bill.get("purchase_order_id"):
+            for line in bill.get("lines") or []:
+                if line.get("purchase_order_line_id"):
+                    await self._exec(
+                        "UPDATE procurement.purchase_order_line "
+                        "SET qty_billed = GREATEST(qty_billed - :qty, 0), updated_at = now(), version = version + 1 "
+                        "WHERE tenant_id = :tenant_id AND id = :id",
+                        qty=qty(line["qty"]),
+                        id=_as_uuid(line["purchase_order_line_id"]),
+                    )
+            await self._refresh_po_status(bill["purchase_order_id"])
+        await self._exec(
+            "UPDATE procurement.vendor_bill SET status = 'VOID', updated_at = now(), version = version + 1 "
+            "WHERE tenant_id = :tenant_id AND id = :id",
+            id=_as_uuid(bill_id),
+        )
+        summary = {
+            "id": str(bill_id),
+            "status": "VOID",
+            "reversal_transaction_id": reversal["transaction_id"],
+            "original_transaction_id": str(bill["posted_transaction_id"]),
+            "reason": reason,
+            "landed_cost_reversals": landed_cost_reversals,
+            "variance_reversals": variance_reversals,
+            "double_reverse_protected": True,
+        }
+        await self._audit("vendor_bill.reversed", "procurement.vendor_bill", bill_id, summary, actor_id)
+        return summary
+
+    async def _reverse_actual_landed_cost_for_bill(
+        self, bill: Mapping[str, Any], *, reason: str, actor_id: Any = None
+    ) -> list[dict[str, Any]]:
+        """Reverse all posted actual (T-26) landed-cost documents linked to the bill (no double-reverse)."""
+        from app.modules.costing.service import CostingService
+        from app.modules.inventory_ledger.facade import PostingPort
+
+        rows = await self._all(
+            "SELECT * FROM costing.landed_cost WHERE tenant_id = :tenant_id AND vendor_bill_id = :bill "
+            "AND NOT estimated ORDER BY created_at",
+            bill=_as_uuid(bill["id"]),
+        )
+        costing = CostingService(self.session, self.tenant_id)
+        port = PostingPort(self.session, self.tenant_id)
+        results: list[dict[str, Any]] = []
+        for row in rows:
+            if row["status"] == "REVERSED":
+                results.append({"landed_cost_id": str(row["id"]), "status": "REVERSED", "replayed": True})
+                continue
+            if row["status"] != "POSTED" or not row.get("posted_transaction_id"):
+                raise InvalidStateTransition(
+                    f"actual landed cost is {row['status']} and cannot be reversed",
+                    details={"landed_cost_id": str(row["id"])},
+                )
+            reversal = await port.reverse(
+                str(row["posted_transaction_id"]),
+                reason=reason,
+                idempotency_key=f"landed-cost:actual:reverse:{bill['id']}:{row['id']}",
+            )
+            await costing.transition_landed_cost(row["id"], "reverse")
+            await self._link_reversal_document(
+                link_type="LANDED_COST_ACTUAL_REVERSAL",
+                from_type="VENDOR_BILL",
+                from_id=bill["id"],
+                to_type="COSTING_LANDED_COST",
+                to_id=row["id"],
+                amount=dec(row.get("total_amount") or 0),
+                actor_id=actor_id,
+            )
+            summary = {
+                "landed_cost_id": str(row["id"]),
+                "status": "REVERSED",
+                "posting_type": "T-26",
+                "amount": _num(-dec(row.get("total_amount") or 0)),
+                "original_transaction_id": str(row["posted_transaction_id"]),
+                "reversal_transaction_id": reversal["transaction_id"],
+                "value_only": True,
+            }
+            await self._audit("landed_cost.actual_reversed", "costing.landed_cost", row["id"], summary, actor_id)
+            results.append(summary)
+        return results
+
+    async def _reverse_landed_cost_absorption_variance_for_bill(
+        self, bill: Mapping[str, Any], *, reason: str, actor_id: Any = None
+    ) -> list[dict[str, Any]]:
+        """Reverse posted T-06 absorption variance postings and mark the costing variance rows CLOSED."""
+        from app.modules.inventory_ledger.facade import PostingPort
+
+        rows = await self._all(
+            "SELECT * FROM costing.cost_variance WHERE tenant_id = :tenant_id "
+            "AND variance_type = 'LANDED_COST_ABSORPTION' AND status = 'OPEN' "
+            "AND detail ->> 'vendor_bill_id' = :bill ORDER BY created_at",
+            bill=str(bill["id"]),
+        )
+        port = PostingPort(self.session, self.tenant_id)
+        results: list[dict[str, Any]] = []
+        for row in rows:
+            reversal = None
+            if row.get("inventory_transaction_id"):
+                reversal = await port.reverse(
+                    str(row["inventory_transaction_id"]),
+                    reason=reason,
+                    idempotency_key=f"landed-cost-variance:reverse:{row['id']}",
+                )
+            detail = dict(row.get("detail") or {})
+            detail.update(
+                {
+                    "status": "CLOSED",
+                    "processed_at": datetime.now(UTC).isoformat(),
+                    "processed_by": str(actor_id) if actor_id else None,
+                    "reversal_transaction_id": reversal["transaction_id"] if reversal else None,
+                    "reversal_reason": reason,
+                }
+            )
+            from app.modules.costing.repository import CostingRepository
+
+            await CostingRepository(self.session, self.tenant_id).update_variance(
+                row["id"], {"status": "CLOSED", "detail": detail}
+            )
+            await self._link_reversal_document(
+                link_type="LANDED_COST_VARIANCE_REVERSAL",
+                from_type="VENDOR_BILL",
+                from_id=bill["id"],
+                to_type="COST_VARIANCE",
+                to_id=row["id"],
+                amount=dec(row["amount_base"]),
+                actor_id=actor_id,
+            )
+            summary = {
+                "cost_variance_id": str(row["id"]),
+                "status": "CLOSED",
+                "posting_type": "T-06",
+                "amount": _num(dec(row["amount_base"])),
+                "original_transaction_id": str(row["inventory_transaction_id"])
+                if row.get("inventory_transaction_id")
+                else None,
+                "reversal_transaction_id": reversal["transaction_id"] if reversal else None,
+                "value_only": True,
+            }
+            await self._audit("landed_cost.absorption_variance_reversed", "costing.cost_variance", row["id"], summary, actor_id)
+            results.append(summary)
+        return results
+
+    async def _link_reversal_document(
+        self,
+        *,
+        link_type: str,
+        from_type: str,
+        from_id: Any,
+        to_type: str,
+        to_id: Any,
+        amount: Decimal | None = None,
+        actor_id: Any = None,
+    ) -> None:
+        await self._exec(
+            """
+            INSERT INTO platform.document_link
+                (id, tenant_id, link_type, from_type, from_id, to_type, to_id, amount_base, created_by, updated_by)
+            VALUES (:id, :tenant_id, :link_type, :from_type, :from_id, :to_type, :to_id, :amount, :actor, :actor)
+            ON CONFLICT (tenant_id, link_type, from_type, from_id, to_type, to_id) DO NOTHING
+            """,
+            id=uuid.uuid4(),
+            link_type=link_type,
+            from_type=from_type,
+            from_id=_as_uuid(from_id),
+            to_type=to_type,
+            to_id=_as_uuid(to_id),
+            amount=amount,
+            actor=_as_uuid(actor_id) if actor_id else None,
+        )
 
     async def _bill_movements(self, bill: Mapping[str, Any]) -> list[dict[str, Any]]:
         movements = []

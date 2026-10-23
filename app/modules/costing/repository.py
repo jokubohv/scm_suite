@@ -606,6 +606,9 @@ class CostingRepository:
     async def create_variance(self, values: Mapping[str, Any]) -> dict[str, Any]:
         return await self._insert(t.cost_variance, values)
 
+    async def update_variance(self, variance_id: str, values: Mapping[str, Any]) -> dict[str, Any]:
+        return await self._update(t.cost_variance, variance_id, values)
+
     # ------------------------------------------------------------- costing groups -------------
     async def list_groups(self, *, active: bool | None = None) -> list[dict[str, Any]]:
         conditions = []
