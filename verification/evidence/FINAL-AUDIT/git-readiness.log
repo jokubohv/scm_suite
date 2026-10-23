@@ -1,0 +1,67 @@
+=== git readiness ===
+--- remote
+origin	git@github.com:jokubohv/scm_suite.git (fetch)
+origin	git@github.com:jokubohv/scm_suite.git (push)
+--- dirty count
+       1
+--- plan doc diff/status (should be empty)
+--- tracked size
+count: 2410
+size: 13.23 MiB
+in-pack: 0
+packs: 0
+size-pack: 0 bytes
+prune-packable: 0
+garbage: 0
+size-garbage: 0 bytes
+tracked_files=    1340
+--- largest tracked
+-rw-r--r--@ 1 jokubo  staff   549385 Oct 23 11:24 contracts/openapi/fragments/FS-00.openapi.json
+-rw-r--r--@ 1 jokubo  staff   561315 Oct 21 12:19 research/features-mfg-procurement-wms.json
+-rw-r--r--@ 1 jokubo  staff   570297 Oct 23 11:33 contracts/openapi/fragments/FS-09.openapi.json
+-rw-r--r--@ 1 jokubo  staff  1117581 Oct 23 09:43 verification/evidence/C0/baseline-openapi-pre-c0.json
+-rw-r--r--@ 1 jokubo  staff  4034790 Oct 23 11:33 contracts/openapi/openapi.json
+-rw-r--r--@ 1 jokubo  staff  4034790 Oct 23 11:33 contracts/openapi/openapi.yaml
+--- env tracked
+.env.example
+--- gitignore
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+.DS_Store
+.worktrees/
+node_modules/
+*.log
+!verification/evidence/**/*.log
+.tmp/
+--- README
+1:# Inventory / SCM Backend — Executable Plan Package
+10:## Read in this order
+24:## Quickstart (plan validation)
+31:# 1) Validate the dependency DAG, phases/waves, contracts, required gates
+34:# 2) Compute the deployment order / wave-by-wave runbook
+38:# 3) Coverage: all 1,348 source topics accounted for
+41:# 4) Regenerate the PLAN.md status/feature tables from the manifest
+44:# 5) Check a feature set's entry gate against an environment deployment state
+52:## Scope at a glance
+83:## Plan package layout
+96:## Deliverable status
+--- compose/docker
+-rw-------@ 1 jokubo  staff   5406 Oct 23 11:42 Dockerfile
+-rw-------@ 1 jokubo  staff   2416 Oct 23 00:09 docker-compose.dev.yml
+-rw-------@ 1 jokubo  staff  10851 Oct 23 00:34 docker-compose.yml
+--- high-risk secrets
+none

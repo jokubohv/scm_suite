@@ -27,6 +27,38 @@ ops/dex/         Dex dev config (S0-02)
 tools/           plan-package gates (read-only reference)
 ```
 
+## Dev stack quickstart
+
+Requires Python 3.12, Docker/Compose. The repo is the full implementation; plan docs are unchanged
+(pre-verified v1.5.0).
+
+```bash
+# 1) local stack: api, worker, outbox-relay, postgres:16, redis:7, minio, shared dev Dex
+COMPOSE_PROJECT_NAME=inv-dev API_PORT=28000 POSTGRES_PORT=5432 \
+  REDIS_PORT=26379 MINIO_API_PORT=29000 MINIO_CONSOLE_PORT=29001 \
+  DEX_PORT=25556 DEX_ISSUER=http://localhost:25556/dex \
+  scripts/up.sh --profile dev --wait
+
+# 2) migrations (30 revisions, head 0030_rls_grants_verify)
+docker compose run --rm api alembic upgrade head
+
+# 3) API + docs
+curl localhost:28000/healthz
+# OpenAPI: http://localhost:28000/api/v1/openapi.json
+
+# 4) tests (needs the dev Postgres)
+TEST_DATABASE_URL=postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory \
+  TMPDIR=$PWD/.tmp python -m pytest -q
+
+# 5) seed reference data (optional; tests create their own tenants)
+docker compose run --rm api python -m app.seed.cli --profile sqlalchemy --tenant system
+```
+
+Deployment is wave-ordered (`0A→…→2`); `deployment-state.dev.json` records all 16 feature sets as
+`verified`. Contract artifacts: `python -m app.contracts.cli generate --check && python -m app.contracts.cli lint`.
+Final verification evidence: `verification/evidence/FINAL-AUDIT/REPORT.md`; implementation report:
+`verification/evidence/FINAL-IMPLEMENTATION-REPORT.md`.
+
 ## Commands
 
 ```bash

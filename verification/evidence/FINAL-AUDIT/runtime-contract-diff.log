@@ -1,0 +1,57 @@
+=== live API vs contract aggregate ===
+live paths 719 contract paths 747 declared_not_mounted 28 mounted_not_declared 0
+live ops 943 contract ops 991 declared_not_mounted_ops 48 mounted_not_declared_ops 0
+missing ops:
+  DELETE /api/v1/manufacturing/compat/rule-sets/{}
+  DELETE /api/v1/manufacturing/compat/rules/{}
+  GET /api/v1/ecos/{}/lines
+  GET /api/v1/manufacturing/compat/attributes/{}
+  GET /api/v1/manufacturing/compat/rule-sets/{}/rules
+  GET /api/v1/serials
+  GET /api/v1/work-order-operations/{}/completions
+  GET /internal/deps
+  GET /openapi.json
+  PATCH /api/v1/boms/{}
+  PATCH /api/v1/estimated-landed-cost-templates/{}
+  PATCH /api/v1/inventory-adjustments/{}
+  PATCH /api/v1/inventory-transfers
+  PATCH /api/v1/inventory-transfers/{}
+  PATCH /api/v1/inventory-worksheets
+  PATCH /api/v1/inventory-worksheets/{}
+  PATCH /api/v1/quality/inspection-plans
+  PATCH /api/v1/quality/inspection-queues
+  PATCH /api/v1/quality/inspection-triggers
+  PATCH /api/v1/routing-step-charges/{}
+  PATCH /api/v1/transfer-orders
+  PATCH /api/v1/transfer-orders/{}
+  PATCH /api/v1/warranty/repair-orders
+  PATCH /api/v1/work-order-components/{}
+  PATCH /api/v1/work-order-operations/{}
+  POST /api/v1/admin/users
+  POST /api/v1/assembly-builds/{}/unbuild
+  POST /api/v1/cogs-adjustments/{}
+  POST /api/v1/cost-revaluations/approve
+  POST /api/v1/cost-revaluations/v1/cost-revaluations/{}/submit
+  POST /api/v1/cost-revaluations/{}/v1/cost-revaluations/{}/submit
+  POST /api/v1/costs/recalculations
+  POST /api/v1/inventory-transfers/post
+  POST /api/v1/inventory-transfers/reverse
+  POST /api/v1/inventory-transfers/v1/inventory-transfers/{}/submit
+  POST /api/v1/inventory-transfers/void
+  POST /api/v1/inventory-transfers/{}/v1/inventory-transfers/{}/submit
+  POST /api/v1/inventory/distributions/{}/approve
+  POST /api/v1/landed-costs/{}/allocations/approve
+  POST /api/v1/landed-costs/{}/allocations/v1/landed-costs/{}/submit
+  POST /api/v1/location-costing-groups/{}/inactivate
+  POST /api/v1/wip-transactions
+  POST /api/v1/wip-transactions/{}/post
+  POST /api/v1/work-orders/mass-create
+  POST /internal/outbox/replay
+  PUT /internal/finance/exchange-rates
+  PUT /internal/finance/fiscal-periods
+  PUT /internal/order-boundary/demand-doubles
+--- live smoke ---
+/healthz 200
+/api/v1/auth/providers 200
+/api/v1/reports 401
+/api/v1/admin/permissions 401

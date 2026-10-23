@@ -1,0 +1,81 @@
+=== 16 FS exit evidence ===
+FS-00 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS00-EXIT/attempt-3.log exists= True
+FS-01 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS01-EXIT/attempt.log exists= True
+FS-02 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS02-EXIT/attempt.log exists= True
+FS-03 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS03-EXIT/attempt.log exists= True
+FS-04 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS04-EXIT/attempt.log exists= True
+FS-05 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS05-EXIT/attempt.log exists= True
+FS-06 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS06-EXIT/attempt.log exists= True
+FS-07 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS07-EXIT/attempt.log exists= True
+FS-08 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS08-EXIT/attempt.log exists= True
+FS-09 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS-09-EXIT/attempt.log exists= True
+FS-10 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS-10-EXIT/attempt.log exists= True
+FS-11 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS-11-EXIT/attempt.log exists= True
+FS-12 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS-12-EXIT/attempt.log exists= True
+FS-13 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS-13-EXIT/attempt.log exists= True
+FS-14 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS-14-EXIT/attempt.log exists= True
+FS-15 status= verified evidence= /Users/jokubo/Documents/deepseek-harness/default-workspace/inventory-platform/verification/evidence/FS-15-EXIT/attempt.log exists= True
+FS-09-EXIT attempt.log bytes= 2143 non_zero_rc_lines= 0 has_FAILED= False
+FS-10-EXIT attempt.log bytes= 1319 non_zero_rc_lines= 0 has_FAILED= False
+FS-11-EXIT attempt.log bytes= 1299 non_zero_rc_lines= 0 has_FAILED= False
+FS-12-EXIT attempt.log bytes= 1254 non_zero_rc_lines= 0 has_FAILED= False
+FS-13-EXIT attempt.log bytes= 1270 non_zero_rc_lines= 0 has_FAILED= False
+FS-14-EXIT attempt.log bytes= 1512 non_zero_rc_lines= 0 has_FAILED= False
+FS-15-EXIT attempt.log bytes= 1790 non_zero_rc_lines= 0 has_FAILED= False
+FS00-EXIT attempt-3.log bytes= 2682 non_zero_rc_lines= 0 has_FAILED= False
+FS01-EXIT attempt.log bytes= 1253 non_zero_rc_lines= 0 has_FAILED= False
+FS02-EXIT attempt.log bytes= 906 non_zero_rc_lines= 0 has_FAILED= False
+FS03-EXIT attempt.log bytes= 833 non_zero_rc_lines= 0 has_FAILED= False
+FS04-EXIT attempt.log bytes= 1116 non_zero_rc_lines= 0 has_FAILED= False
+FS05-EXIT attempt.log bytes= 913 non_zero_rc_lines= 0 has_FAILED= False
+FS06-EXIT attempt.log bytes= 891 non_zero_rc_lines= 0 has_FAILED= False
+FS07-EXIT attempt.log bytes= 874 non_zero_rc_lines= 0 has_FAILED= False
+FS08-EXIT attempt.log bytes= 1013 non_zero_rc_lines= 0 has_FAILED= False
+--- C3 accepted residuals ---
+## Accepted residuals
+1. Contract fragment accounting still partial for FS-01/FS-04 (per-FS builder overlay pending); provider tests green.
+2. FS-06: 2 frozen-FS-04 columns absent (`inventory_transfer_line.serial_id`, `transfer_order_line.serial_id`); 21 deferred FKs closed; 0013 down/up re-verification pending after schema-safe fix.
+3. FS-07: FS-00 declarative approval rows not wired (`approval_request_id: null`); job handlers integration-owned.
+4. FS-08: landed-cost T-26/T-27 bridge not invoked from receipts/bills yet; job handlers stubs; transition idempotency state-guard only.
+5. Settings namespace workarounds (`inventory` + `counts.`/`procurement.` prefixes) to be reconciled by future FS-00 amendment.
+6. Event payload canonical stubs TODO for some contracts; real schemas under `app/contracts/*/events/`.
+
+## Freeze policy
+--- C2/C1 residual headings ---
+verification/evidence/C1/C1-FREEZE.md:## Accepted residuals (tracked, non-breaking)
+verification/evidence/C1/C1-FREEZE.md-
+verification/evidence/C1/C1-FREEZE.md-1. **Contract-ownership accounting:** aggregate generator currently attributes some FS-01 implemented operations to the FS-00 fragment count (generator mapping limitation); FS-01 fragment itself carries the implementation-backed operations and provider contract test passes. Fix generator per-FS attribution in a later tooling pass.
+verification/evidence/C1/C1-FREEZE.md-2. **Event payload schemas:** event registry/envelope frozen; canonical `contracts/events/*` payload stubs remain TODO for item/pricing while real payload schemas live under `app/contracts/item_master/` / `app/contracts/pricing/events/`; event types/envelope/version frozen; additive completion allowed.
+verification/evidence/C1/C1-FREEZE.md-3. **FS-01 residual gaps** (from task-55): type-migration workflow, full inactivation referent validators, custom-field EAV wiring, matrix option-in-use guard partial, UoM deactivation guards, job handlers, data-scope filtering, durable planning-values idempotency; deferred FKs intentionally nullable.
+verification/evidence/C1/C1-FREEZE.md-4. **FS-02 residual gaps:** worker wiring for `pricing.level_swap`/`purchase_price_update`, canonical event payload TODO sync, effective-dated `item_price` natural-key materialisation documented in DATA-MODEL resolution.
+verification/evidence/C1/C1-FREEZE.md-5. Lint warning `extensions.admin` pre-existing FS-14 plan item.
+verification/evidence/C1/C1-FREEZE.md-
+verification/evidence/C1/C1-FREEZE.md-## Freeze policy
+verification/evidence/C1/C1-FREEZE.md-
+verification/evidence/C1/C1-FREEZE.md-FS-01/FS-02 provided contracts are additive-only within major versions (`item.master@1.0.0`,
+--
+verification/evidence/C2/C2-FREEZE.md:## Accepted residuals (tracked, additive-completable)
+verification/evidence/C2/C2-FREEZE.md-
+verification/evidence/C2/C2-FREEZE.md-1. Contract-fragment accounting: FS-01/FS-04 aggregate fragments remain partially skeleton because no per-FS builder overlay yet; their implementation-backed fragments + provider contract tests are green (`app/contracts/item_master`, `app/contracts/inventory_ledger`). Tooling follow-up, not a route/scope break.
+verification/evidence/C2/C2-FREEZE.md-2. FS-04 partitioning deviation (regular tables for transaction/line/detail; partition maintenance pending), simplified approval/flag/data-scope enforcement, inline import rows, serial/lot/dependent reversal checks pending.
+verification/evidence/C2/C2-FREEZE.md-3. FS-05 API-driven posting for T-24/T-26/T-27 transitions uses ledger PostingPort path (authoritative); document lifecycle endpoints emit events. LOT method supported by engine but FS-01 costing_method CHECK excludes LOT (cross-doc item to resolve).
+verification/evidence/C2/C2-FREEZE.md-4. FS-03 stock-coupled guards degrade to warnings until FS-04 strict triggers; worker handler wiring for bootstrap jobs pending.
+verification/evidence/C2/C2-FREEZE.md-5. Event payload schemas: registry/envelope frozen; canonical payload stubs remain TODO for some contracts while real schemas live under `app/contracts/*/events/`; additive completion allowed.
+verification/evidence/C2/C2-FREEZE.md-6. Flags `traceability.registry.enabled`, `inventory.ledger.enabled`, `costing.engine.enabled` deploy-dark; tenant enablement is a deployment action.
+verification/evidence/C2/C2-FREEZE.md-
+verification/evidence/C2/C2-FREEZE.md-## Freeze policy
+verification/evidence/C2/C2-FREEZE.md-
+--- event canonical TODO stubs ---
+x-todo_files=     192
+--- FS-15 V-21 fallback ---
+v_available_to_build fallback: True
+--- reporting scopes ---
+catalogue reporting scopes: ['reporting.cost.view', 'reporting.export', 'reporting.read']
+--- job handler wiring search ---
+app/contracts/reporting/contract.py
+app/tests/contracts/test_fs15_readmodel_contracts.py
+app/modules/reporting/service.py
+app/modules/reporting/tests/test_reporting_catalogue.py
+app/modules/reporting/views.py
+--- settings namespace workarounds ---
+verification/evidence/C3/C3-FREEZE.md:29:5. Settings namespace workarounds (`inventory` + `counts.`/`procurement.` prefixes) to be reconciled by future FS-00 amendment.

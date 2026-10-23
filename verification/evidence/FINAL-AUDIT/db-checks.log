@@ -1,0 +1,15 @@
+=== DB/schema checks ===
+head: 0030_rls_grants_verify
+logical base tables (excl public alembic_version; incl partitioned parents): 373
+non-partition tables: 281
+partitioned parents: ['audit_event', 'cost_layer_consumption', 'cost_ledger_entry', 'demand_history', 'outbox_event', 'serial_number_history']
+reporting plain views: 16
+reporting materialized views: 5
+RLS tables: 280
+RLS policies: 569
+append-only triggers: 76
+unvalidated FKs: 0
+schemas: ['consigned', 'costing', 'counts', 'extensions', 'inventory_ledger', 'item_master', 'manufacturing', 'platform', 'pricing', 'procurement', 'quality', 'replenishment', 'reporting', 'traceability', 'wms']
+--- migration chain guard ---
+  revisions: 30 (0001_platform_core, 0002_platform_security, 0003_platform_events, 0004_item_master, 0005_item_master_uom, 0006_pricing, 0007_traceability_registry, 0008_ledger_core, 0009_ledger_commitment_guards, 0010_ledger_balances, 0011_costing, 0012_costing_standard, 0013_numbered_inventory, 0014_counts, 0015_procurement_vendors, 0016_procurement_ordering, 0017_procurement_billing, 0018_manufacturing_master, 0019_manufacturing_routing, 0020_manufacturing_execution, 0021_planning, 0022_planning_atp, 0023_wms_setup, 0024_wms_inbound, 0025_wms_execution, 0026_quality, 0027_consigned, 0028_extensions, 0029_reporting_views, 0030_rls_grants_verify)
+RESULT: OK

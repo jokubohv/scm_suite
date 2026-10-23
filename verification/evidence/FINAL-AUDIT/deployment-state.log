@@ -1,0 +1,35 @@
+=== deployment-state ===
+sets: 16
+FS-00 verified {'order.demand': '0.1.0', 'order.supply': '0.1.0', 'platform.core': '1.0.0', 'platform.events': '1.0.0', 'platform.finance': '1.0.0'} EVIDENCE_EXISTS
+FS-01 verified {'item.master': '1.0.0'} EVIDENCE_EXISTS
+FS-02 verified {'pricing.engine': '1.0.0'} EVIDENCE_EXISTS
+FS-03 verified {'traceability.registry': '1.0.0'} EVIDENCE_EXISTS
+FS-04 verified {'inventory.balances': '1.0.0', 'inventory.ledger': '1.0.0'} EVIDENCE_EXISTS
+FS-05 verified {'costing.engine': '1.0.0'} EVIDENCE_EXISTS
+FS-06 verified {'traceability.numbered': '1.0.0'} EVIDENCE_EXISTS
+FS-07 verified {'counts.engine': '1.0.0'} EVIDENCE_EXISTS
+FS-08 verified {'procurement.p2p': '1.0.0'} EVIDENCE_EXISTS
+FS-09 verified {'manufacturing.execution': '1.1.0'} EVIDENCE_EXISTS
+FS-10 verified {'replenishment.planning': '1.0.0'} EVIDENCE_EXISTS
+FS-11 verified {'wms.execution': '1.0.0'} EVIDENCE_EXISTS
+FS-12 verified {'quality.management': '1.0.0'} EVIDENCE_EXISTS
+FS-13 verified {'consigned.inventory': '1.0.0'} EVIDENCE_EXISTS
+FS-14 verified {'extensions.registry': '1.0.0'} EVIDENCE_EXISTS
+FS-15 verified {'reporting.readmodels': '1.0.0'} EVIDENCE_EXISTS
+--- check-env ---
+ENTRY GATE PASS for FS-00 (phase 1, wave 0A) against state file deployment-state.dev.json: 0/0 dependency contract(s) verified
+ENTRY GATE PASS for FS-01 (phase 1, wave 0B) against state file deployment-state.dev.json: 2/2 dependency contract(s) verified
+ENTRY GATE PASS for FS-02 (phase 1, wave 0B) against state file deployment-state.dev.json: 3/3 dependency contract(s) verified
+ENTRY GATE PASS for FS-03 (phase 1, wave 0C) against state file deployment-state.dev.json: 3/3 dependency contract(s) verified
+ENTRY GATE PASS for FS-04 (phase 1, wave 0C) against state file deployment-state.dev.json: 7/7 dependency contract(s) verified
+ENTRY GATE PASS for FS-05 (phase 1, wave 0C) against state file deployment-state.dev.json: 6/6 dependency contract(s) verified
+ENTRY GATE PASS for FS-06 (phase 1, wave 1A) against state file deployment-state.dev.json: 6/6 dependency contract(s) verified
+ENTRY GATE PASS for FS-07 (phase 1, wave 1A) against state file deployment-state.dev.json: 8/8 dependency contract(s) verified
+ENTRY GATE PASS for FS-08 (phase 1, wave 1B) against state file deployment-state.dev.json: 9/9 dependency contract(s) verified
+ENTRY GATE PASS for FS-09 (phase 1, wave 1C) against state file deployment-state.dev.json: 11/11 dependency contract(s) verified
+ENTRY GATE PASS for FS-10 (phase 1, wave 1D) against state file deployment-state.dev.json: 11/11 dependency contract(s) verified
+ENTRY GATE PASS for FS-11 (phase 1, wave 1E) against state file deployment-state.dev.json: 11/11 dependency contract(s) verified
+ENTRY GATE PASS for FS-12 (phase 1, wave 1F) against state file deployment-state.dev.json: 8/8 dependency contract(s) verified
+ENTRY GATE PASS for FS-13 (phase 1, wave 1F) against state file deployment-state.dev.json: 9/9 dependency contract(s) verified
+ENTRY GATE PASS for FS-14 (phase 1, wave 1F) against state file deployment-state.dev.json: 5/5 dependency contract(s) verified
+ENTRY GATE PASS for FS-15 (phase 1, wave 2) against state file deployment-state.dev.json: 17/17 dependency contract(s) verified

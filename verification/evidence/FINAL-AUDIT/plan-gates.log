@@ -1,0 +1,26 @@
+=== plan gates ===
+--- tools/feature_sets.py validate
+VALIDATE OK: 16 feature sets, 116 dependency edges (86 unique FS pairs), 21 contracts, 10 waves, phases=[1]
+  ids unique, deps resolve, no self-deps, DAG acyclic, phase/wave monotonic, semver ranges satisfiable
+  warnings: 0
+rc=0
+--- tools/feature_sets.py permissions
+PERMISSIONS OK: 255 scopes (241 assignable, 13 service-only, 1 platform-only, 18 requires-approval, 1 alias(es)); 7 role templates; 14 SoD pairs; 6 global rules
+  allowlists: public=9, self-service=6; route-guard test: app/tests/security/test_route_scope_coverage.py
+  spec reconciliation: 16 specs, 791 endpoint rows scanned, 188 catalogue scope references, 0 unknown, 67 unreferenced warning(s)
+rc=0
+--- tools/feature_sets.py coverage
+COVERAGE OK: 1348/1348 catalog topics accounted (iri=412, mpw=936); 769 in-scope + 579 deferred; 0 missing, 0 extra, 0 duplicates
+  dispositions: DEFERRED-ANALYTICS=46, DEFERRED-INTEGRATION=156, DEFERRED-MOBILE=126, DEFERRED-SUITEAPP=190, DEFERRED-UI=61, FS-00=4, FS-01=57, FS-02=50, FS-03=14, FS-04=42, FS-05=88, FS-06=24, FS-07=16, FS-08=116, FS-09=160, FS-10=52, FS-11=89, FS-12=16, FS-13=9, FS-14=16, FS-15=16
+  every feature set owns >= 1 topic; EXCLUDED-SCM-MOBILE=0; totals consistent
+rc=0
+--- tools/feature_sets.py deploy-order --phase 1
+Rule: within a wave deploy rows top-to-bottom; a wave closes only when every set is `verified`.
+Entry gate command form: python tools/feature_sets.py check-env --set FS-XX --env $ENV
+Record command form:       python tools/feature_sets.py record --set FS-XX --env $ENV --status verified --evidence PATH
+rc=0
+--- tools/check_parallel_plan.py
+PARALLEL PLAN OK: plan_version=1.5.0 tasks=22 scaffold=7 fs_cards=15 sets_covered=16/16 migrations=30 phases=6 freezes=7
+  deployment order remains: FS-00 -> FS-01 -> FS-02 -> FS-03 -> FS-04 -> FS-05 -> FS-06 -> FS-07 -> FS-08 -> FS-09 -> FS-10 -> FS-11 -> FS-12 -> FS-13 -> FS-14 -> FS-15
+  wide-build concurrency: B4 max 8 builders
+rc=0
