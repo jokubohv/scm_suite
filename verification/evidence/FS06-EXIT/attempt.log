@@ -1,0 +1,16 @@
+== FS-06 exit gate 2026-10-23T15:05:32Z ==
+-- entry
+ENTRY GATE PASS for FS-06 (phase 1, wave 1A) against state file deployment-state.dev.json: 6/6 dependency contract(s) verified
+  note: FS-06 has no deployment record yet in this environment
+-- migration
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+---- pytest app/tests/integration/traceability/numbered -q
+RC=0
+......                                                                   [100%]
+---- pytest app/tests/contracts/test_fs06_provider_contract.py -q
+RC=0
+.....                                                                    [100%]
+---- pytest app/tests/invariants/test_serial_projection_matches_history.py app/tests/invariants/test_deferred_fk_backfill.py -q
+RC=0
+........                                                                 [100%]

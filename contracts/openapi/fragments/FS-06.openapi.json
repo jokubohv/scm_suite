@@ -11,6 +11,10 @@
       }
     ],
     "x-feature-set": "FS-06",
+    "x-implementation-status": "implementation-backed",
+    "x-implemented-additions": 7,
+    "x-implemented-operations": 14,
+    "x-implemented-overrides": 7,
     "x-status": "skeleton",
     "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
     "x-wave": "1A"
@@ -89,25 +93,165 @@
         "x-todo": "TODO(S0-04): implement handler + request/response schemas."
       }
     },
-    "/api/v1/lots": {
+    "/api/v1/items/{item_id}/lots": {
       "get": {
-        "operationId": "fs06_get_api-v1-lots",
+        "operationId": "fs06_get_api_v1_items_item_id_lots",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "item_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Item Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lot_number",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lot Number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expiry_before",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expiry Before"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response List Item Lots Api V1 Items  Item Id  Lots Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Search/lots list",
+        "summary": "List Item Lots",
         "tags": [
           "FS-06",
           "traceability.numbered"
@@ -115,33 +259,190 @@
         "x-contract": [
           "traceability.numbered"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-06",
-        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
-        "x-original-path": "/v1/lots",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.lot.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      },
-      "post": {
-        "operationId": "fs06_post_api-v1-lots",
+        "x-skeleton": false
+      }
+    },
+    "/api/v1/items/{item_id}/serials": {
+      "get": {
+        "operationId": "fs06_get_api_v1_items_item_id_serials",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "item_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Item Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Location Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "customer_ref",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Customer Ref"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response List Item Serials Api V1 Items  Item Id  Serials Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Register lot master",
+        "summary": "List Item Serials",
         "tags": [
           "FS-06",
           "traceability.numbered"
@@ -149,15 +450,401 @@
         "x-contract": [
           "traceability.numbered"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-06",
-        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/lots",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": false
+      }
+    },
+    "/api/v1/lots": {
+      "get": {
+        "operationId": "fs06_get_api_v1_lots",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "item_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Item Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lot_number",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Lot Number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expiry_before",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expiry Before"
+            }
+          },
+          {
+            "in": "query",
+            "name": "active",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Active"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response List Lots Api V1 Lots Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Lots",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-contract-version": "1.0.0",
+        "x-feature-set": "FS-06",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "inventory.lot.read"
+        ],
+        "x-skeleton": false
+      },
+      "post": {
+        "operationId": "fs06_post_api_v1_lots",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "cost_basis": {
+                    "anyOf": [
+                      {
+                        "pattern": "^\\d+(\\.\\d+)?$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Cost Basis"
+                  },
+                  "expiry_date": {
+                    "anyOf": [
+                      {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Expiry Date"
+                  },
+                  "item_id": {
+                    "format": "uuid",
+                    "title": "Item Id",
+                    "type": "string"
+                  },
+                  "lot_number": {
+                    "title": "Lot Number",
+                    "type": "string"
+                  },
+                  "manufacture_date": {
+                    "anyOf": [
+                      {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Manufacture Date"
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Notes"
+                  }
+                },
+                "required": [
+                  "item_id",
+                  "lot_number"
+                ],
+                "title": "LotCreate",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Create Lot Api V1 Lots Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Lot",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-contract-version": "1.0.0",
+        "x-feature-set": "FS-06",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.lot.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/lots/{id}": {
@@ -267,25 +954,119 @@
         "x-todo": "TODO(S0-04): implement handler + request/response schemas."
       }
     },
-    "/api/v1/numbered-inventory/deferred-fks/status": {
+    "/api/v1/lots/{lot_id}": {
       "get": {
-        "operationId": "fs06_get_api-v1-numbered-inventory-deferred-fks-status",
+        "operationId": "fs06_get_api_v1_lots_lot_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lot_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Lot Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_positions",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Positions",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Lot Api V1 Lots  Lot Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Migration/ops orphan check",
+        "summary": "Get Lot",
         "tags": [
           "FS-06",
           "traceability.numbered"
@@ -293,35 +1074,639 @@
         "x-contract": [
           "traceability.numbered"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-06",
-        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
-        "x-original-path": "/v1/numbered-inventory/deferred-fks/status",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "inventory.lot.read"
+        ],
+        "x-skeleton": false
+      },
+      "patch": {
+        "operationId": "fs06_patch_api_v1_lots_lot_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lot_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Lot Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "If-Match",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "If-Match"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "cost_basis": {
+                    "anyOf": [
+                      {
+                        "pattern": "^\\d+(\\.\\d+)?$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Cost Basis"
+                  },
+                  "expiry_date": {
+                    "anyOf": [
+                      {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Expiry Date"
+                  },
+                  "manufacture_date": {
+                    "anyOf": [
+                      {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Manufacture Date"
+                  },
+                  "notes": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Notes"
+                  }
+                },
+                "title": "LotPatch",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Patch Lot Api V1 Lots  Lot Id  Patch",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch Lot",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-contract-version": "1.0.0",
+        "x-feature-set": "FS-06",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "inventory.lot.write"
+        ],
+        "x-skeleton": false
+      }
+    },
+    "/api/v1/lots/{lot_id}/inactivate": {
+      "post": {
+        "operationId": "fs06_post_api_v1_lots_lot_id_inactivate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lot_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Lot Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "reason": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Reason"
+                  }
+                },
+                "title": "InactivateIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Inactivate Lot Api V1 Lots  Lot Id  Inactivate Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Inactivate Lot",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-contract-version": "1.0.0",
+        "x-feature-set": "FS-06",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "inventory.lot.inactivate"
+        ],
+        "x-skeleton": false
+      }
+    },
+    "/api/v1/numbered-inventory/deferred-fks/status": {
+      "get": {
+        "operationId": "fs06_get_api_v1_numbered-inventory_deferred-fks_status",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Deferred Fks Status Api V1 Numbered Inventory Deferred Fks Status Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Deferred Fks Status",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-contract-version": "1.0.0",
+        "x-feature-set": "FS-06",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.numbered.reconcile"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/numbered-inventory/fefo-plan": {
       "post": {
-        "operationId": "fs06_post_api-v1-numbered-inventory-fefo-plan",
+        "operationId": "fs06_post_api_v1_numbered-inventory_fefo-plan",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "as_of_date": {
+                    "anyOf": [
+                      {
+                        "format": "date",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "As Of Date"
+                  },
+                  "inventory_status_id": {
+                    "anyOf": [
+                      {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Inventory Status Id"
+                  },
+                  "item_id": {
+                    "format": "uuid",
+                    "title": "Item Id",
+                    "type": "string"
+                  },
+                  "location_id": {
+                    "anyOf": [
+                      {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Location Id"
+                  },
+                  "ownership": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Ownership"
+                  },
+                  "qty": {
+                    "pattern": "^\\d+(\\.\\d+)?$",
+                    "title": "Qty",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "item_id",
+                  "qty"
+                ],
+                "title": "FefoPlanIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Fefo Plan Api V1 Numbered Inventory Fefo Plan Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Read-only FEFO recommendation",
+        "summary": "Fefo Plan",
         "tags": [
           "FS-06",
           "traceability.numbered"
@@ -329,36 +1714,214 @@
         "x-contract": [
           "traceability.numbered"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-06",
-        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
-        "x-idempotency": "Not required (read-only, no writes)",
-        "x-original-path": "/v1/numbered-inventory/fefo-plan",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.lot.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/numbered-inventory/search": {
       "get": {
-        "operationId": "fs06_get_api-v1-numbered-inventory-search",
+        "operationId": "fs06_get_api_v1_numbered-inventory_search",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "item_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Item Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Location Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expiry_before",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expiry Before"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Numbered Search Api V1 Numbered Inventory Search Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Unified traceability search",
+        "summary": "Numbered Search",
         "tags": [
           "FS-06",
           "traceability.numbered"
@@ -366,35 +1929,141 @@
         "x-contract": [
           "traceability.numbered"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-06",
-        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
-        "x-original-path": "/v1/numbered-inventory/search",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.serial.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/numbered-inventory/validate": {
       "post": {
-        "operationId": "fs06_post_api-v1-numbered-inventory-validate",
+        "operationId": "fs06_post_api_v1_numbered-inventory_validate",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "item_id": {
+                    "format": "uuid",
+                    "title": "Item Id",
+                    "type": "string"
+                  },
+                  "line": {
+                    "additionalProperties": true,
+                    "title": "Line",
+                    "type": "object"
+                  },
+                  "transaction_type": {
+                    "title": "Transaction Type",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "item_id",
+                  "transaction_type",
+                  "line"
+                ],
+                "title": "ValidateIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Validate Numbered Posting Api V1 Numbered Inventory Validate Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Dry-run validation for posting callers",
+        "summary": "Validate Numbered Posting",
         "tags": [
           "FS-06",
           "traceability.numbered"
@@ -402,14 +2071,13 @@
         "x-contract": [
           "traceability.numbered"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-06",
-        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
-        "x-original-path": "/v1/numbered-inventory/validate",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.numbered.validate"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/serials": {
@@ -448,23 +2116,161 @@
         "x-todo": "TODO(S0-04): implement handler + request/response schemas."
       },
       "post": {
-        "operationId": "fs06_post_api-v1-serials",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
+        "operationId": "fs06_post_api_v1_serials",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
           },
-          "default": {
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "customer_ref": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Customer Ref"
+                  },
+                  "item_id": {
+                    "format": "uuid",
+                    "title": "Item Id",
+                    "type": "string"
+                  },
+                  "ownership": {
+                    "default": "OWNED",
+                    "title": "Ownership",
+                    "type": "string"
+                  },
+                  "serial_number": {
+                    "title": "Serial Number",
+                    "type": "string"
+                  },
+                  "specific_cost": {
+                    "anyOf": [
+                      {
+                        "pattern": "^\\d+(\\.\\d+)?$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Specific Cost"
+                  }
+                },
+                "required": [
+                  "item_id",
+                  "serial_number"
+                ],
+                "title": "SerialRegister",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Register Serial Api V1 Serials Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Register serial identity before first receipt (`EXT`; documented \"add new serial numbers\" via adjustment uses T-07 instead)",
+        "summary": "Register Serial",
         "tags": [
           "FS-06",
           "traceability.numbered"
@@ -472,15 +2278,13 @@
         "x-contract": [
           "traceability.numbered"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-06",
-        "x-fragment": "contracts/openapi/fragments/FS-06.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/serials",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.serial.register"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/serials/{id}": {
@@ -553,6 +2357,325 @@
         ],
         "x-skeleton": true,
         "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/serials/{serial_id}": {
+      "get": {
+        "operationId": "fs06_get_api_v1_serials_serial_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serial_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Serial Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_history",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include History",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Serial Api V1 Serials  Serial Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Serial",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-contract-version": "1.0.0",
+        "x-feature-set": "FS-06",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": false
+      }
+    },
+    "/api/v1/serials/{serial_id}/history": {
+      "get": {
+        "operationId": "fs06_get_api_v1_serials_serial_id_history",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "serial_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Serial Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "event",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Event"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Serial History Api V1 Serials  Serial Id  History Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Serial History",
+        "tags": [
+          "FS-06",
+          "traceability.numbered"
+        ],
+        "x-contract": [
+          "traceability.numbered"
+        ],
+        "x-contract-version": "1.0.0",
+        "x-feature-set": "FS-06",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "inventory.serial.read"
+        ],
+        "x-skeleton": false
       }
     }
   },

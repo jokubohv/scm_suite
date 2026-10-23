@@ -99,7 +99,9 @@ async def test_sequential_allocation_per_tenant_and_doc_type(db_session) -> None
 
     rows = (
         await db_session.execute(
-            select(number_sequence.c.doc_type, number_sequence.c.tenant_id, number_sequence.c.next_value)
+            select(number_sequence.c.doc_type, number_sequence.c.tenant_id, number_sequence.c.next_value).where(
+                number_sequence.c.tenant_id.in_([tenant_id, other_tenant])
+            )
         )
     ).all()
     assert len(rows) == 3

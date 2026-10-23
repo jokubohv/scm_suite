@@ -42,6 +42,8 @@ This file is the shared briefing for each window.
 
 | 3 | 2026-10-23 10:18 | in progress | **0B/0C deployed**: FS-01/02 verified (0B), FS-03/04/05 verified (0C); C1/C2 freezes recorded; B4a opened (FS-06/07/08 build) | contract lint/generate/route-scope PASS; full suite green (900+ tests); stack 7/7; heads 0012; deployment-state has FS-00..05 verified | B4a FS-06/07/08 implementation; then 1A/1B deploy + C3 freeze; B4b (FS-09..14) + FS-15 after |
 
+| 4 | 2026-10-23 11:00 | in progress | **B4a deployed/verified**: FS-06/FS-07 (1A), FS-08 (1B) verified; C3 freeze recorded; B4b opened (FS-09…FS-15 build, migration slots 0018–0030 serialized) | full suite green (1000+ tests); contract lint/generate PASS; stack 7/7; head 0017; deployment-state FS-00..08 verified | B4b agents: FS-09/10/11/12/13+14/15; then deploy 1C→1F/2, C4/C5 freeze, final verification |
+
 
 ## Suggested agent assignment (reuse inactive teammates; 8-member cap)
 

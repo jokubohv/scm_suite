@@ -17,7 +17,7 @@ edit the specs (Lead-owned) or your builder extension in `app/contracts/<dir>/` 
 | `../app/contracts/<dir>/openapi.fragment.json` | Builder-editable OpenAPI paths fragment (merged by `generate`). |
 
 Current plan version: **1.5.0**. Feature sets: **16**; contracts: **21**;
-paths: **819**; operations: **1062**; event types: **159**.
+paths: **894**; operations: **1149**; event types: **159**.
 All numbers are regenerated — never copy them into docs.
 
 ## Commands (stdlib only, no network, deterministic)

@@ -148,7 +148,7 @@ def build_platform_fragment() -> dict[str, Any]:
     paths: dict[str, Any] = {}
     missing_meta: list[str] = []
     skipped_unscoped: list[str] = []
-    non_platform_tags = {"item-master", "pricing", "traceability", "inventory-ledger", "costing"}
+    non_platform_tags = {"item-master", "pricing", "traceability", "traceability-numbered", "inventory-ledger", "costing", "counts", "procurement"}
     for raw_path, item in (spec.get("paths") or {}).items():
         for method, operation in item.items():
             if method not in METHODS:
