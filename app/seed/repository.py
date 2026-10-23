@@ -56,7 +56,7 @@ UpsertOutcome = Literal["inserted", "updated", "unchanged"]
 TableName = str
 RowKey = tuple[str, ...]
 
-DEFAULT_DATABASE_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:25432/inventory"
+DEFAULT_DATABASE_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory"
 
 #: Baseline ISO-4217 currencies seeded by the platform migrations (migrations 0001 retain these 10 rows).
 #: The seed payload carries a wider initial ISO set for future extension; FS-00 only maintains the

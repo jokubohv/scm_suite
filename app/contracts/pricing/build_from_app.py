@@ -26,7 +26,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 os.environ.setdefault("ENV", "test")
-os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://inventory:inventory-dev-password@localhost:25432/inventory")
+os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory")
 
 METHODS = frozenset({"get", "post", "put", "patch", "delete"})
 PLACEHOLDER_DESCRIPTIONS = {"", "Successful Response", "Validation Error"}

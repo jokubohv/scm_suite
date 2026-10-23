@@ -1,0 +1,20 @@
+== FS-01 exit gate 2026-10-23T14:16:01Z ==
+-- entry check-env
+ENTRY GATE PASS for FS-01 (phase 1, wave 0B) against state file deployment-state.dev.json: 2/2 dependency contract(s) verified
+  note: FS-01 has no deployment record yet in this environment
+-- migration
+ Container inventory-platform-redis-1  Started
+Error response from daemon: driver failed programming external connectivity on endpoint inventory-platform-postgres-1 (31cb051d8c60ff8580db7889bcfc9db452d28d55a98e2fddfefed6752a41cb71): Bind for 0.0.0.0:5432 failed: port is already allocated
+---- pytest app/tests/integration/item_master -q
+RC=0
+........                                                                 [100%]
+---- pytest app/tests/contracts/test_fs01_provider_contract.py -q
+RC=0
+....                                                                     [100%]
+---- pytest app/tests/invariants/test_uom_conversion.py app/tests/invariants/test_item_taxonomy.py -q
+RC=0
+...........                                                              [100%]
+-- migration (project=inv-s0-gate; local isolation override)
+ Container inv-s0-gate-dex-1  Started
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.

@@ -16,7 +16,7 @@ import pytest
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
-DEFAULT_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:25432/inventory"
+DEFAULT_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory"
 
 
 def resolve_live_database_url() -> str:

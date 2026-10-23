@@ -34,7 +34,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 os.environ.setdefault("ENV", "test")
-os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://inventory:inventory-dev-password@localhost:25432/inventory")
+os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory")
 
 METHODS = frozenset({"get", "post", "put", "patch", "delete"})
 OPERATIONAL_EXEMPT_PATHS = frozenset({"/healthz", "/readyz"})
@@ -264,8 +264,8 @@ def main(argv: list[str] | None = None) -> int:
             path.write_text(text, encoding="utf-8")
     if stale:
         print("stale builder fragments (run app/contracts/platform/build_from_app.py):")
-        for path in stale:
-            print(f"  {path}")
+        for stale_path in stale:
+            print(f"  {stale_path}")
         return 1
     if not args.check:
         print(f"wrote {len(outputs)} builder fragments")

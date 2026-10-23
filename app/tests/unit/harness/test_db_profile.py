@@ -143,11 +143,11 @@ def test_container_host_port_parses_docker_port_output(monkeypatch) -> None:
 
     class _Result:
         returncode = 0
-        stdout = "0.0.0.0:25432\n[::]:25432\n"
+        stdout = "0.0.0.0:5432\n[::]:5432\n"
         stderr = ""
 
     monkeypatch.setattr(_subprocess, "run", lambda *args, **kwargs: _Result())
-    assert _container_host_port("cid", "5432", 5) == "25432"
+    assert _container_host_port("cid", "5432", 5) == "5432"
 
     class _Empty:
         returncode = 1

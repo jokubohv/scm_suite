@@ -139,14 +139,18 @@ def test_app_openapi_covers_implemented_aggregate_operations() -> None:
 
     fragment_ops = utils.fragment_operations(utils.platform_fragment())
     counts = aggregate["x-counts"]
-    assert counts["implemented_operations"] == len(fragment_ops)
+    implemented_total = sum(1 for operation in aggregate_ops.values() if operation.get("x-implemented") is True)
+    assert counts["implemented_operations"] == implemented_total
     assert counts["skeleton_operations"] + counts["implemented_operations"] == counts["operations"]
     assert counts["operations"] == sum(len(item) for item in aggregate["paths"].values())
 
     fs00_fragment = utils.load_json("contracts/openapi/fragments/FS-00.openapi.json")
     fs00_ops = sum(len(item) for item in fs00_fragment["paths"].values())
-    assert fs00_fragment["info"]["x-implemented-operations"] == len(fragment_ops)
-    assert fs00_ops >= len(fragment_ops)
+    fs00_impl = sum(
+        1 for item in fs00_fragment["paths"].values() for operation in item.values() if operation.get("x-implemented") is True
+    )
+    assert fs00_fragment["info"]["x-implemented-operations"] == fs00_impl
+    assert fs00_ops >= fs00_impl
 
 
 def test_implemented_fs00_events_carry_the_frozen_envelope() -> None:

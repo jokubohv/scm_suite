@@ -59,7 +59,7 @@ class RouteRow:
 def _load_app() -> Any:
     os.environ.setdefault("ENV", "test")
     os.environ.setdefault(
-        "DATABASE_URL", "postgresql+asyncpg://inventory:inventory-dev-password@localhost:25432/inventory"
+        "DATABASE_URL", "postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory"
     )
     from app.core.config import get_settings
 

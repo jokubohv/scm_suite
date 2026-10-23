@@ -1,0 +1,17 @@
+== FS-02 exit gate 2026-10-23T14:16:23Z ==
+-- entry check-env
+ENTRY GATE PASS for FS-02 (phase 1, wave 0B) against state file deployment-state.dev.json: 3/3 dependency contract(s) verified
+  note: FS-02 has no deployment record yet in this environment
+-- migration (project=inv-s0-gate local override)
+ Container inv-s0-gate-postgres-1  Healthy
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+---- pytest app/tests/integration/pricing -q
+RC=0
+.........                                                                [100%]
+---- pytest app/tests/contracts/test_fs02_provider_contract.py -q
+RC=0
+......                                                                   [100%]
+---- pytest app/tests/invariants/test_price_resolution_order.py -q
+RC=0
+.......                                                                  [100%]

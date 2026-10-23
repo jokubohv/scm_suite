@@ -7,7 +7,7 @@ import os
 
 import pytest
 
-DEFAULT_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:25432/inventory"
+DEFAULT_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory"
 
 
 def _raw_url() -> str:
@@ -39,7 +39,7 @@ def test_platform_schema_present() -> None:
                 "select count(*) from pg_tables where schemaname='platform' and tablename not like '%\\_20%'"
             )
             assert tables == 34, tables
-            assert head in {"0002_platform_security", "0003_platform_events"}
+            assert head.startswith(("0002_platform_security", "0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing"))
         finally:
             await conn.close()
     _run(check())

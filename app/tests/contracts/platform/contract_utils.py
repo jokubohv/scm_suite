@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_DATABASE_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:25432/inventory"
+DEFAULT_DATABASE_URL = "postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory"
 HTTP_METHODS = ("GET", "POST", "PUT", "PATCH", "DELETE")
 
 # FastAPI's own operational endpoints: mounted but not part of the business contract.
