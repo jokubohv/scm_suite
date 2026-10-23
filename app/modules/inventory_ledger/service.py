@@ -30,6 +30,26 @@ from app.modules.inventory_ledger.errors import (
 )
 
 POSTING_TYPES: tuple[str, ...] = tuple(f"T-{number:02d}" for number in range(1, 31))
+#: Posting types whose movements are value-only (qty 0, non-zero value; no inventory position effect).
+#: ARCHITECTURE posting table: T-04 vendor bill, T-05 vendor credit, T-06 bill variance, T-19 WIP close,
+#: T-24 standard revaluation, T-25 COGS adjustment, T-26 landed cost, T-27 estimated landed cost,
+#: T-28 drop-ship (COGS/AP value only, never on-hand).
+VALUE_ONLY_POSTING_TYPES: frozenset[str] = frozenset(
+    {"T-04", "T-05", "T-06", "T-19", "T-24", "T-25", "T-26", "T-27", "T-28"}
+)
+#: Canonical ledger `movement_type` written for each value-only posting type (the DB check allows the
+#: documented value-only movement classes; callers may pass their source-document label which we normalise).
+VALUE_ONLY_MOVEMENT_TYPE = {
+    "T-04": "COST_ONLY",
+    "T-05": "COST_ONLY",
+    "T-06": "VARIANCE",
+    "T-19": "COST_ONLY",
+    "T-24": "REVALUATION",
+    "T-25": "COGS_ADJUST",
+    "T-26": "LANDED_COST",
+    "T-27": "LANDED_COST",
+    "T-28": "DROP_SHIP",
+}
 SYSTEM_TENANT_ID = uuid.UUID("00000000-0000-0000-0000-000000000000")
 QTY_SCALE = Decimal("0.000000000001")
 QTY_ZERO = Decimal("0")
@@ -48,6 +68,15 @@ EVENT_BY_TYPE = {
     "T-20": ("inventory.adjusted",),
     "T-29": ("bin.transferred",),
     "T-30": ("inventory.status_changed", "inventory.availability.changed"),
+    "T-04": ("inventory.value.posted",),
+    "T-05": ("inventory.value.posted",),
+    "T-06": ("inventory.value.posted",),
+    "T-19": ("inventory.value.posted",),
+    "T-24": ("inventory.value.posted",),
+    "T-25": ("inventory.value.posted",),
+    "T-26": ("inventory.value.posted", "landed_cost.applied"),
+    "T-27": ("inventory.value.posted", "landed_cost.estimated"),
+    "T-28": ("inventory.value.posted", "dropship.fulfilled"),
 }
 REVERSAL_TYPE = {"T-01": "T-02", "T-02": "T-01"}
 
@@ -125,8 +154,21 @@ def validate_command(command: Mapping[str, Any]) -> dict[str, Any]:
     for index, raw in enumerate(raw_movements, start=1):
         if not isinstance(raw, Mapping):
             raise ValidationFailed(f"movement {index} must be an object")
-        qty = quantize(raw.get("qty", raw.get("qty_base")))
-        if qty == 0:
+        raw_qty = raw.get("qty", raw.get("qty_base"))
+        value_only_type = posting_type in VALUE_ONLY_POSTING_TYPES
+        qty = QTY_ZERO if raw_qty is None and value_only_type else quantize(raw_qty)
+        value_base = quantize(raw.get("value_base", raw.get("value_delta", 0)))
+        value_txn = quantize(raw.get("value_txn", raw.get("value_delta", value_base)))
+        if value_only_type:
+            if qty != 0:
+                raise ValidationFailed(
+                    f"movement {index}: posting type {posting_type} is value-only and must have qty=0"
+                )
+            if value_base == 0:
+                raise ValidationFailed(
+                    f"movement {index}: value-only posting requires a non-zero value"
+                )
+        elif qty == 0:
             raise ValidationFailed(f"movement {index} quantity must be non-zero")
         line: dict[str, Any] = {
             "line_number": index,
@@ -141,11 +183,18 @@ def validate_command(command: Mapping[str, Any]) -> dict[str, Any]:
             "qty_uom": quantize(raw.get("qty_uom", qty)),
             "conversion_factor": quantize(raw.get("conversion_factor", 1)),
             "qty_base": qty,
-            "value_base": quantize(raw.get("value_base", 0)),
-            "value_txn": quantize(raw.get("value_txn", raw.get("value_base", 0))),
+            "value_base": value_base,
+            "value_txn": value_txn,
+            "value_only": value_only_type,
             "unit_cost": quantize(raw["unit_cost"]) if raw.get("unit_cost") is not None else None,
-            "movement_type": str(raw.get("movement_type") or "ADJUSTMENT").upper(),
-            "movement_direction": str(raw.get("movement_direction") or ("IN" if qty > 0 else "OUT")).upper(),
+            "movement_type": (
+                VALUE_ONLY_MOVEMENT_TYPE.get(posting_type, "COST_ONLY")
+                if value_only_type
+                else str(raw.get("movement_type") or "ADJUSTMENT").upper()
+            ),
+            "movement_direction": (
+                "VALUE_ONLY" if value_only_type else str(raw.get("movement_direction") or ("IN" if qty > 0 else "OUT")).upper()
+            ),
             "reason_code_id": _as_uuid(raw["reason_code_id"], field="reason_code_id") if raw.get("reason_code_id") else None,
             "source_line_ref": raw.get("source_line_ref"),
             "class_ref": raw.get("class_ref"),
@@ -207,6 +256,7 @@ def validate_command(command: Mapping[str, Any]) -> dict[str, Any]:
         "negative_policy_override": command.get("negative_policy_override"),
         "allow_unallocated": bool(command.get("allow_unallocated", False)),
         "movements": movements,
+        "value_only": posting_type in VALUE_ONLY_POSTING_TYPES,
         "reversal_of_transaction_id": command.get("reversal_of_transaction_id"),
         "reversal_reason": command.get("reversal_reason"),
     }
@@ -289,8 +339,9 @@ class LedgerService:
         )
         if existing is not None:
             return await self._result(existing)
-        policy = await self._negative_policy(validated["posting_type"])
-        deltas = self._balance_delta(validated["movements"])
+        value_only = bool(validated.get("value_only"))
+        policy = NegativePolicy.ALLOW if value_only else await self._negative_policy(validated["posting_type"])
+        deltas: dict[tuple, Decimal] = {} if value_only else self._balance_delta(validated["movements"])
         # Ordered row locks; BLOCK policy rejects a resulting negative ON_HAND position.
         for position in sorted(deltas, key=lambda item: tuple(str(part) for part in item)):
             item_id, location_id, status_id, ownership, qty_class, lot_id, serial_id = position
@@ -312,7 +363,7 @@ class LedgerService:
         posting_at = utc_now()
         # FS-05 valuation (steps 8/9/13): compute/persist costing BEFORE the append-only line insert and
         # write the final value columns in the insert itself (the append-only trigger forbids line UPDATE).
-        if self.costing is not None:
+        if self.costing is not None and not value_only:
             for movement in validated["movements"]:
                 line_id = uuid.uuid4()
                 movement["_line_id"] = line_id
@@ -398,11 +449,13 @@ class LedgerService:
                     bin=detail["bin_id"], lot=detail["lot_id"], serial=detail["serial_id"], status=detail["inventory_status_id"],
                     ownership=detail["ownership"], qty=detail["qty_base"], value=detail["value_base"],
                 )
-        await self._apply_balance_deltas(validated["movements"], sequence=sequence, posting_at=posting_at)
+        if not value_only:
+            await self._apply_balance_deltas(validated["movements"], sequence=sequence, posting_at=posting_at)
         event_ids: list[str] = []
         payload = {
             "transaction_id": str(transaction_id), "ledger_sequence": sequence, "transaction_type": validated["posting_type"],
             "total_qty_base": format(total_qty, "f"), "total_value_base": format(total_value, "f"),
+            "value_only": value_only,
         }
         event_ids.append(await self._emit("inventory.balance.changed", aggregate_id=transaction_id, payload=payload, version=sequence))
         for event_type in EVENT_BY_TYPE.get(validated["posting_type"], ()):
@@ -417,6 +470,7 @@ class LedgerService:
             "source_doc_id": str(validated["source_doc_id"]) if validated["source_doc_id"] else None,
             "total_qty_base": _jsonable(total_qty),
             "total_value_base": _jsonable(total_value),
+            "value_only": value_only,
             "event_ids": event_ids,
             "warnings": [] if policy is not NegativePolicy.WARN else ["NEGATIVE_INVENTORY_WARN_POLICY"],
         }
@@ -505,6 +559,7 @@ class LedgerService:
             "source_doc_id": str(header["source_doc_id"]) if header.get("source_doc_id") else None,
             "total_qty_base": _jsonable(header["total_qty_base"]),
             "total_value_base": _jsonable(header["total_value_base"]),
+            "value_only": str(header["transaction_type"]) in VALUE_ONLY_POSTING_TYPES,
             "event_ids": [],
             "warnings": [],
             "replayed": True,
