@@ -310,6 +310,29 @@ class LedgerService:
         sequence = await self._next_sequence()
         transaction_id = uuid.uuid4()
         posting_at = utc_now()
+        # FS-05 valuation (steps 8/9/13): compute/persist costing BEFORE the append-only line insert and
+        # write the final value columns in the insert itself (the append-only trigger forbids line UPDATE).
+        if self.costing is not None:
+            for movement in validated["movements"]:
+                line_id = uuid.uuid4()
+                movement["_line_id"] = line_id
+                try:
+                    costed = await self.costing.value_line(
+                        item_id=movement["item_id"], location_id=movement["location_id"], qty=movement["qty_base"],
+                        movement_type=movement["movement_type"], transaction_date=validated["transaction_date"],
+                        transaction_id=transaction_id, line_id=line_id, lot_id=movement["lot_id"],
+                        serial_id=movement["serial_id"], unit_cost=movement["unit_cost"],
+                        value_delta=movement["value_base"] if movement["value_base"] != 0 else None,
+                        reason=validated["memo"],
+                    )
+                except Exception as exc:  # noqa: BLE001 - typed costing errors abort the posting
+                    raise ledger_error(f"costing valuation failed: {exc}", code="COSTING_ERROR", http_status=409) from exc
+                value = costed.get("value_delta")
+                if value is not None:
+                    movement["value_base"] = Decimal(str(value))
+                    movement["value_txn"] = Decimal(str(value))
+                    movement["unit_cost"] = Decimal(str(costed.get("unit_cost"))) if costed.get("unit_cost") is not None else movement["unit_cost"]
+                    movement["cost_estimated"] = bool(costed.get("estimated", False))
         total_qty = sum((movement["qty_base"] for movement in validated["movements"]), QTY_ZERO)
         total_value = sum((movement["value_base"] for movement in validated["movements"]), QTY_ZERO)
         try:
@@ -341,7 +364,7 @@ class LedgerService:
                 return await self._result(winner)
             raise IdempotencyConflict("posting key conflict") from exc
         for line in validated["movements"]:
-            line_id = uuid.uuid4()
+            line_id = line.get("_line_id") or uuid.uuid4()
             await self._exec(
                 """
                 INSERT INTO inventory_ledger.inventory_transaction_line
@@ -362,22 +385,6 @@ class LedgerService:
                 source_ref=line["source_line_ref"], class_ref=line["class_ref"], department_ref=line["department_ref"],
                 subsidiary_ref=line["subsidiary_ref"], cost_object=line["cost_object_id"], date=validated["transaction_date"],
             )
-            if self.costing is not None:
-                try:
-                    costed = await self.costing.value_line(
-                        item_id=line["item_id"], location_id=line["location_id"], qty=line["qty_base"],
-                        movement_type=line["movement_type"], transaction_date=validated["transaction_date"],
-                        transaction_id=transaction_id, line_id=line_id, lot_id=line["lot_id"], serial_id=line["serial_id"],
-                        unit_cost=line["unit_cost"], value_delta=line["value_base"] if line["value_base"] != 0 else None,
-                        reason=validated["memo"],
-                    )
-                    if costed.get("value_delta") is not None:
-                        await self._exec(
-                            "UPDATE inventory_ledger.inventory_transaction_line SET value_base = :value, value_txn = :value WHERE tenant_id = :tenant_id AND id = :id",
-                            id=line_id, value=costed["value_delta"],
-                        )
-                except Exception as exc:  # noqa: BLE001 - typed costing errors abort the posting
-                    raise ledger_error(f"costing valuation failed: {exc}", code="COSTING_ERROR", http_status=409) from exc
             for detail in line["details"]:
                 await self._exec(
                     """
