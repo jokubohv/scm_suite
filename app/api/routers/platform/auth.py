@@ -238,6 +238,13 @@ class InvitationAcceptResponse(BaseModel):
 
 
 @router.post(
+    "/api/v1/auth/invitations/{token}/accept",
+    response_model=InvitationAcceptResponse,
+    status_code=201,
+    include_in_schema=False,
+    summary="Alias of the contract invitation-accept path",
+)
+@router.post(
     "/api/v1/admin/invitations/{token}/accept",
     response_model=InvitationAcceptResponse,
     status_code=201,
