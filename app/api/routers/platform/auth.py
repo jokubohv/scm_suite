@@ -238,13 +238,6 @@ class InvitationAcceptResponse(BaseModel):
 
 
 @router.post(
-    "/api/v1/auth/invitations/{token}/accept",
-    response_model=InvitationAcceptResponse,
-    status_code=201,
-    include_in_schema=False,
-    summary="Alias of the contract invitation-accept path",
-)
-@router.post(
     "/api/v1/admin/invitations/{token}/accept",
     response_model=InvitationAcceptResponse,
     status_code=201,
@@ -704,12 +697,6 @@ async def providers(
     )
 
 
-@router.get(
-    "/api/v1/auth/me",
-    response_model=MeResponse,
-    summary="Convenience alias for /api/v1/me (contract path)",
-    include_in_schema=False,
-)
 @router.get("/api/v1/me", response_model=MeResponse, summary="Current identity, membership and effective permissions")
 async def me(
     principal: PrincipalDep,

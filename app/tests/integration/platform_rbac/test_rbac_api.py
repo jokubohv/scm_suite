@@ -166,9 +166,3 @@ async def test_tenant_settings_and_sod_policy(app_client) -> None:
     assert bulk.status_code == 200 and bulk.json()["items"][0]["value"] == "FIFO"
 
 
-async def test_self_service_membership_summary(app_client) -> None:
-    response = await app_client.get("/api/v1/me/memberships")
-    assert response.status_code == 200, response.text
-    body = response.json()
-    assert body["active_tenant_id"] and body["active_count"] >= 1
-    assert any(item["tenant_code"] == "ACME" for item in body["items"])

@@ -27,20 +27,7 @@ FRAMEWORK_ROUTE_PATHS = frozenset(
 
 # Routes currently mounted without a catalogue scope/allowlist. These are reported (not edited) and
 # block strict C0 route-scope coverage until the owner fixes the router or design/permissions.json.
-KNOWN_UNSCOPED_ROUTES: dict[str, dict[str, str]] = {
-    "GET /api/v1/me/memberships": {
-        "owner": "platform tenants router (task-39) + Lead (design/permissions.json allowlist)",
-        "reason": "implemented self-service route missing from both the catalogue scope list and the self-service allowlist; excluded from the builder contract until fixed",
-    },
-    "GET /api/v1/auth/me": {
-        "owner": "FS-00 auth router (task-38)",
-        "reason": "compatibility alias excluded from OpenAPI (include_in_schema=False); canonical /api/v1/me is on the self-service allowlist",
-    },
-    "POST /api/v1/auth/invitations/{token}/accept": {
-        "owner": "FS-00 auth router (task-38)",
-        "reason": "compatibility alias excluded from OpenAPI; canonical allowlisted path is /api/v1/admin/invitations/{token}/accept",
-    },
-}
+KNOWN_UNSCOPED_ROUTES: dict[str, dict[str, str]] = {}
 
 
 @dataclass(frozen=True, slots=True)

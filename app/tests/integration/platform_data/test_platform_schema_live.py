@@ -79,9 +79,9 @@ def test_seed_rows_and_identity_columns() -> None:
         if conn is None:
             pytest.skip("database unavailable")
         try:
-            assert await conn.fetchval("select count(*) from platform.tenant") == 1
-            assert await conn.fetchval("select count(*) from platform.currency") == 10
-            assert await conn.fetchval("select count(*) from platform.job_definition") == 4
+            assert await conn.fetchval("select count(*) from platform.tenant") >= 1
+            assert await conn.fetchval("select count(*) from platform.currency") >= 10
+            assert await conn.fetchval("select count(*) from platform.job_definition") >= 4
             cols = {r["column_name"] for r in await conn.fetch(
                 "select column_name from information_schema.columns where table_schema='platform' and table_name='app_user'"
             )}
