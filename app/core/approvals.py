@@ -30,6 +30,7 @@ from sqlalchemy import and_, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import platform as p
+from app.core.platform_events import audit_recorded, emit_platform_event
 from app.core.security.errors import SodConflict
 
 APPROVAL_DECISIONS = frozenset({"APPROVE", "REJECT", "DELEGATE", "RECALL"})
@@ -318,6 +319,11 @@ class ApprovalService:
                 diff=_json_safe(dict(diff)), source="API",
             )
         )
+        await audit_recorded(
+            self.session, tenant_id=tenant_id, event_id=str(event_id), actor_type="USER", action=action,
+            resource_type="approval_request", resource_id=request_id,
+            occurred_at=datetime.now(UTC).isoformat(),
+        )
 
     async def _outbox(self, tenant_id: str, event_type: str, request: Mapping[str, Any], data: Mapping[str, Any]) -> None:
         event_id = uuid4()
@@ -452,6 +458,20 @@ class ApprovalService:
                 "definition_id": str(chosen["id"]), "current_step": 1,
                 "amount_base": str(amount) if amount is not None else None,
             })
+        if chosen is None:
+            await emit_platform_event(
+                self.session, "document.approved", tenant_id=tenant_id, aggregate_type="approval_request",
+                aggregate_id=str(request_id),
+                payload={"document_type": document_type, "document_id": str(document_id),
+                         "approval_request_id": str(request_id)},
+            )
+        await emit_platform_event(
+            self.session, "document.submitted", tenant_id=tenant_id, aggregate_type="approval_request",
+            aggregate_id=str(request_id),
+            payload={"document_type": document_type, "document_id": str(document_id),
+                     "approval_request_id": str(request_id),
+                     "amount_base": str(amount) if amount is not None else None},
+        )
         return {"request": request, "definition": chosen, "reused": False, "auto_approved": chosen is None}
 
     # ------------------------------------------------------------------ status --------------
@@ -575,6 +595,12 @@ class ApprovalService:
                 "request_id": request_id, "document_type": request["document_type"],
                 "document_id": str(request["document_id"]), "actor_id": str(actor_id), "comment": comment,
             })
+            await emit_platform_event(
+                self.session, "document.rejected", tenant_id=tenant_id, aggregate_type="approval_request",
+                aggregate_id=str(request_id),
+                payload={"document_type": str(request["document_type"]), "document_id": str(request["document_id"]),
+                         "approval_request_id": str(request_id), "actor_id": str(actor_id)},
+            )
             return {"request": updated, "action": action}
         approvals = sum(1 for row_action in step_actions if row_action["decision"] == "APPROVE") + 1
         rejects = 0
@@ -590,6 +616,13 @@ class ApprovalService:
                     "request_id": request_id, "document_type": request["document_type"],
                     "document_id": str(request["document_id"]), "decided_at": datetime.now(UTC).isoformat(),
                 })
+                await emit_platform_event(
+                    self.session, "document.approved", tenant_id=tenant_id, aggregate_type="approval_request",
+                    aggregate_id=str(request_id),
+                    payload={"document_type": str(request["document_type"]),
+                             "document_id": str(request["document_id"]),
+                             "approval_request_id": str(request_id)},
+                )
                 return {"request": updated, "action": action}
             await self._set_state(tenant_id, request_id, "PENDING", next_step)
             await self._audit(tenant_id, actor_id, "approval.step_advanced", request_id, {"step": current_step, "next_step": next_step})

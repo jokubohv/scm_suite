@@ -25,13 +25,14 @@ import uuid
 from collections.abc import Iterable
 from datetime import UTC, datetime
 from functools import lru_cache
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, Query, Request, Response
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, Principal, PrincipalDep, scope_registry, token_service
+from app.core.platform_events import SYSTEM_TENANT_ID, emit_platform_event
 from app.core.repositories.auth import (
     AuthRepository,
     MembershipRecord,
@@ -320,6 +321,13 @@ async def accept_invitation(
         touch_last_login=True,
         now=now,
     )
+    await emit_platform_event(
+        repository.session, "membership.activated", tenant_id=str(tenant.id),
+        aggregate_type="app_user", aggregate_id=str(app_user_id),
+        payload={"tenant_id": str(tenant.id), "app_user_id": str(app_user_id),
+                 "identity_id": str(identity_id), "joined_at": now.isoformat(),
+                 "role_ids": [str(role) for role in role_ids]},
+    )
     return InvitationAcceptResponse(
         app_user_id=str(app_user_id),
         identity_id=str(identity_id),
@@ -331,6 +339,22 @@ async def accept_invitation(
 
 
 # --------------------------------------------------------------------------- helpers ----------
+
+
+async def _emit_session_revoked(repository: Any, *, tenant_id: Any = None, app_user_id: Any = None,
+                                session_id: Any = None, reason: str, replay: bool = False) -> None:
+    try:
+        aggregate = session_id if isinstance(session_id, uuid.UUID) else (app_user_id or tenant_id or SYSTEM_TENANT_ID)
+        await emit_platform_event(
+            repository.session, "user.session.revoked",
+            tenant_id=str(tenant_id or SYSTEM_TENANT_ID), aggregate_type="user_session",
+            aggregate_id=str(aggregate),
+            payload={"tenant_id": str(tenant_id or SYSTEM_TENANT_ID),
+                     "app_user_id": str(app_user_id) if app_user_id is not None else "unknown",
+                     "session_id": str(session_id or "ALL"), "reason": reason, "replay_detected": replay},
+        )
+    except Exception:  # noqa: BLE001 - event emission must not mask the auth decision
+        return
 
 
 def _hash_invitation_token(token: str) -> str:
@@ -470,9 +494,24 @@ async def login(
     if identity is None or identity.status != "ACTIVE":
         # Equalise timing for unknown/disabled identities before the generic failure.
         passwords.verify(payload.password, None)
+        await emit_platform_event(
+            repository.session, "auth.login.failed",
+            tenant_id=str(payload.tenant or SYSTEM_TENANT_ID), aggregate_type="user_identity",
+            aggregate_id=str(identity.id) if identity is not None else SYSTEM_TENANT_ID,
+            payload={"identity_id": str(identity.id) if identity is not None else "unknown",
+                     "tenant_id": str(payload.tenant or SYSTEM_TENANT_ID), "reason_code": "INVALID_CREDENTIALS",
+                     "occurred_at": utc_now().isoformat()},
+        )
         raise InvalidCredentials("invalid email or password")
     verification = passwords.verify_and_update(payload.password, identity.password_hash)
     if not verification.valid:
+        await emit_platform_event(
+            repository.session, "auth.login.failed",
+            tenant_id=str(payload.tenant or SYSTEM_TENANT_ID), aggregate_type="user_identity",
+            aggregate_id=str(identity.id),
+            payload={"identity_id": str(identity.id), "tenant_id": str(payload.tenant or SYSTEM_TENANT_ID),
+                     "reason_code": "INVALID_CREDENTIALS", "occurred_at": utc_now().isoformat()},
+        )
         raise InvalidCredentials("invalid email or password")
     if verification.new_hash:
         await repository.update_identity_password_hash(identity.id, verification.new_hash)
@@ -569,17 +608,23 @@ async def refresh(
         raise TokenInvalid("refresh token does not match its session")
     if not session.is_active():
         await repository.revoke_session(session.id, reason="expired")
+        await _emit_session_revoked(repository, tenant_id=session.tenant_id, app_user_id=session.app_user_id,
+                                    session_id=session.id, reason="expired")
         raise SessionRevoked("session is expired or revoked; sign in again")
 
     presented_hash = hash_refresh_token(payload.refresh_token)
     if not constant_time_compare(presented_hash, session.refresh_token_hash):
         # Reuse of an already-rotated token: revoke the whole session (replay defence).
         await repository.revoke_session(session.id, reason="refresh_replay")
+        await _emit_session_revoked(repository, tenant_id=session.tenant_id, app_user_id=session.app_user_id,
+                                    session_id=session.id, reason="refresh_replay", replay=True)
         raise SessionRevoked("refresh token replay detected; session revoked")
 
     membership = await repository.get_membership(session.tenant_id, session.app_user_id)
     if membership is None:
         await repository.revoke_session(session.id, reason="membership_missing")
+        await _emit_session_revoked(repository, tenant_id=session.tenant_id, app_user_id=session.app_user_id,
+                                    session_id=session.id, reason="membership_missing")
         raise SessionRevoked("session is no longer valid; sign in again")
     if membership.token_version != claims.tv:
         raise TokenVersionStale("refresh token version is stale; sign in again")
@@ -604,6 +649,8 @@ async def refresh(
     )
     if not rotated:
         await repository.revoke_session(session.id, reason="refresh_replay")
+        await _emit_session_revoked(repository, tenant_id=session.tenant_id, app_user_id=session.app_user_id,
+                                    session_id=session.id, reason="refresh_replay", replay=True)
         raise SessionRevoked("refresh token replay detected; session revoked")
     return _refresh_response(pair)
 
@@ -629,7 +676,10 @@ async def logout(
         if claims is not None:
             session = await repository.get_session(_as_uuid(claims.sid, field="session_id"))
             if session is not None:
-                await repository.revoke_session(session.id, reason="logout")
+                revoked = await repository.revoke_session(session.id, reason="logout")
+                if revoked:
+                    await _emit_session_revoked(repository, tenant_id=session.tenant_id, app_user_id=session.app_user_id,
+                                                session_id=session.id, reason="logout")
     if payload.all_sessions:
         if principal is None:
             raise TokenInvalid("a valid bearer token is required to revoke all sessions")
@@ -648,6 +698,8 @@ async def logout(
             reason="logout_all",
         )
         await repository.bump_token_version(tenant_id=membership.tenant_id, app_user_id=membership.app_user_id)
+        await _emit_session_revoked(repository, tenant_id=membership.tenant_id, app_user_id=membership.app_user_id,
+                                    session_id="ALL", reason="logout_all")
     return Response(status_code=204)
 
 
@@ -853,6 +905,12 @@ async def switch_tenant(
     if identity is None or identity.status != "ACTIVE":
         raise TokenInvalid("identity is not active; sign in again")
     pair = await _issue_token_pair(repository, tokens, identity_id=identity_id, membership=selected, request=request)
+    await emit_platform_event(
+        repository.session, "auth.tenant_switched", tenant_id=str(selected.tenant_id),
+        aggregate_type="user_identity", aggregate_id=str(identity_id),
+        payload={"identity_id": str(identity_id), "from_tenant_id": str(principal.tenant_id),
+                 "to_tenant_id": str(selected.tenant_id), "app_user_id": str(selected.app_user_id)},
+    )
     return _pair_response(pair, selected)
 
 __all__ = [

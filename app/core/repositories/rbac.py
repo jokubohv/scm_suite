@@ -24,6 +24,7 @@ from sqlalchemy import and_, delete, func, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import platform as p
+from app.core.platform_events import audit_recorded, emit_platform_event
 
 ALLOWED_SETTING_NAMESPACES = frozenset(
     {"inventory", "manufacturing", "wms", "replenishment", "costing", "pricing", "platform", "accounting", "rbac", "auth"}
@@ -98,6 +99,12 @@ class RbacRepository:
                 source=source,
                 occurred_at=_now(),
             )
+        )
+        await audit_recorded(
+            self.session, tenant_id=str(tenant_id), event_id=str(event_id), actor_type=actor_type,
+            action=action, resource_type=resource_type,
+            resource_id=str(resource_id) if resource_id is not None else None,
+            occurred_at=_now().isoformat(),
         )
         return event_id
 
@@ -271,6 +278,11 @@ class RbacRepository:
         )
         role = await self.get_role(tenant_id, role_id)
         assert role is not None
+        await emit_platform_event(
+            self.session, "role.created", tenant_id=str(tenant_id), aggregate_type="role", aggregate_id=str(role_id),
+            payload={"tenant_id": str(tenant_id), "role_id": str(role_id), "code": code,
+                     "scope_count": len(scopes), "source": "CREATE"},
+        )
         return role
 
     async def update_role(
@@ -304,6 +316,11 @@ class RbacRepository:
             tenant_id=tenant_id, actor_id=actor_id, action="role.updated", resource_type="role",
             resource_id=role_id, diff={"before": {k: str(v) for k, v in before.items() if k in values}, "after": {k: str(v) for k, v in values.items()}},
         )
+        await emit_platform_event(
+            self.session, "role.updated", tenant_id=str(tenant_id), aggregate_type="role", aggregate_id=str(role_id),
+            payload={"tenant_id": str(tenant_id), "role_id": str(role_id), "code": str(before["code"]),
+                     "changed_fields": sorted(values), "inactive": bool(values.get("inactive_at"))},
+        )
         return await self.get_role(tenant_id, role_id)
 
     async def replace_role_permissions(
@@ -326,6 +343,13 @@ class RbacRepository:
         await self.audit(
             tenant_id=tenant_id, actor_id=actor_id, action="role.permissions_changed", resource_type="role",
             resource_id=role_id, diff=diff,
+        )
+        await emit_platform_event(
+            self.session, "role.permissions.changed", tenant_id=str(tenant_id), aggregate_type="role",
+            aggregate_id=str(role_id),
+            payload={"tenant_id": str(tenant_id), "role_id": str(role_id),
+                     "added_scope_ids": diff["added"], "removed_scope_ids": diff["removed"],
+                     "actor_app_user_id": str(actor_id) if actor_id else None},
         )
         return after, diff
 
@@ -524,12 +548,23 @@ class RbacRepository:
                 .where(p.user_identity.c.id == user["identity_id"])
                 .values(display_name=display_name, updated_at=_now())
             )
+        sessions_revoked = 0
         if membership_status in {"SUSPENDED"}:
+            sessions_revoked = await self.count_active_sessions(tenant_id, app_user_id)
             await self.revoke_sessions(tenant_id, app_user_id, reason="membership_suspended", actor_id=actor_id)
         await self.audit(
             tenant_id=tenant_id, actor_id=actor_id, action="membership.updated", resource_type="app_user",
             resource_id=app_user_id, diff={k: str(v) for k, v in values.items()},
         )
+        if membership_status == "SUSPENDED":
+            await emit_platform_event(
+                self.session, "membership.suspended", tenant_id=str(tenant_id), aggregate_type="app_user",
+                aggregate_id=str(app_user_id),
+                payload={"tenant_id": str(tenant_id), "app_user_id": str(app_user_id),
+                         "identity_id": str(user["identity_id"]), "reason": "membership_suspended",
+                         "token_version": int(user.get("token_version") or 0) + 1,
+                         "sessions_revoked": sessions_revoked},
+            )
         return await self.get_user(tenant_id, app_user_id)
 
     async def assign_role(
@@ -557,6 +592,13 @@ class RbacRepository:
             tenant_id=tenant_id, actor_id=actor_id, action="role.assigned", resource_type="app_user",
             resource_id=app_user_id, diff={"role_id": str(role_id), "effective_from": now.isoformat()},
         )
+        await emit_platform_event(
+            self.session, "membership.roles.changed", tenant_id=str(tenant_id), aggregate_type="app_user",
+            aggregate_id=str(app_user_id),
+            payload={"tenant_id": str(tenant_id), "app_user_id": str(app_user_id),
+                     "role_ids": [str(role_id)], "added_role_ids": [str(role_id)], "removed_role_ids": [],
+                     "effective_from": now.isoformat(), "actor_app_user_id": str(actor_id) if actor_id else None},
+        )
 
     async def end_role_assignment(
         self, tenant_id: UUID | str, app_user_id: UUID | str, role_id: UUID | str, *, actor_id: UUID | str | None = None
@@ -575,6 +617,15 @@ class RbacRepository:
             tenant_id=tenant_id, actor_id=actor_id, action="role.unassigned", resource_type="app_user",
             resource_id=app_user_id, diff={"role_id": str(role_id)},
         )
+        if int(getattr(result, "rowcount", 0) or 0):
+            await emit_platform_event(
+                self.session, "membership.roles.changed", tenant_id=str(tenant_id), aggregate_type="app_user",
+                aggregate_id=str(app_user_id),
+                payload={"tenant_id": str(tenant_id), "app_user_id": str(app_user_id),
+                         "role_ids": [], "added_role_ids": [], "removed_role_ids": [str(role_id)],
+                         "effective_from": _now().isoformat(),
+                         "actor_app_user_id": str(actor_id) if actor_id else None},
+            )
         return int(getattr(result, "rowcount", 0) or 0)
 
     async def count_active_admins(self, tenant_id: UUID | str) -> int:
@@ -652,6 +703,12 @@ class RbacRepository:
             tenant_id=tenant_id, actor_id=actor_id, action="sessions.revoked", resource_type="app_user",
             resource_id=app_user_id, diff={"reason": reason, "token_version": token_version},
         )
+        await emit_platform_event(
+            self.session, "user.session.revoked", tenant_id=str(tenant_id), aggregate_type="app_user",
+            aggregate_id=str(app_user_id),
+            payload={"tenant_id": str(tenant_id), "app_user_id": str(app_user_id), "session_id": "ALL",
+                     "reason": reason, "replay_detected": False},
+        )
         return token_version
 
     async def count_active_sessions(self, tenant_id: UUID | str, app_user_id: UUID | str) -> int:
@@ -692,6 +749,14 @@ class RbacRepository:
         await self.audit(
             tenant_id=tenant_id, actor_id=invited_by, action="invitation.created", resource_type="tenant_invitation",
             resource_id=invitation_id, diff={"email": email.lower(), "roles": [str(r) for r in intended_role_ids]},
+        )
+        await emit_platform_event(
+            self.session, "user.invited", tenant_id=str(tenant_id), aggregate_type="tenant_invitation",
+            aggregate_id=str(invitation_id),
+            payload={"tenant_id": str(tenant_id), "invitation_id": str(invitation_id),
+                     "intended_role_ids": [str(r) for r in intended_role_ids],
+                     "expires_at": expiry.isoformat(),
+                     "invited_by_app_user_id": str(invited_by) if invited_by else None},
         )
         return {"id": invitation_id, "token": token, "expires_at": expiry, "status": "PENDING"}
 

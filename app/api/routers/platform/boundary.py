@@ -26,7 +26,7 @@ existing routers/main/registry/deps. Every write uses the durable idempotency gu
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from typing import Annotated, Any
 from uuid import UUID
 
@@ -35,6 +35,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
+from app.core.platform_events import emit_platform_event
 from app.core.repositories.boundary import (
     DEFAULT_PAGE_LIMIT,
     BoundaryError,
@@ -249,6 +250,13 @@ async def replace_demand_doubles(
     except BoundaryError as exc:
         raise _http_error(exc) from exc
     adapter.load(rows, fixture_version=body.fixture_version)
+    item_ids = sorted({str(row.get("item_id")) for row in body.rows if row.get("item_id")})
+    await emit_platform_event(
+        db, "order.demand.changed", tenant_id=principal.tenant_id, aggregate_type="order_demand",
+        aggregate_id=str(__import__("uuid").uuid5(__import__("uuid").NAMESPACE_URL, body.fixture_version)),
+        payload={"fixture_version": body.fixture_version, "item_ids": item_ids,
+                 "changed_count": len(rows), "occurred_at": datetime.now(UTC).isoformat()},
+    )
     result = {"loaded": len(rows), "fixture_version": body.fixture_version}
     await store.complete(
         tenant_id=principal.tenant_id,

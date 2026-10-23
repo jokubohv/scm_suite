@@ -37,6 +37,7 @@ from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope, scope_registry, token_service
 from app.core.config import get_settings
+from app.core.platform_events import emit_platform_event
 from app.core.repositories.auth import AuthRepository, hash_refresh_token
 from app.core.repositories.sso import (
     CONNECTION_PROTOCOLS,
@@ -895,6 +896,12 @@ async def create_sso_connection(payload: ConnectionCreate, repo: RepoDep, princi
         resource_id=str(row["id"]),
         diff={"name": row["name"], "protocol": row["protocol"]},
     )
+    await emit_platform_event(
+        repo.session, "sso.connection.created", tenant_id=principal.tenant_id,
+        aggregate_type="tenant_sso_connection", aggregate_id=str(row["id"]),
+        payload={"tenant_id": principal.tenant_id, "connection_id": str(row["id"]),
+                 "name": row["name"], "protocol": row["protocol"], "status": row["status"]},
+    )
     codes = await _connection_role_codes(repo, principal.tenant_id, row)
     return _connection_response(row, role_codes=codes)
 
@@ -930,6 +937,19 @@ async def update_sso_connection(
         resource_id=str(row["id"]),
         diff={"keys": sorted(values)},
     )
+    await emit_platform_event(
+        repo.session, "sso.connection.updated", tenant_id=principal.tenant_id,
+        aggregate_type="tenant_sso_connection", aggregate_id=str(row["id"]),
+        payload={"tenant_id": principal.tenant_id, "connection_id": str(row["id"]),
+                 "changed_fields": sorted(values), "status": row["status"]},
+    )
+    if str(row["status"]).upper() == "DISABLED":
+        await emit_platform_event(
+            repo.session, "sso.connection.disabled", tenant_id=principal.tenant_id,
+            aggregate_type="tenant_sso_connection", aggregate_id=str(row["id"]),
+            payload={"tenant_id": principal.tenant_id, "connection_id": str(row["id"]),
+                     "reason": "status update", "sessions_revoked": 0},
+        )
     codes = await _connection_role_codes(repo, principal.tenant_id, row)
     return _connection_response(row, role_codes=codes)
 
@@ -974,6 +994,13 @@ async def test_sso_connection(connection_id: str, repo: RepoDep, principal: Mana
             tested=True,
             actor_id=principal.identity_id,
         )
+        await emit_platform_event(
+            repo.session, "sso.connection.error", tenant_id=principal.tenant_id,
+            aggregate_type="tenant_sso_connection", aggregate_id=str(row["id"]),
+            payload={"tenant_id": principal.tenant_id, "connection_id": str(row["id"]),
+                     "error_code": getattr(exc, "code", "SSO_HEALTH_CHECK_FAILED"),
+                     "last_error_summary": exc.message},
+        )
         raise
     updated = await repo.set_connection_status(
         principal.tenant_id, row["id"], "ACTIVE", last_error=None, tested=True, actor_id=principal.identity_id
@@ -985,6 +1012,12 @@ async def test_sso_connection(connection_id: str, repo: RepoDep, principal: Mana
         resource_type="tenant_sso_connection",
         resource_id=str(row["id"]),
         diff={"result": "ACTIVE"},
+    )
+    await emit_platform_event(
+        repo.session, "sso.connection.tested", tenant_id=principal.tenant_id,
+        aggregate_type="tenant_sso_connection", aggregate_id=str(row["id"]),
+        payload={"tenant_id": principal.tenant_id, "connection_id": str(row["id"]),
+                 "result": "ACTIVE", "status": "ACTIVE", "last_tested_at": utc_now().isoformat()},
     )
     codes = await _connection_role_codes(repo, principal.tenant_id, updated or row)
     return _connection_response(updated or row, role_codes=codes)

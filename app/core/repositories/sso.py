@@ -38,6 +38,7 @@ from app.core.models.platform import (
     user_role,
     user_session,
 )
+from app.core.platform_events import audit_recorded, emit_platform_event
 
 CONNECTION_PROTOCOLS = ("SAML", "OIDC", "LDAP_AD")
 CONNECTION_STATUSES = ("DRAFT", "TESTING", "ACTIVE", "DISABLED", "ERROR")
@@ -120,6 +121,12 @@ class SsoRepository:
                 source=source,
                 occurred_at=utc_now(),
             )
+        )
+        await audit_recorded(
+            self.session, tenant_id=str(tenant_id), event_id=str(event_id), actor_type=actor_type,
+            action=action, resource_type=resource_type,
+            resource_id=str(resource_id) if resource_id is not None else None,
+            occurred_at=utc_now().isoformat(),
         )
         return event_id
 
@@ -695,6 +702,13 @@ class SsoRepository:
             resource_type="user_identity_link",
             resource_id=link_id,
             diff={"connection_id": str(connection_id), "issuer": issuer},
+        )
+        await emit_platform_event(
+            self.session, "identity.linked", tenant_id=str(tenant_id), aggregate_type="user_identity_link",
+            aggregate_id=str(link_id),
+            payload={"tenant_id": str(tenant_id), "app_user_id": str(identity_id),
+                     "identity_id": str(identity_id), "connection_id": str(connection_id),
+                     "action": "LINKED", "sessions_revoked": 0},
         )
         created = await self.get_link(tenant_id, link_id)
         if created is None:  # pragma: no cover - defensive

@@ -14,14 +14,17 @@ the registry/main/deps.
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Annotated, Any, Literal
+from uuid import uuid4
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
+from sqlalchemy import insert, select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope, scope_registry
 from app.core.models import platform as p
+from app.core.platform_events import emit_platform_event
 from app.core.repositories.rbac import ALLOWED_SETTING_NAMESPACES, RbacRepository
 from app.core.security.errors import (
     LastAdminLockout,
@@ -131,6 +134,15 @@ class UserUpdate(BaseModel):
     timezone: str | None = Field(default=None, max_length=60)
     membership_status: Literal["ACTIVE", "SUSPENDED"] | None = None
     role_ids: list[str] | None = None
+
+
+class UserCreate(BaseModel):
+    email: str | None = Field(default=None, min_length=3, max_length=320,
+                              pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+    identity_id: str | None = None
+    display_name: str | None = Field(default=None, max_length=200)
+    role_ids: list[str] = Field(default_factory=list)
+    is_service_account: bool = False
 
 
 class InvitationCreate(BaseModel):
@@ -443,6 +455,13 @@ async def clone_role(
         description=source.get("description") or "", scopes=scopes, data_scopes=data_scopes,
         is_template=False, is_editable=True, actor_id=principal.identity_id,
     )
+    await emit_platform_event(
+        repo.session, "role.cloned", tenant_id=principal.tenant_id, aggregate_type="role",
+        aggregate_id=str(role["id"]),
+        payload={"tenant_id": principal.tenant_id, "role_id": str(role["id"]),
+                 "source_role_id": str(source["id"]), "code": body.code,
+                 "scope_count": len(scopes)},
+    )
     return _role_payload(role)
 
 
@@ -566,6 +585,60 @@ async def list_users(
         ],
         "next_cursor": next_cursor,
     }
+
+
+@router.post("/admin/users", status_code=201, dependencies=[Depends(require_scope(USER_ADMIN))])
+async def create_user(body: UserCreate, repo: RepoDep, principal: PrincipalDep) -> dict[str, Any]:
+    """Create an INVITED membership for an existing identity (or invitation email) and issue the invitation."""
+    if not body.email and not body.identity_id:
+        raise _unprocessable("USER_IDENTITY_REQUIRED", "email or identity_id is required")
+    identity_id: Any = body.identity_id
+    if identity_id is not None:
+        row = (await repo.session.execute(select(p.user_identity).where(p.user_identity.c.id == identity_id))).mappings().first()
+        if row is None:
+            raise _unprocessable("IDENTITY_NOT_FOUND", "identity does not exist", identity_id=str(identity_id))
+        email = str(row["email"])
+    else:
+        email = str(body.email).strip().lower()
+        existing = (await repo.session.execute(select(p.user_identity).where(p.user_identity.c.email == email))).mappings().first()
+        if existing is not None:
+            identity_id = existing["id"]
+        else:
+            identity_id = uuid4()
+            await repo.session.execute(insert(p.user_identity).values(
+                id=identity_id, email=email, display_name=body.display_name, status="ACTIVE",
+                is_platform_admin=False, mfa_enabled=False,
+            ))
+    existing_membership = (await repo.session.execute(select(p.app_user.c.id).where(
+        p.app_user.c.tenant_id == principal.tenant_id, p.app_user.c.identity_id == identity_id))).scalar_one_or_none()
+    if existing_membership is not None:
+        raise HTTPException(status_code=409, detail={"code": "MEMBERSHIP_EXISTS", "message": "identity already has a membership in this tenant",
+                                                    "details": {"app_user_id": str(existing_membership)}})
+    role_rows = []
+    if body.role_ids:
+        role_rows = list((await repo.session.execute(select(p.role).where(
+            p.role.c.tenant_id == principal.tenant_id, p.role.c.id.in_(body.role_ids)))).mappings().all())
+        if len(role_rows) != len(set(body.role_ids)):
+            raise _unprocessable("ROLE_NOT_FOUND", "one or more roles do not exist in this tenant", role_ids=body.role_ids)
+    now = datetime.now(UTC)
+    app_user_id = uuid4()
+    await repo.session.execute(insert(p.app_user).values(
+        id=app_user_id, tenant_id=principal.tenant_id, identity_id=identity_id, email=email,
+        display_name=body.display_name, status="ACTIVE", membership_status="INVITED",
+        is_service_account=bool(body.is_service_account), joined_at=now,
+    ))
+    invitation = await repo.create_invitation(
+        principal.tenant_id, email=email,
+        intended_role_ids=[str(row["id"]) for row in role_rows],
+        invited_by=principal.app_user_id,
+    )
+    await repo.audit(
+        tenant_id=principal.tenant_id, actor_id=principal.identity_id, action="membership.invited",
+        resource_type="app_user", resource_id=app_user_id,
+        diff={"email": email, "invitation_id": str(invitation["id"])},
+    )
+    return {"app_user_id": str(app_user_id), "membership_status": "INVITED",
+            "invitation_id": str(invitation["id"]), "expires_at": invitation["expires_at"]}
 
 
 @router.get("/admin/users/{user_id}", dependencies=[Depends(require_scope(USER_ADMIN))])

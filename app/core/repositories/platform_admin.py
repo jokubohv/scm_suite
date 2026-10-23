@@ -38,6 +38,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import platform as p
+from app.core.platform_events import audit_recorded, emit_platform_event
 from app.core.security.tenant_context import SYSTEM_TENANT_ID
 from app.core.tenant_provisioning import provision_tenant_defaults
 
@@ -430,6 +431,12 @@ class PlatformAdminRepository:
                 occurred_at=_now(),
             )
         )
+        await audit_recorded(
+            self.session, tenant_id=str(_SYSTEM_ID), event_id=str(event_id), actor_type=actor_type,
+            action=action, resource_type=resource_type,
+            resource_id=str(resource_id) if resource_id is not None else None,
+            occurred_at=_now().isoformat(),
+        )
         return event_id
 
     # -- reads ---------------------------------------------------------------------------------
@@ -629,6 +636,13 @@ class PlatformAdminRepository:
             raise
         row = await self.get_tenant(tenant_id)
         assert row is not None
+        await emit_platform_event(
+            self.session, "tenant.provisioned", tenant_id=str(tenant_id), aggregate_type="tenant",
+            aggregate_id=str(tenant_id),
+            payload={"tenant_id": str(tenant_id), "code": str(row["code"]),
+                     "base_currency_code": row.get("base_currency_code"),
+                     "timezone": str(row["timezone"]), "seeded": {"roles": 7, "sequences": 27}},
+        )
         return row
 
     async def update_tenant(
@@ -742,6 +756,14 @@ class PlatformAdminRepository:
                 "sessions_revoked": sessions_revoked,
             },
         )
+        if target == "SUSPENDED":
+            await emit_platform_event(
+                self.session, "tenant.suspended", tenant_id=str(tenant_id), aggregate_type="tenant",
+                aggregate_id=str(tenant_id),
+                payload={"tenant_id": str(tenant_id), "reason": reason,
+                         "sessions_revoked": sessions_revoked,
+                         "actor_identity_id": str(actor_identity_id) if actor_identity_id else None},
+            )
         return updated, False, sessions_revoked
 
     async def revoke_sessions(self, tenant_id: str | UUID, *, reason: str) -> int:
