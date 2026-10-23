@@ -18,6 +18,7 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.outbox import emit as emit_outbox
 from app.modules.manufacturing import compat as compat_engine
 from app.modules.manufacturing import tables as t
 from app.modules.manufacturing.errors import (
@@ -133,6 +134,67 @@ def component_requirement(
 def component_requirement_rounded(qty_per: Any, qty_ordered: Any, *, yield_percent: Any = None) -> Decimal:
     """``ceil`` variant used by ``round_up_component_qty`` BOM members."""
     return component_requirement(qty_per, qty_ordered, yield_percent=yield_percent, round_up=True)
+
+
+def atb_input_hash(
+    *,
+    assembly_item_id: Any,
+    item_id: Any,
+    location_id: Any,
+    level_mode: str,
+    basis: str,
+    as_of: str,
+    components: Sequence[Mapping[str, Any]],
+    on_hand: Any,
+    buildable_qty: Any,
+) -> str:
+    """Deterministic SHA-256 over the ATB inputs + result (propagated to V-21 as ``input_hash``)."""
+    import hashlib
+    import json as json_module
+
+    ordered_components = [
+        {
+            "component_item_id": str(component.get("component_item_id")),
+            "qty_per": str(component.get("qty_per")),
+            "qty_required": str(component.get("qty_required")),
+            "level": component.get("level"),
+        }
+        for component in sorted(
+            components, key=lambda item: (str(item.get("component_item_id")), int(item.get("level") or 0))
+        )
+    ]
+    canonical = {
+        "assembly_item_id": str(assembly_item_id),
+        "item_id": str(item_id),
+        "location_id": str(location_id),
+        "level_mode": str(level_mode),
+        "basis": str(basis),
+        "as_of": str(as_of),
+        "on_hand": str(on_hand),
+        "buildable_qty": str(buildable_qty),
+        "components": ordered_components,
+    }
+    return hashlib.sha256(
+        json_module.dumps(canonical, sort_keys=True, separators=(",", ":"), default=str).encode()
+    ).hexdigest()
+
+
+def atb_per_level(components: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """Group resolved BOM leaves by level for the ``per_level`` breakdown passed to V-21."""
+    levels: dict[int, list[dict[str, Any]]] = {}
+    for component in components:
+        level = int(component.get("level") or 1)
+        levels.setdefault(level, []).append(
+            {
+                "component_item_id": str(component.get("component_item_id")),
+                "item_number": component.get("item_number"),
+                "qty_per": str(component.get("qty_per")),
+                "qty_required": str(component.get("qty_required")),
+                "available": component.get("available"),
+                "limiting": component.get("limiting", False),
+            }
+        )
+    return [{"level": level, "components": levels[level]} for level in sorted(levels)]
 
 
 class ManufacturingService:
@@ -2628,26 +2690,75 @@ class ManufacturingService:
         basis = str(await self._setting("available_to_build.basis", "ON_HAND") or "ON_HAND").upper()
         moment = as_of or date.today()
         location = location_id or await self._default_location()
+        policy_version = await self._setting("available_to_build.policy_version", "atb-v1") or "atb-v1"
         limiting: dict[str, Any] | None = None
-        buildable: Decimal | None = None
+        component_limit: Decimal | None = None
         on_hand = await self._on_hand(assembly["item_id"], location, basis)
-        buildable = on_hand
         components = await self.resolve_bom(assembly["id"], as_of=moment, qty_ordered=1)
         for component in components:
             required_per_unit = dec(component["qty_required"])
             if required_per_unit <= 0:
+                component["available"] = None
                 continue
             available = await self._on_hand(_uuid(component["component_item_id"]), location, basis)
+            component["available"] = str(available)
+            component["qty_per"] = str(required_per_unit)
             units_from_component = (available / required_per_unit).to_integral_value(rounding="ROUND_FLOOR")
-            if buildable is None or units_from_component < buildable:
-                buildable = units_from_component
+            if component_limit is None or units_from_component < component_limit:
+                component_limit = units_from_component
+                component["limiting"] = True
                 limiting = {
                     "component_item_id": component["component_item_id"],
                     "item_number": component.get("item_number"),
                     "available": str(available),
                     "qty_per": str(required_per_unit),
                 }
+        # atb-v1: buildable = min over component requirement paths (phantom-expanded); a BOM-less
+        # assembly is limited by its own on-hand supply (RULE-MFG-20 deterministic floor).
+        buildable = component_limit if component_limit is not None else on_hand
         buildable = max(buildable or ZERO, ZERO)
+        buildable_qty = buildable.to_integral_value(rounding="ROUND_FLOOR")
+        buildable_qty_str = str(int(buildable_qty))
+        input_hash = atb_input_hash(
+            assembly_item_id=assembly["id"],
+            item_id=assembly["item_id"],
+            location_id=location,
+            level_mode=mode,
+            basis=basis,
+            as_of=str(moment),
+            components=components,
+            on_hand=on_hand,
+            buildable_qty=buildable_qty_str,
+        )
+        per_level = atb_per_level(components)
+        await emit_outbox(
+            self.session,
+            event_type="available_to_build.calculated",
+            tenant_id=str(self.tenant_id),
+            aggregate_type="ASSEMBLY_ITEM",
+            aggregate_id=str(assembly["id"]),
+            payload={
+                "tenant_id": str(self.tenant_id),
+                "item_id": str(assembly["item_id"]),
+                "assembly_item_id": str(assembly["id"]),
+                "location_id": str(location),
+                "level_mode": mode,
+                "basis": basis,
+                "as_of": str(moment),
+                "buildable_qty": buildable_qty_str,
+                "on_hand": str(on_hand),
+                "limiting_component": limiting,
+                "limiting_component_id": limiting["component_item_id"] if limiting else None,
+                "qty_per_component": limiting["qty_per"] if limiting else None,
+                "available_component_qty": limiting["available"] if limiting else None,
+                "per_level": per_level,
+                "policy_version": policy_version,
+                "input_hash": input_hash,
+                "degraded": False,
+                "approximation": False,
+            },
+            aggregate_version=1,
+        )
         return {
             "assembly_item_id": str(assembly["id"]),
             "item_id": str(assembly["item_id"]),
@@ -2656,9 +2767,12 @@ class ManufacturingService:
             "level_mode": mode,
             "basis": basis,
             "on_hand": str(on_hand),
-            "buildable_qty": str(buildable.to_integral_value(rounding="ROUND_FLOOR")),
+            "buildable_qty": buildable_qty_str,
             "limiting_component": limiting,
-            "policy_version": await self._setting("available_to_build.policy_version", "atb-v1") or "atb-v1",
+            "policy_version": policy_version,
+            "input_hash": input_hash,
+            "per_level": per_level,
+            "degraded": False,
             "components": components,
         }
 

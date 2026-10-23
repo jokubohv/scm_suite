@@ -138,6 +138,21 @@ class ReportService:
         )
         columns = [(str(row[0]), str(row[1])) for row in rows.all()]
         if not columns:
+            # Materialised views are not exposed by information_schema; read pg_attribute instead so
+            # materialised read models (V-04/V-11/V-12/V-16/V-21) are queryable through the service.
+            matview_rows = await self.session.execute(
+                text(
+                    "SELECT a.attname, format_type(a.atttypid, a.atttypmod) AS data_type "
+                    "FROM pg_attribute a "
+                    "JOIN pg_class c ON c.oid = a.attrelid "
+                    "JOIN pg_namespace n ON n.oid = c.relnamespace "
+                    "WHERE n.nspname = 'reporting' AND c.relname = :view AND a.attnum > 0 AND NOT a.attisdropped "
+                    "ORDER BY a.attnum"
+                ),
+                {"view": view},
+            )
+            columns = [(str(row[0]), str(row[1])) for row in matview_rows.all()]
+        if not columns:
             raise ReportingError("REPORT_VIEW_UNAVAILABLE", f"reporting view {view!r} is not available",
                                  status_code=503)
         names = [name for name, _ in columns]

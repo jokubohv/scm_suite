@@ -58,7 +58,7 @@ SOURCE_GUARDS: dict[str, str] = {
     "v_manufacturing_workbench": "manufacturing.work_order",
     "v_consigned_balance": "consigned.consignment_agreement_item",
     "v_quality_inspection_status": "quality.inspection",
-    "v_available_to_build": "manufacturing.available_to_build_cache",
+    "v_available_to_build": "platform.outbox_event",
 }
 
 

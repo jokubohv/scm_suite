@@ -6,6 +6,11 @@ applies. Five heavy projections are materialised (V-04, V-11, V-12, V-16, V-21) 
 ``reporting.refresh_views`` job. Views over later-wave contexts are created conditionally by the
 migration: if the source relation does not exist yet, a typed empty fallback keeps the contract's 21
 view names available (the real definition is used as soon as the owning migration has landed).
+
+V-21 (`v_available_to_build`) is a strict pass-through of the authoritative FS-09 ``atb-v1`` result: it
+projects ``payload->'data'`` from the latest ``available_to_build.calculated`` transactional outbox event
+per tenant/assembly/location and never recomputes the ATB formula (RULE-RPT-ATB); ``degraded`` is carried
+through from FS-09 evidence.
 """
 
 from __future__ import annotations
@@ -411,10 +416,36 @@ SELECT NULL::uuid AS tenant_id, NULL::uuid AS inspection_id, NULL::text AS inspe
  WHERE false""")
 
 V21 = _v("V-21", "v_available_to_build", "Pass-through of FS-09 atb-v1 available-to-build", "assembly_item, location_id", """
-SELECT atb.tenant_id, atb.assembly_item, atb.location_id, atb.level_mode, atb.basis, atb.as_of,
-       atb.buildable_qty, atb.limiting_component, atb.per_level, atb.policy_version, atb.input_hash,
-       atb.qty_per_component, atb.available_component_qty, atb.degraded
-  FROM manufacturing.available_to_build_cache atb
+SELECT DISTINCT ON (tenant_id, assembly_item, location_id)
+       tenant_id, assembly_item, location_id, level_mode, basis, as_of, buildable_qty,
+       limiting_component, per_level, policy_version, input_hash,
+       qty_per_component, available_component_qty, degraded
+  FROM (
+    SELECT e.tenant_id,
+           COALESCE(NULLIF(e.payload->'data'->>'assembly_item_id', '')::uuid,
+                    NULLIF(e.payload->'data'->>'item_id', '')::uuid) AS assembly_item,
+           NULLIF(e.payload->'data'->>'location_id', '')::uuid AS location_id,
+           NULLIF(e.payload->'data'->>'level_mode', '') AS level_mode,
+           NULLIF(e.payload->'data'->>'basis', '') AS basis,
+           NULLIF(e.payload->'data'->>'as_of', '')::timestamptz AS as_of,
+           NULLIF(e.payload->'data'->>'buildable_qty', '')::numeric AS buildable_qty,
+           COALESCE(NULLIF(e.payload->'data'->>'limiting_component_id', '')::uuid,
+                    NULLIF(e.payload->'data'->'limiting_component'->>'component_item_id', '')::uuid)
+             AS limiting_component,
+           e.payload->'data'->'per_level' AS per_level,
+           NULLIF(e.payload->'data'->>'policy_version', '') AS policy_version,
+           NULLIF(e.payload->'data'->>'input_hash', '') AS input_hash,
+           NULLIF(e.payload->'data'->>'qty_per_component', '')::numeric AS qty_per_component,
+           NULLIF(e.payload->'data'->>'available_component_qty', '')::numeric AS available_component_qty,
+           COALESCE((e.payload->'data'->>'degraded')::boolean, false) AS degraded,
+           e.occurred_at
+      FROM platform.outbox_event e
+     WHERE e.event_type = 'available_to_build.calculated'
+       AND COALESCE(NULLIF(e.payload->'data'->>'assembly_item_id', '')::uuid,
+                    NULLIF(e.payload->'data'->>'item_id', '')::uuid) IS NOT NULL
+       AND NULLIF(e.payload->'data'->>'location_id', '')::uuid IS NOT NULL
+  ) atb
+ ORDER BY tenant_id, assembly_item, location_id, occurred_at DESC
 """, materialized=True, fallback_sql="""
 SELECT NULL::uuid AS tenant_id, NULL::uuid AS assembly_item, NULL::uuid AS location_id,
        NULL::text AS level_mode, NULL::text AS basis, NULL::timestamptz AS as_of,
