@@ -7,7 +7,7 @@ from typing import Any
 from sqlalchemy import func, select
 
 from app.core.models import platform as p
-from app.tests.integration.platform_config.conftest import OTHER_TENANT_ID, TENANT_ID
+from app.tests.integration.platform_config.conftest import TENANT_ID
 
 PREFIX = "/api/v1/admin/flags"
 FLAG = "inventory.ledger.enabled"

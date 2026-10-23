@@ -6,11 +6,9 @@ from datetime import date
 from typing import Any
 from uuid import UUID
 
-import pytest
-
 from app.api.deps import Principal
 from app.core.models import platform as p
-from app.tests.integration.platform_config.conftest import OTHER_TENANT_ID, TENANT_ID
+from app.tests.integration.platform_config.conftest import OTHER_TENANT_ID
 
 PREFIX = "/api/v1/admin/fiscal-periods"
 

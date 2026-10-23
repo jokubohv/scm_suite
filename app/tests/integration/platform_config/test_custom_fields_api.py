@@ -2,11 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import UTC
 from typing import Any
 from uuid import UUID, uuid4
-
-from sqlalchemy import select
 
 from app.core.models import platform as p
 from app.tests.integration.platform_config.conftest import OTHER_TENANT_ID, TENANT_ID

@@ -845,7 +845,7 @@ class ConfigRepository:
                 code="PERIOD_OVERLAP",
                 details={
                     "period_key": values["period_key"],
-                    "overlaps": [dict(row) for row in overlap_rows],
+                    "overlaps": [serialize_row(dict(row)) for row in overlap_rows],
                 },
             )
         period_id = uuid4()
