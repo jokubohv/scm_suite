@@ -1,0 +1,33 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "cost_revaluation_id": {
+      "title": "Cost Revaluation Id",
+      "type": "string"
+    },
+    "posted_transaction_id": {
+      "title": "Posted Transaction Id",
+      "type": "string"
+    },
+    "revaluation_type": {
+      "enum": [
+        "STANDARD_CHANGE",
+        "COST_CORRECTION"
+      ],
+      "title": "Revaluation Type",
+      "type": "string"
+    },
+    "total_value_delta": {
+      "title": "Total Value Delta",
+      "type": "string"
+    }
+  },
+  "required": [
+    "cost_revaluation_id",
+    "revaluation_type",
+    "posted_transaction_id",
+    "total_value_delta"
+  ],
+  "title": "CostRevaluationPostedEvent",
+  "type": "object"
+}

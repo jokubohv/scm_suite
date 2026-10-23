@@ -1,0 +1,32 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "as_of": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "As Of"
+    },
+    "checked_positions": {
+      "title": "Checked Positions",
+      "type": "integer"
+    },
+    "drift_count": {
+      "title": "Drift Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "checked_positions",
+    "drift_count"
+  ],
+  "title": "CostReconciliationCompletedEvent",
+  "type": "object"
+}

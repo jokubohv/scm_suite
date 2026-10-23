@@ -1,0 +1,471 @@
+{
+  "$defs": {
+    "CostEntryPayload": {
+      "properties": {
+        "cost_category_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Category Id"
+        },
+        "estimated": {
+          "default": false,
+          "title": "Estimated",
+          "type": "boolean"
+        },
+        "layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Layer Id"
+        },
+        "movement_type": {
+          "title": "Movement Type",
+          "type": "string"
+        },
+        "qty_delta": {
+          "title": "Qty Delta",
+          "type": "string"
+        },
+        "rounding_residual": {
+          "default": false,
+          "title": "Rounding Residual",
+          "type": "boolean"
+        },
+        "unit_cost": {
+          "title": "Unit Cost",
+          "type": "string"
+        },
+        "value_delta": {
+          "title": "Value Delta",
+          "type": "string"
+        },
+        "variance_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Variance Type"
+        }
+      },
+      "required": [
+        "movement_type",
+        "qty_delta",
+        "unit_cost",
+        "value_delta"
+      ],
+      "title": "CostEntryPayload",
+      "type": "object"
+    },
+    "EventDraftPayload": {
+      "properties": {
+        "aggregate_id": {
+          "title": "Aggregate Id",
+          "type": "string"
+        },
+        "aggregate_type": {
+          "title": "Aggregate Type",
+          "type": "string"
+        },
+        "aggregate_version": {
+          "default": 1,
+          "title": "Aggregate Version",
+          "type": "integer"
+        },
+        "event_type": {
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        }
+      },
+      "required": [
+        "event_type",
+        "aggregate_type",
+        "aggregate_id"
+      ],
+      "title": "EventDraftPayload",
+      "type": "object"
+    },
+    "GLIntentPayload": {
+      "properties": {
+        "account_ref": {
+          "title": "Account Ref",
+          "type": "string"
+        },
+        "cost_category_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Category Id"
+        },
+        "credit": {
+          "default": "0",
+          "title": "Credit",
+          "type": "string"
+        },
+        "debit": {
+          "default": "0",
+          "title": "Debit",
+          "type": "string"
+        },
+        "dimensions": {
+          "additionalProperties": true,
+          "title": "Dimensions",
+          "type": "object"
+        },
+        "posting_rule_id": {
+          "title": "Posting Rule Id",
+          "type": "string"
+        },
+        "qty": {
+          "default": "0",
+          "title": "Qty",
+          "type": "string"
+        }
+      },
+      "required": [
+        "posting_rule_id",
+        "account_ref"
+      ],
+      "title": "GLIntentPayload",
+      "type": "object"
+    },
+    "ItemCostStatePayload": {
+      "additionalProperties": false,
+      "properties": {
+        "avg_cost": {
+          "default": "0.000000000000",
+          "title": "Avg Cost",
+          "type": "string"
+        },
+        "cost_provisional": {
+          "default": false,
+          "title": "Cost Provisional",
+          "type": "boolean"
+        },
+        "item_cost_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Cost Id"
+        },
+        "last_cost_ledger_seq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Cost Ledger Seq"
+        },
+        "last_purchase_price": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Purchase Price"
+        },
+        "qty_on_hand": {
+          "default": "0.000000000000",
+          "title": "Qty On Hand",
+          "type": "string"
+        },
+        "status": {
+          "default": "CURRENT",
+          "enum": [
+            "CURRENT",
+            "PENDING_RECALC",
+            "UNDERWATER"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value_base": {
+          "default": "0.000000000000",
+          "title": "Value Base",
+          "type": "string"
+        }
+      },
+      "title": "ItemCostStatePayload",
+      "type": "object"
+    },
+    "LayerActionPayload": {
+      "properties": {
+        "action": {
+          "enum": [
+            "CREATE",
+            "CONSUME",
+            "REVALUE",
+            "CLOSE"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "derived_from_layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Derived From Layer Id"
+        },
+        "estimated": {
+          "default": false,
+          "title": "Estimated",
+          "type": "boolean"
+        },
+        "layer_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Layer Date"
+        },
+        "layer_id": {
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "layer_seq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Layer Seq"
+        },
+        "qty": {
+          "default": "0",
+          "title": "Qty",
+          "type": "string"
+        },
+        "unit_cost": {
+          "default": "0",
+          "title": "Unit Cost",
+          "type": "string"
+        },
+        "value": {
+          "default": "0",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "layer_id"
+      ],
+      "title": "LayerActionPayload",
+      "type": "object"
+    },
+    "LayerStatePayload": {
+      "additionalProperties": false,
+      "properties": {
+        "derived_from_layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Derived From Layer Id"
+        },
+        "estimated": {
+          "default": false,
+          "title": "Estimated",
+          "type": "boolean"
+        },
+        "layer_date": {
+          "format": "date",
+          "title": "Layer Date",
+          "type": "string"
+        },
+        "layer_id": {
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "layer_seq": {
+          "minimum": 0,
+          "title": "Layer Seq",
+          "type": "integer"
+        },
+        "qty_original": {
+          "title": "Qty Original",
+          "type": "string"
+        },
+        "qty_remaining": {
+          "title": "Qty Remaining",
+          "type": "string"
+        },
+        "status": {
+          "default": "OPEN",
+          "enum": [
+            "OPEN",
+            "EXHAUSTED",
+            "REVALUED"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit_cost": {
+          "title": "Unit Cost",
+          "type": "string"
+        },
+        "value_remaining": {
+          "title": "Value Remaining",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layer_id",
+        "layer_seq",
+        "layer_date",
+        "qty_original",
+        "qty_remaining",
+        "unit_cost",
+        "value_remaining"
+      ],
+      "title": "LayerStatePayload",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cost_entries": {
+      "items": {
+        "$ref": "#/$defs/CostEntryPayload"
+      },
+      "title": "Cost Entries",
+      "type": "array"
+    },
+    "estimated": {
+      "default": false,
+      "title": "Estimated",
+      "type": "boolean"
+    },
+    "events": {
+      "items": {
+        "$ref": "#/$defs/EventDraftPayload"
+      },
+      "title": "Events",
+      "type": "array"
+    },
+    "gl_intents": {
+      "items": {
+        "$ref": "#/$defs/GLIntentPayload"
+      },
+      "title": "Gl Intents",
+      "type": "array"
+    },
+    "layer_actions": {
+      "items": {
+        "$ref": "#/$defs/LayerActionPayload"
+      },
+      "title": "Layer Actions",
+      "type": "array"
+    },
+    "new_layers": {
+      "items": {
+        "$ref": "#/$defs/LayerStatePayload"
+      },
+      "title": "New Layers",
+      "type": "array"
+    },
+    "new_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ItemCostStatePayload"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "provisional": {
+      "default": false,
+      "title": "Provisional",
+      "type": "boolean"
+    },
+    "qty_delta": {
+      "title": "Qty Delta",
+      "type": "string"
+    },
+    "unit_cost": {
+      "title": "Unit Cost",
+      "type": "string"
+    },
+    "value_delta": {
+      "title": "Value Delta",
+      "type": "string"
+    },
+    "variance_amount": {
+      "default": "0.000000000000",
+      "title": "Variance Amount",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_cost",
+    "value_delta",
+    "qty_delta"
+  ],
+  "title": "ValueResultPayload",
+  "type": "object"
+}

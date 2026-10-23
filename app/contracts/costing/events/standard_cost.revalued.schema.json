@@ -1,0 +1,34 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "cost_version_id": {
+      "title": "Cost Version Id",
+      "type": "string"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "new_cost": {
+      "title": "New Cost",
+      "type": "string"
+    },
+    "old_cost": {
+      "title": "Old Cost",
+      "type": "string"
+    },
+    "value_delta": {
+      "title": "Value Delta",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "cost_version_id",
+    "old_cost",
+    "new_cost",
+    "value_delta"
+  ],
+  "title": "StandardCostRevaluedEvent",
+  "type": "object"
+}

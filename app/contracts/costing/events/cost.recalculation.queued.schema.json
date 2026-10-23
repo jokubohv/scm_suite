@@ -1,0 +1,44 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "cost_run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cost Run Id"
+    },
+    "from_date": {
+      "format": "date",
+      "title": "From Date",
+      "type": "string"
+    },
+    "item_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Item Id"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "from_date",
+    "reason"
+  ],
+  "title": "CostRecalculationQueuedEvent",
+  "type": "object"
+}

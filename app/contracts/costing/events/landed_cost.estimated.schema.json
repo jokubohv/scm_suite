@@ -1,0 +1,43 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "allocated_amount": {
+      "title": "Allocated Amount",
+      "type": "string"
+    },
+    "cost_category_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cost Category Id"
+    },
+    "item_receipt_line_id": {
+      "title": "Item Receipt Line Id",
+      "type": "string"
+    },
+    "template_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Template Id"
+    }
+  },
+  "required": [
+    "item_receipt_line_id",
+    "allocated_amount"
+  ],
+  "title": "LandedCostEstimatedEvent",
+  "type": "object"
+}

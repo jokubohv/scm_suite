@@ -1,0 +1,39 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "estimated": {
+      "default": false,
+      "title": "Estimated",
+      "type": "boolean"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "layer_id": {
+      "title": "Layer Id",
+      "type": "string"
+    },
+    "qty": {
+      "title": "Qty",
+      "type": "string"
+    },
+    "unit_cost": {
+      "title": "Unit Cost",
+      "type": "string"
+    },
+    "value": {
+      "title": "Value",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "layer_id",
+    "qty",
+    "unit_cost",
+    "value"
+  ],
+  "title": "CostLayerCreatedEvent",
+  "type": "object"
+}

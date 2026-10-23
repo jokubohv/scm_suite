@@ -1,0 +1,51 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "estimated": {
+      "default": false,
+      "title": "Estimated",
+      "type": "boolean"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "layer_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Layer Id"
+    },
+    "movement_type": {
+      "title": "Movement Type",
+      "type": "string"
+    },
+    "qty_delta": {
+      "title": "Qty Delta",
+      "type": "string"
+    },
+    "unit_cost": {
+      "title": "Unit Cost",
+      "type": "string"
+    },
+    "value_delta": {
+      "title": "Value Delta",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "movement_type",
+    "qty_delta",
+    "unit_cost",
+    "value_delta"
+  ],
+  "title": "CostLayerUpdatedEvent",
+  "type": "object"
+}

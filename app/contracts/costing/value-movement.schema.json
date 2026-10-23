@@ -1,0 +1,246 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "actual_unit_cost": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actual Unit Cost"
+    },
+    "affects_inventory": {
+      "default": true,
+      "title": "Affects Inventory",
+      "type": "boolean"
+    },
+    "asset_account_ref": {
+      "default": "ASSET",
+      "title": "Asset Account Ref",
+      "type": "string"
+    },
+    "close_layer_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Close Layer Id"
+    },
+    "cost_category_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cost Category Id"
+    },
+    "derived_from_layer_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Derived From Layer Id"
+    },
+    "estimated_allowed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Estimated Allowed"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "layer_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Layer Date"
+    },
+    "location_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Id"
+    },
+    "lot_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lot Id"
+    },
+    "movement_type": {
+      "enum": [
+        "IN",
+        "OUT",
+        "ADJUST",
+        "TRANSFER",
+        "REVALUE",
+        "LANDED",
+        "VARIANCE",
+        "COGS_ADJUST"
+      ],
+      "title": "Movement Type",
+      "type": "string"
+    },
+    "offset_account_ref": {
+      "default": "",
+      "title": "Offset Account Ref",
+      "type": "string"
+    },
+    "posting_rule_id": {
+      "default": "",
+      "title": "Posting Rule Id",
+      "type": "string"
+    },
+    "qty_delta": {
+      "title": "Qty Delta",
+      "type": "string"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    },
+    "return_original_cost": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Return Original Cost"
+    },
+    "serial_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Serial Id"
+    },
+    "source_line_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Line Id"
+    },
+    "standard_unit_cost": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Standard Unit Cost"
+    },
+    "transaction_date": {
+      "format": "date",
+      "title": "Transaction Date",
+      "type": "string"
+    },
+    "unit_cost": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unit Cost"
+    },
+    "value_delta": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Value Delta"
+    },
+    "variance_account_ref": {
+      "default": "VARIANCE",
+      "title": "Variance Account Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "qty_delta",
+    "movement_type",
+    "transaction_date"
+  ],
+  "title": "ValueMovementPayload",
+  "type": "object"
+}

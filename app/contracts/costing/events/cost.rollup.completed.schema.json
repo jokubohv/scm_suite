@@ -1,0 +1,33 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "cost_rollup_run_id": {
+      "title": "Cost Rollup Run Id",
+      "type": "string"
+    },
+    "cost_version_id": {
+      "title": "Cost Version Id",
+      "type": "string"
+    },
+    "lines": {
+      "title": "Lines",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "SUCCEEDED",
+        "FAILED"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "cost_rollup_run_id",
+    "cost_version_id",
+    "lines",
+    "status"
+  ],
+  "title": "CostRollupCompletedEvent",
+  "type": "object"
+}

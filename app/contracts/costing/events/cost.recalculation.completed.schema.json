@@ -1,0 +1,29 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "adjustments": {
+      "title": "Adjustments",
+      "type": "integer"
+    },
+    "cost_run_id": {
+      "title": "Cost Run Id",
+      "type": "string"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "value_delta": {
+      "title": "Value Delta",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "cost_run_id",
+    "adjustments",
+    "value_delta"
+  ],
+  "title": "CostRecalculationCompletedEvent",
+  "type": "object"
+}

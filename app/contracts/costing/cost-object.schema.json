@@ -1,0 +1,88 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "costing_method": {
+      "enum": [
+        "AVERAGE",
+        "FIFO",
+        "LIFO",
+        "GROUP_AVERAGE",
+        "STANDARD",
+        "SPECIFIC",
+        "LOT"
+      ],
+      "title": "Costing Method",
+      "type": "string"
+    },
+    "item_cost_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Item Cost Id"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "location_costing_group_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Costing Group Id"
+    },
+    "location_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Id"
+    },
+    "lot_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lot Id"
+    },
+    "serial_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Serial Id"
+    }
+  },
+  "required": [
+    "item_id",
+    "costing_method"
+  ],
+  "title": "CostObjectPayload",
+  "type": "object"
+}

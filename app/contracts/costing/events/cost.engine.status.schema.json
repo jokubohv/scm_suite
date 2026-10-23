@@ -1,0 +1,49 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "avg_cost": {
+      "title": "Avg Cost",
+      "type": "string"
+    },
+    "costing_method": {
+      "title": "Costing Method",
+      "type": "string"
+    },
+    "estimated": {
+      "default": false,
+      "title": "Estimated",
+      "type": "boolean"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "qty_on_hand": {
+      "title": "Qty On Hand",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "CURRENT",
+        "PENDING_RECALC",
+        "UNDERWATER"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "value_base": {
+      "title": "Value Base",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "costing_method",
+    "qty_on_hand",
+    "value_base",
+    "avg_cost",
+    "status"
+  ],
+  "title": "CostEngineStatusEvent",
+  "type": "object"
+}

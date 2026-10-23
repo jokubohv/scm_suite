@@ -1,0 +1,43 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "cogs_adjustment_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cogs Adjustment Id"
+    },
+    "fiscal_period_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Fiscal Period Id"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "value_delta": {
+      "title": "Value Delta",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "value_delta"
+  ],
+  "title": "CogsRecordedEvent",
+  "type": "object"
+}

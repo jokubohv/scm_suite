@@ -1,0 +1,42 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "adjustment_type": {
+      "enum": [
+        "UNDERWATER_TRUE_UP",
+        "RECALC",
+        "ROUNDING",
+        "RETURN_COST"
+      ],
+      "title": "Adjustment Type",
+      "type": "string"
+    },
+    "cogs_adjustment_id": {
+      "title": "Cogs Adjustment Id",
+      "type": "string"
+    },
+    "posted_transaction_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Posted Transaction Id"
+    },
+    "total_value_base": {
+      "title": "Total Value Base",
+      "type": "string"
+    }
+  },
+  "required": [
+    "cogs_adjustment_id",
+    "adjustment_type",
+    "total_value_base"
+  ],
+  "title": "CostAdjustmentPostedEvent",
+  "type": "object"
+}

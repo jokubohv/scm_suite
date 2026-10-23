@@ -1,0 +1,36 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "amount_base": {
+      "title": "Amount Base",
+      "type": "string"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "variance_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Variance Id"
+    },
+    "variance_type": {
+      "title": "Variance Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "variance_type",
+    "amount_base"
+  ],
+  "title": "CostVariancePostedEvent",
+  "type": "object"
+}

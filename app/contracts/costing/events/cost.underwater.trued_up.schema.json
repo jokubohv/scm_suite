@@ -1,0 +1,34 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "estimated_unit_cost": {
+      "title": "Estimated Unit Cost",
+      "type": "string"
+    },
+    "item_id": {
+      "title": "Item Id",
+      "type": "string"
+    },
+    "qty": {
+      "title": "Qty",
+      "type": "string"
+    },
+    "true_unit_cost": {
+      "title": "True Unit Cost",
+      "type": "string"
+    },
+    "value_delta": {
+      "title": "Value Delta",
+      "type": "string"
+    }
+  },
+  "required": [
+    "item_id",
+    "qty",
+    "true_unit_cost",
+    "estimated_unit_cost",
+    "value_delta"
+  ],
+  "title": "CostUnderwaterTruedUpEvent",
+  "type": "object"
+}
