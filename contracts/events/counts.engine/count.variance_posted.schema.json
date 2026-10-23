@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/counts.engine/count.variance_posted/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "counts.engine@1.0.0 count.variance_posted payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,50 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "count_id": {
+          "title": "Count Id",
+          "type": "string"
+        },
+        "inventory_transaction_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inventory Transaction Id"
+        },
+        "ledger_sequence": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ledger Sequence"
+        },
+        "line_count": {
+          "title": "Line Count",
+          "type": "integer"
+        },
+        "variance_value_base": {
+          "title": "Variance Value Base",
+          "type": "string"
+        }
+      },
+      "required": [
+        "count_id",
+        "line_count",
+        "variance_value_base"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +129,5 @@
     "ledger_sequence",
     "line_count",
     "variance_value_base"
-  ],
-  "x-todo": true
+  ]
 }

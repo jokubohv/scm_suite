@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/cost.engine.status/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 cost.engine.status payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,51 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "avg_cost": {
+          "title": "Avg Cost",
+          "type": "string"
+        },
+        "costing_method": {
+          "title": "Costing Method",
+          "type": "string"
+        },
+        "estimated": {
+          "default": false,
+          "title": "Estimated",
+          "type": "boolean"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "qty_on_hand": {
+          "title": "Qty On Hand",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "CURRENT",
+            "PENDING_RECALC",
+            "UNDERWATER"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "value_base": {
+          "title": "Value Base",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "costing_method",
+        "qty_on_hand",
+        "value_base",
+        "avg_cost",
+        "status"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -83,6 +127,5 @@
     "item_id",
     "status",
     "reason"
-  ],
-  "x-todo": true
+  ]
 }

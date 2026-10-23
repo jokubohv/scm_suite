@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/consigned.inventory/consigned.guard.rejected/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "consigned.inventory@1.0.0 consigned.guard.rejected payload (final outbox envelope; implemented data fields).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -25,14 +25,19 @@
       ],
       "type": "object"
     },
-    "causation_id": {
-      "type": "string"
-    },
     "correlation_id": {
       "type": "string"
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "config_snapshot": {},
+        "reason_codes": {}
+      },
+      "required": [
+        "reason_codes",
+        "config_snapshot"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +52,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,16 +73,11 @@
   "title": "consigned.guard.rejected",
   "type": "object",
   "x-contract": "consigned.inventory",
-  "x-event-family": true,
   "x-event-type": "consigned.guard.rejected",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-13",
   "x-payload-key-fields": [
-    "reason_code",
-    "entity",
-    "refs",
-    "config",
-    "snapshot"
-  ],
-  "x-todo": true
+    "reason_codes",
+    "config_snapshot"
+  ]
 }

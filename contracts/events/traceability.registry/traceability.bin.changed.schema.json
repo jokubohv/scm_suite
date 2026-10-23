@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/traceability.registry/traceability.bin.changed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "traceability.registry@1.0.0 traceability.bin.changed payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,46 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "bin_id": {
+          "title": "Bin Id",
+          "type": "string"
+        },
+        "change": {
+          "enum": [
+            "CREATED",
+            "UPDATED",
+            "ACTIVATED",
+            "INACTIVATED"
+          ],
+          "title": "Change",
+          "type": "string"
+        },
+        "changed": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Changed",
+          "type": "array"
+        },
+        "location_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location Id"
+        }
+      },
+      "required": [
+        "bin_id",
+        "change"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -85,6 +124,5 @@
     "zone_id",
     "change_type",
     "fields"
-  ],
-  "x-todo": true
+  ]
 }

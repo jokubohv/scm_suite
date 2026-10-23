@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/standard_cost.revalued/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 standard_cost.revalued payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,36 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "cost_version_id": {
+          "title": "Cost Version Id",
+          "type": "string"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "new_cost": {
+          "title": "New Cost",
+          "type": "string"
+        },
+        "old_cost": {
+          "title": "Old Cost",
+          "type": "string"
+        },
+        "value_delta": {
+          "title": "Value Delta",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "cost_version_id",
+        "old_cost",
+        "new_cost",
+        "value_delta"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +115,5 @@
     "lines",
     "item",
     "location"
-  ],
-  "x-todo": true
+  ]
 }

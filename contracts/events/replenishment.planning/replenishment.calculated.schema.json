@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/replenishment.calculated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 replenishment.calculated payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,36 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "applied_count": {
+          "default": 0,
+          "title": "Applied Count",
+          "type": "integer"
+        },
+        "formula_version": {
+          "title": "Formula Version",
+          "type": "string"
+        },
+        "line_count": {
+          "title": "Line Count",
+          "type": "integer"
+        },
+        "replenishment_calculation_id": {
+          "title": "Replenishment Calculation Id",
+          "type": "string"
+        },
+        "skipped_manual_count": {
+          "default": 0,
+          "title": "Skipped Manual Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "replenishment_calculation_id",
+        "formula_version",
+        "line_count"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -85,6 +114,5 @@
     "line_count",
     "applied_count",
     "skipped_manual_count"
-  ],
-  "x-todo": true
+  ]
 }

@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/consigned.inventory/consigned.returned/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "consigned.inventory@1.0.0 consigned.returned payload (final outbox envelope; implemented data fields).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -25,14 +25,23 @@
       ],
       "type": "object"
     },
-    "causation_id": {
-      "type": "string"
-    },
     "correlation_id": {
       "type": "string"
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "agreement_id": {},
+        "inventory_transaction_id": {},
+        "lines": {},
+        "transfer_id": {}
+      },
+      "required": [
+        "transfer_id",
+        "agreement_id",
+        "inventory_transaction_id",
+        "lines"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +56,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,15 +77,13 @@
   "title": "consigned.returned",
   "type": "object",
   "x-contract": "consigned.inventory",
-  "x-event-family": true,
   "x-event-type": "consigned.returned",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-13",
   "x-payload-key-fields": [
     "transfer_id",
-    "agreement",
-    "qty",
-    "value"
-  ],
-  "x-todo": true
+    "agreement_id",
+    "inventory_transaction_id",
+    "lines"
+  ]
 }

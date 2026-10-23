@@ -1170,7 +1170,7 @@
     "feature_sets": 16
   },
   "envelope": {
-    "note": "Every event schema carries the final envelope; data payload is TODO until the owning FS implements it.",
+    "note": "Every event schema carries the final envelope; data payloads are implementation-backed where the owning feature set published one and TODO only for remaining unimplemented producers.",
     "properties": [
       "aggregate",
       "causation_id",

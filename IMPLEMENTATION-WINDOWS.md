@@ -46,6 +46,8 @@ This file is the shared briefing for each window.
 
 | 5 | 2026-10-23 11:30 | in progress/final | **All 16 sets deployed/verified** (waves 0A–2); C3/C4/C5 freezes; full suite **1163 passed/1 skipped**; contract lint 0/0; final audit running | deployment-state 16/16 verified; head 0030; app OpenAPI 719 paths/943 ops; dev stack 7/7 | Independent final audit (`verification/evidence/FINAL-AUDIT/`), clean commit and push to https://github.com/jokubohv/scm_suite.git |
 
+| 6 | 2026-10-23 12:50 | in progress/final | **Residual remediation batch**: 159/159 event payloads synced, namespace CHECK widened, FS-07 approvals + FS-08 landed-cost bridge wired, FS-06 0013 scratch down/up verified, contract/runtime drift checker added; full suite 1185 passed/1 skipped | FS-07/08 re-verified + re-recorded; contract lint 0/0; 16/16 deployment state unchanged | Commit/push residual fixes; remaining residuals documented in `verification/evidence/RESIDUALS/REMEDIATION-REPORT.md` |
+
 
 ## Suggested agent assignment (reuse inactive teammates; 8-member cap)
 

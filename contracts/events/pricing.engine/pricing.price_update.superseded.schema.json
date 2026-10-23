@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/pricing.engine/pricing.price_update.superseded/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "pricing.engine@1.0.0 pricing.price_update.superseded payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,31 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "effective_start": {
+          "title": "Effective Start",
+          "type": "string"
+        },
+        "price_update_id": {
+          "title": "Price Update Id",
+          "type": "string"
+        },
+        "superseded_by_id": {
+          "title": "Superseded By Id",
+          "type": "string"
+        },
+        "target_ref": {
+          "title": "Target Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "price_update_id",
+        "superseded_by_id",
+        "target_ref",
+        "effective_start"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +108,5 @@
     "superseded_by_id",
     "target_ref",
     "effective_start"
-  ],
-  "x-todo": true
+  ]
 }

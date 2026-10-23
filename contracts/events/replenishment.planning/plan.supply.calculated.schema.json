@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/plan.supply.calculated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 plan.supply.calculated payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,48 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "exception_count": {
+          "title": "Exception Count",
+          "type": "integer"
+        },
+        "rule_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rule Id"
+        },
+        "run_key": {
+          "title": "Run Key",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "suggestion_count": {
+          "title": "Suggestion Count",
+          "type": "integer"
+        },
+        "supply_plan_id": {
+          "title": "Supply Plan Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "supply_plan_id",
+        "suggestion_count",
+        "exception_count",
+        "run_key",
+        "status"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +127,5 @@
     "exception_count",
     "run_key",
     "status"
-  ],
-  "x-todo": true
+  ]
 }

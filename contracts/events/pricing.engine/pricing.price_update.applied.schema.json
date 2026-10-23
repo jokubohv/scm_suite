@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/pricing.engine/pricing.price_update.applied/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "pricing.engine@1.0.0 pricing.price_update.applied payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,48 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "effective_end": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective End"
+        },
+        "effective_start": {
+          "title": "Effective Start",
+          "type": "string"
+        },
+        "price_update_id": {
+          "title": "Price Update Id",
+          "type": "string"
+        },
+        "rows_written": {
+          "title": "Rows Written",
+          "type": "integer"
+        },
+        "target_ref": {
+          "title": "Target Ref",
+          "type": "string"
+        },
+        "update_type": {
+          "title": "Update Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "price_update_id",
+        "update_type",
+        "target_ref",
+        "effective_start",
+        "rows_written"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +127,5 @@
     "effective_start",
     "effective_end",
     "rows_written"
-  ],
-  "x-todo": true
+  ]
 }

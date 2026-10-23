@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/procurement.p2p/vendor_bill.created/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "procurement.p2p@1.0.0 vendor_bill.created payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,21 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "source_doc_id": {},
+        "source_doc_type": {},
+        "tenant_id": {},
+        "total": {},
+        "vendor_bill_id": {},
+        "vendor_id": {}
+      },
+      "required": [
+        "vendor_bill_id",
+        "vendor_id",
+        "source_doc_type",
+        "source_doc_id",
+        "total"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +62,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,7 +83,6 @@
   "title": "vendor_bill.created",
   "type": "object",
   "x-contract": "procurement.p2p",
-  "x-event-family": true,
   "x-event-type": "vendor_bill.created",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-08",
@@ -86,6 +93,5 @@
     "source_doc_type",
     "source_doc_id",
     "total"
-  ],
-  "x-todo": true
+  ]
 }

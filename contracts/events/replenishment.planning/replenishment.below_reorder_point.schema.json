@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/replenishment.below_reorder_point/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 replenishment.below_reorder_point payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,41 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "available_qty": {
+          "title": "Available Qty",
+          "type": "string"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "location_id": {
+          "title": "Location Id",
+          "type": "string"
+        },
+        "preferred_stock": {
+          "title": "Preferred Stock",
+          "type": "string"
+        },
+        "qty_to_order": {
+          "title": "Qty To Order",
+          "type": "string"
+        },
+        "reorder_point": {
+          "title": "Reorder Point",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "location_id",
+        "available_qty",
+        "reorder_point",
+        "preferred_stock",
+        "qty_to_order"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +120,5 @@
     "reorder_point",
     "preferred_stock",
     "qty_to_order"
-  ],
-  "x-todo": true
+  ]
 }

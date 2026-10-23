@@ -1,17 +1,14 @@
 {
-  "$id": "https://contracts.inventory-platform.local/traceability.numbered/traceability.lot.inactivated/1.0.0",
+  "$id": "https://inventory-platform/contracts/events/traceability.numbered/traceability.lot.inactivated.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
   "properties": {
     "aggregate": {
-      "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "const": "traceability.numbered"
         },
         "version": {
           "minimum": 1,
@@ -26,13 +23,40 @@
       "type": "object"
     },
     "causation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "correlation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "actor_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lot_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "lot_id"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -40,16 +64,10 @@
       "type": "string"
     },
     "event_type": {
-      "minLength": 3,
-      "type": "string"
+      "const": "traceability.lot.inactivated"
     },
     "event_version": {
-      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "type": "string"
-    },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
+      "const": "1.0.0"
     },
     "occurred_at": {
       "format": "date-time",
@@ -58,32 +76,23 @@
     "tenant_id": {
       "format": "uuid",
       "type": "string"
-    },
-    "trace_id": {
-      "type": "string"
     }
   },
   "required": [
+    "aggregate",
+    "data",
     "event_id",
     "event_type",
     "event_version",
-    "tenant_id",
     "occurred_at",
-    "aggregate",
-    "data"
+    "tenant_id"
   ],
-  "title": "traceability.lot.inactivated",
+  "title": "traceability.numbered/traceability.lot.inactivated",
   "type": "object",
   "x-contract": "traceability.numbered",
-  "x-event-family": true,
+  "x-contract-version": "1.0.0",
+  "x-event": "traceability.lot.inactivated",
   "x-event-type": "traceability.lot.inactivated",
   "x-event-version": "1.0.0",
-  "x-feature-set": "FS-06",
-  "x-payload-key-fields": [
-    "tenant_id",
-    "lot_id",
-    "reason",
-    "actor_id"
-  ],
-  "x-todo": true
+  "x-feature-set": "FS-06"
 }

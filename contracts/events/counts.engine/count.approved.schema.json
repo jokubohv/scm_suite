@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/counts.engine/count.approved/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "counts.engine@1.0.0 count.approved payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,50 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "approved_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approved At"
+        },
+        "approved_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approved By"
+        },
+        "count_id": {
+          "title": "Count Id",
+          "type": "string"
+        },
+        "line_count": {
+          "title": "Line Count",
+          "type": "integer"
+        },
+        "variance_qty_total": {
+          "title": "Variance Qty Total",
+          "type": "string"
+        }
+      },
+      "required": [
+        "count_id",
+        "line_count",
+        "variance_qty_total"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +129,5 @@
     "approved_at",
     "line_count",
     "variance_qty_total"
-  ],
-  "x-todo": true
+  ]
 }

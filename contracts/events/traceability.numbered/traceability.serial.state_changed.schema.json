@@ -1,17 +1,14 @@
 {
-  "$id": "https://contracts.inventory-platform.local/traceability.numbered/traceability.serial.state_changed/1.0.0",
+  "$id": "https://inventory-platform/contracts/events/traceability.numbered/traceability.serial.state_changed.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
   "properties": {
     "aggregate": {
-      "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "const": "traceability.numbered"
         },
         "version": {
           "minimum": 1,
@@ -26,13 +23,61 @@
       "type": "object"
     },
     "causation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "correlation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "from_location_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "from_state": {
+          "type": "string"
+        },
+        "inventory_transaction_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "item_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "serial_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "to_location_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "to_state": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "serial_id",
+        "item_id",
+        "to_state"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -40,16 +85,10 @@
       "type": "string"
     },
     "event_type": {
-      "minLength": 3,
-      "type": "string"
+      "const": "traceability.serial.state_changed"
     },
     "event_version": {
-      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "type": "string"
-    },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
+      "const": "1.0.0"
     },
     "occurred_at": {
       "format": "date-time",
@@ -58,37 +97,23 @@
     "tenant_id": {
       "format": "uuid",
       "type": "string"
-    },
-    "trace_id": {
-      "type": "string"
     }
   },
   "required": [
+    "aggregate",
+    "data",
     "event_id",
     "event_type",
     "event_version",
-    "tenant_id",
     "occurred_at",
-    "aggregate",
-    "data"
+    "tenant_id"
   ],
-  "title": "traceability.serial.state_changed",
+  "title": "traceability.numbered/traceability.serial.state_changed",
   "type": "object",
   "x-contract": "traceability.numbered",
-  "x-event-family": true,
+  "x-contract-version": "1.0.0",
+  "x-event": "traceability.serial.state_changed",
   "x-event-type": "traceability.serial.state_changed",
   "x-event-version": "1.0.0",
-  "x-feature-set": "FS-06",
-  "x-payload-key-fields": [
-    "tenant_id",
-    "serial_id",
-    "item_id",
-    "from_state",
-    "to_state",
-    "from_location_id",
-    "to_location_id",
-    "inventory_transaction_id",
-    "event"
-  ],
-  "x-todo": true
+  "x-feature-set": "FS-06"
 }

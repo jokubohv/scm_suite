@@ -1,17 +1,14 @@
 {
-  "$id": "https://contracts.inventory-platform.local/traceability.numbered/traceability.expiry.warning/1.0.0",
+  "$id": "https://inventory-platform/contracts/events/traceability.numbered/traceability.expiry.warning.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
   "properties": {
     "aggregate": {
-      "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "const": "traceability.numbered"
         },
         "version": {
           "minimum": 1,
@@ -26,13 +23,45 @@
       "type": "object"
     },
     "causation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "correlation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "days_to_expiry": {
+          "type": "integer"
+        },
+        "expiry_date": {
+          "format": "date",
+          "type": "string"
+        },
+        "item_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "lot_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "on_hand": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "lot_id",
+        "expiry_date",
+        "days_to_expiry"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -40,16 +69,10 @@
       "type": "string"
     },
     "event_type": {
-      "minLength": 3,
-      "type": "string"
+      "const": "traceability.expiry.warning"
     },
     "event_version": {
-      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "type": "string"
-    },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
+      "const": "1.0.0"
     },
     "occurred_at": {
       "format": "date-time",
@@ -58,34 +81,23 @@
     "tenant_id": {
       "format": "uuid",
       "type": "string"
-    },
-    "trace_id": {
-      "type": "string"
     }
   },
   "required": [
+    "aggregate",
+    "data",
     "event_id",
     "event_type",
     "event_version",
-    "tenant_id",
     "occurred_at",
-    "aggregate",
-    "data"
+    "tenant_id"
   ],
-  "title": "traceability.expiry.warning",
+  "title": "traceability.numbered/traceability.expiry.warning",
   "type": "object",
   "x-contract": "traceability.numbered",
-  "x-event-family": true,
+  "x-contract-version": "1.0.0",
+  "x-event": "traceability.expiry.warning",
   "x-event-type": "traceability.expiry.warning",
   "x-event-version": "1.0.0",
-  "x-feature-set": "FS-06",
-  "x-payload-key-fields": [
-    "tenant_id",
-    "item_id",
-    "lot_id",
-    "expiry_date",
-    "days_to_expiry",
-    "on_hand"
-  ],
-  "x-todo": true
+  "x-feature-set": "FS-06"
 }

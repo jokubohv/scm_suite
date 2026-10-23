@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/planning.exception.raised/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 planning.exception.raised payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,62 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "additionalProperties": true,
+          "title": "Context",
+          "type": "object"
+        },
+        "item_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Id"
+        },
+        "location_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location Id"
+        },
+        "message_type": {
+          "title": "Message Type",
+          "type": "string"
+        },
+        "severity": {
+          "title": "Severity",
+          "type": "string"
+        },
+        "supply_plan_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supply Plan Id"
+        }
+      },
+      "required": [
+        "message_type",
+        "severity"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +141,5 @@
     "location",
     "supply_plan_id",
     "context"
-  ],
-  "x-todo": true
+  ]
 }

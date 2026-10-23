@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/cost.reconciliation.completed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 cost.reconciliation.completed payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,34 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "As Of"
+        },
+        "checked_positions": {
+          "title": "Checked Positions",
+          "type": "integer"
+        },
+        "drift_count": {
+          "title": "Drift Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "checked_positions",
+        "drift_count"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +111,5 @@
     "drift",
     "repaired",
     "job_run_id"
-  ],
-  "x-todo": true
+  ]
 }

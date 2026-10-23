@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/wms.execution/wms.inbound_shipment.created/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "wms.execution@1.0.0 wms.inbound_shipment.created payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,19 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "inbound_shipment_id": {},
+        "lines": {},
+        "location_id": {},
+        "shipment_number": {},
+        "tenant_id": {}
+      },
+      "required": [
+        "inbound_shipment_id",
+        "shipment_number",
+        "location_id",
+        "lines"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +60,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,15 +81,14 @@
   "title": "wms.inbound_shipment.created",
   "type": "object",
   "x-contract": "wms.execution",
-  "x-event-family": true,
   "x-event-type": "wms.inbound_shipment.created",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-11",
   "x-payload-key-fields": [
-    "shipment_id",
+    "tenant_id",
+    "inbound_shipment_id",
+    "shipment_number",
     "location_id",
-    "lines",
-    "summary"
-  ],
-  "x-todo": true
+    "lines"
+  ]
 }

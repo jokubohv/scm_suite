@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/pricing.engine/pricing.rule.changed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "pricing.engine@1.0.0 pricing.rule.changed payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,32 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "change": {
+          "enum": [
+            "CREATED",
+            "UPDATED",
+            "DISABLED",
+            "GENERATED"
+          ],
+          "title": "Change",
+          "type": "string"
+        },
+        "price_rule_id": {
+          "title": "Price Rule Id",
+          "type": "string"
+        },
+        "priority": {
+          "title": "Priority",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "price_rule_id",
+        "change",
+        "priority"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -83,6 +108,5 @@
     "price_rule_id",
     "change",
     "priority"
-  ],
-  "x-todo": true
+  ]
 }

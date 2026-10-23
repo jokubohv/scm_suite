@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/wms.execution/wms.task.watchdog.alert/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "wms.execution@1.0.0 wms.task.watchdog.alert payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,19 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "age_hours": {},
+        "status": {},
+        "task_id": {},
+        "task_type": {},
+        "tenant_id": {}
+      },
+      "required": [
+        "task_type",
+        "task_id",
+        "age_hours",
+        "status"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +60,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,14 +81,14 @@
   "title": "wms.task.watchdog.alert",
   "type": "object",
   "x-contract": "wms.execution",
-  "x-event-family": true,
   "x-event-type": "wms.task.watchdog.alert",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-11",
   "x-payload-key-fields": [
+    "tenant_id",
     "task_type",
     "task_id",
-    "age_minutes"
-  ],
-  "x-todo": true
+    "age_hours",
+    "status"
+  ]
 }

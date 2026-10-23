@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/procurement.p2p/vendor_return.credited/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "procurement.p2p@1.0.0 vendor_return.credited payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,15 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "tenant_id": {},
+        "vendor_credit_id": {},
+        "vendor_return_id": {}
+      },
+      "required": [
+        "vendor_return_id",
+        "vendor_credit_id"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +56,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,7 +77,6 @@
   "title": "vendor_return.credited",
   "type": "object",
   "x-contract": "procurement.p2p",
-  "x-event-family": true,
   "x-event-type": "vendor_return.credited",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-08",
@@ -83,6 +84,5 @@
     "tenant_id",
     "vendor_return_id",
     "vendor_credit_id"
-  ],
-  "x-todo": true
+  ]
 }

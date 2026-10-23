@@ -111,7 +111,7 @@ tenant_settings = mk("tenant_setting", [
     Column("is_default", Boolean, nullable=False, server_default=text("false")),
 ], extra_constraints=[
     UniqueConstraint("tenant_id", "namespace", "key", name="uq_tenant_setting_scope"),
-    CheckConstraint("namespace IN ('inventory','manufacturing','wms','replenishment','costing','pricing','platform','accounting','rbac','auth')", name="tenant_setting_namespace"),
+    CheckConstraint("namespace IN ('inventory','manufacturing','wms','replenishment','costing','pricing','platform','accounting','rbac','auth','counts','traceability','procurement','quality','consigned','extensions','reporting')", name="tenant_setting_namespace"),
 ])
 exchange_rate = mk("exchange_rate", [
     Column("base_currency", Text, nullable=False),

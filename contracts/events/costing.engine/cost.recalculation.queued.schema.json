@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/cost.recalculation.queued/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 cost.recalculation.queued payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,46 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "cost_run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Run Id"
+        },
+        "from_date": {
+          "format": "date",
+          "title": "From Date",
+          "type": "string"
+        },
+        "item_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Item Id"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from_date",
+        "reason"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +123,5 @@
     "from_date",
     "reason",
     "run_key"
-  ],
-  "x-todo": true
+  ]
 }

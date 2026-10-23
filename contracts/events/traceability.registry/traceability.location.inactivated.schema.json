@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/traceability.registry/traceability.location.inactivated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "traceability.registry@1.0.0 traceability.location.inactivated payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,23 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "location_id": {
+          "title": "Location Id",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "location_id"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +100,5 @@
     "code",
     "reason",
     "occurred_at"
-  ],
-  "x-todo": true
+  ]
 }

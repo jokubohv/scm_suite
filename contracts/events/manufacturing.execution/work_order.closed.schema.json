@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/manufacturing.execution/work_order.closed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "manufacturing.execution@1.0.0 work_order.closed payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,19 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "qty_built": {},
+        "qty_scrapped": {},
+        "tenant_id": {},
+        "variance_refs": {},
+        "work_order_id": {}
+      },
+      "required": [
+        "work_order_id",
+        "qty_built",
+        "qty_scrapped",
+        "variance_refs"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +60,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,17 +81,14 @@
   "title": "work_order.closed",
   "type": "object",
   "x-contract": "manufacturing.execution",
-  "x-event-family": true,
   "x-event-type": "work_order.closed",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-09",
   "x-payload-key-fields": [
+    "tenant_id",
     "work_order_id",
     "qty_built",
     "qty_scrapped",
-    "variance",
-    "refs",
-    "closed_at"
-  ],
-  "x-todo": true
+    "variance_refs"
+  ]
 }

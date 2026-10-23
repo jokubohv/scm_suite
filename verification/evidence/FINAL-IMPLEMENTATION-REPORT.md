@@ -33,15 +33,21 @@ Waves: `0A → 0B → 0C → 1A → 1B → 1C → 1D → 1E → 1F → 2`.
 - **FS-10/11**: replenishment/planning (AIM/ATP/MRP/DRP/allocation); WMS (strategies, waves/pick/pack/ship, ASN/receiving/putaway).
 - **FS-12/13/14/15**: quality (inspections/NCR/holds/recall), consigned inventory (T-21/22/23), extensions (warranty/repair/customer parts/UPC), reporting (21 read-model views incl. materialized).
 
-## Known accepted residuals
+## Residual remediation (post-completion)
 
-1. FS-15 V-21 `v_available_to_build` is a typed empty fallback until FS-09 exposes a persisted ATB cache; FS-09 computes ATB via API/contract.
-2. Settings namespaces use frozen `inventory` namespace with `counts.`/`procurement.`/`quality.`/`consigned.`/`extensions.` prefixes (platform CHECK amendment deferred).
-3. Contract-fragment ownership accounting for FS-01/FS-04 is partial; implementation-backed fragments + provider tests are green.
-4. Some canonical event payload schemas remain TODO stubs in the registry; real schemas live under `app/contracts/*/events/`.
-5. Scheduled job handlers/scheduler wiring, tenant provisioning cloning of new sequences/settings, and durable idempotency hardening for some transitions remain deployment/operations follow-ups.
-6. Spec/catalogue variance (`reporting.admin`, `extensions.admin`) handled with catalogued scopes.
+See `verification/evidence/RESIDUALS/REMEDIATION-REPORT.md` for the full before/after register. Closed:
+canonical event payload schemas (**159/159** implementation-backed, 0 `x-todo`), widened tenant-setting
+namespace CHECK (dedicated namespaces allowed), FS-07 declarative approval wiring, FS-08 receipt/bill
+landed-cost T-27/T-26 bridge, FS-06 `0013` scratch down/up verification, and a contract/runtime drift
+checker (0 implemented operations unmounted, 0 mounted operations undeclared).
 
+Remaining accepted residuals: 374 contract-first skeleton (spec-only) operations; FS-15 V-21 ATB empty
+fallback pending an FS-09 persisted cache (plan-count change); scheduler/job handlers; tenant
+provisioning cloning of new sequences/settings plus a default `INVENTORY_COUNT` approval definition;
+landed-cost absorption true-up/reversal; FS-00 event producers for some platform/order events
+(structural schemas only); FS-04 partition deviation and FS-01/02 minor guards.
+
+## Repository
 ## Repository
 
 Implementation root: `inventory-platform/`. Plan package unchanged (v1.5.0 verified). Independent final audit: `verification/evidence/FINAL-AUDIT/REPORT.md`.

@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/atp.updated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 atp.updated payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,36 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "title": "As Of",
+          "type": "string"
+        },
+        "bucket_count": {
+          "title": "Bucket Count",
+          "type": "integer"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "policy_version": {
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "scope": {
+          "additionalProperties": true,
+          "title": "Scope",
+          "type": "object"
+        }
+      },
+      "required": [
+        "as_of",
+        "method",
+        "policy_version",
+        "bucket_count"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -90,6 +119,5 @@
     "earliest_full_date",
     "sample",
     "stale_seconds"
-  ],
-  "x-todo": true
+  ]
 }

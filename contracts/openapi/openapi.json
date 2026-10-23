@@ -50211,6 +50211,28 @@
               "schema": {
                 "additionalProperties": false,
                 "properties": {
+                  "approved_by": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Approved By"
+                  },
+                  "comment": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Comment"
+                  },
                   "reason": {
                     "maxLength": 500,
                     "minLength": 1,

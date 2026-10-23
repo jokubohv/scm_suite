@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/cost.rollup.completed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 cost.rollup.completed payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,35 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "cost_rollup_run_id": {
+          "title": "Cost Rollup Run Id",
+          "type": "string"
+        },
+        "cost_version_id": {
+          "title": "Cost Version Id",
+          "type": "string"
+        },
+        "lines": {
+          "title": "Lines",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "SUCCEEDED",
+            "FAILED"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cost_rollup_run_id",
+        "cost_version_id",
+        "lines",
+        "status"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +112,5 @@
     "cost_version_id",
     "max_level",
     "items_count"
-  ],
-  "x-todo": true
+  ]
 }

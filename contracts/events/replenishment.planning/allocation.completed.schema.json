@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/allocation.completed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 allocation.completed payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,47 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "allocated_count": {
+          "title": "Allocated Count",
+          "type": "integer"
+        },
+        "allocation_run_id": {
+          "title": "Allocation Run Id",
+          "type": "string"
+        },
+        "as_of_date": {
+          "format": "date",
+          "title": "As Of Date",
+          "type": "string"
+        },
+        "demand_count": {
+          "title": "Demand Count",
+          "type": "integer"
+        },
+        "exception_count": {
+          "title": "Exception Count",
+          "type": "integer"
+        },
+        "strategy_id": {
+          "title": "Strategy Id",
+          "type": "string"
+        },
+        "supply_count": {
+          "title": "Supply Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "allocation_run_id",
+        "strategy_id",
+        "as_of_date",
+        "demand_count",
+        "supply_count",
+        "allocated_count",
+        "exception_count"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -87,6 +127,5 @@
     "supply_count",
     "allocated_count",
     "exception_count"
-  ],
-  "x-todo": true
+  ]
 }

@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/cost.layer.created/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 cost.layer.created payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,41 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "estimated": {
+          "default": false,
+          "title": "Estimated",
+          "type": "boolean"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "layer_id": {
+          "title": "Layer Id",
+          "type": "string"
+        },
+        "qty": {
+          "title": "Qty",
+          "type": "string"
+        },
+        "unit_cost": {
+          "title": "Unit Cost",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "layer_id",
+        "qty",
+        "unit_cost",
+        "value"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -83,6 +117,5 @@
     "item_cost_id",
     "item",
     "location"
-  ],
-  "x-todo": true
+  ]
 }

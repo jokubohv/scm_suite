@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/landed_cost.estimated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 landed_cost.estimated payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,45 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "allocated_amount": {
+          "title": "Allocated Amount",
+          "type": "string"
+        },
+        "cost_category_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Category Id"
+        },
+        "item_receipt_line_id": {
+          "title": "Item Receipt Line Id",
+          "type": "string"
+        },
+        "template_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Template Id"
+        }
+      },
+      "required": [
+        "item_receipt_line_id",
+        "allocated_amount"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +122,5 @@
     "template_id",
     "estimated_amount",
     "transaction_id"
-  ],
-  "x-todo": true
+  ]
 }

@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/costing.engine/cost.variance.posted/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "costing.engine@1.0.0 cost.variance.posted payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,38 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "amount_base": {
+          "title": "Amount Base",
+          "type": "string"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "variance_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Variance Id"
+        },
+        "variance_type": {
+          "title": "Variance Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "variance_type",
+        "amount_base"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -86,6 +117,5 @@
     "amount_base",
     "period",
     "source"
-  ],
-  "x-todo": true
+  ]
 }

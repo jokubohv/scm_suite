@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/wms.execution/wms.receiving.reversed/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "wms.execution@1.0.0 wms.receiving.reversed payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,17 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "item_receipt_id": {},
+        "receiving_order_id": {},
+        "reversed_transaction_ids": {},
+        "tenant_id": {}
+      },
+      "required": [
+        "receiving_order_id",
+        "item_receipt_id",
+        "reversed_transaction_ids"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +58,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,13 +79,13 @@
   "title": "wms.receiving.reversed",
   "type": "object",
   "x-contract": "wms.execution",
-  "x-event-family": true,
   "x-event-type": "wms.receiving.reversed",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-11",
   "x-payload-key-fields": [
+    "tenant_id",
     "receiving_order_id",
+    "item_receipt_id",
     "reversed_transaction_ids"
-  ],
-  "x-todo": true
+  ]
 }

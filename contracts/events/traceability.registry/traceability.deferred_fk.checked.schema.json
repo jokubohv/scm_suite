@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/traceability.registry/traceability.deferred_fk.checked/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "traceability.registry@1.0.0 traceability.deferred_fk.checked payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,24 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "ok": {
+          "title": "Ok",
+          "type": "boolean"
+        },
+        "orphans": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Orphans",
+          "type": "object"
+        }
+      },
+      "required": [
+        "orphans",
+        "ok"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -83,6 +100,5 @@
     "tenant_id",
     "orphan_count",
     "closed"
-  ],
-  "x-todo": true
+  ]
 }

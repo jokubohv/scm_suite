@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/plan.demand.calculated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 plan.demand.calculated payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,36 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "changed_lines": {
+          "default": 0,
+          "title": "Changed Lines",
+          "type": "integer"
+        },
+        "demand_plan_id": {
+          "title": "Demand Plan Id",
+          "type": "string"
+        },
+        "line_count": {
+          "title": "Line Count",
+          "type": "integer"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "policy_version": {
+          "title": "Policy Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "demand_plan_id",
+        "method",
+        "line_count",
+        "policy_version"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -85,6 +114,5 @@
     "line_count",
     "policy_version",
     "changed_lines"
-  ],
-  "x-todo": true
+  ]
 }

@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/procurement.p2p/po.receipted/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "procurement.p2p@1.0.0 po.receipted payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,17 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "item_receipt_id": {},
+        "lines": {},
+        "purchase_order_id": {},
+        "tenant_id": {}
+      },
+      "required": [
+        "purchase_order_id",
+        "item_receipt_id",
+        "lines"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +58,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,13 +79,13 @@
   "title": "po.receipted",
   "type": "object",
   "x-contract": "procurement.p2p",
-  "x-event-family": true,
   "x-event-type": "po.receipted",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-08",
   "x-payload-key-fields": [
-    "po_line_id",
-    "qty_received_cumulative"
-  ],
-  "x-todo": true
+    "tenant_id",
+    "purchase_order_id",
+    "item_receipt_id",
+    "lines"
+  ]
 }

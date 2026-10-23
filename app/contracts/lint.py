@@ -257,8 +257,8 @@ def _check_events(model: ContractModel, issues: list[dict[str, str]], stats: dic
                 issues.append(_issue(ERROR, "EVENTS_SCHEMA_CONTRACT", f"{schema_rel}: x-contract mismatch", paths.relpath(schema_path)))
             if schema.get("x-event-version") != event_entry.get("version"):
                 issues.append(_issue(ERROR, "EVENTS_SCHEMA_VERSION", f"{schema_rel}: x-event-version mismatch", paths.relpath(schema_path)))
-            if schema.get("x-todo") is not True:
-                issues.append(_issue(WARNING, "EVENTS_SCHEMA_TODO", f"{schema_rel}: payload not marked TODO (implemented event?)", paths.relpath(schema_path)))
+            # Non-TODO payloads are the expected steady state now that feature sets are implemented;
+            # the generator folds builder extension schemas into the canonical envelope (EVENT_SYNC).
     if schema_count == 0:
         issues.append(_issue(ERROR, "EVENTS_EMPTY", "no event schemas found", paths.relpath(paths.EVENTS_DIR)))
     stats["event_schemas"] = schema_count

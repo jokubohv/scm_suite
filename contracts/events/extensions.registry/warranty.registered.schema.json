@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/extensions.registry/warranty.registered/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "extensions.registry@1.0.0 warranty.registered payload (final outbox envelope; implemented data fields).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -25,14 +25,29 @@
       ],
       "type": "object"
     },
-    "causation_id": {
-      "type": "string"
-    },
     "correlation_id": {
       "type": "string"
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "customer_ref": {},
+        "item_id": {},
+        "registration_id": {},
+        "serial_id": {},
+        "source": {},
+        "warranty_end": {},
+        "warranty_start": {}
+      },
+      "required": [
+        "registration_id",
+        "item_id",
+        "serial_id",
+        "customer_ref",
+        "warranty_start",
+        "warranty_end",
+        "source"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +62,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,7 +83,6 @@
   "title": "warranty.registered",
   "type": "object",
   "x-contract": "extensions.registry",
-  "x-event-family": true,
   "x-event-type": "warranty.registered",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-14",
@@ -85,8 +92,7 @@
     "serial_id",
     "customer_ref",
     "warranty_start",
-    "end",
+    "warranty_end",
     "source"
-  ],
-  "x-todo": true
+  ]
 }

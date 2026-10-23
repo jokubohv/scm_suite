@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/manufacturing.execution/manufacturing.compat.rule_set.activated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "manufacturing.execution@1.0.0 manufacturing.compat.rule_set.activated payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,21 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "enforcement_mode": {},
+        "rule_count": {},
+        "rule_set_id": {},
+        "scope_ref_id": {},
+        "scope_type": {},
+        "tenant_id": {}
+      },
+      "required": [
+        "rule_set_id",
+        "scope_type",
+        "scope_ref_id",
+        "enforcement_mode",
+        "rule_count"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +62,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,20 +83,15 @@
   "title": "manufacturing.compat.rule_set.activated",
   "type": "object",
   "x-contract": "manufacturing.execution",
-  "x-event-family": true,
   "x-event-type": "manufacturing.compat.rule_set.activated",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-09",
   "x-payload-key-fields": [
+    "tenant_id",
     "rule_set_id",
-    "code",
     "scope_type",
     "scope_ref_id",
-    "priority",
     "enforcement_mode",
-    "rule_count",
-    "effective_from",
-    "version"
-  ],
-  "x-todo": true
+    "rule_count"
+  ]
 }

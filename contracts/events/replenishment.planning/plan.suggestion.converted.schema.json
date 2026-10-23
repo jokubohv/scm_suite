@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/replenishment.planning/plan.suggestion.converted/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "replenishment.planning@1.0.0 plan.suggestion.converted payload.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -32,7 +32,52 @@
       "type": "string"
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "created_doc_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created Doc Id"
+        },
+        "created_doc_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created Doc Type"
+        },
+        "idempotency_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Idempotency Ref"
+        },
+        "suggestion_id": {
+          "title": "Suggestion Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "suggestion_id"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -84,6 +129,5 @@
     "created_doc_type",
     "created_doc_id",
     "idempotency_ref"
-  ],
-  "x-todo": true
+  ]
 }

@@ -1,0 +1,31 @@
+== FS-07 residual re-verification 2026-10-23T16:47:09.098066+00:00 ==
+-- entry
+ENTRY GATE PASS for FS-07 (phase 1, wave 1A) against state file deployment-state.dev.json: 8/8 dependency contract(s) verified
+  note: FS-07 already recorded as 'verified' in this environment
+-- $ docker compose run --rm api alembic upgrade head
+RC=0
+
+ Container inv-s0-gate-postgres-1  Running
+ Container inv-s0-gate-minio-1  Running
+ Container inv-s0-gate-redis-1  Running
+ Container inv-s0-gate-dex-1  Running
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-postgres-1  Healthy
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+
+-- $ pytest app/tests/integration/counts -q
+RC=0
+..................                                                       [100%]
+
+
+-- $ pytest app/tests/contracts/test_fs07_provider_contract.py -q
+RC=0
+......                                                                   [100%]
+
+
+-- $ pytest app/tests/invariants/test_count_variance_equals_delta.py app/tests/invariants/test_count_snapshot_immutable.py -q
+RC=0
+.......                                                                  [100%]
+
+

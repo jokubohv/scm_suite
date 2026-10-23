@@ -1,17 +1,14 @@
 {
-  "$id": "https://contracts.inventory-platform.local/quality.management/quality.derived_field.evaluated/1.0.0",
+  "$id": "https://inventory-platform/contracts/events/quality.management/quality.derived_field.evaluated.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
   "properties": {
     "aggregate": {
-      "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "const": "quality"
         },
         "version": {
           "minimum": 1,
@@ -26,13 +23,51 @@
       "type": "object"
     },
     "causation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "correlation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "coa_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "disposition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "inspection_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "item_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "plan_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "spec_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "trigger_id": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
       "type": "object"
     },
     "event_id": {
@@ -40,16 +75,10 @@
       "type": "string"
     },
     "event_type": {
-      "minLength": 3,
-      "type": "string"
+      "const": "quality.derived_field.evaluated"
     },
     "event_version": {
-      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "type": "string"
-    },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
+      "const": "1.0.0"
     },
     "occurred_at": {
       "format": "date-time",
@@ -58,32 +87,23 @@
     "tenant_id": {
       "format": "uuid",
       "type": "string"
-    },
-    "trace_id": {
-      "type": "string"
     }
   },
   "required": [
+    "aggregate",
+    "data",
     "event_id",
     "event_type",
     "event_version",
-    "tenant_id",
     "occurred_at",
-    "aggregate",
-    "data"
+    "tenant_id"
   ],
-  "title": "quality.derived_field.evaluated",
+  "title": "quality.management/quality.derived_field.evaluated",
   "type": "object",
   "x-contract": "quality.management",
-  "x-event-family": true,
+  "x-contract-version": "1.0.0",
+  "x-event": "quality.derived_field.evaluated",
   "x-event-type": "quality.derived_field.evaluated",
   "x-event-version": "1.0.0",
-  "x-feature-set": "FS-12",
-  "x-payload-key-fields": [
-    "inspection_id",
-    "field",
-    "keys",
-    "summary"
-  ],
-  "x-todo": true
+  "x-feature-set": "FS-12"
 }

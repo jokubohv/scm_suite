@@ -34,7 +34,11 @@ def test_every_registered_event_has_a_valid_schema() -> None:
             assert schema["x-event-version"] == event["version"]
             assert schema["x-contract"] == entry["contract"]
             assert schema["x-feature-set"] == entry["feature_set"]
-            assert schema["x-todo"] is True, f"{event['event']} should still be a TODO payload stub"
+            if schema.get("x-todo") is True:
+                assert "TODO" in schema["properties"]["data"].get("description", schema.get("description", "TODO"))
+            else:  # implementation-backed payload folded into the canonical envelope
+                data = schema["properties"]["data"]
+                assert isinstance(data.get("properties"), dict), f"{event['event']} payload schema is empty"
             checked += 1
     assert checked == registry["counts"]["event_schemas"]
 

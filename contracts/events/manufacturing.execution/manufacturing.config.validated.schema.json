@@ -2,7 +2,7 @@
   "$id": "https://contracts.inventory-platform.local/manufacturing.execution/manufacturing.config.validated/1.0.0",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "manufacturing.execution@1.0.0 manufacturing.config.validated payload (final outbox envelope; data fields implemented).",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
@@ -33,6 +33,21 @@
     },
     "data": {
       "additionalProperties": true,
+      "properties": {
+        "assembly_item_id": {},
+        "configuration_hash": {},
+        "configuration_id": {},
+        "context": {},
+        "result": {},
+        "tenant_id": {}
+      },
+      "required": [
+        "configuration_id",
+        "configuration_hash",
+        "context",
+        "assembly_item_id",
+        "result"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -47,19 +62,12 @@
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
       "type": "string"
     },
-    "metadata": {
-      "additionalProperties": true,
-      "type": "object"
-    },
     "occurred_at": {
       "format": "date-time",
       "type": "string"
     },
     "tenant_id": {
       "format": "uuid",
-      "type": "string"
-    },
-    "trace_id": {
       "type": "string"
     }
   },
@@ -75,21 +83,15 @@
   "title": "manufacturing.config.validated",
   "type": "object",
   "x-contract": "manufacturing.execution",
-  "x-event-family": true,
   "x-event-type": "manufacturing.config.validated",
   "x-event-version": "1.0.0",
   "x-feature-set": "FS-09",
   "x-payload-key-fields": [
+    "tenant_id",
     "configuration_id",
     "configuration_hash",
     "context",
     "assembly_item_id",
-    "result",
-    "violation_count",
-    "matched_rule_set_codes",
-    "override",
-    "refs",
-    "validated_at"
-  ],
-  "x-todo": true
+    "result"
+  ]
 }

@@ -14,6 +14,7 @@ implementation-backed schemas in their own ``app/contracts/<dir>/`` scope.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any
 
 from . import paths
@@ -178,7 +179,17 @@ def build_fragment(fs: FeatureSet, model: ContractModel) -> dict[str, Any]:
     return fragment
 
 
-def build_event_schema(event: Event) -> dict[str, Any]:
+def _extension_dir_contracts(path: Path) -> set[str]:
+    """Contracts advertised by the builder directory that owns an extension event schema."""
+    contract_file = path.parents[1] / "contract.json"
+    try:
+        data = json.loads(contract_file.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    return {entry.get("contract") for entry in data.get("contracts", []) if entry.get("contract")}
+
+
+def _event_skeleton(event: Event) -> dict[str, Any]:
     schema: dict[str, Any] = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "$id": f"https://contracts.inventory-platform.local/{event.contract}/{event.name}/{event.version}",
@@ -198,6 +209,58 @@ def build_event_schema(event: Event) -> dict[str, Any]:
     if event.family:
         schema["x-event-family"] = True
     return schema
+
+
+def _extension_event_schema(event: Event) -> dict[str, Any] | None:
+    """Return the implementation-backed schema when a feature set published one.
+
+    Builders publish either a full final-envelope schema or a payload-only schema whose
+    ``properties`` describe the event ``data`` object. Both forms are folded into the canonical
+    envelope contract here.
+    """
+    root = Path(__file__).resolve().parents[2]
+    matches = sorted((root / "app" / "contracts").glob(f"*/events/{event.name}.schema.json"))
+    for path in matches:
+        try:
+            schema = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        declared_contract = schema.get("x-contract")
+        candidate = declared_contract or event.contract
+        if candidate != event.contract and event.contract not in _extension_dir_contracts(path):
+            continue
+        if schema.get("x-todo") is True:
+            continue
+        properties = schema.get("properties")
+        if not isinstance(properties, dict) or not properties:
+            continue
+        has_envelope = all(key in properties for key in EVENT_ENVELOPE_REQUIRED) and "data" in properties
+        if has_envelope:
+            normalized = schema
+        else:
+            normalized = _event_skeleton(event)
+            normalized["description"] = schema.get("description") or f"{event.contract}@{event.version} {event.name} payload."
+            normalized["properties"]["data"] = {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": properties,
+                "required": list(schema.get("required") or ()),
+            }
+            normalized.pop("x-todo", None)
+        normalized.pop("x-todo", None)
+        normalized["x-event-type"] = event.name
+        normalized["x-event-version"] = event.version
+        normalized["x-contract"] = event.contract
+        normalized["x-feature-set"] = event.fs_id
+        return normalized
+    return None
+
+
+def build_event_schema(event: Event) -> dict[str, Any]:
+    override = _extension_event_schema(event)
+    if override is not None:
+        return override
+    return _event_skeleton(event)
 
 
 def _contract_entries(model: ContractModel) -> list[dict[str, Any]]:
@@ -240,7 +303,7 @@ def build_registry(model: ContractModel) -> dict[str, Any]:
         "envelope": {
             "required": list(EVENT_ENVELOPE_REQUIRED),
             "properties": sorted(EVENT_ENVELOPE_PROPERTIES),
-            "note": "Every event schema carries the final envelope; data payload is TODO until the owning FS implements it.",
+            "note": "Every event schema carries the final envelope; data payloads are implementation-backed where the owning feature set published one and TODO only for remaining unimplemented producers.",
         },
         "contracts": entries,
         "event_families": sorted({e.name for e in model.events if e.wildcard}),
