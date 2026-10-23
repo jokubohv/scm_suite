@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import uuid
+
 import pytest
 from sqlalchemy import select, update
 
@@ -428,3 +430,36 @@ async def test_invitation_accept_existing_identity_and_error_states(db_session, 
     )
     assert invalid.status_code == 400
     assert invalid.json()["code"] == "INVITATION_TOKEN_INVALID"
+
+
+async def test_switch_tenant_issues_pair_for_other_membership(db_session, auth_client, tokens) -> None:
+    first = await create_tenant(db_session, code="TEN-O")
+    second = await create_tenant(db_session, code="TEN-P")
+    identity_id = await create_identity(db_session, email="switch@example.com")
+    await create_membership(db_session, tenant_id=first, identity_id=identity_id, email="switch@example.com", scopes=("items.read",))
+    await create_membership(
+        db_session, tenant_id=second, identity_id=identity_id, email="switch@example.com", scopes=("items.read", "items.create")
+    )
+    login = await _login(auth_client, "switch@example.com", tenant_selector="TEN-O")
+    assert login.status_code == 200, login.text
+    access_token = login.json()["access_token"]
+
+    switched = await auth_client.post(
+        "/api/v1/auth/switch-tenant",
+        headers=auth_headers(access_token),
+        json={"tenant_id": str(second)},
+    )
+    assert switched.status_code == 200, switched.text
+    pair = switched.json()
+    assert pair["tenant"]["code"] == "TEN-P"
+    claims = tokens.decode_access_token(pair["access_token"])
+    assert claims.tid == str(second)
+    assert "items.create" in claims.scopes
+
+    unknown = await auth_client.post(
+        "/api/v1/auth/switch-tenant",
+        headers=auth_headers(access_token),
+        json={"tenant_id": str(uuid.uuid4())},
+    )
+    assert unknown.status_code == 403
+    assert unknown.json()["code"] == "NO_ACTIVE_MEMBERSHIP"

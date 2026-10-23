@@ -120,6 +120,10 @@ class SelectTenantRequest(BaseModel):
     tenant_id: str = Field(min_length=1)
 
 
+class SwitchTenantRequest(BaseModel):
+    tenant_id: str = Field(min_length=1)
+
+
 class RefreshRequest(BaseModel):
     refresh_token: str = Field(min_length=8)
 
@@ -829,6 +833,33 @@ async def me_effective_permissions(
         sod_pairs=[] if break_glass else [[pair.a, pair.b] for pair in conflicts],
     )
 
+
+
+
+@router.post(
+    "/api/v1/auth/switch-tenant",
+    response_model=TokenPairResponse,
+    summary="Issue a token pair for another ACTIVE membership of the caller (self-service)",
+)
+async def switch_tenant(
+    payload: SwitchTenantRequest,
+    request: Request,
+    principal: PrincipalDep,
+    repository: RepoDep,
+    tokens: TokenSvcDep,
+) -> TokenPairResponse:
+    identity_id = _as_uuid(principal.identity_id, field="identity_id")
+    tenant_id = _as_uuid(payload.tenant_id, field="tenant_id")
+    memberships = await repository.list_memberships(identity_id)
+    selected = next((membership for membership in memberships if membership.tenant_id == tenant_id), None)
+    if selected is None:
+        raise NoActiveMembership("identity has no membership for the requested tenant")
+    _check_membership_loginable(selected)
+    identity = await repository.get_identity(identity_id)
+    if identity is None or identity.status != "ACTIVE":
+        raise TokenInvalid("identity is not active; sign in again")
+    pair = await _issue_token_pair(repository, tokens, identity_id=identity_id, membership=selected, request=request)
+    return _pair_response(pair, selected)
 
 __all__ = [
     "get_auth_repository",
