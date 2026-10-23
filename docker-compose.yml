@@ -226,13 +226,11 @@ services:
 
   outbox-relay:
     <<: *app-service
-    # Placeholder until FS-00 adds the dedicated relay entrypoint (`app/core` outbox relay):
-    # the scaffold image only has the RQ worker bootstrap, so for NOW this service runs the same
-    # entrypoint to keep the S0 stack healthy. FS-00 will set, e.g.:
-    #   OUTBOX_RELAY_COMMAND=python -m app.core.outbox_relay
-    command: ${OUTBOX_RELAY_COMMAND:-python -m app.workers.worker}
+    # FS-00 outbox relay: polls platform.outbox_event and publishes to Redis Streams.
+    # Override with OUTBOX_RELAY_COMMAND / OUTBOX_RELAY_HEALTHCHECK_MATCH if needed.
+    command: ${OUTBOX_RELAY_COMMAND:-python -m app.core.outbox_relay}
     healthcheck:
-      test: ["CMD", "python", "-c", "import glob,os,sys; needle=os.environ.get('OUTBOX_RELAY_HEALTHCHECK_MATCH','app.workers.worker'); sys.exit(0 if any(needle in open(f,'rb').read().decode('utf-8','ignore') for f in glob.glob('/proc/[0-9]*/cmdline')) else 1)"]
+      test: ["CMD", "python", "-c", "import glob,os,sys; needle=os.environ.get('OUTBOX_RELAY_HEALTHCHECK_MATCH','app.core.outbox_relay'); sys.exit(0 if any(needle in open(f,'rb').read().decode('utf-8','ignore') for f in glob.glob('/proc/[0-9]*/cmdline')) else 1)"]
       interval: 15s
       timeout: 5s
       retries: 8

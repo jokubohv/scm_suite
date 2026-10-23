@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import hashlib
 import uuid
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from sqlalchemy import insert
+from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models.platform import (
@@ -15,6 +16,7 @@ from app.core.models.platform import (
     role,
     role_permission,
     tenant,
+    tenant_invitation,
     tenant_sso_connection,
     user_identity,
     user_role,
@@ -147,6 +149,84 @@ async def create_membership(
     return app_user_id
 
 
+async def create_role(
+    session: AsyncSession,
+    *,
+    tenant_id: uuid.UUID,
+    code: str,
+    scopes: tuple[str, ...] = ("items.read",),
+) -> uuid.UUID:
+    role_id = uuid.uuid4()
+    await session.execute(
+        insert(role).values(
+            id=role_id,
+            tenant_id=tenant_id,
+            code=code,
+            name=code.replace("_", " ").title(),
+            is_system=False,
+            is_template=False,
+            is_editable=True,
+        )
+    )
+    for scope_name in scopes:
+        domain, _, action = scope_name.partition(".")
+        existing = (
+            await session.execute(
+                select(permission_scope.c.id).where(
+                    permission_scope.c.tenant_id == tenant_id,
+                    permission_scope.c.scope == scope_name,
+                )
+            )
+        ).scalar_one_or_none()
+        scope_id = existing or uuid.uuid4()
+        if existing is None:
+            await session.execute(
+                insert(permission_scope).values(
+                    id=scope_id,
+                    tenant_id=tenant_id,
+                    scope=scope_name,
+                    domain=domain or scope_name,
+                    action=action or "read",
+                    is_assignable=True,
+                )
+            )
+        await session.execute(
+            insert(role_permission).values(tenant_id=tenant_id, role_id=role_id, scope_id=scope_id)
+        )
+    return role_id
+
+
+async def create_invitation(
+    session: AsyncSession,
+    *,
+    tenant_id: uuid.UUID,
+    email: str,
+    invited_by: uuid.UUID,
+    role_ids: tuple[uuid.UUID, ...] = (),
+    raw_token: str = "invitation-raw-token-123456",
+    status: str = "PENDING",
+    expires_in_hours: int = 48,
+) -> uuid.UUID:
+    invitation_id = uuid.uuid4()
+    now = datetime.now(UTC)
+    expires_at = now + timedelta(hours=expires_in_hours)
+    created_at = min(now, expires_at - timedelta(hours=1))
+    await session.execute(
+        insert(tenant_invitation).values(
+            id=invitation_id,
+            tenant_id=tenant_id,
+            email=email.lower(),
+            intended_role_ids=list(role_ids),
+            token_hash=hashlib.sha256(raw_token.encode()).hexdigest(),
+            status=status,
+            invited_by=invited_by,
+            expires_at=expires_at,
+            created_at=created_at,
+        )
+    )
+    return invitation_id
+
+
 async def create_sso_connection(
     session: AsyncSession,
     *,
@@ -187,7 +267,9 @@ __all__ = [
     "auth_headers",
     "cheap_password_service",
     "create_identity",
+    "create_invitation",
     "create_membership",
+    "create_role",
     "create_sso_connection",
     "create_tenant",
     "hash_password",

@@ -20,6 +20,7 @@ report). Errors use the existing ``problem+json`` handlers (``app.api.errors``).
 
 from __future__ import annotations
 
+import hashlib
 import uuid
 from collections.abc import Iterable
 from datetime import UTC, datetime
@@ -215,7 +216,121 @@ class MeResponse(BaseModel):
     permissions: MePermissions
 
 
+class InvitationAcceptRequest(BaseModel):
+    password: str | None = Field(default=None, max_length=1024)
+    display_name: str | None = Field(default=None, max_length=200)
+
+
+class InvitationAcceptResponse(BaseModel):
+    app_user_id: str
+    identity_id: str
+    tenant_id: str
+    access_token: str
+    refresh_token: str
+    token_type: Literal["Bearer"] = "Bearer"
+    expires_in: int
+
+
+
+
+@router.post(
+    "/api/v1/admin/invitations/{token}/accept",
+    response_model=InvitationAcceptResponse,
+    status_code=201,
+    summary="Accept an invitation (public; single-use token, creates identity/membership/roles atomically)",
+)
+async def accept_invitation(
+    token: str,
+    payload: InvitationAcceptRequest,
+    request: Request,
+    repository: RepoDep,
+    tokens: TokenSvcDep,
+    passwords: PasswordSvcDep,
+) -> InvitationAcceptResponse:
+    invitation = await repository.get_invitation_by_token_hash(_hash_invitation_token(token))
+    if invitation is None:
+        raise _request_error("invitation token is invalid", code="INVITATION_TOKEN_INVALID", status=400)
+    if invitation.status == "ACCEPTED":
+        raise _request_error("invitation was already used", code="INVITATION_ALREADY_USED", status=409)
+    if invitation.status == "REVOKED":
+        raise _request_error("invitation was revoked", code="INVITATION_REVOKED", status=409)
+    now = utc_now()
+    if invitation.status == "EXPIRED" or invitation.expires_at <= now:
+        await repository.expire_invitation(invitation.id, now=now)
+        raise _request_error("invitation has expired", code="INVITATION_EXPIRED", status=410)
+
+    tenant = await repository.get_tenant(invitation.tenant_id)
+    if tenant is None:
+        raise NoActiveMembership("invitation tenant no longer exists")
+    if tenant.status != "ACTIVE":
+        raise TenantSuspended("tenant is not active")
+
+    identity = await repository.get_identity_by_email(invitation.email)
+    if identity is not None and identity.status != "ACTIVE":
+        raise MembershipInactive("identity is not active; contact the tenant administrator")
+    if identity is None:
+        if not payload.password:
+            raise _request_error("password is required to create the invited identity", code="INVITATION_PASSWORD_REQUIRED", status=422)
+        try:
+            password_hash = passwords.hash(payload.password)
+        except InvalidCredentials as exc:
+            raise _request_error("password does not meet the policy", code="INVITATION_PASSWORD_INVALID", status=422) from exc
+        identity_id = await repository.create_identity(
+            email=invitation.email,
+            display_name=payload.display_name,
+            password_hash=password_hash,
+        )
+    else:
+        identity_id = identity.id
+        if payload.display_name:
+            await repository.update_identity_display_name(identity_id, payload.display_name)
+        if payload.password and identity.password_hash is None:
+            try:
+                await repository.update_identity_password_hash(identity_id, passwords.hash(payload.password))
+            except InvalidCredentials as exc:
+                raise _request_error("password does not meet the policy", code="INVITATION_PASSWORD_INVALID", status=422) from exc
+
+    role_ids = list(dict.fromkeys(invitation.intended_role_ids))
+    roles = await repository.get_roles_by_ids(tenant.id, role_ids)
+    if len(roles) != len(role_ids):
+        raise _request_error("invitation contains roles that are not assignable", code="INVITATION_ROLE_INVALID", status=422)
+    app_user_id = await repository.ensure_membership_for_invitation(
+        tenant_id=tenant.id,
+        identity_id=identity_id,
+        email=invitation.email,
+        display_name=payload.display_name,
+        role_ids=role_ids,
+    )
+    accepted = await repository.accept_invitation(invitation.id, app_user_id=app_user_id, now=now)
+    if not accepted:
+        raise _request_error("invitation is no longer available", code="INVITATION_ALREADY_USED", status=409)
+    membership = await repository.get_membership(tenant.id, app_user_id)
+    if membership is None:
+        raise _request_error("membership could not be resolved", code="INVITATION_ACCEPT_FAILED", status=500)
+    pair = await _issue_token_pair(
+        repository,
+        tokens,
+        identity_id=identity_id,
+        membership=membership,
+        request=request,
+        touch_last_login=True,
+        now=now,
+    )
+    return InvitationAcceptResponse(
+        app_user_id=str(app_user_id),
+        identity_id=str(identity_id),
+        tenant_id=str(tenant.id),
+        access_token=pair.access_token,
+        refresh_token=pair.refresh_token,
+        expires_in=pair.expires_in,
+    )
+
+
 # --------------------------------------------------------------------------- helpers ----------
+
+
+def _hash_invitation_token(token: str) -> str:
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
 def _request_error(message: str, *, code: str, status: int) -> SecurityError:

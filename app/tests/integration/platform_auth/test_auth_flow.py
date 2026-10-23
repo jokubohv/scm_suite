@@ -6,13 +6,15 @@ import pytest
 from sqlalchemy import select, update
 
 from app.api.routers.platform.auth import get_password_service
-from app.core.models.platform import app_user, tenant, user_identity
+from app.core.models.platform import app_user, tenant, tenant_invitation, user_identity
 from app.core.security.passwords import PasswordPolicy, PasswordService
 from app.tests.integration.platform_auth.support import (
     TEST_PASSWORD,
     auth_headers,
     create_identity,
+    create_invitation,
     create_membership,
+    create_role,
     create_sso_connection,
     create_tenant,
 )
@@ -312,3 +314,117 @@ async def test_logout_all_sessions_bumps_token_version(db_session, auth_client) 
         await db_session.execute(select(app_user.c.token_version).where(app_user.c.id == app_user_id))
     ).scalar_one()
     assert token_version == 1
+
+
+async def test_invitation_accept_creates_identity_membership_and_tokens(db_session, auth_client, tokens) -> None:
+    tenant_id = await create_tenant(db_session, code="TEN-M")
+    inviter_identity = await create_identity(db_session, email="inviter@ten-m.example")
+    inviter_app_user = await create_membership(
+        db_session, tenant_id=tenant_id, identity_id=inviter_identity, email="inviter@ten-m.example"
+    )
+    role_id = await create_role(db_session, tenant_id=tenant_id, code="invitee", scopes=("items.read",))
+    invitation_id = await create_invitation(
+        db_session,
+        tenant_id=tenant_id,
+        email="newinvitee@ten-m.example",
+        invited_by=inviter_app_user,
+        role_ids=(role_id,),
+        raw_token="invite-token-new-user",
+    )
+
+    accepted = await auth_client.post(
+        "/api/v1/admin/invitations/invite-token-new-user/accept",
+        json={"password": TEST_PASSWORD, "display_name": "New Invitee"},
+    )
+    assert accepted.status_code == 201, accepted.text
+    body = accepted.json()
+    assert body["tenant_id"] == str(tenant_id)
+    assert body["token_type"] == "Bearer"
+    claims = tokens.decode_access_token(body["access_token"])
+    assert claims.uid == body["app_user_id"]
+    assert claims.tid == str(tenant_id)
+    assert "items.read" in claims.scopes
+
+    status = (
+        await db_session.execute(select(tenant_invitation.c.status).where(tenant_invitation.c.id == invitation_id))
+    ).scalar_one()
+    assert status == "ACCEPTED"
+    reused = await auth_client.post(
+        "/api/v1/admin/invitations/invite-token-new-user/accept",
+        json={"password": TEST_PASSWORD},
+    )
+    assert reused.status_code == 409
+    assert reused.json()["code"] == "INVITATION_ALREADY_USED"
+
+    login = await _login(auth_client, "newinvitee@ten-m.example")
+    assert login.status_code == 200
+    assert login.json()["tenant"]["code"] == "TEN-M"
+
+
+async def test_invitation_accept_existing_identity_and_error_states(db_session, auth_client) -> None:
+    tenant_id = await create_tenant(db_session, code="TEN-N")
+    inviter_identity = await create_identity(db_session, email="inviter@ten-n.example")
+    inviter_app_user = await create_membership(
+        db_session, tenant_id=tenant_id, identity_id=inviter_identity, email="inviter@ten-n.example"
+    )
+    existing_identity = await create_identity(db_session, email="existing@ten-n.example")
+    role_id = await create_role(db_session, tenant_id=tenant_id, code="reader", scopes=("items.read",))
+    await create_invitation(
+        db_session,
+        tenant_id=tenant_id,
+        email="existing@ten-n.example",
+        invited_by=inviter_app_user,
+        role_ids=(role_id,),
+        raw_token="invite-token-existing",
+    )
+    accepted = await auth_client.post(
+        "/api/v1/admin/invitations/invite-token-existing/accept",
+        json={},
+    )
+    assert accepted.status_code == 201, accepted.text
+    body = accepted.json()
+    assert body["identity_id"] == str(existing_identity)
+    assert len(body["access_token"]) > 20
+
+    expired_invitation = await create_invitation(
+        db_session,
+        tenant_id=tenant_id,
+        email="expired@ten-n.example",
+        invited_by=inviter_app_user,
+        role_ids=(role_id,),
+        raw_token="invite-token-expired",
+        expires_in_hours=-1,
+    )
+    expired = await auth_client.post(
+        "/api/v1/admin/invitations/invite-token-expired/accept",
+        json={"password": TEST_PASSWORD},
+    )
+    assert expired.status_code == 410
+    assert expired.json()["code"] == "INVITATION_EXPIRED"
+    expired_status = (
+        await db_session.execute(select(tenant_invitation.c.status).where(tenant_invitation.c.id == expired_invitation))
+    ).scalar_one()
+    assert expired_status == "EXPIRED"
+
+    await create_invitation(
+        db_session,
+        tenant_id=tenant_id,
+        email="revoked@ten-n.example",
+        invited_by=inviter_app_user,
+        role_ids=(role_id,),
+        raw_token="invite-token-revoked",
+        status="REVOKED",
+    )
+    revoked = await auth_client.post(
+        "/api/v1/admin/invitations/invite-token-revoked/accept",
+        json={"password": TEST_PASSWORD},
+    )
+    assert revoked.status_code == 409
+    assert revoked.json()["code"] == "INVITATION_REVOKED"
+
+    invalid = await auth_client.post(
+        "/api/v1/admin/invitations/unknown-token/accept",
+        json={"password": TEST_PASSWORD},
+    )
+    assert invalid.status_code == 400
+    assert invalid.json()["code"] == "INVITATION_TOKEN_INVALID"

@@ -516,6 +516,146 @@ class AuthRepository:
         )
         return int(result.scalar_one())
 
+    # -- invitation accept -------------------------------------------------------------------
+
+    async def create_identity(
+        self,
+        *,
+        email: str,
+        display_name: str | None,
+        password_hash: str,
+        status: str = "ACTIVE",
+    ) -> UUID:
+        identity_id = uuid.uuid4()
+        await self.session.execute(
+            insert(user_identity).values(
+                id=identity_id,
+                email=email.strip().lower(),
+                display_name=display_name,
+                password_hash=password_hash,
+                status=status,
+            )
+        )
+        return identity_id
+
+    async def update_identity_display_name(self, identity_id: UUID, display_name: str | None) -> None:
+        if not display_name:
+            return
+        await self.session.execute(
+            update(user_identity)
+            .where(user_identity.c.id == identity_id)
+            .values(display_name=display_name, updated_at=utc_now(), version=user_identity.c.version + 1)
+        )
+
+    async def get_roles_by_ids(self, tenant_id: UUID, role_ids: Sequence[UUID]) -> dict[UUID, str]:
+        if not role_ids:
+            return {}
+        result = await self.session.execute(
+            select(role.c.id, role.c.code).where(
+                and_(
+                    role.c.tenant_id == tenant_id,
+                    role.c.id.in_(list(role_ids)),
+                    role.c.inactive_at.is_(None),
+                )
+            )
+        )
+        return {row["id"]: str(row["code"]) for row in result.mappings().all()}
+
+    async def ensure_membership_for_invitation(
+        self,
+        *,
+        tenant_id: UUID,
+        identity_id: UUID,
+        email: str,
+        display_name: str | None,
+        role_ids: Sequence[UUID],
+    ) -> UUID:
+        """Create or re-activate the INVITED membership and assign the intended roles (same transaction)."""
+        now = utc_now()
+        existing = await self.session.execute(
+            select(app_user.c.id, app_user.c.status, app_user.c.membership_status).where(
+                and_(app_user.c.tenant_id == tenant_id, app_user.c.identity_id == identity_id)
+            )
+        )
+        row = existing.mappings().first()
+        if row is None:
+            app_user_id = uuid.uuid4()
+            await self.session.execute(
+                insert(app_user).values(
+                    id=app_user_id,
+                    tenant_id=tenant_id,
+                    identity_id=identity_id,
+                    email=email.strip().lower(),
+                    display_name=display_name,
+                    status="ACTIVE",
+                    membership_status="ACTIVE",
+                    joined_at=now,
+                )
+            )
+        else:
+            app_user_id = row["id"]
+            await self.session.execute(
+                update(app_user)
+                .where(and_(app_user.c.tenant_id == tenant_id, app_user.c.id == app_user_id))
+                .values(
+                    email=email.strip().lower(),
+                    display_name=display_name,
+                    status="ACTIVE",
+                    membership_status="ACTIVE",
+                    joined_at=now,
+                )
+            )
+        if role_ids:
+            current = await self.session.execute(
+                select(user_role.c.role_id).where(
+                    and_(
+                        user_role.c.tenant_id == tenant_id,
+                        user_role.c.user_id == app_user_id,
+                        user_role.c.effective_to.is_(None),
+                    )
+                )
+            )
+            assigned = {row["role_id"] for row in current.mappings().all()}
+            for role_id in dict.fromkeys(role_ids):
+                if role_id in assigned:
+                    continue
+                await self.session.execute(
+                    insert(user_role).values(
+                        tenant_id=tenant_id,
+                        user_id=app_user_id,
+                        role_id=role_id,
+                        effective_from=now,
+                    )
+                )
+        return app_user_id
+
+    async def accept_invitation(self, invitation_id: UUID, *, app_user_id: UUID, now: datetime) -> bool:
+        """Conditional single-use transition PENDING → ACCEPTED (False on expiry/revoke/race)."""
+        result = await self.session.execute(
+            update(tenant_invitation)
+            .where(
+                and_(
+                    tenant_invitation.c.id == invitation_id,
+                    tenant_invitation.c.status == "PENDING",
+                    tenant_invitation.c.expires_at > now,
+                )
+            )
+            .values(
+                status="ACCEPTED",
+                accepted_at=now,
+                accepted_app_user_id=app_user_id,
+                version=tenant_invitation.c.version + 1,
+            )
+        )
+        return bool(getattr(result, "rowcount", 0))
+
+    async def expire_invitation(self, invitation_id: UUID, *, now: datetime) -> None:
+        await self.session.execute(
+            update(tenant_invitation)
+            .where(and_(tenant_invitation.c.id == invitation_id, tenant_invitation.c.status == "PENDING"))
+            .values(status="EXPIRED", version=tenant_invitation.c.version + 1)
+        )
+
     # -- SSO providers -----------------------------------------------------------------------
 
     async def list_active_sso_connections(self) -> list[SsoConnectionRecord]:
