@@ -67,11 +67,11 @@ async def seed_tenant(session: Any, tenant_id: Any, suffix: str) -> dict[str, An
             else (str(value).lower() if isinstance(value, bool) else json.dumps(value))
         )
         await session.execute(
-            insert(platform_models.tenant_setting).values(
+            insert(platform_models.metadata.tables["platform.tenant_setting"]).values(
                 id=uuid4(),
                 tenant_id=tenant_id,
-                namespace="quality",
-                key=key,
+                namespace="inventory",
+                key=f"quality.{key}",
                 value=raw,
                 value_type=value_type,
                 is_default=True,

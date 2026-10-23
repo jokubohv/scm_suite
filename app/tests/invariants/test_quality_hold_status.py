@@ -29,6 +29,7 @@ pytestmark = pytest.mark.integration
 async def _seed_balance(db_session, tenant_id, qty: str = "5") -> None:
     await db_session.execute(
         insert(ledger.inventory_balance).values(
+            id=uuid4(),
             tenant_id=tenant_id,
             item_id=ITEM_ID,
             location_id=LOCATION_ID,
@@ -39,7 +40,6 @@ async def _seed_balance(db_session, tenant_id, qty: str = "5") -> None:
             qty_on_hand=Decimal(qty),
             qty_committed=Decimal("0"),
             qty_on_order=Decimal("0"),
-            qty_in_transit=Decimal("0"),
             value_base=Decimal("0"),
         )
     )

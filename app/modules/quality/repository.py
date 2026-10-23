@@ -100,7 +100,9 @@ class QualityRepository:
     async def set_setting(self, tenant_id: UUID | str, key: str, value: Any, value_type: str = "json") -> None:
         table = platform_models.metadata.tables["platform.tenant_setting"]
         existing = await self.session.scalar(
-            select(table.c.id).where(table.c.tenant_id == tenant_id, table.c.namespace == "inventory", table.c.key == f"quality.{key}")
+            select(table.c.id).where(
+                table.c.tenant_id == tenant_id, table.c.namespace == "inventory", table.c.key == f"quality.{key}"
+            )
         )
         if existing is None:
             await self.session.execute(
@@ -582,7 +584,10 @@ class QualityRepository:
         if rows:
             await self.session.execute(
                 q.inspection_result.insert(),
-                [{**dict(row), "tenant_id": tenant_id, "inspection_id": inspection_id} for row in rows],
+                [
+                    {**dict(row), "id": uuid.uuid4(), "tenant_id": tenant_id, "inspection_id": inspection_id}
+                    for row in rows
+                ],
             )
 
     async def list_results(self, tenant_id: UUID | str, inspection_id: UUID | str) -> list[dict[str, Any]]:

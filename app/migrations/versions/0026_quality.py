@@ -103,9 +103,9 @@ def _triggers() -> None:
         END $$;
         """
     )
-    op.execute(f'DROP TRIGGER IF EXISTS trg_coa_immutability ON {SCHEMA}.coa')
+    op.execute(f"DROP TRIGGER IF EXISTS trg_coa_immutability ON {SCHEMA}.coa")
     op.execute(
-        f'CREATE TRIGGER trg_coa_immutability BEFORE UPDATE OR DELETE ON {SCHEMA}.coa '
+        f"CREATE TRIGGER trg_coa_immutability BEFORE UPDATE OR DELETE ON {SCHEMA}.coa "
         f"FOR EACH ROW EXECUTE FUNCTION {SCHEMA}.guard_coa_immutability()"
     )
     op.execute(
@@ -124,9 +124,9 @@ def _triggers() -> None:
         END $$;
         """
     )
-    op.execute(f'DROP TRIGGER IF EXISTS trg_inspection_result_immutable ON {SCHEMA}.inspection_result')
+    op.execute(f"DROP TRIGGER IF EXISTS trg_inspection_result_immutable ON {SCHEMA}.inspection_result")
     op.execute(
-        f'CREATE TRIGGER trg_inspection_result_immutable BEFORE UPDATE OR DELETE ON {SCHEMA}.inspection_result '
+        f"CREATE TRIGGER trg_inspection_result_immutable BEFORE UPDATE OR DELETE ON {SCHEMA}.inspection_result "
         f"FOR EACH ROW EXECUTE FUNCTION {SCHEMA}.guard_completed_results()"
     )
 
@@ -162,7 +162,8 @@ def _rls_and_grants() -> None:
 
 def _tenants(bind: sa.Connection) -> list[str]:
     rows = bind.execute(
-        sa.text("SELECT id::text FROM platform.tenant WHERE id <> :system ORDER BY created_at"), {"system": SYSTEM_TENANT_ID}
+        sa.text("SELECT id::text FROM platform.tenant WHERE id <> :system ORDER BY created_at"),
+        {"system": SYSTEM_TENANT_ID},
     )
     return [row[0] for row in rows]
 
@@ -253,8 +254,12 @@ def downgrade() -> None:
         op.execute(
             f"DELETE FROM platform.job_definition WHERE name = '{name}' AND tenant_id = '{SYSTEM_TENANT_ID}'::uuid"
         )
-    op.execute("DELETE FROM platform.tenant_setting WHERE namespace = 'inventory' AND key LIKE 'quality.%' AND is_default")
-    op.execute("DELETE FROM platform.feature_flag WHERE flag_key = 'quality.management.enabled' AND source = 'MIGRATION'")
+    op.execute(
+        "DELETE FROM platform.tenant_setting WHERE namespace = 'inventory' AND key LIKE 'quality.%' AND is_default"
+    )
+    op.execute(
+        "DELETE FROM platform.feature_flag WHERE flag_key = 'quality.management.enabled' AND source = 'MIGRATION'"
+    )
     op.execute("DELETE FROM platform.number_sequence WHERE doc_type IN ('INSP','COA')")
     op.execute(f"DROP FUNCTION IF EXISTS {SCHEMA}.guard_completed_results()")
     op.execute(f"DROP FUNCTION IF EXISTS {SCHEMA}.guard_coa_immutability()")

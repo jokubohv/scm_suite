@@ -85,7 +85,7 @@ def validate_result_row(row: Mapping[str, Any], spec_line: Mapping[str, Any]) ->
             is_pass = False
         if maximum is not None and value > _dec(maximum) + RESULT_TOLERANCE:
             is_pass = False
-        measured_text = str(value)
+        measured_text = None
     elif result_type == "PASS_FAIL":
         if measured_text not in {"PASS", "FAIL", "pass", "fail"}:
             raise ValidationError(
@@ -106,7 +106,9 @@ def validate_result_row(row: Mapping[str, Any], spec_line: Mapping[str, Any]) ->
         "characteristic": characteristic,
         "quality_spec_line_id": spec_line.get("id"),
         "measured_value_text": measured_text,
-        "measured_value_number": _dec(measured_number) if measured_number is not None else None,
+        "measured_value_number": _dec(measured_number)
+        if result_type == "NUMERIC" and measured_number is not None
+        else None,
         "is_pass": is_pass,
         "notes": row.get("notes"),
         "attachment_id": row.get("attachment_id"),

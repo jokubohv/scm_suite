@@ -11,10 +11,6 @@ from sqlalchemy import insert
 
 from app.modules.inventory_ledger import tables as ledger
 from app.tests.integration.quality.conftest import (
-    AVAILABLE_STATUS,
-    HOLD_STATUS,
-    ITEM_ID,
-    LOCATION_ID,
     create_active_spec,
     create_inspection,
     create_plan,
@@ -104,17 +100,17 @@ async def test_trigger_once_and_inspection_flow(client: Any, db_session: Any, se
 async def test_failed_inspection_hold_and_release(client: Any, db_session: Any, seeded: dict[str, Any]) -> None:
     await db_session.execute(
         insert(ledger.inventory_balance).values(
+            id=uuid4(),
             tenant_id=seeded["tenant_id"],
-            item_id=ITEM_ID,
-            location_id=LOCATION_ID,
-            inventory_status_id=AVAILABLE_STATUS,
+            item_id=seeded["item_id"],
+            location_id=seeded["location_id"],
+            inventory_status_id=seeded["available_status"],
             lot_id=None,
             serial_id=None,
             ownership="OWNED",
             qty_on_hand=Decimal("5"),
             qty_committed=Decimal("0"),
             qty_on_order=Decimal("0"),
-            qty_in_transit=Decimal("0"),
             value_base=Decimal("0"),
         )
     )
@@ -126,9 +122,9 @@ async def test_failed_inspection_hold_and_release(client: Any, db_session: Any, 
 
     positions = [
         {
-            "item_id": str(ITEM_ID),
-            "location_id": str(LOCATION_ID),
-            "inventory_status_id": str(AVAILABLE_STATUS),
+            "item_id": str(seeded["item_id"]),
+            "location_id": str(seeded["location_id"]),
+            "inventory_status_id": str(seeded["available_status"]),
             "qty": "2",
         }
     ]
@@ -148,10 +144,9 @@ async def test_failed_inspection_hold_and_release(client: Any, db_session: Any, 
         .all()
     )
     by_status = {row["inventory_status_id"]: Decimal(row["qty_on_hand"]) for row in balances}
-    assert by_status[AVAILABLE_STATUS] == Decimal("3")
-    assert by_status[HOLD_STATUS] == Decimal("2")
+    assert by_status[seeded["available_status"]] == Decimal("3")
+    assert by_status[seeded["hold_status"]] == Decimal("2")
 
-    # A PASSED inspection is required to release; waive this failed one with a recorded approval reference.
     waived = await client.post(
         f"/api/v1/quality/inspections/{inspection['id']}/waive",
         json={"reason": "customer concession", "approval_ref": "APPROVAL-1"},
@@ -159,7 +154,12 @@ async def test_failed_inspection_hold_and_release(client: Any, db_session: Any, 
     )
     assert waived.status_code == 200, waived.text
     release_positions = [
-        {"item_id": str(ITEM_ID), "location_id": str(LOCATION_ID), "inventory_status_id": str(HOLD_STATUS), "qty": "2"}
+        {
+            "item_id": str(seeded["item_id"]),
+            "location_id": str(seeded["location_id"]),
+            "inventory_status_id": str(seeded["hold_status"]),
+            "qty": "2",
+        }
     ]
     released = await client.post(
         f"/api/v1/quality/inspections/{inspection['id']}/release-hold",
@@ -177,7 +177,7 @@ async def test_failed_inspection_hold_and_release(client: Any, db_session: Any, 
         .all()
     )
     by_status = {row["inventory_status_id"]: Decimal(row["qty_on_hand"]) for row in balances}
-    assert by_status[AVAILABLE_STATUS] == Decimal("5")
+    assert by_status[seeded["available_status"]] == Decimal("5")
 
 
 async def test_coa_lifecycle_excludes_internal_lines(client: Any, seeded: dict[str, Any]) -> None:
