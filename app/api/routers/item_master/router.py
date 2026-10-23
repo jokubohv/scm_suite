@@ -34,7 +34,7 @@ PLANNING = "items.planning.manage"
 
 
 def _svc(db: AsyncSession, principal: PrincipalDep) -> ItemMasterService:
-    return ItemMasterService(db, principal.tenant_id)
+    return ItemMasterService(db, principal.tenant_id, app_user_id=principal.app_user_id)
 
 
 ReadDep = Annotated[PrincipalDep, Depends(require_scope(READ))]
@@ -183,6 +183,46 @@ async def resolve_conversion(payload: dict[str, Any], principal: ReadDep, db: Db
     return await _svc(db, principal).resolve_conversion(payload)
 
 
+# --------------------------------------------------------------------------- idempotency ------
+async def _idempotent_mutation(
+    *,
+    db: AsyncSession,
+    principal: PrincipalDep,
+    endpoint_id: str,
+    key: str,
+    method: str,
+    path: str,
+    body: Any,
+    status: int,
+    runner: Any,
+) -> Any:
+    store = IdempotencyStore(db)
+    fingerprint = build_fingerprint(
+        method=method, path=path, tenant_id=principal.tenant_id, endpoint_id=endpoint_id, body=body
+    )
+    decision = await store.guard(
+        tenant_id=principal.tenant_id,
+        endpoint_id=endpoint_id,
+        key=key,
+        request_fingerprint_hash=fingerprint,
+        actor_id=principal.identity_id,
+    )
+    if decision.outcome is IdempotencyOutcome.REPLAY and decision.record is not None:
+        return JSONResponse(status_code=decision.record.response_status or status, content=dict(decision.record.response_body or {}))
+    if decision.outcome is IdempotencyOutcome.CONFLICT or decision.outcome is IdempotencyOutcome.IN_PROGRESS:
+        decision.raise_for_conflict()
+    result = await runner()
+    await store.complete(
+        tenant_id=principal.tenant_id,
+        endpoint_id=endpoint_id,
+        key=key,
+        response_status=status,
+        response_body=result,
+        resource_id=result.get("id") or result.get("new_item_id") or result.get("item_id"),
+    )
+    return JSONResponse(status_code=status, content=result)
+
+
 # --------------------------------------------------------------------------- items -------------
 @router.post("/items", status_code=201)
 async def create_item(
@@ -252,6 +292,48 @@ async def resolve_alias(alias: str, principal: ReadDep, db: DbDep, alias_type: s
 @router.get("/items/{item_id}")
 async def get_item(item_id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _svc(db, principal).get_item(item_id)
+
+
+@router.post("/items/{item_id}/convert-to-inventory", status_code=201)
+async def convert_to_inventory(
+    item_id: str,
+    payload: dict[str, Any],
+    principal: CreateDep,
+    db: DbDep,
+    key: IdempotencyDep = None,
+) -> Any:
+    assert key is not None
+    service = _svc(db, principal)
+    return await _idempotent_mutation(
+        db=db, principal=principal, endpoint_id="items.convert_to_inventory", key=key,
+        method="POST", path=f"/api/v1/items/{item_id}/convert-to-inventory", body=payload, status=201,
+        runner=lambda: service.convert_to_inventory(item_id, payload, actor_id=principal.identity_id),
+    )
+
+
+@router.get("/items/{item_id}/custom-fields")
+async def get_item_custom_fields(item_id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
+    return await _svc(db, principal).get_item_custom_fields(item_id)
+
+
+@router.put("/items/{item_id}/custom-fields")
+async def put_item_custom_fields(
+    item_id: str,
+    payload: dict[str, Any],
+    principal: UpdateDep,
+    db: DbDep,
+    key: IdempotencyDep = None,
+) -> Any:
+    assert key is not None
+    service = _svc(db, principal)
+    values = payload.get("custom_fields") if isinstance(payload.get("custom_fields"), dict) else payload.get("values")
+    if not isinstance(values, dict):
+        raise item_error("custom_fields must be an object", code="CUSTOM_FIELD_INVALID")
+    return await _idempotent_mutation(
+        db=db, principal=principal, endpoint_id="items.custom_fields.put", key=key,
+        method="PUT", path=f"/api/v1/items/{item_id}/custom-fields", body=payload, status=200,
+        runner=lambda: service.set_item_custom_fields(item_id, values, actor_id=principal.identity_id),
+    )
 
 
 @router.patch("/items/{item_id}")
@@ -353,11 +435,17 @@ async def apply_planning_values(
     if_match: VersionHeader = None,
     key: IdempotencyDep = None,
 ) -> dict[str, Any]:
+    assert key is not None
     values = {name: payload[name] for name in ("reorder_point", "preferred_stock_level", "safety_stock", "lead_time_days", "seasonal_demand") if name in payload}
-    return await _svc(db, principal).apply_planning_values(
-        item_id, location_id=None, values=values, source=str(payload.get("source") or "MANUAL"),
-        policy_version=payload.get("policy_version"), expected_version=_version(if_match),
-        actor_id=principal.identity_id, idempotency_key=key,
+    service = _svc(db, principal)
+    return await _idempotent_mutation(
+        db=db, principal=principal, endpoint_id="items.planning_values", key=key,
+        method="POST", path=f"/api/v1/items/{item_id}/planning-values", body=payload, status=200,
+        runner=lambda: service.apply_planning_values(
+            item_id, location_id=None, values=values, source=str(payload.get("source") or "MANUAL"),
+            policy_version=payload.get("policy_version"), expected_version=_version(if_match),
+            actor_id=principal.identity_id, idempotency_key=key,
+        ),
     )
 
 
@@ -371,11 +459,17 @@ async def apply_location_planning_values(
     if_match: VersionHeader = None,
     key: IdempotencyDep = None,
 ) -> dict[str, Any]:
+    assert key is not None
     values = {name: payload[name] for name in ("reorder_point", "preferred_stock_level", "safety_stock", "lead_time_days", "seasonal_demand") if name in payload}
-    return await _svc(db, principal).apply_planning_values(
-        item_id, location_id=location_id, values=values, source=str(payload.get("source") or "MANUAL"),
-        policy_version=payload.get("policy_version"), expected_version=_version(if_match),
-        actor_id=principal.identity_id, idempotency_key=key,
+    service = _svc(db, principal)
+    return await _idempotent_mutation(
+        db=db, principal=principal, endpoint_id="items.location_planning_values", key=key,
+        method="POST", path=f"/api/v1/items/{item_id}/locations/{location_id}/planning-values", body=payload, status=200,
+        runner=lambda: service.apply_planning_values(
+            item_id, location_id=location_id, values=values, source=str(payload.get("source") or "MANUAL"),
+            policy_version=payload.get("policy_version"), expected_version=_version(if_match),
+            actor_id=principal.identity_id, idempotency_key=key,
+        ),
     )
 
 

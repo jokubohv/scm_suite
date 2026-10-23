@@ -54,6 +54,21 @@ class MatrixOptionInvalid(ItemMasterError):
     http_status = 422
 
 
+class MatrixOptionInUse(ItemMasterError):
+    code = "MATRIX_OPTION_IN_USE"
+    http_status = 422
+
+
+class UomInUse(ItemMasterError):
+    code = "UOM_IN_USE"
+    http_status = 409
+
+
+class TypeMigrationInvalid(ItemMasterError):
+    code = "TYPE_MIGRATION_INVALID"
+    http_status = 422
+
+
 class MatrixTooManyCombinations(ItemMasterError):
     code = "MATRIX_TOO_MANY_COMBINATIONS"
     http_status = 422
@@ -110,8 +125,11 @@ __all__ = [
     "ItemTypeNotFound",
     "KitMemberInvalid",
     "MatrixChildExists",
+    "MatrixOptionInUse",
     "MatrixOptionInvalid",
     "MatrixTooManyCombinations",
+    "TypeMigrationInvalid",
+    "UomInUse",
     "PlanningAutoCalcDisabled",
     "PlanningValuesInvalid",
     "UomAssignmentInvalid",

@@ -19,6 +19,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core import custom_fields as fs00_custom_fields
 from app.core.outbox import emit
 from app.modules.item_master.errors import (
     BarcodeInvalid,
@@ -32,11 +33,14 @@ from app.modules.item_master.errors import (
     ItemTypeNotFound,
     KitMemberInvalid,
     MatrixChildExists,
+    MatrixOptionInUse,
     MatrixOptionInvalid,
     MatrixTooManyCombinations,
     PlanningAutoCalcDisabled,
     PlanningValuesInvalid,
+    TypeMigrationInvalid,
     UomAssignmentInvalid,
+    UomInUse,
     item_error,
 )
 from app.modules.item_master.taxonomy import ITEM_TYPE_SEEDS, PostingOperation, posting_eligibility
@@ -90,9 +94,12 @@ def _ean_checksum_ok(barcode: str) -> bool:
 
 
 class ItemMasterService:
-    def __init__(self, session: AsyncSession, tenant_id: uuid.UUID | str) -> None:
+    def __init__(
+        self, session: AsyncSession, tenant_id: uuid.UUID | str, *, app_user_id: str | uuid.UUID | None = None
+    ) -> None:
         self.session = session
         self.tenant_id = tenant_id if isinstance(tenant_id, uuid.UUID) else uuid.UUID(str(tenant_id))
+        self.app_user_id = uuid.UUID(str(app_user_id)) if app_user_id else None
 
     # -- low-level helpers --------------------------------------------------------------------
     async def _exec(self, sql: str, **params: Any):
@@ -319,6 +326,13 @@ class ItemMasterService:
 
     async def update_uom_type(self, type_id: str, data: Mapping[str, Any]) -> dict[str, Any]:
         values = {key: data[key] for key in ("name", "is_active") if key in data}
+        if values.get("is_active") is False:
+            referenced = await self._scalar(
+                "SELECT count(*) FROM item_master.uom WHERE tenant_id = :tenant_id AND uom_type_id = :type",
+                type=uuid.UUID(str(type_id)),
+            )
+            if int(referenced or 0) > 0:
+                raise UomInUse("units type has defined UoMs and cannot be deactivated")
         if values:
             sets = ", ".join(f"{key} = :{key}" for key in values)
             await self._exec(
@@ -327,13 +341,16 @@ class ItemMasterService:
             )
         row = await self._one("SELECT * FROM item_master.uom_type WHERE tenant_id = :tenant_id AND id = :id", id=uuid.UUID(str(type_id)))
         if row is None:
-            raise UomAssignmentInvalid("uom type not found")
+            raise ItemNotFound("uom type not found")
         return _row(row)
 
     async def update_uom(self, uom_id: str, data: Mapping[str, Any]) -> dict[str, Any]:
+        uom_uuid = uuid.UUID(str(uom_id))
         values = {key: data[key] for key in ("name", "conversion_factor", "rounding_precision", "is_active") if key in data}
         if "conversion_factor" in values and Decimal(str(values["conversion_factor"])) <= 0:
             raise UomAssignmentInvalid("conversion_factor must be > 0")
+        if values.get("is_active") is False:
+            await self._assert_uom_unreferenced(uom_uuid)
         if values:
             sets = ", ".join(f"{key} = :{key}" for key in values)
             await self._exec(
@@ -342,8 +359,20 @@ class ItemMasterService:
             )
         row = await self._one("SELECT * FROM item_master.uom WHERE tenant_id = :tenant_id AND id = :id", id=uuid.UUID(str(uom_id)))
         if row is None:
-            raise UomAssignmentInvalid("uom not found")
+            raise ItemNotFound("uom not found")
         return _row(row)
+
+    async def _assert_uom_unreferenced(self, uom_uuid: uuid.UUID) -> None:
+        """RULE-ITEM: referenced UoM/UoM type rows cannot be deactivated (reference guard)."""
+        references = await self._scalar(
+            "SELECT (SELECT count(*) FROM item_master.item_uom WHERE tenant_id = :tenant_id AND uom_id = :id) + "
+            "(SELECT count(*) FROM item_master.item WHERE tenant_id = :tenant_id AND base_uom_id = :id) + "
+            "(SELECT count(*) FROM item_master.uom_conversion WHERE tenant_id = :tenant_id AND (from_uom_id = :id OR to_uom_id = :id)) + "
+            "(SELECT count(*) FROM item_master.kit_group_member WHERE tenant_id = :tenant_id AND uom_id = :id)",
+            id=uom_uuid,
+        )
+        if int(references or 0) > 0:
+            raise UomInUse("uom is referenced by items, conversions or kit members and cannot be deactivated")
 
     async def list_conversions(self, *, uom_type_id: str | None = None) -> list[dict[str, Any]]:
         rows = await self._all(
@@ -593,6 +622,10 @@ class ItemMasterService:
         uoms = data.get("uoms")
         if isinstance(uoms, list) and uoms:
             await self.replace_item_uoms(item_id, uoms, allow_stock=stockable, stock_base_uom_id=base_uom_id)
+        custom_values = data.get("custom_fields")
+        if isinstance(custom_values, Mapping) and custom_values:
+            await self.set_item_custom_fields(item_id, custom_values, actor_id=data.get("actor_id"), require_complete=True)
+        await self._validate_required_custom_fields(item_id)
         version = int(await self._scalar("SELECT version FROM item_master.item WHERE tenant_id = :tenant_id AND id = :id", id=item_id) or 1)
         await self._emit("item.created", item_id=item_id, payload={
             "item_id": str(item_id), "item_number": item_number, "item_type_code": str(type_row["code"]),
@@ -662,6 +695,7 @@ class ItemMasterService:
         detail["accounting"] = await self._extension_row(item["id"], "item_accounting")
         detail["uoms"] = await self.list_item_uoms(item["id"])
         detail["matrix_parent_id"] = str(item["matrix_parent_id"]) if item["matrix_parent_id"] else None
+        detail["custom_fields"] = await self._read_item_custom_fields(item["id"])
         return _jsonable(detail)
 
     async def patch_item(self, item_id: uuid.UUID | str, data: Mapping[str, Any], *, expected_version: int | None = None) -> dict[str, Any]:
@@ -679,6 +713,9 @@ class ItemMasterService:
                 id=uuid.UUID(str(item_id)), actor=data.get("actor_id"), **allowed,
             )
             await self._emit("item.updated", item_id=item_id, payload={"item_id": str(item_id), "changed_fields": sorted(allowed), "version": int(item["version"]) + 1, "is_active": True})
+        custom_values = data.get("custom_fields")
+        if isinstance(custom_values, Mapping) and custom_values:
+            await self.set_item_custom_fields(item_id, custom_values, actor_id=data.get("actor_id"))
         return await self.get_item(item_id)
 
     async def inactivate(self, item_id: uuid.UUID | str, reason: str, *, actor_id: str | None = None) -> dict[str, Any]:
@@ -703,6 +740,7 @@ class ItemMasterService:
         item = await self._one("SELECT id FROM item_master.item WHERE tenant_id = :tenant_id AND id = :id", id=uuid.UUID(str(item_id)))
         if item is None:
             raise ItemNotFound("item not found")
+        await self._validate_required_custom_fields(item_id)
         await self._exec(
             "UPDATE item_master.item SET is_active = true, inactive_at = NULL, updated_at = now(), updated_by = :actor, version = version + 1 WHERE tenant_id = :tenant_id AND id = :id",
             id=uuid.UUID(str(item_id)), actor=actor_id,
@@ -858,12 +896,51 @@ class ItemMasterService:
         await self._emit("item.uom.changed", item_id=item_uuid, payload={"item_id": str(item_uuid), "roles": sorted(seen_roles), "conversion_version": 1})
         return await self.list_item_uoms(item_uuid)
 
-    async def list_locations(self, item_id: uuid.UUID | str, *, location_id: str | None = None) -> list[dict[str, Any]]:
+    async def _location_data_scope_ids(self) -> set[uuid.UUID] | None:
+        """Effective LOCATION data scopes for the acting membership (None = unrestricted).
+
+        Read-only projection of FS-00 ``user_data_scope``; exact location ids are enforced (descendant
+        expansion requires the FS-03 registry facade and is tracked as remaining residual).
+        """
+        if self.app_user_id is None:
+            return None
         rows = await self._all(
-            "SELECT * FROM item_master.item_location WHERE tenant_id = :tenant_id AND item_id = :item "
-            + ("AND location_id = :location " if location_id else "") + "ORDER BY location_id",
-            item=uuid.UUID(str(item_id)),
-            **({"location": uuid.UUID(str(location_id))} if location_id else {}),
+            "SELECT scope_value FROM platform.user_data_scope WHERE tenant_id = :tenant_id "
+            "AND scope_type = 'LOCATION' AND (user_id = :app_user OR role_id IN ("
+            "SELECT role_id FROM platform.user_role WHERE tenant_id = :tenant_id AND user_id = :app_user "
+            "AND (effective_to IS NULL OR effective_to >= now())))",
+            app_user=self.app_user_id,
+        )
+        if not rows:
+            return None
+        allowed: set[uuid.UUID] = set()
+        for row in rows:
+            try:
+                allowed.add(uuid.UUID(str(row["scope_value"])))
+            except ValueError:
+                continue
+        return allowed
+
+    async def _require_location_scope(self, location_id: uuid.UUID) -> None:
+        allowed = await self._location_data_scope_ids()
+        if allowed is not None and location_id not in allowed:
+            raise ItemLocationNotFound("item location not found")
+
+    async def list_locations(self, item_id: uuid.UUID | str, *, location_id: str | None = None) -> list[dict[str, Any]]:
+        allowed = await self._location_data_scope_ids()
+        clauses = ["tenant_id = :tenant_id", "item_id = :item"]
+        params: dict[str, Any] = {"item": uuid.UUID(str(item_id))}
+        if location_id:
+            location_uuid = uuid.UUID(str(location_id))
+            await self._require_location_scope(location_uuid)
+            clauses.append("location_id = :location")
+            params["location"] = location_uuid
+        elif allowed is not None:
+            clauses.append("location_id = ANY(:allowed_locations)")
+            params["allowed_locations"] = list(allowed)
+        rows = await self._all(
+            "SELECT * FROM item_master.item_location WHERE " + " AND ".join(clauses) + " ORDER BY location_id",
+            **params,
         )
         return [_jsonable(row) for row in rows]
 
@@ -880,10 +957,17 @@ class ItemMasterService:
                 item=item_uuid, location=location_id,
             )
             if existing is None:
+                defaults = {
+                    "is_preferred": False, "reorder_point": Decimal("0"), "preferred_stock_level": Decimal("0"),
+                    "safety_stock": Decimal("0"), "lead_time_days": 0, "seasonal_demand": Decimal("0"),
+                    "auto_calculate_planning": False, "default_bin_id": None, "default_status_id": None,
+                    "cost_group_override_id": None, "is_consigned_allowed": False,
+                }
+                insert_values = {**defaults, **values}
                 await self._exec(
                     "INSERT INTO item_master.item_location (tenant_id, item_id, location_id, is_preferred, reorder_point, preferred_stock_level, safety_stock, lead_time_days, seasonal_demand, auto_calculate_planning, default_bin_id, default_status_id, cost_group_override_id, is_consigned_allowed, created_at, updated_at, version) "
                     "VALUES (:tenant_id, :item, :location, :is_preferred, :reorder_point, :preferred_stock_level, :safety_stock, :lead_time_days, :seasonal_demand, :auto_calculate_planning, :default_bin_id, :default_status_id, :cost_group_override_id, :is_consigned_allowed, now(), now(), 1)",
-                    item=item_uuid, location=location_id, **values,
+                    item=item_uuid, location=location_id, **insert_values,
                 )
             else:
                 await self._exec(
@@ -918,6 +1002,7 @@ class ItemMasterService:
     async def patch_location(self, item_id: uuid.UUID | str, location_id: str, data: Mapping[str, Any], *, expected_version: int | None = None) -> dict[str, Any]:
         item_uuid = uuid.UUID(str(item_id))
         loc_uuid = uuid.UUID(str(location_id))
+        await self._require_location_scope(loc_uuid)
         existing = await self._one("SELECT * FROM item_master.item_location WHERE tenant_id = :tenant_id AND item_id = :item AND location_id = :location", item=item_uuid, location=loc_uuid)
         if existing is None:
             raise ItemLocationNotFound("item location settings not found")
@@ -964,6 +1049,7 @@ class ItemMasterService:
             if target is None or not target.get("auto_calculate_planning"):
                 raise PlanningAutoCalcDisabled("source=AIM requires auto_calculate_planning=true")
         if location_id:
+            await self._require_location_scope(uuid.UUID(str(location_id)))
             existing = await self._one("SELECT version FROM item_master.item_location WHERE tenant_id = :tenant_id AND item_id = :item AND location_id = :location", item=item_uuid, location=uuid.UUID(str(location_id)))
             if existing is None:
                 raise ItemLocationNotFound("item location settings not found")
@@ -1233,9 +1319,18 @@ class ItemMasterService:
 
     async def replace_matrix_option_values(self, item_id: uuid.UUID | str, option_id: str, values: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         option_uuid = uuid.UUID(str(option_id))
-        option = await self._one("SELECT id FROM item_master.item_matrix_option WHERE tenant_id = :tenant_id AND id = :id", id=option_uuid)
+        option = await self._one(
+            "SELECT id, parent_item_id, code FROM item_master.item_matrix_option WHERE tenant_id = :tenant_id AND id = :id",
+            id=option_uuid,
+        )
         if option is None:
             raise MatrixOptionInvalid("matrix option not found")
+        allowed_values = {
+            str(value.get("code") or value.get("value") or "").strip()
+            for value in values if bool(value.get("is_active", True))
+        }
+        allowed_values.discard("")
+        await self._assert_matrix_values_removable(uuid.UUID(str(option["parent_item_id"])), str(option["code"]), allowed_values)
         await self._exec("DELETE FROM item_master.item_matrix_option_value WHERE tenant_id = :tenant_id AND option_id = :option", option=option_uuid)
         for value in values:
             await self._insert_option_value(option_uuid=option_uuid, value=value)
@@ -1394,6 +1489,130 @@ class ItemMasterService:
         row = await self._one("SELECT id, is_base FROM item_master.uom WHERE tenant_id = :tenant_id AND id = :id AND uom_type_id = :type_id", id=uuid.UUID(str(uom_id)), type_id=uuid.UUID(str(units_type_id)))
         if row is None:
             raise UomAssignmentInvalid("UOM_TYPE_MISMATCH")
+
+    # -- custom fields (FS-00 EAV) / type migration / matrix guards ---------------------------
+    async def _read_item_custom_fields(self, item_id: uuid.UUID | str) -> list[dict[str, Any]]:
+        values = await fs00_custom_fields.read_values(
+            self.session, tenant_id=self.tenant_id, entity_type="ITEM", entity_id=uuid.UUID(str(item_id))
+        )
+        return [
+            {"field_code": value.field_code, "data_type": value.data_type, "value": _jsonable(value.value)}
+            for value in values
+        ]
+
+    async def get_item_custom_fields(self, item_id: uuid.UUID | str) -> dict[str, Any]:
+        await self._require_item(item_id)
+        return {"item_id": str(item_id), "items": await self._read_item_custom_fields(item_id)}
+
+    async def set_item_custom_fields(
+        self, item_id: uuid.UUID | str, values: Mapping[str, Any], *, actor_id: str | None = None,
+        require_complete: bool = False,
+    ) -> dict[str, Any]:
+        await self._require_item(item_id)
+        if not isinstance(values, Mapping) or not values:
+            raise item_error("custom_fields must be a non-empty object", code="CUSTOM_FIELD_INVALID")
+        try:
+            await fs00_custom_fields.validate_and_store(
+                self.session, tenant_id=self.tenant_id, entity_type="ITEM",
+                entity_id=uuid.UUID(str(item_id)), values=values,
+                require_complete=require_complete, actor_id=actor_id,
+            )
+        except fs00_custom_fields.CustomFieldError as exc:
+            raise item_error(str(exc), code=exc.code, http_status=exc.http_status) from exc
+        return await self.get_item_custom_fields(item_id)
+
+    async def _validate_required_custom_fields(self, item_id: uuid.UUID | str) -> None:
+        definitions = await fs00_custom_fields.list_definitions(
+            self.session, tenant_id=self.tenant_id, entity_type="ITEM"
+        )
+        required = {definition.field_code for definition in definitions if definition.is_required}
+        if not required:
+            return
+        stored = {value.field_code for value in await fs00_custom_fields.read_values(
+            self.session, tenant_id=self.tenant_id, entity_type="ITEM", entity_id=uuid.UUID(str(item_id))
+        )}
+        missing = sorted(required - stored)
+        if missing:
+            raise item_error(f"required custom fields missing: {missing}", code="CUSTOM_FIELD_REQUIRED")
+
+    async def _matrix_children_using_option(self, parent_id: uuid.UUID, option_code: str) -> list[dict[str, Any]]:
+        children = await self._all(
+            "SELECT child_item_id, option_values FROM item_master.item_matrix_member "
+            "WHERE tenant_id = :tenant_id AND parent_item_id = :parent ORDER BY child_item_id",
+            parent=parent_id,
+        )
+        return [
+            child for child in children
+            if isinstance(child.get("option_values"), Mapping) and option_code in child["option_values"]
+        ]
+
+    async def _assert_matrix_values_removable(
+        self, parent_id: uuid.UUID, option_code: str, allowed_values: set[str]
+    ) -> None:
+        children = await self._matrix_children_using_option(parent_id, option_code)
+        for child in children:
+            used = str(child["option_values"].get(option_code))
+            if used not in allowed_values:
+                raise MatrixOptionInUse(
+                    f"matrix option value {used!r} is used by child {child['child_item_id']}",
+                    details={"option_code": option_code, "value": used, "child_item_id": str(child["child_item_id"])},
+                )
+
+    async def convert_to_inventory(
+        self, item_id: uuid.UUID | str, data: Mapping[str, Any], *, actor_id: str | None = None
+    ) -> dict[str, Any]:
+        """D-22/iri-203 type-migration workflow: new INVENTORY item, provenance link, inactivate source."""
+        source_uuid = uuid.UUID(str(item_id))
+        source = await self.get_item(source_uuid)
+        source_type = await self._item_type(str(source["item_type_code"]))
+        if source_type["can_stock"] or str(source_type["code"]) not in {"NON_INVENTORY", "DROP_SHIP", "SPECIAL_ORDER"}:
+            raise TypeMigrationInvalid("only NON_INVENTORY/DROP_SHIP/SPECIAL_ORDER items can migrate to INVENTORY")
+        existing = await self._one(
+            "SELECT to_id FROM platform.document_link WHERE tenant_id = :tenant_id AND link_type = 'TYPE_MIGRATION' "
+            "AND from_type = 'ITEM' AND from_id = :source AND to_type = 'ITEM'",
+            source=source_uuid,
+        )
+        if existing is not None:
+            target = await self.get_item(existing["to_id"])
+            return {
+                "source_item_id": str(source_uuid), "new_item_id": str(existing["to_id"]),
+                "new_item_number": target["item_number"], "status": "CONVERTED", "converted": True,
+                "rewired": data.get("rewire") or [],
+            }
+        if not source.get("is_active"):
+            raise ItemInactive("source item is inactive")
+        target_type = await self._item_type(str(data.get("target_item_type_code") or "INVENTORY"))
+        if not target_type["can_stock"]:
+            raise TypeMigrationInvalid("target item type must be stockable")
+        item_number = str(data.get("item_number") or f"{source['item_number']}-INV").strip()
+        payload: dict[str, Any] = {
+            "item_number": item_number, "display_name": source["display_name"],
+            "description": source.get("description"), "item_type_code": str(target_type["code"]),
+            "item_category_id": source.get("item_category_id"), "created_from": "MANUAL",
+            "actor_id": actor_id,
+        }
+        for extension in ("purchasing", "sales", "accounting"):
+            values = source.get(extension)
+            if isinstance(values, Mapping):
+                payload[extension] = {
+                    key: value for key, value in values.items()
+                    if key not in {"id", "tenant_id", "item_id", "version", "created_at", "updated_at", "created_by", "updated_by"}
+                }
+        source_custom_fields = {row["field_code"]: row["value"] for row in source.get("custom_fields") or []}
+        if source_custom_fields:
+            payload["custom_fields"] = source_custom_fields
+        target = await self.create_item(payload)
+        await self._exec(
+            "INSERT INTO platform.document_link (id, tenant_id, link_type, from_type, from_id, to_type, to_id, version) "
+            "VALUES (:id, :tenant_id, 'TYPE_MIGRATION', 'ITEM', :source, 'ITEM', :target, 1) ON CONFLICT DO NOTHING",
+            id=uuid.uuid4(), source=source_uuid, target=uuid.UUID(str(target["id"])),
+        )
+        await self.inactivate(source_uuid, reason=str(data.get("reason") or "type migration"), actor_id=actor_id)
+        return {
+            "source_item_id": str(source_uuid), "new_item_id": str(target["id"]),
+            "new_item_number": target["item_number"], "status": "CONVERTED", "converted": False,
+            "rewired": data.get("rewire") or [],
+        }
 
     async def posting_eligibility(self, item_id: uuid.UUID | str, operation: str) -> dict[str, Any]:
         item = await self._one(
