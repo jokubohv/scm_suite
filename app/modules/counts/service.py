@@ -19,6 +19,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import platform as platform_models
 from app.modules.counts import engine as e
+from app.modules.counts.approvals import (
+    complete_count_request,
+    find_linked_request,
+    resolve_approval_mode,
+    submit_count_request,
+)
 from app.modules.counts.errors import (
     CountAlreadyPosted,
     CountsConflict,
@@ -78,7 +84,7 @@ class CountsService:
         ]
         result = await self.session.execute(
             select(table.c.key, table.c.value).where(
-                table.c.tenant_id == self.tenant_id, table.c.namespace == "inventory", table.c.key.in_([f"counts.{key}" for key in keys])
+                table.c.tenant_id == self.tenant_id, table.c.namespace == "inventory", table.c.key.in_(keys)
             )
         )
         values = {str(row.key): row.value for row in result.all()}
@@ -503,7 +509,9 @@ class CountsService:
         return {"status": "COUNTED", "recounts": refs}
 
     # ------------------------------------------------------------------ review / approve -----
-    async def submit(self, count_id: str) -> dict[str, Any]:
+    async def submit(
+        self, count_id: str, payload: Mapping[str, Any] | None = None, *, requested_by: str | None = None
+    ) -> dict[str, Any]:
         await self._require_enabled()
         count = await self._get_count(count_id)
         settings = await self.settings()
@@ -515,17 +523,69 @@ class CountsService:
         if uncounted:
             raise CountsConflict("all lines must be counted before submit", code="COUNT_LINES_INCOMPLETE", details={"uncounted": len(uncounted)})
         tolerance = e.evaluate_tolerance(lines, settings)
+        mode = resolve_approval_mode(
+            settings=settings, tolerance=tolerance, approval_required=bool(count.get("approval_required", True))
+        )
+        approval_request_id: str | None = None
+        approval_definition_id: str | None = None
+        if mode == "REQUEST":
+            requester = requested_by or (payload or {}).get("requested_by")
+            if not requester:
+                raise CountsConflict(
+                    "declarative count approval requires an authenticated requester",
+                    code="APPROVAL_REQUESTER_REQUIRED",
+                )
+            request = await submit_count_request(
+                self.session, self.tenant_id, count=count, requested_by=str(requester),
+                context={
+                    "count_type": count.get("count_type"),
+                    "line_count": len(lines),
+                    "variance_qty": e.qty_str(e.variance_totals(lines)["variance_qty_total"]),
+                },
+            )
+            approval_request_id = request["approval_request_id"]
+            approval_definition_id = request.get("definition_id")
+            if count.get("created_by") is None:
+                await self.repo.update_count(count_id, {"created_by": _uuid(str(requester))})
         updated = await self.repo.update_count(count_id, {"status": "PENDING_REVIEW"})
-        return {"status": updated["status"], "approval_request_id": None, "tolerance": tolerance.as_dict()}
+        return {
+            "status": updated["status"],
+            "approval_request_id": approval_request_id,
+            "approval_definition_id": approval_definition_id,
+            "approval_mode": mode,
+            "tolerance": tolerance.as_dict(),
+        }
 
-    async def approve(self, count_id: str, payload: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    async def approve(
+        self, count_id: str, payload: Mapping[str, Any] | None = None, *, actor_id: str | None = None
+    ) -> dict[str, Any]:
         settings = await self._require_enabled()
         count = await self._get_count(count_id)
         e.assert_count_transition(count["status"], "APPROVED")
         if count["status"] != "PENDING_REVIEW":
             raise CountStateError("only a PENDING_REVIEW count can be approved")
+        linked_request = await find_linked_request(self.session, self.tenant_id, count_id)
+        if linked_request is not None:
+            request_actor = (payload or {}).get("approved_by") or actor_id
+            if not request_actor:
+                raise CountsConflict(
+                    "approving a count with a declarative approval request requires an approver",
+                    code="APPROVAL_ACTOR_REQUIRED",
+                )
+            completion = await complete_count_request(
+                self.session, self.tenant_id, count_id=count_id,
+                actor_id=str(request_actor), decision="APPROVE",
+                comment=(payload or {}).get("comment"),
+            )
+            if not completion["approval_ok"]:
+                return {
+                    "status": count["status"],
+                    "approval_request_id": linked_request,
+                    "approval_status": completion["status"],
+                    "approval_pending": True,
+                }
         lines = await self.repo.list_lines(count_id)
-        actor = (payload or {}).get("approved_by")
+        actor = (payload or {}).get("approved_by") or actor_id
         updated = await self.repo.update_count(
             count_id,
             {"status": "APPROVED", "approved_at": datetime.now(UTC), "approved_by": _uuid(actor) if actor else None},
@@ -544,7 +604,7 @@ class CountsService:
             return {"status": posted["status"], "posted_transaction_id": posted.get("posted_transaction_id"), "auto_posted": True}
         return {"status": updated["status"], "posted_transaction_id": None, "auto_posted": False}
 
-    async def reject(self, count_id: str, payload: Mapping[str, Any]) -> dict[str, Any]:
+    async def reject(self, count_id: str, payload: Mapping[str, Any], *, actor_id: str | None = None) -> dict[str, Any]:
         await self._require_enabled()
         count = await self._get_count(count_id)
         e.assert_count_transition(count["status"], "REJECTED")
@@ -554,6 +614,18 @@ class CountsService:
         if not reason:
             raise CountsValidationError("rejection reason is required")
         recalc = bool(payload.get("recalc_snapshot", count.get("recalc_snapshot_on_reject", True)))
+        linked_request = await find_linked_request(self.session, self.tenant_id, count_id)
+        if linked_request is not None:
+            reject_actor = payload.get("approved_by") or actor_id
+            if not reject_actor:
+                raise CountsConflict(
+                    "rejecting a count with a declarative approval request requires an approver",
+                    code="APPROVAL_ACTOR_REQUIRED",
+                )
+            await complete_count_request(
+                self.session, self.tenant_id, count_id=count_id,
+                actor_id=str(reject_actor), decision="REJECT", comment=reason,
+            )
         updated = await self.repo.update_count(
             count_id, {"status": "REJECTED", "reason": reason, "count_round": int(count["count_round"]) + 1}
         )
@@ -670,6 +742,7 @@ class CountsService:
         count = await self._get_count(count_id)
         blind = bool(count["blind_count"]) and count["status"] not in {"PENDING_REVIEW", "APPROVED", "POSTED"}
         result = dict(count)
+        result["approval_request_id"] = await find_linked_request(self.session, self.tenant_id, count_id)
         if blind:
             result.pop("variance_account_ref", None)
         if include_lines:

@@ -114,6 +114,8 @@ class RejectIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
     reason: str = Field(min_length=1, max_length=500)
     recalc_snapshot: bool = True
+    approved_by: str | None = None
+    comment: str | None = None
 
 
 class SnapshotRecalcIn(BaseModel):

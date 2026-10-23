@@ -17,6 +17,10 @@ from app.api.routers.counts import router as counts_router
 from app.core.models import platform as p
 from app.modules.item_master import tables as it
 
+REQUESTER_APP_USER_ID = UUID("e0000000-0000-7000-8000-000000000031")
+APPROVER_APP_USER_ID = UUID("e0000000-0000-7000-8000-000000000032")
+REQUESTER_IDENTITY_ID = UUID("e0000000-0000-7000-8000-000000000033")
+APPROVER_IDENTITY_ID = UUID("e0000000-0000-7000-8000-000000000034")
 TENANT_ID = UUID("e0000000-0000-7000-8000-000000000001")
 OTHER_TENANT_ID = UUID("e0000000-0000-7000-8000-000000000002")
 LOCATION_ID = UUID("e0000000-0000-7000-8000-000000000010")
@@ -56,6 +60,46 @@ async def _seed_tenant(db_session: Any, tenant_id: UUID, code: str) -> None:
             settings={},
             version=1,
         )
+    )
+
+
+async def _seed_app_user(db_session: Any, tenant_id: UUID, *, app_user_id: UUID, identity_id: UUID, email: str) -> None:
+    await db_session.execute(
+        text(
+            """
+            INSERT INTO platform.user_identity (id, email, display_name, status, created_at, updated_at, version)
+            VALUES (:id, :email, :display_name, 'ACTIVE', now(), now(), 1)
+            """
+        ),
+        {"id": identity_id, "email": email, "display_name": email.split("@")[0]},
+    )
+    await db_session.execute(
+        text(
+            """
+            INSERT INTO platform.app_user
+                (id, tenant_id, identity_id, email, display_name, status, membership_status,
+                 token_version, is_service_account, created_at, updated_at, version)
+            VALUES (:id, :tenant_id, :identity_id, :email, :display_name, 'ACTIVE', 'ACTIVE', 0, false,
+                    now(), now(), 1)
+            """
+        ),
+        {"id": app_user_id, "tenant_id": tenant_id, "identity_id": identity_id, "email": email, "display_name": email.split("@")[0]},
+    )
+
+
+async def _seed_approval_definition(db_session: Any, tenant_id: UUID, *, code: str = "COUNT") -> None:
+    await db_session.execute(
+        text(
+            """
+            INSERT INTO platform.approval_definition
+                (id, tenant_id, document_type, name, condition, steps, is_enabled, priority,
+                 created_at, updated_at, version)
+            VALUES (gen_random_uuid(), :tenant_id, 'INVENTORY_COUNT', :name, '{}'::jsonb,
+                    '[{"step": 1, "name": "Count approval", "mode": "SEQUENTIAL"}]'::jsonb,
+                    true, 100, now(), now(), 1)
+            """
+        ),
+        {"tenant_id": tenant_id, "name": f"Inventory count approval {code}"},
     )
 
 
@@ -184,6 +228,15 @@ async def seeded(db_session: Any) -> dict[str, Any]:
     await _seed_location_status(db_session, OTHER_TENANT_ID, location_id=uuid4(), status_id=uuid4(), suffix="3")
     await _enable_flag(db_session, TENANT_ID, True)
     await _enable_flag(db_session, OTHER_TENANT_ID, True)
+    await _seed_app_user(
+        db_session, TENANT_ID, app_user_id=REQUESTER_APP_USER_ID,
+        identity_id=REQUESTER_IDENTITY_ID, email="count-requester@test.local",
+    )
+    await _seed_app_user(
+        db_session, TENANT_ID, app_user_id=APPROVER_APP_USER_ID,
+        identity_id=APPROVER_IDENTITY_ID, email="count-approver@test.local",
+    )
+    await _seed_approval_definition(db_session, TENANT_ID)
     await seed_balance(db_session, tenant_id=TENANT_ID, item_id=ITEM_A, location_id=LOCATION_ID, status_id=STATUS_ID, qty="10", value="40")
     await seed_balance(db_session, tenant_id=TENANT_ID, item_id=ITEM_B, location_id=LOCATION_ID, status_id=STATUS_ID, qty="5", value="15")
     await db_session.flush()
@@ -201,7 +254,7 @@ async def seeded(db_session: Any) -> dict[str, Any]:
 @pytest.fixture()
 def principal() -> Principal:
     return Principal(
-        identity_id=str(uuid4()), app_user_id=str(uuid4()), tenant_id=str(TENANT_ID),
+        identity_id=str(REQUESTER_IDENTITY_ID), app_user_id=str(REQUESTER_APP_USER_ID), tenant_id=str(TENANT_ID),
         token_version=0, scopes=ALL_COUNT_SCOPES,
     )
 

@@ -345,7 +345,7 @@ async def submit(
     if replay is not None:
         return replay
     try:
-        row = await _service(db, principal).submit(count_id)
+        row = await _service(db, principal).submit(count_id, requested_by=principal.app_user_id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
@@ -364,7 +364,7 @@ async def approve(
     if replay is not None:
         return replay
     try:
-        row = await _service(db, principal).approve(count_id, payload)
+        row = await _service(db, principal).approve(count_id, payload, actor_id=principal.app_user_id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
@@ -383,7 +383,7 @@ async def reject(
     if replay is not None:
         return replay
     try:
-        row = await _service(db, principal).reject(count_id, payload)
+        row = await _service(db, principal).reject(count_id, payload, actor_id=principal.app_user_id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)

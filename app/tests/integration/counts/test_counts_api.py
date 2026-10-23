@@ -43,7 +43,7 @@ async def _create_manual_count(client: Any, *, item_ids: list[str] | None = None
         "/api/v1/inventory-counts",
         json={
             "count_type": "MANUAL", "count_date": "2026-10-23", "blind_count": blind,
-            "approval_required": True, "scope": {"items": item_ids or [str(ITEM_A)]},
+            "approval_required": False, "scope": {"items": item_ids or [str(ITEM_A)]},
         },
         headers=idem(),
     )
