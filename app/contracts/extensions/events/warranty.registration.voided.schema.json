@@ -1,0 +1,83 @@
+{
+  "$id": "https://contracts.inventory-platform.local/extensions.registry/warranty.registration.voided/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "extensions.registry@1.0.0 warranty.registration.voided payload (final outbox envelope; implemented data fields).",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "reason": {},
+        "registration_id": {}
+      },
+      "required": [
+        "registration_id",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "event_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "warranty.registration.voided",
+  "type": "object",
+  "x-contract": "extensions.registry",
+  "x-event-type": "warranty.registration.voided",
+  "x-event-version": "1.0.0",
+  "x-feature-set": "FS-14",
+  "x-payload-key-fields": [
+    "registration_id",
+    "reason"
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "$id": "https://contracts.inventory-platform.local/consigned.inventory/consigned.consumed/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "consigned.inventory@1.0.0 consigned.consumed payload (final outbox envelope; implemented data fields).",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "agreement_id": {},
+        "consumption_id": {},
+        "item_id": {},
+        "period_key": {},
+        "qty": {},
+        "value": {}
+      },
+      "required": [
+        "consumption_id",
+        "agreement_id",
+        "item_id",
+        "period_key",
+        "qty",
+        "value"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "event_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "consigned.consumed",
+  "type": "object",
+  "x-contract": "consigned.inventory",
+  "x-event-type": "consigned.consumed",
+  "x-event-version": "1.0.0",
+  "x-feature-set": "FS-13",
+  "x-payload-key-fields": [
+    "consumption_id",
+    "agreement_id",
+    "item_id",
+    "period_key",
+    "qty",
+    "value"
+  ]
+}

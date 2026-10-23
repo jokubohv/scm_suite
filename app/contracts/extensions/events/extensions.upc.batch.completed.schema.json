@@ -1,0 +1,89 @@
+{
+  "$id": "https://contracts.inventory-platform.local/extensions.registry/extensions.upc.batch.completed/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "extensions.registry@1.0.0 extensions.upc.batch.completed payload (final outbox envelope; implemented data fields).",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "assigned": {},
+        "failed": {},
+        "job_run_id": {},
+        "skipped": {}
+      },
+      "required": [
+        "job_run_id",
+        "assigned",
+        "skipped",
+        "failed"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "event_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "extensions.upc.batch.completed",
+  "type": "object",
+  "x-contract": "extensions.registry",
+  "x-event-type": "extensions.upc.batch.completed",
+  "x-event-version": "1.0.0",
+  "x-feature-set": "FS-14",
+  "x-payload-key-fields": [
+    "job_run_id",
+    "assigned",
+    "skipped",
+    "failed"
+  ]
+}

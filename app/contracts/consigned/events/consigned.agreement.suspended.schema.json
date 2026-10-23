@@ -1,0 +1,89 @@
+{
+  "$id": "https://contracts.inventory-platform.local/consigned.inventory/consigned.agreement.suspended/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "consigned.inventory@1.0.0 consigned.agreement.suspended payload (final outbox envelope; implemented data fields).",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "agreement_id": {},
+        "reason": {},
+        "status": {},
+        "vendor_id": {}
+      },
+      "required": [
+        "agreement_id",
+        "vendor_id",
+        "status",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "event_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "consigned.agreement.suspended",
+  "type": "object",
+  "x-contract": "consigned.inventory",
+  "x-event-type": "consigned.agreement.suspended",
+  "x-event-version": "1.0.0",
+  "x-feature-set": "FS-13",
+  "x-payload-key-fields": [
+    "agreement_id",
+    "vendor_id",
+    "status",
+    "reason"
+  ]
+}
