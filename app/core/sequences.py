@@ -206,8 +206,7 @@ class SequenceService:
         if allow_undeclared:
             return SequenceDefinition(doc_type=normalised, prefix=normalised, padding=DEFAULT_PADDING)
         raise UnknownSequenceType(
-            f"sequence {normalised!r} is not declared in the seed catalogue",
-            f"declared={sorted(self.declarations)}",
+            f"sequence {normalised!r} is not declared in the seed catalogue (declared={sorted(self.declarations)})"
         )
 
     def declared(self) -> Mapping[str, SequenceDefinition]:
@@ -362,7 +361,7 @@ class SequenceService:
         period_key: str | None,
         *,
         for_update: bool = False,
-    ) -> Mapping[str, Any] | None:
+    ) -> Any:
         condition = [
             number_sequence.c.tenant_id == tenant_id,
             number_sequence.c.doc_type == doc_type,
