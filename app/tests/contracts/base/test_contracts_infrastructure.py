@@ -9,7 +9,6 @@ harness for their provider/consumer tests; the S0 gate is ``test_lint_gate_is_cl
 from __future__ import annotations
 
 import json
-import subprocess
 
 import pytest
 
@@ -75,14 +74,18 @@ def test_contract_builder_directories_complete() -> None:
         assert "paths" in placeholder
 
 
-def test_aggregate_operation_count_matches_parsed_endpoints() -> None:
+def test_aggregate_operation_count_matches_parsed_endpoints_and_implemented_additions() -> None:
     model = fixtures.contract_model()
     aggregate = fixtures.committed_openapi()
-    # No builder extension fragments are merged yet (S0), so counts must be exact.
-    assert aggregate["x-counts"]["operations"] == len(model.endpoints)
-    assert aggregate["x-counts"]["paths"] == len({ep.path for ep in model.endpoints})
-    assert aggregate["x-counts"]["contracts"] == 21
-    assert aggregate["x-counts"]["feature_sets"] == 16
+    counts = aggregate["x-counts"]
+    # Spec rows are the base; implementation-backed builder operations may override a spec row
+    # (no count change) or append genuinely new implemented operations/paths (C0+).
+    assert counts["operations"] == len(model.endpoints) + counts["implemented_additions"]
+    assert counts["paths"] == len({ep.path for ep in model.endpoints}) + counts["implemented_paths_added"]
+    assert counts["operations"] == counts["spec_operations"] + counts["implemented_additions"]
+    assert counts["skeleton_operations"] + counts["implemented_operations"] == counts["operations"]
+    assert counts["contracts"] == 21
+    assert counts["feature_sets"] == 16
 
 
 def test_contract_registry_versions_match_manifest() -> None:

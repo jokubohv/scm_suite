@@ -14,7 +14,6 @@ implementation-backed schemas in their own ``app/contracts/<dir>/`` scope.
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Any
 
 from . import paths
@@ -133,7 +132,7 @@ def _paths_for(endpoints: list[Endpoint], fragment_relpath: str) -> dict[str, An
 
 def build_fragment(fs: FeatureSet, model: ContractModel) -> dict[str, Any]:
     relpath = _fs_fragment_relpath(fs.id)
-    return {
+    fragment: dict[str, Any] = {
         "openapi": "3.1.0",
         "info": {
             "title": f"{fs.id} — {fs.name} (contract skeleton)",
@@ -158,6 +157,25 @@ def build_fragment(fs: FeatureSet, model: ContractModel) -> dict[str, Any]:
         "x-jobs": fs.jobs,
         "x-endpoint-count": len(fs.endpoints),
     }
+    # Builder implementation overlay: only operations explicitly derived from the implemented app.
+    implemented_overrides = 0
+    implemented_added = 0
+    for raw_path, item in _builder_fragments().items():
+        for method, operation in item.items():
+            if not _is_implemented_operation(operation) or operation.get("x-feature-set") != fs.id:
+                continue
+            if method in (fragment["paths"].get(raw_path) or {}):
+                implemented_overrides += 1
+            else:
+                implemented_added += 1
+            fragment["paths"].setdefault(raw_path, {})[method] = operation
+    if implemented_overrides or implemented_added:
+        fragment["paths"] = dict(sorted(fragment["paths"].items()))
+        fragment["info"]["x-implementation-status"] = "implementation-backed"
+        fragment["info"]["x-implemented-operations"] = implemented_overrides + implemented_added
+        fragment["info"]["x-implemented-overrides"] = implemented_overrides
+        fragment["info"]["x-implemented-additions"] = implemented_added
+    return fragment
 
 
 def build_event_schema(event: Event) -> dict[str, Any]:
@@ -248,6 +266,15 @@ def build_contracts_registry(model: ContractModel) -> dict[str, Any]:
     }
 
 
+def _is_implemented_operation(operation: Any) -> bool:
+    """True for builder-fragment operations derived from the implemented app (they replace skeletons)."""
+    return (
+        isinstance(operation, dict)
+        and operation.get("x-implemented") is True
+        and operation.get("x-skeleton") is False
+    )
+
+
 def _builder_fragments() -> dict[str, Any]:
     """Merge optional FS-builder extension fragments (``app/contracts/<dir>/openapi.fragment.json``)."""
     merged_paths: dict[str, Any] = {}
@@ -273,22 +300,45 @@ def build_aggregate(model: ContractModel) -> dict[str, Any]:
                 paths_out.setdefault(raw_path, {})
                 if method not in paths_out[raw_path]:
                     paths_out[raw_path][method] = operation
+    spec_operation_count = sum(len(item) for item in paths_out.values())
+    spec_path_count = len(paths_out)
+    implemented_overrides = 0
+    implemented_added = 0
+    implemented_paths_added = 0
     for raw_path, item in _builder_fragments().items():
+        added_path = raw_path not in paths_out
         paths_out.setdefault(raw_path, {})
         for method, operation in item.items():
-            if isinstance(operation, dict) and method not in paths_out[raw_path]:
-                operation.setdefault("x-skeleton", False)
-                paths_out[raw_path][method] = operation
+            if not isinstance(operation, dict):
+                continue
+            if method in paths_out[raw_path]:
+                if _is_implemented_operation(operation):
+                    paths_out[raw_path][method] = operation
+                    implemented_overrides += 1
+                continue
+            operation.setdefault("x-skeleton", False)
+            paths_out[raw_path][method] = operation
+            implemented_added += 1
+            if added_path:
+                implemented_paths_added += 1
+                added_path = False
     operation_count = sum(len(item) for item in paths_out.values())
+    skeleton_operations = sum(
+        1
+        for item in paths_out.values()
+        for operation in item.values()
+        if isinstance(operation, dict) and operation.get("x-skeleton") is True
+    )
     contracts = _contract_entries(model)
     return {
         "openapi": "3.1.0",
         "info": {
             "title": "Inventory Platform — Contract Surfaces (S0 skeleton)",
             "version": model.plan_version,
-            "description": "Aggregated OpenAPI 3.1 skeleton generated from feature-sets/FS-*.md §6 + design/feature-sets.json; operations carry x-todo until implemented. Event contracts are in contracts/events/registry.json.",
+            "description": "Aggregated OpenAPI 3.1 document generated from feature-sets/FS-*.md §6 + design/feature-sets.json + implementation-backed builder fragments; unimplemented operations carry x-todo, implemented ones are merged from app.openapi(). Event contracts are in contracts/events/registry.json.",
             "x-plan-version": model.plan_version,
             "x-status": "skeleton",
+            "x-status-detail": "C0 freeze candidate: FS-00 implementation-backed operations merged from app.openapi(); spec skeletons remain for unimplemented surfaces.",
         },
         "servers": [{"url": "/", "description": "relative to deployment origin"}],
         "tags": [{"name": fs.id, "description": f"{fs.name} ({fs.wave})"} for fs in model.feature_sets],
@@ -313,6 +363,13 @@ def build_aggregate(model: ContractModel) -> dict[str, Any]:
             "paths": len(paths_out),
             "operations": operation_count,
             "events": sum(1 for e in model.events if not e.wildcard),
+            "spec_operations": spec_operation_count,
+            "spec_paths": spec_path_count,
+            "implemented_operations": implemented_overrides + implemented_added,
+            "implemented_overrides": implemented_overrides,
+            "implemented_additions": implemented_added,
+            "implemented_paths_added": implemented_paths_added,
+            "skeleton_operations": skeleton_operations,
         },
     }
 

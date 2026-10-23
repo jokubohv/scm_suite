@@ -1,0 +1,70 @@
+$ python3 -m app.contracts.cli lint --json
+
+{
+  "errors": [],
+  "ok": true,
+  "stats": {
+    "builder_fragments": {
+      "consigned": 0,
+      "costing": 0,
+      "counts": 0,
+      "extensions": 0,
+      "inventory_balances": 0,
+      "inventory_ledger": 0,
+      "item_master": 0,
+      "manufacturing": 0,
+      "order_boundary": 0,
+      "platform": 77,
+      "pricing": 0,
+      "procurement": 0,
+      "quality": 0,
+      "replenishment": 0,
+      "reporting": 0,
+      "traceability": 0,
+      "traceability_numbered": 0,
+      "wms": 0
+    },
+    "contracts": 21,
+    "endpoints": 934,
+    "event_schemas": 159,
+    "feature_sets": 16,
+    "fragments": {
+      "FS-00": 130,
+      "FS-01": 59,
+      "FS-02": 64,
+      "FS-03": 29,
+      "FS-04": 78,
+      "FS-05": 61,
+      "FS-06": 15,
+      "FS-07": 23,
+      "FS-08": 89,
+      "FS-09": 125,
+      "FS-10": 72,
+      "FS-11": 98,
+      "FS-12": 35,
+      "FS-13": 24,
+      "FS-14": 36,
+      "FS-15": 24
+    },
+    "operation_ids": 962,
+    "operations": 962,
+    "paths": 727,
+    "plan_version": "1.5.0"
+  },
+  "warnings": [
+    {
+      "code": "OP_SCOPE_UNKNOWN",
+      "level": "WARN",
+      "message": "spec scope(s) not in permissions.json catalogue (reconcile with owner): ['extensions.admin'] on GET /api/v1/extensions/settings",
+      "path": "contracts/openapi/openapi.json"
+    },
+    {
+      "code": "OP_SCOPE_UNKNOWN",
+      "level": "WARN",
+      "message": "spec scope(s) not in permissions.json catalogue (reconcile with owner): ['extensions.admin'] on PATCH /api/v1/extensions/settings",
+      "path": "contracts/openapi/openapi.json"
+    }
+  ]
+}
+
+exit_code=0

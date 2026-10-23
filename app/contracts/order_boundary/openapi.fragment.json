@@ -1,9 +1,15 @@
 {
   "info": {
-    "description": "TODO(S0-04): FS builder adds implementation-backed paths here; merged by app.contracts.cli generate.",
-    "title": "Builder extension fragment (order_boundary)",
+    "description": "TODO(C0/residual): no order-boundary routers are implemented yet; spec skeletons remain authoritative. Add implementation-backed paths here when order.demand/order.supply are implemented.",
+    "title": "FS-00 order boundary — stub contract fragment (order.demand/order.supply 0.1.0)",
     "version": "1.5.0",
-    "x-placeholder": true
+    "x-contracts": [
+      "order.demand@0.1.0",
+      "order.supply@0.1.0"
+    ],
+    "x-feature-set": "FS-00",
+    "x-generated-by": "app/contracts/platform/build_from_app.py",
+    "x-status": "pending-implementation"
   },
   "openapi": "3.1.0",
   "paths": {}

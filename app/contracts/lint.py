@@ -25,8 +25,8 @@ from pathlib import Path
 from typing import Any
 
 from . import paths
-from .generate import build_outputs, build_model, stale_generated_files
-from .parse_specs import ContractModel, _SCOPE_RE
+from .generate import build_model, build_outputs, stale_generated_files
+from .parse_specs import ContractModel
 from .yaml_emit import dump_yaml
 
 ERROR = "ERROR"
@@ -88,9 +88,24 @@ def _check_fragments(model: ContractModel, issues: list[dict[str, str]], stats: 
         paths_in_fragment = fragment.get("paths") or {}
         if not paths_in_fragment:
             issues.append(_issue(ERROR, "FRAGMENT_EMPTY", f"{fs.id}: fragment has no paths", paths.relpath(fragment_path)))
-        declared = {(method.lower(), path) for path, item in paths_in_fragment.items() for method in item}
-        if declared != expected[fs.id]:
-            issues.append(_issue(ERROR, "FRAGMENT_ENDPOINTS", f"{fs.id}: fragment methods/paths do not match spec parse (delta={len(declared ^ expected[fs.id])})", paths.relpath(fragment_path)))
+        declared = {
+            (method.lower(), path)
+            for path, item in paths_in_fragment.items()
+            for method, operation in item.items()
+            if isinstance(operation, dict)
+        }
+        implemented = {
+            (method.lower(), path)
+            for path, item in paths_in_fragment.items()
+            for method, operation in item.items()
+            if isinstance(operation, dict) and operation.get("x-skeleton") is False
+        }
+        missing = expected[fs.id] - declared
+        unexpected = declared - expected[fs.id] - implemented
+        if missing:
+            issues.append(_issue(ERROR, "FRAGMENT_ENDPOINTS", f"{fs.id}: fragment misses {len(missing)} spec method/path(s): {sorted(missing)[:5]}", paths.relpath(fragment_path)))
+        if unexpected:
+            issues.append(_issue(ERROR, "FRAGMENT_ENDPOINTS", f"{fs.id}: {len(unexpected)} fragment method/path(s) are neither spec rows nor implementation-backed: {sorted(unexpected)[:5]}", paths.relpath(fragment_path)))
         stats.setdefault("fragments", {})[fs.id] = len(declared)
 
 
