@@ -1,0 +1,24 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "count_id": {
+      "title": "Count Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "recalc_snapshot": {
+      "title": "Recalc Snapshot",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "count_id",
+    "reason",
+    "recalc_snapshot"
+  ],
+  "title": "CountRejectedEvent",
+  "type": "object"
+}

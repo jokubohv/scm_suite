@@ -1,0 +1,52 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "count_date": {
+      "format": "date",
+      "title": "Count Date",
+      "type": "string"
+    },
+    "count_id": {
+      "title": "Count Id",
+      "type": "string"
+    },
+    "count_number": {
+      "title": "Count Number",
+      "type": "string"
+    },
+    "count_plan_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Count Plan Id"
+    },
+    "count_type": {
+      "enum": [
+        "CALCULATED",
+        "MANUAL",
+        "CYCLE"
+      ],
+      "title": "Count Type",
+      "type": "string"
+    },
+    "line_count": {
+      "title": "Line Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "count_id",
+    "count_number",
+    "count_type",
+    "count_date",
+    "line_count"
+  ],
+  "title": "CountGeneratedEvent",
+  "type": "object"
+}

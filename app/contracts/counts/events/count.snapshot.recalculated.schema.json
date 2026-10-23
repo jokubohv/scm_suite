@@ -1,0 +1,31 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "count_id": {
+      "title": "Count Id",
+      "type": "string"
+    },
+    "recalculated_from_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Recalculated From Id"
+    },
+    "snapshot_revision": {
+      "title": "Snapshot Revision",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "count_id",
+    "snapshot_revision"
+  ],
+  "title": "CountSnapshotRecalculatedEvent",
+  "type": "object"
+}

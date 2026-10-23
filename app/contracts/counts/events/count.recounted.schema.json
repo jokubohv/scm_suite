@@ -1,0 +1,29 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "attempt": {
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "count_id": {
+      "title": "Count Id",
+      "type": "string"
+    },
+    "counted_qty": {
+      "title": "Counted Qty",
+      "type": "string"
+    },
+    "line_id": {
+      "title": "Line Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "count_id",
+    "line_id",
+    "attempt",
+    "counted_qty"
+  ],
+  "title": "CountRecountedEvent",
+  "type": "object"
+}

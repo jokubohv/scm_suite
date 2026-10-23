@@ -1,0 +1,39 @@
+{
+  "properties": {
+    "count_date": {
+      "format": "date",
+      "title": "Count Date",
+      "type": "string"
+    },
+    "count_id": {
+      "title": "Count Id",
+      "type": "string"
+    },
+    "count_number": {
+      "title": "Count Number",
+      "type": "string"
+    },
+    "count_round": {
+      "title": "Count Round",
+      "type": "integer"
+    },
+    "count_type": {
+      "title": "Count Type",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "count_id",
+    "count_number",
+    "status",
+    "count_type",
+    "count_date",
+    "count_round"
+  ],
+  "title": "_CountRef",
+  "type": "object"
+}

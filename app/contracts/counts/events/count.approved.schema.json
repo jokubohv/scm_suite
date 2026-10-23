@@ -1,0 +1,48 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "approved_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approved At"
+    },
+    "approved_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Approved By"
+    },
+    "count_id": {
+      "title": "Count Id",
+      "type": "string"
+    },
+    "line_count": {
+      "title": "Line Count",
+      "type": "integer"
+    },
+    "variance_qty_total": {
+      "title": "Variance Qty Total",
+      "type": "string"
+    }
+  },
+  "required": [
+    "count_id",
+    "line_count",
+    "variance_qty_total"
+  ],
+  "title": "CountApprovedEvent",
+  "type": "object"
+}

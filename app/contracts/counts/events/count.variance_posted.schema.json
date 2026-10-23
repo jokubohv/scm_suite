@@ -1,0 +1,48 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "count_id": {
+      "title": "Count Id",
+      "type": "string"
+    },
+    "inventory_transaction_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inventory Transaction Id"
+    },
+    "ledger_sequence": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ledger Sequence"
+    },
+    "line_count": {
+      "title": "Line Count",
+      "type": "integer"
+    },
+    "variance_value_base": {
+      "title": "Variance Value Base",
+      "type": "string"
+    }
+  },
+  "required": [
+    "count_id",
+    "line_count",
+    "variance_value_base"
+  ],
+  "title": "CountVariancePostedEvent",
+  "type": "object"
+}
