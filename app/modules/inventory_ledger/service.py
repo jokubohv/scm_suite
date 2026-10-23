@@ -213,10 +213,11 @@ def validate_command(command: Mapping[str, Any]) -> dict[str, Any]:
 
 
 class LedgerService:
-    def __init__(self, session: AsyncSession, tenant_id: uuid.UUID | str) -> None:
+    def __init__(self, session: AsyncSession, tenant_id: uuid.UUID | str, *, costing: Any | None = None) -> None:
         self.session = session
         self.tenant_id = tenant_id if isinstance(tenant_id, uuid.UUID) else uuid.UUID(str(tenant_id))
         self._sequence_key = f"ledger_seq:{self.tenant_id}"
+        self.costing = costing
 
     # -- low-level helpers --------------------------------------------------------------------
     async def _exec(self, sql: str, **params: Any):
@@ -361,6 +362,22 @@ class LedgerService:
                 source_ref=line["source_line_ref"], class_ref=line["class_ref"], department_ref=line["department_ref"],
                 subsidiary_ref=line["subsidiary_ref"], cost_object=line["cost_object_id"], date=validated["transaction_date"],
             )
+            if self.costing is not None:
+                try:
+                    costed = await self.costing.value_line(
+                        item_id=line["item_id"], location_id=line["location_id"], qty=line["qty_base"],
+                        movement_type=line["movement_type"], transaction_date=validated["transaction_date"],
+                        transaction_id=transaction_id, line_id=line_id, lot_id=line["lot_id"], serial_id=line["serial_id"],
+                        unit_cost=line["unit_cost"], value_delta=line["value_base"] if line["value_base"] != 0 else None,
+                        reason=validated["memo"],
+                    )
+                    if costed.get("value_delta") is not None:
+                        await self._exec(
+                            "UPDATE inventory_ledger.inventory_transaction_line SET value_base = :value, value_txn = :value WHERE tenant_id = :tenant_id AND id = :id",
+                            id=line_id, value=costed["value_delta"],
+                        )
+                except Exception as exc:  # noqa: BLE001 - typed costing errors abort the posting
+                    raise ledger_error(f"costing valuation failed: {exc}", code="COSTING_ERROR", http_status=409) from exc
             for detail in line["details"]:
                 await self._exec(
                     """

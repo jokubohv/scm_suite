@@ -33,8 +33,16 @@ class PostingPort:
     def __init__(self, session: AsyncSession, tenant_id: uuid.UUID | str, *, costing: CostingPort | None = None) -> None:
         self.session = session
         self.tenant_id = tenant_id
-        self.costing = costing
-        self.ledger = LedgerService(session, tenant_id)
+        adapter: Any | None = costing
+        if adapter is None:
+            try:
+                from app.modules.inventory_ledger.costing import LedgerCostingAdapter
+
+                adapter = LedgerCostingAdapter(session, tenant_id)
+            except Exception:  # noqa: BLE001 - FS-05 unavailable in some deployments/tests
+                adapter = None
+        self.costing = adapter
+        self.ledger = LedgerService(session, tenant_id, costing=adapter)
         self.documents = LedgerDocuments(self.ledger)
 
     # -- core ---------------------------------------------------------------------------------
