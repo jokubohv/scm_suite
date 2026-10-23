@@ -1,0 +1,34 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "applied_count": {
+      "default": 0,
+      "title": "Applied Count",
+      "type": "integer"
+    },
+    "formula_version": {
+      "title": "Formula Version",
+      "type": "string"
+    },
+    "line_count": {
+      "title": "Line Count",
+      "type": "integer"
+    },
+    "replenishment_calculation_id": {
+      "title": "Replenishment Calculation Id",
+      "type": "string"
+    },
+    "skipped_manual_count": {
+      "default": 0,
+      "title": "Skipped Manual Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "replenishment_calculation_id",
+    "formula_version",
+    "line_count"
+  ],
+  "title": "ReplenishmentCalculatedEvent",
+  "type": "object"
+}

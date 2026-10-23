@@ -1,0 +1,46 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "exception_count": {
+      "title": "Exception Count",
+      "type": "integer"
+    },
+    "rule_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rule Id"
+    },
+    "run_key": {
+      "title": "Run Key",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "suggestion_count": {
+      "title": "Suggestion Count",
+      "type": "integer"
+    },
+    "supply_plan_id": {
+      "title": "Supply Plan Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "supply_plan_id",
+    "suggestion_count",
+    "exception_count",
+    "run_key",
+    "status"
+  ],
+  "title": "PlanSupplyCalculatedEvent",
+  "type": "object"
+}

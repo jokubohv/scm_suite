@@ -1,0 +1,33 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "actor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Actor"
+    },
+    "changed_keys": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Changed Keys",
+      "type": "array"
+    },
+    "policy_versions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Policy Versions",
+      "type": "object"
+    }
+  },
+  "title": "ReplenishmentPreferencesChangedEvent",
+  "type": "object"
+}

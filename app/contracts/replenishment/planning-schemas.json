@@ -1,0 +1,274 @@
+{
+  "planning": {
+    "AllocationRun": {
+      "additionalProperties": true,
+      "properties": {
+        "allocation_strategy_id": {
+          "title": "Allocation Strategy Id",
+          "type": "string"
+        },
+        "as_of_date": {
+          "format": "date",
+          "title": "As Of Date",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "run_number": {
+          "title": "Run Number",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "run_number",
+        "allocation_strategy_id",
+        "as_of_date",
+        "status"
+      ],
+      "title": "AllocationRunPayload",
+      "type": "object"
+    },
+    "AtpBucket": {
+      "additionalProperties": true,
+      "properties": {
+        "begin_qty": {
+          "title": "Begin Qty",
+          "type": "string"
+        },
+        "bucket_date": {
+          "format": "date",
+          "title": "Bucket Date",
+          "type": "string"
+        },
+        "demand_qty": {
+          "title": "Demand Qty",
+          "type": "string"
+        },
+        "earliest_full_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Earliest Full Date"
+        },
+        "projected_available": {
+          "title": "Projected Available",
+          "type": "string"
+        },
+        "shortage_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shortage Date"
+        },
+        "shortage_qty": {
+          "title": "Shortage Qty",
+          "type": "string"
+        },
+        "supply_qty": {
+          "title": "Supply Qty",
+          "type": "string"
+        }
+      },
+      "required": [
+        "bucket_date",
+        "begin_qty",
+        "supply_qty",
+        "demand_qty",
+        "projected_available",
+        "shortage_qty"
+      ],
+      "title": "AtpBucketPayload",
+      "type": "object"
+    },
+    "DemandPlan": {
+      "additionalProperties": true,
+      "properties": {
+        "horizon_end": {
+          "format": "date",
+          "title": "Horizon End",
+          "type": "string"
+        },
+        "horizon_start": {
+          "format": "date",
+          "title": "Horizon Start",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "plan_number": {
+          "title": "Plan Number",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "plan_number",
+        "method",
+        "status",
+        "horizon_start",
+        "horizon_end"
+      ],
+      "title": "DemandPlanPayload",
+      "type": "object"
+    },
+    "PlanningRule": {
+      "additionalProperties": true,
+      "properties": {
+        "allowed_supply_types": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Supply Types",
+          "type": "array"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "engine": {
+          "title": "Engine",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "lot_sizing": {
+          "title": "Lot Sizing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "code",
+        "engine",
+        "allowed_supply_types",
+        "lot_sizing"
+      ],
+      "title": "PlanningRulePayload",
+      "type": "object"
+    },
+    "Suggestion": {
+      "additionalProperties": true,
+      "properties": {
+        "action_type": {
+          "title": "Action Type",
+          "type": "string"
+        },
+        "due_date": {
+          "format": "date",
+          "title": "Due Date",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "location_id": {
+          "title": "Location Id",
+          "type": "string"
+        },
+        "qty": {
+          "title": "Qty",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "supply_plan_id": {
+          "title": "Supply Plan Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "supply_plan_id",
+        "item_id",
+        "location_id",
+        "action_type",
+        "qty",
+        "due_date",
+        "status"
+      ],
+      "title": "SuggestionPayload",
+      "type": "object"
+    },
+    "SupplyPlan": {
+      "additionalProperties": true,
+      "properties": {
+        "horizon_end": {
+          "format": "date",
+          "title": "Horizon End",
+          "type": "string"
+        },
+        "horizon_start": {
+          "format": "date",
+          "title": "Horizon Start",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "plan_number": {
+          "title": "Plan Number",
+          "type": "string"
+        },
+        "run_key": {
+          "title": "Run Key",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "plan_number",
+        "status",
+        "run_key",
+        "horizon_start",
+        "horizon_end"
+      ],
+      "title": "SupplyPlanPayload",
+      "type": "object"
+    }
+  }
+}

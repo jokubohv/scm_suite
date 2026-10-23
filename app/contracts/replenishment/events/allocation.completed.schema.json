@@ -1,0 +1,45 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "allocated_count": {
+      "title": "Allocated Count",
+      "type": "integer"
+    },
+    "allocation_run_id": {
+      "title": "Allocation Run Id",
+      "type": "string"
+    },
+    "as_of_date": {
+      "format": "date",
+      "title": "As Of Date",
+      "type": "string"
+    },
+    "demand_count": {
+      "title": "Demand Count",
+      "type": "integer"
+    },
+    "exception_count": {
+      "title": "Exception Count",
+      "type": "integer"
+    },
+    "strategy_id": {
+      "title": "Strategy Id",
+      "type": "string"
+    },
+    "supply_count": {
+      "title": "Supply Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "allocation_run_id",
+    "strategy_id",
+    "as_of_date",
+    "demand_count",
+    "supply_count",
+    "allocated_count",
+    "exception_count"
+  ],
+  "title": "AllocationCompletedEvent",
+  "type": "object"
+}

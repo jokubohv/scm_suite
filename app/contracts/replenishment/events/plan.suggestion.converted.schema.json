@@ -1,0 +1,50 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "created_doc_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created Doc Id"
+    },
+    "created_doc_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created Doc Type"
+    },
+    "idempotency_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Idempotency Ref"
+    },
+    "suggestion_id": {
+      "title": "Suggestion Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "suggestion_id"
+  ],
+  "title": "PlanSuggestionConvertedEvent",
+  "type": "object"
+}

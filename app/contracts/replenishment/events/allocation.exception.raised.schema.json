@@ -1,0 +1,22 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "allocation_run_id": {
+      "title": "Allocation Run Id",
+      "type": "string"
+    },
+    "exceptions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Exceptions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "allocation_run_id"
+  ],
+  "title": "AllocationExceptionRaisedEvent",
+  "type": "object"
+}

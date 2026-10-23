@@ -1,0 +1,22 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "suggestions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Suggestions",
+      "type": "array"
+    },
+    "supply_plan_id": {
+      "title": "Supply Plan Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "supply_plan_id"
+  ],
+  "title": "PlanSuggestionCreatedEvent",
+  "type": "object"
+}

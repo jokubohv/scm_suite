@@ -1,0 +1,34 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "as_of": {
+      "title": "As Of",
+      "type": "string"
+    },
+    "bucket_count": {
+      "title": "Bucket Count",
+      "type": "integer"
+    },
+    "method": {
+      "title": "Method",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "scope": {
+      "additionalProperties": true,
+      "title": "Scope",
+      "type": "object"
+    }
+  },
+  "required": [
+    "as_of",
+    "method",
+    "policy_version",
+    "bucket_count"
+  ],
+  "title": "AtpUpdatedEvent",
+  "type": "object"
+}

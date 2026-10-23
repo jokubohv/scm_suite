@@ -1,0 +1,34 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "changed_lines": {
+      "default": 0,
+      "title": "Changed Lines",
+      "type": "integer"
+    },
+    "demand_plan_id": {
+      "title": "Demand Plan Id",
+      "type": "string"
+    },
+    "line_count": {
+      "title": "Line Count",
+      "type": "integer"
+    },
+    "method": {
+      "title": "Method",
+      "type": "string"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "demand_plan_id",
+    "method",
+    "line_count",
+    "policy_version"
+  ],
+  "title": "PlanDemandCalculatedEvent",
+  "type": "object"
+}

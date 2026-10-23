@@ -1,0 +1,19 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "calculation_id": {
+      "title": "Calculation Id",
+      "type": "string"
+    },
+    "item_count": {
+      "title": "Item Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "calculation_id",
+    "item_count"
+  ],
+  "title": "ReplenishmentOrderItemsCalculatedEvent",
+  "type": "object"
+}
