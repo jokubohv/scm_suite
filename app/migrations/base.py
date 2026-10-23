@@ -33,6 +33,7 @@ _DISCOVERY_CANDIDATES: tuple[str, ...] = (
     "app.db.models",
     "app.core.db.base",
     "app.core.db.models",
+    "app.core.models",
 )
 
 
