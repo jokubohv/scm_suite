@@ -52,7 +52,7 @@ def test_fragment_is_implementation_backed_and_scope_complete() -> None:
             assert len(scopes) == 1 and scopes[0] in catalogue
             assert "TODO" not in json.dumps(operation)
     assert set(operations) == set(ROUTE_SCOPES)
-    assert len(operations) == 26
+    assert len(operations) == 39
     for path in ("/api/v1/consignment-agreements", "/api/v1/consignment-transfers", "/api/v1/consignment-consumption", "/api/v1/consigned/balances", "/api/v1/consignment/eligibility", "/api/v1/consignment/settings"):
         assert path in fragment["paths"], path
 

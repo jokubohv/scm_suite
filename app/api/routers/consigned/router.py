@@ -327,4 +327,66 @@ async def patch_settings(
     return await _svc(db, principal).patch_settings(payload, actor_id=principal.app_user_id)
 
 
+# ------------------------------------------------------------------ canonical {id} aliases ----
+# The frozen FS-13 contract declares canonical ``{id}`` resource placeholders while the implementation
+# historically mounted ``{agreement_id}``/``{transfer_id}``. These aliases mount the declared operations
+# without changing concrete URLs or behaviour.
+import inspect as _inspect  # noqa: E402
+
+_CONSIGNED_CANONICAL_ALIASES: tuple[tuple[str, str, str, str], ...] = (
+    ("GET", "/api/v1/consignment-agreements/{agreement_id}", "/consignment-agreements/{id}", "agreement_id"),
+    ("POST", "/api/v1/consignment-agreements/{agreement_id}/activate", "/consignment-agreements/{id}/activate", "agreement_id"),
+    ("GET", "/api/v1/consignment-agreements/{agreement_id}/items", "/consignment-agreements/{id}/items", "agreement_id"),
+    ("POST", "/api/v1/consignment-agreements/{agreement_id}/items", "/consignment-agreements/{id}/items", "agreement_id"),
+    ("PATCH", "/api/v1/consignment-agreements/{agreement_id}/items/{item_id}", "/consignment-agreements/{id}/items/{item_id}", "agreement_id"),
+    ("POST", "/api/v1/consignment-agreements/{agreement_id}/suspend", "/consignment-agreements/{id}/suspend", "agreement_id"),
+    ("POST", "/api/v1/consignment-agreements/{agreement_id}/terminate", "/consignment-agreements/{id}/terminate", "agreement_id"),
+    ("GET", "/api/v1/consignment-transfers/{transfer_id}", "/consignment-transfers/{id}", "transfer_id"),
+    ("POST", "/api/v1/consignment-transfers/{transfer_id}/submit", "/consignment-transfers/{id}/submit", "transfer_id"),
+    ("POST", "/api/v1/consignment-transfers/{transfer_id}/approve", "/consignment-transfers/{id}/approve", "transfer_id"),
+    ("POST", "/api/v1/consignment-transfers/{transfer_id}/post", "/consignment-transfers/{id}/post", "transfer_id"),
+    ("POST", "/api/v1/consignment-transfers/{transfer_id}/reverse", "/consignment-transfers/{id}/reverse", "transfer_id"),
+    ("POST", "/api/v1/consignment-transfers/{transfer_id}/void", "/consignment-transfers/{id}/void", "transfer_id"),
+)
+
+
+def _alias_endpoint(endpoint: Any, implementation_param: str) -> Any:
+    signature = _inspect.signature(endpoint)
+    parameters = [
+        parameter.replace(name="id") if parameter.name == implementation_param else parameter
+        for parameter in signature.parameters.values()
+    ]
+
+    async def _alias(**kwargs: Any) -> Any:
+        kwargs[implementation_param] = kwargs.pop("id")
+        return await endpoint(**kwargs)
+
+    _alias.__signature__ = signature.replace(parameters=parameters)  # type: ignore[attr-defined]
+    _alias.__name__ = f"{endpoint.__name__}_canonical"
+    return _alias
+
+
+def _register_canonical_aliases() -> None:
+    routes_by_path: dict[tuple[str, str], Any] = {}
+    for route in router.routes:
+        for method in getattr(route, "methods", None) or set():
+            routes_by_path[(method.upper(), getattr(route, "path", ""))] = route
+    for method, declared_path, relative_path, implementation_param in _CONSIGNED_CANONICAL_ALIASES:
+        alias_route: Any = routes_by_path.get((method, declared_path))
+        if alias_route is None:  # pragma: no cover - defensive: drift detected by route-surface tests
+            continue
+        alias = _alias_endpoint(alias_route.endpoint, implementation_param)
+        router.add_api_route(
+            relative_path,
+            alias,
+            methods=[method],
+            status_code=int(getattr(alias_route, "status_code", None) or 200),
+            dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, declared_path)]))],
+        )
+        ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, declared_path)]
+
+
+_register_canonical_aliases()
+
+
 __all__ = ["ROUTE_SCOPES", "router"]

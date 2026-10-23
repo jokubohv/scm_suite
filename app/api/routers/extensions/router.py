@@ -39,6 +39,7 @@ ROUTE_SCOPES: dict[tuple[str, str], str] = {
     ("POST", "/api/v1/warranty/claims/{claim_id}/cancel"): CLAIMS,
     ("GET", "/api/v1/warranty/repair-orders"): READ,
     ("POST", "/api/v1/warranty/repair-orders"): WARRANTY,
+    ("PATCH", "/api/v1/warranty/repair-orders"): WARRANTY,
     ("PATCH", "/api/v1/warranty/repair-orders/{repair_id}"): WARRANTY,
     ("GET", "/api/v1/customer-parts"): READ,
     ("POST", "/api/v1/customer-parts"): CUSTOMER_PART,
@@ -383,6 +384,91 @@ async def patch_settings(
     db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
 ) -> dict[str, Any]:
     return await _svc(db, principal).patch_settings(payload, actor_id=principal.app_user_id)
+
+
+# ===================================================== collection-level repair-order update =====
+# The frozen FS-14 contract declares ``PATCH /warranty/repair-orders`` with the repair id in the body;
+# this delegates to the same service method as the by-id PATCH handler.
+@router.patch("/warranty/repair-orders", dependencies=[Depends(require_scope(WARRANTY))])
+async def patch_repair_order_collection(
+    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+) -> dict[str, Any]:
+    repair_id = payload.get("id") or payload.get("repair_id")
+    if not repair_id:
+        from fastapi import HTTPException
+
+        raise HTTPException(
+            status_code=422,
+            detail={"code": "VALIDATION_FAILED", "message": "id or repair_id is required", "details": []},
+        )
+    return await _svc(db, principal).update_repair_order(
+        str(repair_id), payload, actor_id=principal.app_user_id
+    )
+
+
+# ------------------------------------------------------------------ canonical {id} aliases ----
+# The frozen FS-14 contract declares canonical ``{id}`` resource placeholders while the implementation
+# historically mounted resource-specific names (``{mapping_id}``/``{claim_id}``/...). These aliases mount
+# the declared operations without changing concrete URLs or behaviour.
+import inspect as _inspect  # noqa: E402
+
+_EXTENSIONS_CANONICAL_ALIASES: tuple[tuple[str, str, str, str], ...] = (
+    ("GET", "/api/v1/customer-parts/{mapping_id}", "/customer-parts/{id}", "mapping_id"),
+    ("PATCH", "/api/v1/customer-parts/{mapping_id}", "/customer-parts/{id}", "mapping_id"),
+    ("GET", "/api/v1/items/{item_id}/customer-parts", "/items/{id}/customer-parts", "item_id"),
+    ("GET", "/api/v1/items/{item_id}/warranty", "/items/{id}/warranty", "item_id"),
+    ("PUT", "/api/v1/items/{item_id}/warranty", "/items/{id}/warranty", "item_id"),
+    ("GET", "/api/v1/upc-registry/{registry_id}", "/upc-registry/{id}", "registry_id"),
+    ("POST", "/api/v1/upc-registry/{registry_id}/retire", "/upc-registry/{id}/retire", "registry_id"),
+    ("GET", "/api/v1/warranty/claims/{claim_id}", "/warranty/claims/{id}", "claim_id"),
+    ("POST", "/api/v1/warranty/claims/{claim_id}/validate", "/warranty/claims/{id}/validate", "claim_id"),
+    ("POST", "/api/v1/warranty/claims/{claim_id}/approve", "/warranty/claims/{id}/approve", "claim_id"),
+    ("POST", "/api/v1/warranty/claims/{claim_id}/reject", "/warranty/claims/{id}/reject", "claim_id"),
+    ("POST", "/api/v1/warranty/claims/{claim_id}/actions", "/warranty/claims/{id}/actions", "claim_id"),
+    ("POST", "/api/v1/warranty/claims/{claim_id}/complete", "/warranty/claims/{id}/complete", "claim_id"),
+    ("POST", "/api/v1/warranty/claims/{claim_id}/cancel", "/warranty/claims/{id}/cancel", "claim_id"),
+    ("GET", "/api/v1/warranty/registrations/{registration_id}", "/warranty/registrations/{id}", "registration_id"),
+    ("POST", "/api/v1/warranty/registrations/{registration_id}/void", "/warranty/registrations/{id}/void", "registration_id"),
+)
+
+
+def _alias_endpoint(endpoint: Any, implementation_param: str) -> Any:
+    signature = _inspect.signature(endpoint)
+    parameters = [
+        parameter.replace(name="id") if parameter.name == implementation_param else parameter
+        for parameter in signature.parameters.values()
+    ]
+
+    async def _alias(**kwargs: Any) -> Any:
+        kwargs[implementation_param] = kwargs.pop("id")
+        return await endpoint(**kwargs)
+
+    _alias.__signature__ = signature.replace(parameters=parameters)  # type: ignore[attr-defined]
+    _alias.__name__ = f"{endpoint.__name__}_canonical"
+    return _alias
+
+
+def _register_canonical_aliases() -> None:
+    routes_by_path: dict[tuple[str, str], Any] = {}
+    for route in router.routes:
+        for method in getattr(route, "methods", None) or set():
+            routes_by_path[(method.upper(), getattr(route, "path", ""))] = route
+    for method, declared_path, relative_path, implementation_param in _EXTENSIONS_CANONICAL_ALIASES:
+        alias_route: Any = routes_by_path.get((method, declared_path))
+        if alias_route is None:  # pragma: no cover - defensive: drift detected by route-surface tests
+            continue
+        alias = _alias_endpoint(alias_route.endpoint, implementation_param)
+        router.add_api_route(
+            relative_path,
+            alias,
+            methods=[method],
+            status_code=int(getattr(alias_route, "status_code", None) or 200),
+            dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, declared_path)]))],
+        )
+        ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, declared_path)]
+
+
+_register_canonical_aliases()
 
 
 __all__ = ["ROUTE_SCOPES", "router"]

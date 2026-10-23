@@ -368,6 +368,18 @@ class QualityRepository:
         )
         return _row(result.mappings().one())
 
+    async def update_queue(
+        self, tenant_id: UUID | str, queue_id: UUID | str, values: Mapping[str, Any]
+    ) -> dict[str, Any] | None:
+        result = await self.session.execute(
+            update(q.inspection_queue)
+            .where(q.inspection_queue.c.tenant_id == tenant_id, q.inspection_queue.c.id == queue_id)
+            .values(**dict(values), updated_at=utc_now(), version=q.inspection_queue.c.version + 1)
+            .returning(*q.inspection_queue.c)
+        )
+        row = result.mappings().first()
+        return _row(row) if row else None
+
     async def get_queue(self, tenant_id: UUID | str, queue_id: UUID | str) -> dict[str, Any] | None:
         row = (
             (

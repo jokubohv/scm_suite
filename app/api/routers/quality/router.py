@@ -42,12 +42,15 @@ ROUTE_SCOPES: dict[tuple[str, str], str] = {
     ("POST", "/api/v1/quality/inspection-plans"): QUALITY_SPEC_WRITE,
     ("GET", "/api/v1/quality/inspection-plans"): QUALITY_READ,
     ("GET", "/api/v1/quality/inspection-plans/{plan_id}"): QUALITY_READ,
+    ("PATCH", "/api/v1/quality/inspection-plans"): QUALITY_SPEC_WRITE,
     ("PATCH", "/api/v1/quality/inspection-plans/{plan_id}"): QUALITY_SPEC_WRITE,
     ("POST", "/api/v1/quality/inspection-queues"): QUALITY_ADMIN,
     ("GET", "/api/v1/quality/inspection-queues"): QUALITY_READ,
+    ("PATCH", "/api/v1/quality/inspection-queues"): QUALITY_ADMIN,
     ("GET", "/api/v1/quality/inspection-queues/{queue_id}/items"): QUALITY_READ,
     ("POST", "/api/v1/quality/inspection-triggers"): QUALITY_ADMIN,
     ("GET", "/api/v1/quality/inspection-triggers"): QUALITY_READ,
+    ("PATCH", "/api/v1/quality/inspection-triggers"): QUALITY_ADMIN,
     ("PATCH", "/api/v1/quality/inspection-triggers/{trigger_id}"): QUALITY_ADMIN,
     ("POST", "/api/v1/quality/inspection-triggers/{trigger_id}/reset-counter"): QUALITY_ADMIN,
     ("POST", "/api/v1/quality/inspection-triggers/{trigger_id}/evaluate"): QUALITY_ADMIN,
@@ -981,6 +984,132 @@ async def patch_settings(body: dict[str, Any], db: DbDep, principal: PrincipalDe
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return {"settings": settings}
+
+
+# ========================================================== collection updates ================
+# The frozen FS-12 contract declares collection-level PATCH operations where the document id travels in
+# the body (matching the existing by-id PATCH handlers); these delegate to the same service methods.
+def _body_id(body: dict[str, Any], *names: str) -> UUID:
+    for name in names:
+        if body.get(name):
+            return UUID(str(body[name]))
+    raise HTTPException(
+        status_code=422,
+        detail={"code": "VALIDATION_FAILED", "message": f"one of {', '.join(names)} is required", "details": []},
+    )
+
+
+@router.patch("/quality/inspection-plans", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))])
+async def patch_plan_collection(
+    body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+) -> dict[str, Any]:
+    del gate
+    plan_id = _body_id(body, "id", "plan_id")
+    try:
+        plan = await _service(db).update_plan(
+            tenant_id=principal.tenant_id, plan_id=plan_id, values=body, actor_id=principal.identity_id
+        )
+    except Exception as exc:  # noqa: BLE001
+        _raise(exc)
+    return {"plan": plan, "version": plan["version"]}
+
+
+@router.patch("/quality/inspection-queues", dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+async def patch_queue_collection(
+    body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+) -> dict[str, Any]:
+    del gate
+    queue_id = _body_id(body, "id", "queue_id")
+    try:
+        queue = await _service(db).update_queue(
+            tenant_id=principal.tenant_id, queue_id=queue_id, values=body, actor_id=principal.identity_id
+        )
+    except Exception as exc:  # noqa: BLE001
+        _raise(exc)
+    return {"queue": queue, "version": queue["version"]}
+
+
+@router.patch("/quality/inspection-triggers", dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+async def patch_trigger_collection(
+    body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+) -> dict[str, Any]:
+    del gate
+    trigger_id = _body_id(body, "id", "trigger_id")
+    try:
+        trigger = await _service(db).update_trigger(
+            tenant_id=principal.tenant_id, trigger_id=trigger_id, values=body, actor_id=principal.identity_id
+        )
+    except Exception as exc:  # noqa: BLE001
+        _raise(exc)
+    return {"trigger": trigger}
+
+
+# ------------------------------------------------------------------ canonical {id} aliases ----
+# The frozen FS-12 contract declares canonical ``{id}`` resource placeholders while the implementation
+# historically mounted resource-specific names (``{spec_id}``/``{coa_id}``/...). These aliases mount the
+# contract-declared operations without changing concrete URLs or behaviour: the wrapper renames ``id``
+# back to the implementation parameter and delegates to the same handler.
+import inspect as _inspect  # noqa: E402
+
+_QUALITY_CANONICAL_ALIASES: tuple[tuple[str, str, str, str], ...] = (
+    ("GET", "/api/v1/quality/specs/{spec_id}", "/quality/specs/{id}", "spec_id"),
+    ("POST", "/api/v1/quality/specs/{spec_id}/versions", "/quality/specs/{id}/versions", "spec_id"),
+    ("POST", "/api/v1/quality/specs/{spec_id}/activate", "/quality/specs/{id}/activate", "spec_id"),
+    ("POST", "/api/v1/quality/specs/{spec_id}/retire", "/quality/specs/{id}/retire", "spec_id"),
+    ("GET", "/api/v1/quality/inspection-queues/{queue_id}/items", "/quality/inspection-queues/{id}/items", "queue_id"),
+    ("POST", "/api/v1/quality/inspection-triggers/{trigger_id}/reset-counter", "/quality/inspection-triggers/{id}/reset-counter", "trigger_id"),
+    ("GET", "/api/v1/quality/inspections/{inspection_id}", "/quality/inspections/{id}", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/start", "/quality/inspections/{id}/start", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/results", "/quality/inspections/{id}/results", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/complete", "/quality/inspections/{id}/complete", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/waive", "/quality/inspections/{id}/waive", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/cancel", "/quality/inspections/{id}/cancel", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/hold", "/quality/inspections/{id}/hold", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/release-hold", "/quality/inspections/{id}/release-hold", "inspection_id"),
+    ("POST", "/api/v1/quality/inspections/{inspection_id}/images", "/quality/inspections/{id}/images", "inspection_id"),
+    ("GET", "/api/v1/quality/coas/{coa_id}", "/quality/coas/{id}", "coa_id"),
+    ("POST", "/api/v1/quality/coas/{coa_id}/issue", "/quality/coas/{id}/issue", "coa_id"),
+    ("POST", "/api/v1/quality/coas/{coa_id}/revoke", "/quality/coas/{id}/revoke", "coa_id"),
+)
+
+
+def _alias_endpoint(endpoint: Any, implementation_param: str) -> Any:
+    signature = _inspect.signature(endpoint)
+    parameters = [
+        parameter.replace(name="id") if parameter.name == implementation_param else parameter
+        for parameter in signature.parameters.values()
+    ]
+
+    async def _alias(**kwargs: Any) -> Any:
+        kwargs[implementation_param] = kwargs.pop("id")
+        return await endpoint(**kwargs)
+
+    _alias.__signature__ = signature.replace(parameters=parameters)  # type: ignore[attr-defined]
+    _alias.__name__ = f"{endpoint.__name__}_canonical"
+    return _alias
+
+
+def _register_canonical_aliases() -> None:
+    routes_by_path: dict[tuple[str, str], Any] = {}
+    for route in router.routes:
+        for method in getattr(route, "methods", None) or set():
+            routes_by_path[(method.upper(), getattr(route, "path", ""))] = route
+    for method, declared_path, relative_path, implementation_param in _QUALITY_CANONICAL_ALIASES:
+        alias_route: Any = routes_by_path.get((method, declared_path))
+        if alias_route is None:  # pragma: no cover - defensive: drift detected by route-surface tests
+            continue
+        alias = _alias_endpoint(alias_route.endpoint, implementation_param)
+        router.add_api_route(
+            relative_path,
+            alias,
+            methods=[method],
+            status_code=int(getattr(alias_route, "status_code", None) or 200),
+            dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, declared_path)]))],
+        )
+        ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, declared_path)]
+
+
+_register_canonical_aliases()
 
 
 __all__ = ["ROUTE_SCOPES", "router"]

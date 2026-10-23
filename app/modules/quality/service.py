@@ -29,6 +29,7 @@ from app.modules.quality.errors import (
     InvalidStateTransition,
     PlanNotFound,
     QualityHoldStatusInvalid,
+    QueueNotFound,
     SpecLineLimit,
     SpecNotFound,
     SpecVersionImmutable,
@@ -562,6 +563,35 @@ class QualityService:
 
     async def list_queues(self, tenant_id: UUID | str, **filters: Any) -> list[dict[str, Any]]:
         return await self.repository.list_queues(tenant_id, **filters)
+    async def update_queue(
+        self,
+        *,
+        tenant_id: UUID | str,
+        queue_id: UUID | str,
+        values: Mapping[str, Any],
+        actor_id: UUID | str | None = None,
+    ) -> dict[str, Any]:
+        await self.require_enabled(tenant_id)
+        queue = await self.repository.get_queue(tenant_id, queue_id)
+        if queue is None:
+            raise QueueNotFound("inspection queue not found", details={"queue_id": str(queue_id)})
+        allowed = {"name", "location_id", "trigger_id", "assignment_strategy", "is_active"}
+        patch = {key: value for key, value in values.items() if key in allowed}
+        if "assignment_strategy" in patch:
+            strategy = str(patch["assignment_strategy"]).upper()
+            if strategy not in q.ASSIGNMENT_STRATEGIES:
+                raise ValidationError(f"invalid assignment strategy {strategy!r}")
+            patch["assignment_strategy"] = strategy
+        updated = await self.repository.update_queue(tenant_id, queue["id"], patch)
+        assert updated is not None
+        await self.repository.emit_event(
+            event_type="quality.queue.changed",
+            tenant_id=tenant_id,
+            aggregate_id=queue_id,
+            payload={"queue_id": str(queue_id)},
+        )
+        return updated
+
 
     async def queue_items(self, tenant_id: UUID | str, queue_id: UUID | str, **filters: Any) -> list[dict[str, Any]]:
         return await self.repository.list_inspections(tenant_id, queue_id=queue_id, **filters)
