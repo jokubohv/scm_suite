@@ -1,17 +1,18 @@
 {
-  "$id": "https://contracts.inventory-platform.local/reporting.readmodels/reporting.view.refreshed/1.0.0",
+  "$id": "https://inventory-platform/contracts/events/reporting.readmodels/reporting.view.refreshed.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "A reporting materialized view refresh completed; emitted by the reporting refresh job after a successful concurrent refresh.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
       "properties": {
         "id": {
+          "description": "view name (v_*)",
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "const": "reporting"
         },
         "version": {
           "minimum": 1,
@@ -26,13 +27,57 @@
       "type": "object"
     },
     "causation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "correlation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "duration_ms": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "refreshed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "row_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_high_watermark": {
+          "description": "Source read-model watermark/digest for reconcile tracing.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "view_name": {
+          "description": "Materialized reporting view name (v_*).",
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "view_name",
+        "refreshed_at",
+        "duration_ms",
+        "row_count",
+        "source_high_watermark"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -40,12 +85,10 @@
       "type": "string"
     },
     "event_type": {
-      "minLength": 3,
-      "type": "string"
+      "const": "reporting.view.refreshed"
     },
     "event_version": {
-      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "type": "string"
+      "const": "1.0.0"
     },
     "metadata": {
       "additionalProperties": true,
@@ -60,7 +103,10 @@
       "type": "string"
     },
     "trace_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     }
   },
   "required": [
@@ -72,20 +118,12 @@
     "aggregate",
     "data"
   ],
-  "title": "reporting.view.refreshed",
+  "title": "reporting.readmodels/reporting.view.refreshed",
   "type": "object",
   "x-contract": "reporting.readmodels",
-  "x-event-family": true,
+  "x-contract-version": "1.0.0",
+  "x-event": "reporting.view.refreshed",
   "x-event-type": "reporting.view.refreshed",
   "x-event-version": "1.0.0",
-  "x-feature-set": "FS-15",
-  "x-payload-key-fields": [
-    "tenant_id",
-    "view_name",
-    "refreshed_at",
-    "duration_ms",
-    "row_count",
-    "source_high_watermark"
-  ],
-  "x-todo": true
+  "x-feature-set": "FS-15"
 }

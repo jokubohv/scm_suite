@@ -1,0 +1,127 @@
+{
+  "$id": "https://inventory-platform/contracts/events/reporting.readmodels/reporting.view.refreshed.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A reporting materialized view refresh completed; emitted by the reporting refresh job after a successful concurrent refresh.",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "view name (v_*)",
+          "type": "string"
+        },
+        "type": {
+          "const": "reporting"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_ms": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "refreshed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "row_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_high_watermark": {
+          "description": "Source read-model watermark/digest for reconcile tracing.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "view_name": {
+          "description": "Materialized reporting view name (v_*).",
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "view_name",
+        "refreshed_at",
+        "duration_ms",
+        "row_count",
+        "source_high_watermark"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "const": "reporting.view.refreshed"
+    },
+    "event_version": {
+      "const": "1.0.0"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "trace_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "reporting.readmodels/reporting.view.refreshed",
+  "type": "object",
+  "x-contract": "reporting.readmodels",
+  "x-contract-version": "1.0.0",
+  "x-event": "reporting.view.refreshed",
+  "x-feature-set": "FS-15"
+}

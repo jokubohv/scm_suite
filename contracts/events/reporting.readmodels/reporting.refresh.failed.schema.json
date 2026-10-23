@@ -1,17 +1,18 @@
 {
-  "$id": "https://contracts.inventory-platform.local/reporting.readmodels/reporting.refresh.failed/1.0.0",
+  "$id": "https://inventory-platform/contracts/events/reporting.readmodels/reporting.refresh.failed.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "description": "TODO(S0-04): payload schema pending feature-set implementation; envelope is final.",
+  "description": "A reporting materialized view refresh failed or partially failed; the previous snapshot is retained and retried with backoff.",
   "properties": {
     "aggregate": {
       "additionalProperties": false,
       "properties": {
         "id": {
+          "description": "view name (v_*)",
           "type": "string"
         },
         "type": {
-          "type": "string"
+          "const": "reporting"
         },
         "version": {
           "minimum": 1,
@@ -26,13 +27,52 @@
       "type": "object"
     },
     "causation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "correlation_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "data": {
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "properties": {
+        "attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "error_code": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "failed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "is_retryable": {
+          "type": "boolean"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "view_name": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "view_name",
+        "failed_at",
+        "attempt",
+        "error_code",
+        "is_retryable"
+      ],
       "type": "object"
     },
     "event_id": {
@@ -40,12 +80,10 @@
       "type": "string"
     },
     "event_type": {
-      "minLength": 3,
-      "type": "string"
+      "const": "reporting.refresh.failed"
     },
     "event_version": {
-      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "type": "string"
+      "const": "1.0.0"
     },
     "metadata": {
       "additionalProperties": true,
@@ -60,7 +98,10 @@
       "type": "string"
     },
     "trace_id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     }
   },
   "required": [
@@ -72,20 +113,12 @@
     "aggregate",
     "data"
   ],
-  "title": "reporting.refresh.failed",
+  "title": "reporting.readmodels/reporting.refresh.failed",
   "type": "object",
   "x-contract": "reporting.readmodels",
-  "x-event-family": true,
+  "x-contract-version": "1.0.0",
+  "x-event": "reporting.refresh.failed",
   "x-event-type": "reporting.refresh.failed",
   "x-event-version": "1.0.0",
-  "x-feature-set": "FS-15",
-  "x-payload-key-fields": [
-    "tenant_id",
-    "view_name",
-    "failed_at",
-    "attempt",
-    "error_code",
-    "is_retryable"
-  ],
-  "x-todo": true
+  "x-feature-set": "FS-15"
 }
