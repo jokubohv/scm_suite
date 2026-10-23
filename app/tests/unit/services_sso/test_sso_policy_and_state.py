@@ -88,9 +88,7 @@ def test_disabled_connection_cannot_start_sso() -> None:
     assert excinfo.value.code == "SSO_DISABLED"
     # A non-ACTIVE connection is not discoverable for routing at all (no silent downgrade).
     with pytest.raises(Exception) as not_found:
-        authn.resolve_connection_for_start(
-            "acme", connections=[_connection(status=authn.SsoConnectionStatus.DISABLED)]
-        )
+        authn.resolve_connection_for_start("acme", connections=[_connection(status=authn.SsoConnectionStatus.DISABLED)])
     assert not_found.value.code == "SSO_PROVIDER_NOT_FOUND"
 
 
@@ -133,7 +131,7 @@ def test_id_token_claims_are_strictly_validated() -> None:
     assert claims.email == "dev@example.com" and claims.email_verified
     assert claims.groups == ("platform-admins",)
 
-    for override, reason in (
+    for override, _reason in (
         ({"iss": "http://other/dex"}, "ISSUER_MISMATCH"),
         ({"aud": "other-client"}, "AUDIENCE_MISMATCH"),
         ({"nonce": "other"}, "NONCE_MISMATCH"),

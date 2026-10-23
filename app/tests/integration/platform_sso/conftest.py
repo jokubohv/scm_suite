@@ -84,7 +84,9 @@ async def seed_tenant(
 ) -> dict[str, Any]:
     """Create a tenant + admin identity/membership + optional roles/scopes; return ids/token."""
     tenant_id, identity_id, user_id = uuid4(), uuid4(), uuid4()
-    await session.execute(insert(tenant).values(id=tenant_id, code=code, name=f"{code} Inc", status="ACTIVE"))
+    await session.execute(
+        insert(tenant).values(id=tenant_id, tenant_id=tenant_id, code=code, name=f"{code} Inc", status="ACTIVE")
+    )
     await session.execute(
         insert(user_identity).values(
             id=identity_id,

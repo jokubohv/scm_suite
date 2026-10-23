@@ -29,7 +29,7 @@ async def test_start_callback_issues_platform_tokens_and_links_identity(sso_clie
     connection = await _active_connection(
         sso_client, tenant["headers"], email_domains=["example.com"], jit_provisioning=True
     )
-    started = await _start(sso_client, {"email_or_tenant": "example.com"})
+    started = await _start(sso_client, {"email_or_tenant": "dev@example.com"})
     assert started.status_code == 200, started.text
     body = started.json()
     assert body["connection_id"] == connection["id"]
