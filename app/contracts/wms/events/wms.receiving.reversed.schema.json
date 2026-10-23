@@ -1,0 +1,91 @@
+{
+  "$id": "https://contracts.inventory-platform.local/wms.execution/wms.receiving.reversed/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "wms.execution@1.0.0 wms.receiving.reversed payload (final outbox envelope; data fields implemented).",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "causation_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "item_receipt_id": {},
+        "receiving_order_id": {},
+        "reversed_transaction_ids": {},
+        "tenant_id": {}
+      },
+      "required": [
+        "receiving_order_id",
+        "item_receipt_id",
+        "reversed_transaction_ids"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "event_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "wms.receiving.reversed",
+  "type": "object",
+  "x-contract": "wms.execution",
+  "x-event-type": "wms.receiving.reversed",
+  "x-event-version": "1.0.0",
+  "x-feature-set": "FS-11",
+  "x-payload-key-fields": [
+    "tenant_id",
+    "receiving_order_id",
+    "item_receipt_id",
+    "reversed_transaction_ids"
+  ]
+}
