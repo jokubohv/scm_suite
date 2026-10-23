@@ -1,0 +1,114 @@
+{
+  "$id": "https://inventory-platform/contracts/events/traceability.numbered/traceability.lot.created.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "aggregate": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "traceability.numbered"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "expiry_date": {
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "item_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "lot_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "lot_number": {
+          "type": "string"
+        },
+        "manufacture_date": {
+          "format": "date",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_doc": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "lot_id",
+        "item_id",
+        "lot_number"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "const": "traceability.lot.created"
+    },
+    "event_version": {
+      "const": "1.0.0"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "aggregate",
+    "data",
+    "event_id",
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id"
+  ],
+  "title": "traceability.numbered/traceability.lot.created",
+  "type": "object",
+  "x-contract": "traceability.numbered",
+  "x-contract-version": "1.0.0",
+  "x-event": "traceability.lot.created",
+  "x-feature-set": "FS-06",
+  "x-todo": false
+}

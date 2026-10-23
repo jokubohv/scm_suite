@@ -1,0 +1,97 @@
+{
+  "$id": "https://inventory-platform/contracts/events/traceability.numbered/traceability.lot.inactivated.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "aggregate": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "traceability.numbered"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "actor_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lot_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "lot_id"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "const": "traceability.lot.inactivated"
+    },
+    "event_version": {
+      "const": "1.0.0"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "aggregate",
+    "data",
+    "event_id",
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id"
+  ],
+  "title": "traceability.numbered/traceability.lot.inactivated",
+  "type": "object",
+  "x-contract": "traceability.numbered",
+  "x-contract-version": "1.0.0",
+  "x-event": "traceability.lot.inactivated",
+  "x-feature-set": "FS-06",
+  "x-todo": false
+}
