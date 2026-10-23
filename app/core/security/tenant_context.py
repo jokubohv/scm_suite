@@ -162,7 +162,7 @@ class TenantContext:
         return self.admin_class is AdminClass.PLATFORM_ADMIN
 
     def is_tenant_admin(self) -> bool:
-        return self.admin_class in (AdminClass.TENANT_ADMIN, AdminClass.PLATFORM_ADMIN)
+        return self.admin_class is AdminClass.TENANT_ADMIN
 
     def can_write(self) -> bool:
         return self.membership.status is MembershipStatus.ACTIVE and self.tenant.status is TenantStatus.ACTIVE

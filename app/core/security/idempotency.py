@@ -73,7 +73,7 @@ def canonicalize(value: Any) -> Any:
     if isinstance(value, Mapping):
         if not all(isinstance(key, str) for key in value):
             raise TypeError("canonical JSON mapping keys must be strings")
-        return {key: canonicalize(value[key]) for key in sorted(value)}  # type: ignore[index]
+        return {key: canonicalize(value[key]) for key in sorted(value)}
     if isinstance(value, Sequence) and not isinstance(value, bytes | bytearray | str):
         return [canonicalize(item) for item in value]
     if isinstance(value, bytes | bytearray):
