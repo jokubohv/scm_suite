@@ -171,7 +171,7 @@ def _route_index() -> dict[tuple[str, str], object]:
 def test_router_exposes_expected_routes_only() -> None:
     routes = _route_index()
     assert set(routes) == set(config_router_module.ROUTE_SCOPES)
-    assert len(routes) == 15
+    assert len(routes) == 20
 
 
 def test_every_route_scope_is_catalogued_and_singular() -> None:
@@ -202,6 +202,11 @@ def test_expected_api_surface() -> None:
         ("GET", "/api/v1/admin/flags/{flag_key}"),
         ("PATCH", "/api/v1/admin/flags/{flag_key}"),
         ("GET", "/api/v1/admin/sequences"),
+        ("GET", "/api/v1/reference/currencies"),
+        ("GET", "/api/v1/reference/fiscal-periods"),
+        ("GET", "/api/v1/admin/feature-flags"),
+        ("PUT", "/api/v1/admin/feature-flags/{flag_key}"),
+        ("GET", "/api/v1/admin/number-sequences"),
     }
 
 

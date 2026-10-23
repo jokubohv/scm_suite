@@ -60,6 +60,14 @@ ROUTE_SCOPES: dict[tuple[str, str], str] = {
     ("GET", "/api/v1/admin/flags/{flag_key}"): FLAG_MANAGE,
     ("PATCH", "/api/v1/admin/flags/{flag_key}"): FLAG_MANAGE,
     ("GET", "/api/v1/admin/sequences"): SEQUENCE_MANAGE,
+    # FS-00 §6 spec-aligned aliases (additive): the task card names /admin/flags,/admin/sequences;
+    # the FS-00 API matrix names /admin/feature-flags,/admin/number-sequences and the read
+    # reference endpoints /reference/currencies,/reference/fiscal-periods.
+    ("GET", "/api/v1/reference/currencies"): REFERENCE_READ,
+    ("GET", "/api/v1/reference/fiscal-periods"): FINANCE_READ,
+    ("GET", "/api/v1/admin/feature-flags"): FLAG_MANAGE,
+    ("PUT", "/api/v1/admin/feature-flags/{flag_key}"): FLAG_MANAGE,
+    ("GET", "/api/v1/admin/number-sequences"): SEQUENCE_MANAGE,
 }
 
 
@@ -142,14 +150,22 @@ SequenceManager = Annotated[object, Depends(require_scope(SEQUENCE_MANAGE))]
 
 
 # ------------------------------------------------------------------------ currencies ----------
-@router.get("/admin/currencies", dependencies=[Depends(require_scope(REFERENCE_READ))])
-async def list_currencies(
-    repo: RepoDep,
-    _: ReferenceReader,
-    is_active: bool | None = None,
-) -> dict[str, Any]:
+async def _list_currencies(repo: ConfigRepository, *, is_active: bool | None) -> dict[str, Any]:
     items = await repo.list_currencies(is_active=is_active)
     return {"items": items, "count": len(items)}
+
+
+@router.get("/admin/currencies", dependencies=[Depends(require_scope(REFERENCE_READ))])
+async def list_currencies(repo: RepoDep, _: ReferenceReader, is_active: bool | None = None) -> dict[str, Any]:
+    return await _list_currencies(repo, is_active=is_active)
+
+
+@router.get("/reference/currencies", dependencies=[Depends(require_scope(REFERENCE_READ))])
+async def list_reference_currencies(
+    repo: RepoDep, _: ReferenceReader, is_active: bool | None = None
+) -> dict[str, Any]:
+    """FS-00 §6 reference read alias (read-only global currency list)."""
+    return await _list_currencies(repo, is_active=is_active)
 
 
 @router.post("/admin/currencies", status_code=201)
@@ -201,6 +217,16 @@ async def update_currency(
 
 
 # ---------------------------------------------------------------------- fiscal periods ---------
+async def _list_fiscal_periods(
+    repo: ConfigRepository, *, tenant_id: str, status: str | None, year: int | None
+) -> dict[str, Any]:
+    try:
+        items = await repo.list_fiscal_periods(tenant_id, status=status, year=year)
+    except ConfigError as exc:
+        raise _http_error(exc) from exc
+    return {"items": items, "count": len(items)}
+
+
 @router.get("/admin/fiscal-periods", dependencies=[Depends(require_scope(FINANCE_READ))])
 async def list_fiscal_periods(
     repo: RepoDep,
@@ -209,11 +235,23 @@ async def list_fiscal_periods(
     status: str | None = None,
     year: int | None = Query(default=None, ge=1900, le=2200),
 ) -> dict[str, Any]:
-    try:
-        items = await repo.list_fiscal_periods(principal.tenant_id, status=status, year=year)
-    except ConfigError as exc:
-        raise _http_error(exc) from exc
-    return {"items": items, "count": len(items)}
+    return await _list_fiscal_periods(
+        repo, tenant_id=principal.tenant_id, status=status, year=year
+    )
+
+
+@router.get("/reference/fiscal-periods", dependencies=[Depends(require_scope(FINANCE_READ))])
+async def list_reference_fiscal_periods(
+    repo: RepoDep,
+    principal: PrincipalDep,
+    _: FinanceReader,
+    status: str | None = None,
+    year: int | None = Query(default=None, ge=1900, le=2200),
+) -> dict[str, Any]:
+    """FS-00 §6 reference read alias (finance period-status projection read-only)."""
+    return await _list_fiscal_periods(
+        repo, tenant_id=principal.tenant_id, status=status, year=year
+    )
 
 
 @router.post("/admin/fiscal-periods", status_code=201)
@@ -308,6 +346,16 @@ async def delete_custom_field(
 
 
 # ---------------------------------------------------------------------------- flags -----------
+async def _list_flags(
+    repo: ConfigRepository, *, tenant_id: str, flag_key: str | None
+) -> dict[str, Any]:
+    try:
+        items = await repo.list_feature_flags(tenant_id, flag_key=flag_key)
+    except ConfigError as exc:
+        raise _http_error(exc) from exc
+    return {"items": items, "count": len(items)}
+
+
 @router.get("/admin/flags", dependencies=[Depends(require_scope(FLAG_MANAGE))])
 async def list_flags(
     repo: RepoDep,
@@ -315,11 +363,18 @@ async def list_flags(
     _: FlagManager,
     flag_key: str | None = None,
 ) -> dict[str, Any]:
-    try:
-        items = await repo.list_feature_flags(principal.tenant_id, flag_key=flag_key)
-    except ConfigError as exc:
-        raise _http_error(exc) from exc
-    return {"items": items, "count": len(items)}
+    return await _list_flags(repo, tenant_id=principal.tenant_id, flag_key=flag_key)
+
+
+@router.get("/admin/feature-flags", dependencies=[Depends(require_scope(FLAG_MANAGE))])
+async def list_feature_flags_alias(
+    repo: RepoDep,
+    principal: PrincipalDep,
+    _: FlagManager,
+    flag_key: str | None = None,
+) -> dict[str, Any]:
+    """FS-00 §6 alias for the feature-flag list."""
+    return await _list_flags(repo, tenant_id=principal.tenant_id, flag_key=flag_key)
 
 
 @router.get("/admin/flags/{flag_key}", dependencies=[Depends(require_scope(FLAG_MANAGE))])
@@ -349,7 +404,34 @@ async def set_flag(
         raise _http_error(exc) from exc
 
 
+@router.put("/admin/feature-flags/{flag_key}")
+async def set_flag_put_alias(
+    flag_key: str,
+    body: FeatureFlagUpdate,
+    repo: RepoDep,
+    principal: PrincipalDep,
+    _: FlagManager,
+) -> dict[str, Any]:
+    """FS-00 §6 PUT alias (same tenant-scoped, audited, idempotent upsert as PATCH)."""
+    try:
+        return await repo.set_feature_flag(
+            principal.tenant_id, flag_key, body.model_dump(), actor_id=principal.app_user_id
+        )
+    except ConfigError as exc:
+        raise _http_error(exc) from exc
+
+
 # ------------------------------------------------------------------------ sequences -----------
+async def _list_sequences(
+    repo: ConfigRepository, *, tenant_id: str, doc_type: str | None, limit: int
+) -> dict[str, Any]:
+    try:
+        items = await repo.list_number_sequences(tenant_id, doc_type=doc_type, limit=limit)
+    except ConfigError as exc:
+        raise _http_error(exc) from exc
+    return {"items": items, "count": len(items)}
+
+
 @router.get("/admin/sequences", dependencies=[Depends(require_scope(SEQUENCE_MANAGE))])
 async def list_sequences(
     repo: RepoDep,
@@ -358,11 +440,19 @@ async def list_sequences(
     doc_type: str | None = None,
     limit: int = Query(default=200, ge=1, le=500),
 ) -> dict[str, Any]:
-    try:
-        items = await repo.list_number_sequences(principal.tenant_id, doc_type=doc_type, limit=limit)
-    except ConfigError as exc:
-        raise _http_error(exc) from exc
-    return {"items": items, "count": len(items)}
+    return await _list_sequences(repo, tenant_id=principal.tenant_id, doc_type=doc_type, limit=limit)
+
+
+@router.get("/admin/number-sequences", dependencies=[Depends(require_scope(SEQUENCE_MANAGE))])
+async def list_number_sequences_alias(
+    repo: RepoDep,
+    principal: PrincipalDep,
+    _: SequenceManager,
+    doc_type: str | None = None,
+    limit: int = Query(default=200, ge=1, le=500),
+) -> dict[str, Any]:
+    """FS-00 §6 alias for sequence heads (read-only in this task)."""
+    return await _list_sequences(repo, tenant_id=principal.tenant_id, doc_type=doc_type, limit=limit)
 
 
 __all__ = ["ROUTE_SCOPES", "router"]
