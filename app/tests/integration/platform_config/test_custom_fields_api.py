@@ -86,7 +86,9 @@ async def test_select_options_and_validation_rules(app_client: Any) -> None:
     assert bad_validation.status_code == 422
     assert bad_validation.json()["code"] == "CUSTOM_FIELD_VALIDATION_INVALID"
 
-    duplicate = await app_client.post(PREFIX, json=_payload(field_code="warranty_months", label="Dup"))
+    duplicate = await app_client.post(
+        PREFIX, json=_payload(field_code="coating", data_type="SELECT", options=["painted"], validation=None)
+    )
     assert duplicate.status_code == 409
     assert duplicate.json()["code"] == "CUSTOM_FIELD_DUPLICATE"
 

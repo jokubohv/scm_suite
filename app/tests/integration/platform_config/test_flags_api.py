@@ -102,7 +102,7 @@ async def test_flag_validation_errors(app_client: Any) -> None:
     bad_body = await app_client.patch(f"{PREFIX}/{FLAG}", json={"notes": "missing is_enabled"})
     assert bad_body.status_code == 422
 
-    bad_type = await app_client.patch(f"{PREFIX}/{FLAG}", json={"is_enabled": "yes"})
+    bad_type = await app_client.patch(f"{PREFIX}/{FLAG}", json={"is_enabled": "maybe"})
     assert bad_type.status_code == 422
     assert bad_type.json()["code"] == "VALIDATION_ERROR"
 
@@ -111,12 +111,12 @@ async def test_flag_validation_errors(app_client: Any) -> None:
     assert unknown.json()["code"] == "FLAG_NOT_FOUND"
 
 
-async def test_flags_are_tenant_scoped(app_client: Any, other_principal: Any, client_factory: Any) -> None:
+async def test_flags_are_tenant_scoped(app_client: Any, principal: Any, other_principal: Any, client_factory: Any) -> None:
     await app_client.patch(f"{PREFIX}/{FLAG}", json={"is_enabled": True})
     async with client_factory(other_principal) as other_client:
         other_list = await other_client.get(PREFIX)
         assert other_list.status_code == 200
         assert other_list.json()["items"] == []
-    # The primary tenant's row is unchanged.
-    primary = await app_client.get(PREFIX)
+    async with client_factory(principal) as primary_client:
+        primary = await primary_client.get(PREFIX)
     assert primary.json()["items"][0]["is_enabled"] is True

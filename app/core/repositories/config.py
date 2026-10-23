@@ -779,7 +779,7 @@ class ConfigRepository:
         await self.session.execute(
             update(p.currency)
             .where(p.currency.c.code == normalized, p.currency.c.tenant_id.is_(None))
-            .values(**changes)
+            .values(**changes, version=p.currency.c.version + 1)
         )
         updated = await self.get_currency(normalized)
         if updated is None:  # pragma: no cover - update/read race only
@@ -970,7 +970,7 @@ class ConfigRepository:
                     p.custom_field_def.c.tenant_id == tenant_id,
                     p.custom_field_def.c.id == field_def_id,
                 )
-                .values(**changes)
+                .values(**changes, version=p.custom_field_def.c.version + 1)
             )
         updated = await self.get_custom_field(tenant_id, field_def_id)
         if updated is None:  # pragma: no cover - update/read race only
@@ -1074,7 +1074,7 @@ class ConfigRepository:
                         p.feature_flag.c.tenant_id == tenant_id,
                         p.feature_flag.c.flag_key == normalized,
                     )
-                    .values(**values)
+                    .values(**values, version=p.feature_flag.c.version + 1)
                 )
             updated = await self.get_feature_flag(tenant_id, normalized)
             if updated is None:  # pragma: no cover - write/read race only

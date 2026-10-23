@@ -111,7 +111,6 @@ def client_factory(app_with_config_router: FastAPI, db_session: Any) -> Callable
         transport = httpx.ASGITransport(app=app_with_config_router)
         async with httpx.AsyncClient(transport=transport, base_url="http://testserver") as client:
             yield client
-        app_with_config_router.dependency_overrides.clear()
 
     return factory
 

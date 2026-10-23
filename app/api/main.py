@@ -16,6 +16,7 @@ from app.api.routers.platform import api_keys as platform_api_keys
 from app.api.routers.platform import approvals as platform_approvals
 from app.api.routers.platform import auth as platform_auth
 from app.api.routers.platform import ops as platform_ops
+from app.api.routers.platform import platform_admin as platform_admin
 from app.api.routers.platform import rbac as platform_rbac
 from app.api.routers.platform import sso as platform_sso
 from app.api.routers.platform import tenants as platform_tenants
@@ -49,6 +50,7 @@ def create_app() -> FastAPI:
     register_router(platform_auth.router)
     register_router(platform_sso.router)
     register_router(platform_tenants.router)
+    register_router(platform_admin.router)
     include_routers(app)
 
     @app.get("/healthz", tags=["platform"])

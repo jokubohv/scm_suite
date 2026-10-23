@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC
+from datetime import date
 from typing import Any
 from uuid import UUID
 
@@ -121,8 +121,8 @@ async def test_fiscal_periods_are_tenant_scoped(app_client: Any, db_session: Any
             id=UUID("7a000000-0000-7000-8000-0000000000a1"),
             tenant_id=OTHER_TENANT_ID,
             period_key="2026-10",
-            start_date="2026-10-01",
-            end_date="2026-10-31",
+            start_date=date(2026, 10, 1),
+            end_date=date(2026, 10, 31),
             status="OPEN",
             source_version=1,
         )
