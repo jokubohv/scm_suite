@@ -92,6 +92,7 @@ ROUTE_SCOPES: dict[tuple[str, str], str] = {
     ("POST", "/api/v1/landed-costs/{landed_cost_id}/estimated-costs"): ELC_MANAGE,
     ("GET", "/api/v1/estimated-landed-cost-templates"): COST_READ,
     ("GET", "/api/v1/estimated-landed-cost-templates/{template_id}"): COST_READ,
+    ("PATCH", "/api/v1/estimated-landed-cost-templates/{template_id}"): ELC_MANAGE,
     ("POST", "/api/v1/estimated-landed-cost-templates"): ELC_MANAGE,
     ("POST", "/api/v1/cogs-adjustments"): COGS_CREATE,
     ("GET", "/api/v1/cogs-adjustments"): COST_READ,
@@ -105,6 +106,7 @@ ROUTE_SCOPES: dict[tuple[str, str], str] = {
     ("GET", "/api/v1/location-costing-groups/{group_id}"): COST_READ,
     ("PATCH", "/api/v1/location-costing-groups/{group_id}"): GROUP_MANAGE,
     ("POST", "/api/v1/location-costing-groups/{group_id}/members"): GROUP_MANAGE,
+    ("POST", "/api/v1/location-costing-groups/{group_id}/inactivate"): GROUP_MANAGE,
     ("DELETE", "/api/v1/location-costing-groups/{group_id}/members/{location_id}"): GROUP_MANAGE,
     ("GET", "/api/v1/group-average-balances"): COST_READ,
     ("POST", "/api/v1/cost-recalculations"): RECALC_RUN,
@@ -738,6 +740,24 @@ async def create_elc_template(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
 
 
+@router.patch("/estimated-landed-cost-templates/{template_id}", dependencies=[Depends(require_scope(ELC_MANAGE))])
+async def update_elc_template(
+    template_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, response: Response,
+    idempotency_key: IdempotencyKey,
+) -> dict[str, Any]:
+    endpoint = "costing:elc-templates:update"
+    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
+                                     method="PATCH", path=f"/api/v1/estimated-landed-cost-templates/{template_id}",
+                                     body=body, response=response)
+    if replay is not None:
+        return replay
+    try:
+        row = await _service(db, principal).update_elc_template(template_id, body)
+    except Exception as exc:  # noqa: BLE001
+        _raise(exc)
+    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=template_id)
+
+
 # ---------------------------------------------------------------- COGS adjustments ----------
 @router.post("/cogs-adjustments", status_code=201, dependencies=[Depends(require_scope(COGS_CREATE))])
 async def create_cogs_adjustment(
@@ -884,6 +904,23 @@ async def remove_group_member(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=group_id)
 
 
+@router.post("/location-costing-groups/{group_id}/inactivate", dependencies=[Depends(require_scope(GROUP_MANAGE))])
+async def inactivate_group(
+    group_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
+) -> dict[str, Any]:
+    endpoint = "costing:groups:inactivate"
+    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
+                                     method="POST", path=f"/api/v1/location-costing-groups/{group_id}/inactivate",
+                                     body={}, response=response)
+    if replay is not None:
+        return replay
+    try:
+        row = await _service(db, principal).update_group(group_id, {"is_active": False})
+    except Exception as exc:  # noqa: BLE001
+        _raise(exc)
+    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=group_id)
+
+
 @router.get("/group-average-balances", dependencies=[Depends(require_scope(COST_READ))])
 async def group_average_balances(
     db: DbDep, principal: PrincipalDep, item_id: str | None = None, group_id: str | None = None
@@ -913,3 +950,92 @@ async def reconcile(
     db: DbDep, principal: PrincipalDep, body: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     return await _service(db, principal).reconciliation(as_of=(body or {}).get("as_of"))
+
+
+# --------------------------------------------------------------------------- canonical aliases -----
+# The FS-05 contract declares resource paths with the canonical ``{id}`` placeholder (and a few legacy
+# action spellings) while the implementation historically used resource-specific parameter names
+# (``{category_id}``/``{template_id}``/``{landed_cost_id}``/...). These aliases mount the declared
+# operations at their exact contract spelling without changing behaviour: the wrapper renames ``id``
+# back to the implementation parameter and delegates to the same handler. Five malformed spec-extraction
+# paths are intentionally not mounted (documented in the residual report/tests): POST
+# ``/cogs-adjustments/{id}`` (read resource with POST), POST ``/cost-revaluations/approve`` (missing
+# resource id), and three duplicated-path submit variants under cost-revaluations / landed-costs.
+import inspect as _inspect  # noqa: E402
+
+_CANONICAL_ALIASES: tuple[tuple[str, str, str, str | None], ...] = (
+    ("GET", "/api/v1/cogs-adjustments/{adjustment_id}", "/cogs-adjustments/{id}", "adjustment_id"),
+    ("GET", "/api/v1/cost-revaluations/{revaluation_id}", "/cost-revaluations/{id}", "revaluation_id"),
+    ("GET", "/api/v1/cost-rollups/{run_id}", "/cost-rollups/{id}", "run_id"),
+    ("GET", "/api/v1/cost-rollups/{run_id}/lines", "/cost-rollups/{id}/lines", "run_id"),
+    ("GET", "/api/v1/cost-versions/{version_id}", "/cost-versions/{id}", "version_id"),
+    ("GET", "/api/v1/cost-versions/{version_id}/planned-standards", "/cost-versions/{id}/planned-standards", "version_id"),
+    ("GET", "/api/v1/costs/item-costs/{item_cost_id}", "/costs/item-costs/{id}", "item_cost_id"),
+    ("GET", "/api/v1/costs/item-costs/{item_cost_id}/layers", "/costs/item-costs/{id}/layers", "item_cost_id"),
+    ("GET", "/api/v1/landed-costs/{landed_cost_id}", "/landed-costs/{id}", "landed_cost_id"),
+    ("GET", "/api/v1/landed-costs/{landed_cost_id}/allocations", "/landed-costs/{id}/allocations", "landed_cost_id"),
+    ("GET", "/api/v1/location-costing-groups/{group_id}", "/location-costing-groups/{id}", "group_id"),
+    ("PATCH", "/api/v1/cost-categories/{category_id}", "/cost-categories/{id}", "category_id"),
+    ("PATCH", "/api/v1/cost-templates/{template_id}", "/cost-templates/{id}", "template_id"),
+    ("PATCH", "/api/v1/estimated-landed-cost-templates/{template_id}", "/estimated-landed-cost-templates/{id}", "template_id"),
+    ("POST", "/api/v1/cogs-adjustments/{adjustment_id}/approve", "/cogs-adjustments/{id}/approve", "adjustment_id"),
+    ("POST", "/api/v1/cogs-adjustments/{adjustment_id}/post", "/cogs-adjustments/{id}/post", "adjustment_id"),
+    ("POST", "/api/v1/cogs-adjustments/{adjustment_id}/reverse", "/cogs-adjustments/{id}/reverse", "adjustment_id"),
+    ("POST", "/api/v1/cost-revaluations/{revaluation_id}/approve", "/cost-revaluations/{id}/approve", "revaluation_id"),
+    ("POST", "/api/v1/cost-revaluations/{revaluation_id}/post", "/cost-revaluations/{id}/post", "revaluation_id"),
+    ("POST", "/api/v1/cost-revaluations/{revaluation_id}/reverse", "/cost-revaluations/{id}/reverse", "revaluation_id"),
+    ("POST", "/api/v1/cost-versions/{version_id}/activate", "/cost-versions/{id}/activate", "version_id"),
+    ("POST", "/api/v1/cost-versions/{version_id}/approve", "/cost-versions/{id}/approve", "version_id"),
+    ("POST", "/api/v1/cost-versions/{version_id}/planned-standards", "/cost-versions/{id}/planned-standards", "version_id"),
+    ("POST", "/api/v1/landed-costs/{landed_cost_id}/approve", "/landed-costs/{id}/allocations/approve", "landed_cost_id"),
+    ("POST", "/api/v1/landed-costs/{landed_cost_id}/post", "/landed-costs/{id}/post", "landed_cost_id"),
+    ("POST", "/api/v1/landed-costs/{landed_cost_id}/reverse", "/landed-costs/{id}/reverse", "landed_cost_id"),
+    ("POST", "/api/v1/location-costing-groups/{group_id}/members", "/location-costing-groups/{id}/members", "group_id"),
+    ("POST", "/api/v1/location-costing-groups/{group_id}/inactivate", "/location-costing-groups/{id}/inactivate", "group_id"),
+    ("DELETE", "/api/v1/location-costing-groups/{group_id}/members/{location_id}", "/location-costing-groups/{id}/members/{location_id}", "group_id"),
+    ("POST", "/api/v1/cost-recalculations", "/costs/recalculations", None),
+)
+
+
+def _alias_endpoint(endpoint: Any, implementation_param: str | None) -> Any:
+    if implementation_param is None:
+        return endpoint
+    signature = _inspect.signature(endpoint)
+    parameters = [
+        parameter.replace(name="id") if parameter.name == implementation_param else parameter
+        for parameter in signature.parameters.values()
+    ]
+
+    async def _alias(**kwargs: Any) -> Any:
+        kwargs[implementation_param] = kwargs.pop("id")
+        return await endpoint(**kwargs)
+
+    _alias.__signature__ = signature.replace(parameters=parameters)  # type: ignore[attr-defined]
+    _alias.__name__ = f"{endpoint.__name__}_canonical"
+    return _alias
+
+
+def _register_canonical_aliases() -> None:
+    routes_by_path: dict[tuple[str, str], Any] = {}
+    for route in router.routes:
+        methods = getattr(route, "methods", None) or set()
+        for method in methods:
+            routes_by_path[(method.upper(), getattr(route, "path", ""))] = route
+    for method, concrete_path, relative_path, implementation_param in _CANONICAL_ALIASES:
+        concrete_route: Any = routes_by_path.get((method, concrete_path))
+        if concrete_route is None:  # pragma: no cover - defensive: contract drift detected by tests
+            continue
+        endpoint = concrete_route.endpoint
+        alias = _alias_endpoint(endpoint, implementation_param)
+        scope = ROUTE_SCOPES[(method, concrete_path)]
+        router.add_api_route(
+            relative_path,
+            alias,
+            methods=[method],
+            status_code=int(getattr(concrete_route, "status_code", None) or 200),
+            dependencies=[Depends(require_scope(scope))],
+        )
+        ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = scope
+
+
+_register_canonical_aliases()

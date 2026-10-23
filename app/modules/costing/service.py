@@ -718,6 +718,41 @@ class CostingService:
             ],
         )
 
+    async def update_elc_template(self, template_id: str, payload: Mapping[str, Any]) -> dict[str, Any]:
+        await self.get_elc_template(template_id)
+        values: dict[str, Any] = {}
+        if payload.get("name") is not None:
+            values["name"] = str(payload["name"]).strip()
+        if payload.get("currency_code") is not None:
+            values["currency_code"] = str(payload["currency_code"]).upper()
+        if payload.get("is_default") is not None:
+            values["is_default"] = bool(payload["is_default"])
+        if payload.get("is_active") is not None:
+            values["is_active"] = bool(payload["is_active"])
+        lines: list[dict[str, Any]] | None = None
+        if payload.get("lines") is not None:
+            lines = []
+            for line in payload.get("lines") or []:
+                await self.get_category(str(line["cost_category_id"]))
+                has_amount = line.get("default_amount") is not None
+                has_percent = line.get("default_percent") is not None
+                if has_amount == has_percent:
+                    raise CostingValidationError("ELC template line requires exactly one of amount/percent")
+                lines.append(
+                    {
+                        "cost_category_id": _uuid(line["cost_category_id"]),
+                        "allocation_basis": line["allocation_basis"],
+                        "default_amount": Decimal(str(line["default_amount"]))
+                        if line.get("default_amount") is not None
+                        else None,
+                        "default_percent": Decimal(str(line["default_percent"]))
+                        if line.get("default_percent") is not None
+                        else None,
+                        "sort_order": int(line.get("sort_order", 0)),
+                    }
+                )
+        return await self.repo.update_elc_template(template_id, values, lines)
+
     # ---------------------------------------------------------------- COGS adjustments ----
     async def create_cogs_adjustment(self, payload: Mapping[str, Any]) -> dict[str, Any]:
         lines = e.cogs_adjustment_lines(payload.get("lines") or [])
