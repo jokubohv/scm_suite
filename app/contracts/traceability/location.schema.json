@@ -1,0 +1,113 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "allow_commit_from_non_available": {
+      "title": "Allow Commit From Non Available",
+      "type": "boolean"
+    },
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "inactive_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inactive At"
+    },
+    "inactive_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inactive Reason"
+    },
+    "is_bins_enabled": {
+      "title": "Is Bins Enabled",
+      "type": "boolean"
+    },
+    "is_consignment_allowed": {
+      "title": "Is Consignment Allowed",
+      "type": "boolean"
+    },
+    "is_inactive": {
+      "title": "Is Inactive",
+      "type": "boolean"
+    },
+    "is_statuses_enabled": {
+      "title": "Is Statuses Enabled",
+      "type": "boolean"
+    },
+    "is_unallocated": {
+      "title": "Is Unallocated",
+      "type": "boolean"
+    },
+    "location_type": {
+      "enum": [
+        "WAREHOUSE",
+        "STORE",
+        "RECEIVING",
+        "TRANSIT",
+        "CONSUMPTION",
+        "UNALLOCATED"
+      ],
+      "title": "Location Type",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "parent_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Id"
+    },
+    "timezone": {
+      "title": "Timezone",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "code",
+    "name",
+    "location_type",
+    "is_bins_enabled",
+    "is_statuses_enabled",
+    "is_consignment_allowed",
+    "allow_commit_from_non_available",
+    "is_unallocated",
+    "is_inactive",
+    "timezone",
+    "version"
+  ],
+  "title": "Location",
+  "type": "object"
+}

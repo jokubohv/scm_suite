@@ -1,0 +1,44 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "bin_id": {
+      "title": "Bin Id",
+      "type": "string"
+    },
+    "change": {
+      "enum": [
+        "CREATED",
+        "UPDATED",
+        "ACTIVATED",
+        "INACTIVATED"
+      ],
+      "title": "Change",
+      "type": "string"
+    },
+    "changed": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Changed",
+      "type": "array"
+    },
+    "location_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Id"
+    }
+  },
+  "required": [
+    "bin_id",
+    "change"
+  ],
+  "title": "BinChangedEvent",
+  "type": "object"
+}

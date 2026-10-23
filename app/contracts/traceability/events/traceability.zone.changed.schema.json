@@ -1,0 +1,36 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "change": {
+      "enum": [
+        "CREATED",
+        "UPDATED",
+        "INACTIVATED"
+      ],
+      "title": "Change",
+      "type": "string"
+    },
+    "location_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Id"
+    },
+    "zone_id": {
+      "title": "Zone Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "zone_id",
+    "change"
+  ],
+  "title": "ZoneChangedEvent",
+  "type": "object"
+}

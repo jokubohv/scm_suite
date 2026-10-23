@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "changed": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Changed",
+      "type": "array"
+    },
+    "location_id": {
+      "title": "Location Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "location_id"
+  ],
+  "title": "LocationUpdatedEvent",
+  "type": "object"
+}

@@ -1,0 +1,89 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "default_status_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Default Status Code"
+    },
+    "deferred_fk_closed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deferred Fk Closed"
+    },
+    "distribution_completed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Distribution Completed"
+    },
+    "seeded": {
+      "title": "Seeded",
+      "type": "boolean"
+    },
+    "sentinel_location_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sentinel Location Id"
+    },
+    "sentinel_present": {
+      "title": "Sentinel Present",
+      "type": "boolean"
+    },
+    "status_count": {
+      "title": "Status Count",
+      "type": "integer"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "unallocated_positions": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Unallocated Positions"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "sentinel_present",
+    "status_count",
+    "seeded"
+  ],
+  "title": "BootstrapState",
+  "type": "object"
+}

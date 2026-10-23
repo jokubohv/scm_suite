@@ -1,0 +1,22 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "ok": {
+      "title": "Ok",
+      "type": "boolean"
+    },
+    "orphans": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Orphans",
+      "type": "object"
+    }
+  },
+  "required": [
+    "orphans",
+    "ok"
+  ],
+  "title": "DeferredFkCheckedEvent",
+  "type": "object"
+}

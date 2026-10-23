@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "location_id": {
+      "title": "Location Id",
+      "type": "string"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "location_id"
+  ],
+  "title": "LocationInactivatedEvent",
+  "type": "object"
+}

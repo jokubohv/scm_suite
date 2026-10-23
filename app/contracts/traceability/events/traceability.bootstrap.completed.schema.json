@@ -1,0 +1,19 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "seeded": {
+      "title": "Seeded",
+      "type": "boolean"
+    },
+    "status_count": {
+      "title": "Status Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "seeded",
+    "status_count"
+  ],
+  "title": "BootstrapCompletedEvent",
+  "type": "object"
+}
