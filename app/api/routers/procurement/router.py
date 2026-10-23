@@ -1140,3 +1140,117 @@ async def fulfil_dropship(
 
 
 __all__ = ["ROUTE_SCOPES", "router"]
+
+
+# --------------------------------------------------------------------------- canonical aliases -----
+# The FS-08 contract declares resource paths with the canonical ``{id}`` placeholder while the
+# implementation historically used resource-specific names (``{po_id}``/``{vendor_id}``/...). These
+# aliases mount the contract-declared operations without changing behaviour or concrete URLs: the
+# wrapper renames ``id`` back to the implementation parameter and delegates to the same handler.
+import inspect as _inspect  # noqa: E402
+
+_CANONICAL_ALIASES: tuple[tuple[str, str, str, str], ...] = (
+    ("GET", "/api/v1/vendors/{vendor_id}", "/vendors/{id}", "vendor_id"),
+    ("PATCH", "/api/v1/vendors/{vendor_id}", "/vendors/{id}", "vendor_id"),
+    ("POST", "/api/v1/vendors/{vendor_id}/inactivate", "/vendors/{id}/inactivate", "vendor_id"),
+    ("POST", "/api/v1/vendors/{vendor_id}/merge", "/vendors/{id}/merge", "vendor_id"),
+    ("GET", "/api/v1/vendors/{vendor_id}/purchase-history", "/vendors/{id}/purchase-history", "vendor_id"),
+    ("PATCH", "/api/v1/vendor-categories/{category_id}", "/vendor-categories/{id}", "category_id"),
+    ("PATCH", "/api/v1/item-vendors/{item_vendor_id}", "/item-vendors/{id}", "item_vendor_id"),
+    ("GET", "/api/v1/item-vendors/{item_vendor_id}/prices", "/item-vendors/{id}/prices", "item_vendor_id"),
+    ("POST", "/api/v1/item-vendors/{item_vendor_id}/prices", "/item-vendors/{id}/prices", "item_vendor_id"),
+    ("GET", "/api/v1/item-receipts/{receipt_id}", "/item-receipts/{id}", "receipt_id"),
+    ("PATCH", "/api/v1/item-receipts/{receipt_id}", "/item-receipts/{id}", "receipt_id"),
+    ("POST", "/api/v1/item-receipts/{receipt_id}/post", "/item-receipts/{id}/post", "receipt_id"),
+    ("POST", "/api/v1/item-receipts/{receipt_id}/reverse", "/item-receipts/{id}/reverse", "receipt_id"),
+    ("GET", "/api/v1/purchase-orders/{po_id}", "/purchase-orders/{id}", "po_id"),
+    ("PATCH", "/api/v1/purchase-orders/{po_id}", "/purchase-orders/{id}", "po_id"),
+    ("POST", "/api/v1/purchase-orders/{po_id}/submit", "/purchase-orders/{id}/submit", "po_id"),
+    ("POST", "/api/v1/purchase-orders/{po_id}/approve", "/purchase-orders/{id}/approve", "po_id"),
+    ("POST", "/api/v1/purchase-orders/{po_id}/reject", "/purchase-orders/{id}/reject", "po_id"),
+    ("POST", "/api/v1/purchase-orders/{po_id}/cancel", "/purchase-orders/{id}/cancel", "po_id"),
+    ("POST", "/api/v1/purchase-orders/{po_id}/close", "/purchase-orders/{id}/close", "po_id"),
+    ("GET", "/api/v1/purchase-orders/{po_id}/status", "/purchase-orders/{id}/status", "po_id"),
+    ("GET", "/api/v1/purchase-orders/{po_id}/history", "/purchase-orders/{id}/history", "po_id"),
+    ("GET", "/api/v1/purchase-orders/{po_id}/releases", "/purchase-orders/{id}/releases", "po_id"),
+    ("POST", "/api/v1/purchase-orders/{po_id}/releases", "/purchase-orders/{id}/releases", "po_id"),
+    ("GET", "/api/v1/purchase-requests/{request_id}", "/purchase-requests/{id}", "request_id"),
+    ("POST", "/api/v1/purchase-requests/{request_id}/approve", "/purchase-requests/{id}/approve", "request_id"),
+    ("POST", "/api/v1/purchase-requests/{request_id}/convert-to-po", "/purchase-requests/{id}/convert-to-po", "request_id"),
+    ("GET", "/api/v1/purchase-requisitions/{requisition_id}", "/purchase-requisitions/{id}", "requisition_id"),
+    ("PATCH", "/api/v1/purchase-requisitions/{requisition_id}", "/purchase-requisitions/{id}", "requisition_id"),
+    ("POST", "/api/v1/purchase-requisitions/{requisition_id}/submit", "/purchase-requisitions/{id}/submit", "requisition_id"),
+    ("POST", "/api/v1/purchase-requisitions/{requisition_id}/approve", "/purchase-requisitions/{id}/approve", "requisition_id"),
+    ("POST", "/api/v1/purchase-requisitions/{requisition_id}/order", "/purchase-requisitions/{id}/order", "requisition_id"),
+    ("GET", "/api/v1/rfqs/{rfq_id}", "/rfqs/{id}", "rfq_id"),
+    ("POST", "/api/v1/rfqs/{rfq_id}/open", "/rfqs/{id}/open", "rfq_id"),
+    ("POST", "/api/v1/rfqs/{rfq_id}/close", "/rfqs/{id}/close", "rfq_id"),
+    ("POST", "/api/v1/rfqs/{rfq_id}/award", "/rfqs/{id}/award", "rfq_id"),
+    ("GET", "/api/v1/rfqs/{rfq_id}/responses", "/rfqs/{id}/responses", "rfq_id"),
+    ("POST", "/api/v1/rfqs/{rfq_id}/responses", "/rfqs/{id}/responses", "rfq_id"),
+    ("GET", "/api/v1/special-order-links/{link_id}", "/special-order-links/{id}", "link_id"),
+    ("POST", "/api/v1/special-order-links/{link_id}/fulfil", "/special-order-links/{id}/fulfil", "link_id"),
+    ("GET", "/api/v1/vendor-bills/{bill_id}", "/vendor-bills/{id}", "bill_id"),
+    ("PATCH", "/api/v1/vendor-bills/{bill_id}", "/vendor-bills/{id}", "bill_id"),
+    ("POST", "/api/v1/vendor-bills/{bill_id}/submit", "/vendor-bills/{id}/submit", "bill_id"),
+    ("POST", "/api/v1/vendor-bills/{bill_id}/approve", "/vendor-bills/{id}/approve", "bill_id"),
+    ("POST", "/api/v1/vendor-bills/{bill_id}/cancel", "/vendor-bills/{id}/cancel", "bill_id"),
+    ("POST", "/api/v1/vendor-bills/{bill_id}/match", "/vendor-bills/{id}/match", "bill_id"),
+    ("POST", "/api/v1/vendor-bills/{bill_id}/post", "/vendor-bills/{id}/post", "bill_id"),
+    ("GET", "/api/v1/vendor-bills/{bill_id}/variances", "/vendor-bills/{id}/variances", "bill_id"),
+    ("GET", "/api/v1/vendor-contracts/{contract_id}", "/vendor-contracts/{id}", "contract_id"),
+    ("PATCH", "/api/v1/vendor-contracts/{contract_id}", "/vendor-contracts/{id}", "contract_id"),
+    ("POST", "/api/v1/vendor-contracts/{contract_id}/submit", "/vendor-contracts/{id}/submit", "contract_id"),
+    ("POST", "/api/v1/vendor-contracts/{contract_id}/approve", "/vendor-contracts/{id}/approve", "contract_id"),
+    ("POST", "/api/v1/vendor-contracts/{contract_id}/activate", "/vendor-contracts/{id}/activate", "contract_id"),
+    ("POST", "/api/v1/vendor-contracts/{contract_id}/close", "/vendor-contracts/{id}/close", "contract_id"),
+    ("GET", "/api/v1/vendor-credits/{credit_id}", "/vendor-credits/{id}", "credit_id"),
+    ("POST", "/api/v1/vendor-credits/{credit_id}/apply", "/vendor-credits/{id}/apply", "credit_id"),
+    ("POST", "/api/v1/vendor-credits/{credit_id}/post", "/vendor-credits/{id}/post", "credit_id"),
+    ("GET", "/api/v1/vendor-returns/{return_id}", "/vendor-returns/{id}", "return_id"),
+    ("POST", "/api/v1/vendor-returns/{return_id}/ship", "/vendor-returns/{id}/ship", "return_id"),
+    ("POST", "/api/v1/vendor-returns/{return_id}/approve", "/vendor-returns/{id}/approve", "return_id"),
+    ("POST", "/api/v1/vendor-returns/{return_id}/credit", "/vendor-returns/{id}/credit", "return_id"),
+    ("POST", "/api/v1/vendor-returns/{return_id}/close", "/vendor-returns/{id}/close", "return_id"),
+)
+
+
+def _alias_endpoint(endpoint: Any, implementation_param: str) -> Any:
+    signature = _inspect.signature(endpoint)
+    parameters = [
+        parameter.replace(name="id") if parameter.name == implementation_param else parameter
+        for parameter in signature.parameters.values()
+    ]
+
+    async def _alias(**kwargs: Any) -> Any:
+        kwargs[implementation_param] = kwargs.pop("id")
+        return await endpoint(**kwargs)
+
+    _alias.__signature__ = signature.replace(parameters=parameters)  # type: ignore[attr-defined]
+    _alias.__name__ = f"{endpoint.__name__}_canonical"
+    return _alias
+
+
+def _register_canonical_aliases() -> None:
+    routes_by_path: dict[tuple[str, str], Any] = {}
+    for route in router.routes:
+        methods = getattr(route, "methods", None) or set()
+        for method in methods:
+            routes_by_path[(method.upper(), getattr(route, "path", ""))] = route
+    for method, declared_path, relative_path, implementation_param in _CANONICAL_ALIASES:
+        alias_route: Any = routes_by_path.get((method, declared_path))
+        if alias_route is None:  # pragma: no cover - defensive: contract drift detected by tests
+            continue
+        endpoint = alias_route.endpoint
+        alias = _alias_endpoint(endpoint, implementation_param)
+        router.add_api_route(
+            relative_path,
+            alias,
+            methods=[method],
+            status_code=int(getattr(alias_route, "status_code", None) or 200),
+            dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, declared_path)]))],
+        )
+        ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, declared_path)]
+
+
+_register_canonical_aliases()
