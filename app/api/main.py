@@ -12,10 +12,13 @@ from app import __version__
 from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
+from app.api.routers.consigned import router as consigned_router
 from app.api.routers.costing import router as costing_router
 from app.api.routers.counts import router as counts_router
+from app.api.routers.extensions import router as extensions_router
 from app.api.routers.inventory_ledger import router as inventory_ledger_router
 from app.api.routers.item_master import router as item_master_router
+from app.api.routers.manufacturing import router as manufacturing_router
 from app.api.routers.platform import api_keys as platform_api_keys
 from app.api.routers.platform import approval_actions as platform_approval_actions
 from app.api.routers.platform import approvals as platform_approvals
@@ -31,8 +34,12 @@ from app.api.routers.platform import sso as platform_sso
 from app.api.routers.platform import tenants as platform_tenants
 from app.api.routers.pricing import router as pricing_router
 from app.api.routers.procurement import router as procurement_router
+from app.api.routers.quality import router as quality_router
+from app.api.routers.replenishment import router as replenishment_router
+from app.api.routers.reporting.router import router as reporting_router
 from app.api.routers.traceability import router as traceability_router
 from app.api.routers.traceability_numbered import router as traceability_numbered_router
+from app.api.routers.wms import router as wms_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 
@@ -77,6 +84,13 @@ def create_app() -> FastAPI:
     register_router(traceability_numbered_router)
     register_router(counts_router)
     register_router(procurement_router)
+    register_router(manufacturing_router)
+    register_router(replenishment_router)
+    register_router(wms_router)
+    register_router(quality_router)
+    register_router(consigned_router)
+    register_router(extensions_router)
+    register_router(reporting_router)
     include_routers(app)
 
     @app.get("/healthz", tags=["platform"])

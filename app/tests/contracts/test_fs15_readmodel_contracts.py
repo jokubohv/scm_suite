@@ -51,5 +51,5 @@ def test_openapi_fragment_covers_all_endpoints() -> None:
     assert "/api/v1/reports" in paths
     assert "/api/v1/reports/stock-ledger" in paths
     assert "/api/v1/inventory/balances/search" in paths
-    assert "/api/v1/reports/{report_name}/export" in paths
+    assert "/api/v1/reports/{report}/export" in paths
     assert len(paths) == 24

@@ -44,7 +44,7 @@ Exporter = Annotated[object, Depends(require_scope(REPORT_EXPORT))]
 ROUTE_SCOPES: dict[tuple[str, str], str] = {("GET", "/api/v1/reports"): REPORT_READ}
 for _spec in ENDPOINTS:
     if _spec.export:
-        ROUTE_SCOPES[("GET", "/api/v1" + "/reports/{report_name}/export")] = REPORT_EXPORT
+        ROUTE_SCOPES[("GET", "/api/v1" + "/reports/{report}/export")] = REPORT_EXPORT
     else:
         ROUTE_SCOPES[("GET", "/api/v1" + _spec.path)] = _spec.scope
 
@@ -259,15 +259,15 @@ async def available_to_build(service: ServiceDep, _: Read, assembly_item_id: str
     return await _page(service, "v_available_to_build", locals(), cursor, limit, fields)
 
 
-@router.get("/reports/{report_name}/export")
-async def export_report(report_name: str, service: ServiceDep, _: Exporter,
+@router.get("/reports/{report}/export", dependencies=[Depends(require_scope(REPORT_EXPORT))])
+async def export_report(report: str, service: ServiceDep, _: Exporter,
                         format: str = Query("json", pattern="^(json|csv)$"), cursor: str | None = None,
                         limit: int = Query(500, ge=1, le=500), fields: str | None = None) -> Response:
-    if report_name not in REPORT_ALIASES:
+    if report not in REPORT_ALIASES:
         raise HTTPException(status_code=404, detail={"code": "REPORT_NOT_FOUND",
-                                                     "message": f"unknown report {report_name!r}"})
+                                                     "message": f"unknown report {report!r}"})
     try:
-        body, media_type = await service.export_view(report_name, cursor=cursor, limit=limit,
+        body, media_type = await service.export_view(report, cursor=cursor, limit=limit,
                                                      format=format, fields=fields)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)

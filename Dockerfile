@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.7
+# (built-in Dockerfile frontend; avoids a Docker Hub frontend pull on restricted networks)
 #
 # Inventory Platform — runtime image (S0-02).
 # One image, three entrypoints (D-01): `api` (uvicorn), `worker` (RQ), `outbox-relay`

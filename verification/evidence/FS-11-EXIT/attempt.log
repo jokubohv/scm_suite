@@ -1,0 +1,33 @@
+== FS-11 exit gate 2026-10-23T15:44:10.166364+00:00 ==
+-- entry check-env
+$ python3 tools/feature_sets.py check-env --set FS-11 --env dev
+ENTRY GATE PASS for FS-11 (phase 1, wave 1E) against state file deployment-state.dev.json: 11/11 dependency contract(s) verified
+  note: FS-11 has no deployment record yet in this environment
+
+-- $ docker compose run --rm api alembic upgrade head
+RC=0
+
+ Container inv-s0-gate-minio-1  Running
+ Container inv-s0-gate-redis-1  Running
+ Container inv-s0-gate-postgres-1  Running
+ Container inv-s0-gate-dex-1  Running
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-postgres-1  Healthy
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+
+-- $ pytest app/tests/integration/wms -q
+RC=0
+...................                                                      [100%]
+
+
+-- $ pytest app/tests/contracts/test_fs11_provider_contract.py -q
+RC=0
+........                                                                 [100%]
+
+
+-- $ pytest app/tests/invariants/test_wave_task_completion.py app/tests/invariants/test_pick_never_negative.py app/tests/invariants/test_bin_block_pick_guard.py -q
+RC=0
+......                                                                   [100%]
+
+

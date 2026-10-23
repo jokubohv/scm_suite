@@ -1,0 +1,40 @@
+== FS-15 exit gate 2026-10-23T15:45:03.053969+00:00 ==
+-- entry check-env
+$ python3 tools/feature_sets.py check-env --set FS-15 --env dev
+ENTRY GATE PASS for FS-15 (phase 1, wave 2) against state file deployment-state.dev.json: 17/17 dependency contract(s) verified
+  note: FS-15 has no deployment record yet in this environment
+
+-- $ docker compose run --rm api alembic upgrade head
+RC=0
+
+ Container inv-s0-gate-minio-1  Running
+ Container inv-s0-gate-postgres-1  Running
+ Container inv-s0-gate-redis-1  Running
+ Container inv-s0-gate-dex-1  Running
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-postgres-1  Healthy
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+
+-- $ pytest app/tests/integration/reporting -q
+RC=0
+.....                                                                    [100%]
+
+
+-- $ pytest app/tests/contracts/test_fs15_provider_contract.py -q
+RC=0
+...                                                                      [100%]
+
+
+-- $ pytest app/tests/invariants/test_reporting_readonly.py app/tests/invariants/test_reconcile_exact.py -q
+RC=0
+.....                                                                    [100%]
+
+
+-- $ python tools/feature_sets.py coverage
+RC=0
+COVERAGE OK: 1348/1348 catalog topics accounted (iri=412, mpw=936); 769 in-scope + 579 deferred; 0 missing, 0 extra, 0 duplicates
+  dispositions: DEFERRED-ANALYTICS=46, DEFERRED-INTEGRATION=156, DEFERRED-MOBILE=126, DEFERRED-SUITEAPP=190, DEFERRED-UI=61, FS-00=4, FS-01=57, FS-02=50, FS-03=14, FS-04=42, FS-05=88, FS-06=24, FS-07=16, FS-08=116, FS-09=160, FS-10=52, FS-11=89, FS-12=16, FS-13=9, FS-14=16, FS-15=16
+  every feature set owns >= 1 topic; EXCLUDED-SCM-MOBILE=0; totals consistent
+
+

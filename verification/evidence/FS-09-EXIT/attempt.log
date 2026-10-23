@@ -1,0 +1,57 @@
+== FS-09 exit gate 2026-10-23T15:43:37.315499+00:00 ==
+-- entry check-env
+$ python3 tools/feature_sets.py check-env --set FS-09 --env dev
+ENTRY GATE PASS for FS-09 (phase 1, wave 1C) against state file deployment-state.dev.json: 11/11 dependency contract(s) verified
+  note: FS-09 has no deployment record yet in this environment
+
+-- $ docker compose run --rm api alembic upgrade head
+RC=0
+
+ Container inv-s0-gate-redis-1  Recreate
+ Container inv-s0-gate-minio-1  Recreate
+ Container inv-s0-gate-postgres-1  Running
+ Container inv-s0-gate-dex-1  Recreate
+ Container inv-s0-gate-dex-1  Recreated
+ Container inv-s0-gate-minio-1  Recreated
+ Container inv-s0-gate-redis-1  Recreated
+ Container inv-s0-gate-minio-1  Starting
+ Container inv-s0-gate-postgres-1  Waiting
+ Container inv-s0-gate-redis-1  Starting
+ Container inv-s0-gate-redis-1  Started
+ Container inv-s0-gate-minio-1  Started
+ Container inv-s0-gate-postgres-1  Healthy
+ Container inv-s0-gate-dex-1  Starting
+ Container inv-s0-gate-dex-1  Started
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+
+-- $ pytest app/tests/integration/manufacturing -q
+RC=0
+.........                                                                [100%]
+
+
+-- $ pytest app/tests/contracts/test_fs09_provider_contract.py -q
+RC=0
+......                                                                   [100%]
+
+
+-- $ pytest app/tests/invariants/test_assembly_build_value.py app/tests/invariants/test_wip_reconciliation.py app/tests/invariants/test_mps_schedule_inputs.py -q
+RC=0
+.....                                                                    [100%]
+
+
+-- $ pytest app/tests/invariants/test_compat_rules.py -q
+RC=0
+....                                                                     [100%]
+
+
+-- $ pytest app/tests/integration/manufacturing/test_compat_paths.py -q
+RC=0
+...                                                                      [100%]
+
+
+-- $ pytest app/tests/integration/manufacturing/test_unbuild_dispositions.py -q
+RC=0
+...                                                                      [100%]
+
+

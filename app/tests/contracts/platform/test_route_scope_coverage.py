@@ -91,7 +91,7 @@ def test_contract_scope_alignment() -> None:
     fragment_ops = utils.fragment_operations(utils.platform_fragment())
     platform_prefixes = (
         "/api/v1/auth", "/api/v1/me", "/api/v1/admin", "/api/v1/platform", "/api/v1/finance",
-        "/api/v1/reference", "/api/v1/order", "/api/v1/internal", "/api/v1/attachments",
+        "/api/v1/reference", "/api/v1/order/", "/api/v1/internal", "/api/v1/attachments",
         "/api/v1/document-links", "/api/v1/custom-field-values", "/api/v1/audit-events",
         "/healthz", "/readyz", "/openapi.json",
     )

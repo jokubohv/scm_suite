@@ -39,7 +39,7 @@ def test_platform_schema_present() -> None:
                 "select count(*) from pg_tables where schemaname='platform' and tablename not like '%\\_20%'"
             )
             assert tables == 34, tables
-            assert head in {"0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing", "0007_traceability_registry", "0008_ledger_core", "0009_ledger_commitment_guards", "0010_ledger_balances", "0011_costing", "0012_costing_standard", "0013_numbered_inventory", "0014_counts", "0015_procurement_vendors", "0016_procurement_ordering", "0017_procurement_billing"}
+            assert head in {"0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing", "0007_traceability_registry", "0008_ledger_core", "0009_ledger_commitment_guards", "0010_ledger_balances", "0011_costing", "0012_costing_standard", "0013_numbered_inventory", "0014_counts", "0015_procurement_vendors", "0016_procurement_ordering", "0017_procurement_billing", "0018_manufacturing_master", "0019_manufacturing_routing", "0020_manufacturing_execution", "0021_planning", "0022_planning_atp", "0023_wms_setup", "0024_wms_inbound", "0025_wms_execution", "0026_quality", "0027_consigned", "0028_extensions", "0029_reporting_views", "0030_rls_grants_verify"}
         finally:
             await conn.close()
     _run(check())

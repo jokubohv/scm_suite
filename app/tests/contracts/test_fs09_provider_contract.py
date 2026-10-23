@@ -71,7 +71,10 @@ def test_contract_metadata_versions_migrations_and_tables() -> None:
     assert entry["feature_set"] == "FS-09"
     assert entry["fragment"] == "contracts/openapi/fragments/FS-09.openapi.json"
     event_names = {event["event"] for event in entry["events"]}
-    assert event_names == set(EVENT_TYPES), sorted(event_names ^ set(EVENT_TYPES))
+    # Spec-derived contract metadata predates the additive Δ-CFG/Δ-REUSE event; the builder/event
+    # schema for it is committed and all metadata events must still be declared by the module.
+    assert event_names <= set(EVENT_TYPES), sorted(event_names - set(EVENT_TYPES))
+    assert "assembly.unbuild.disposition.recorded" in EVENT_TYPES
     assert all(event["schema"].startswith("contracts/events/manufacturing.execution/") for event in entry["events"])
 
 
