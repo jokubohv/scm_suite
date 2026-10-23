@@ -4,7 +4,7 @@ $ python3 -m pytest app/tests/contracts/platform/test_route_scope_coverage.py -q
 ==================================== PASSES ====================================
 _______________________ test_route_scope_coverage_report _______________________
 ----------------------------- Captured stdout call -----------------------------
-route-scope coverage: {'mounted_operations': 120, 'scoped': 102, 'public': 8, 'self_service': 6, 'framework': 4, 'unknown_scopes': [], 'multi_scope': [], 'duplicates': [], 'unresolved': ['GET /api/v1/auth/me', 'GET /api/v1/me/memberships', 'POST /api/v1/auth/invitations/{token}/accept'], 'scoped_without_scope': []}
+route-scope coverage: {'mounted_operations': 136, 'scoped': 118, 'public': 8, 'self_service': 6, 'framework': 4, 'unknown_scopes': [], 'multi_scope': [], 'duplicates': [], 'unresolved': [], 'scoped_without_scope': []}
 =========================== short test summary info ============================
 PASSED app/tests/contracts/platform/test_route_scope_coverage.py::test_route_scope_coverage_report
 PASSED app/tests/contracts/platform/test_route_scope_coverage.py::test_scoped_routes_have_exactly_one_catalogued_scope

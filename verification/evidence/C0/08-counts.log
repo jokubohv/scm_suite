@@ -5,28 +5,26 @@ $ python3 verification/evidence/C0/count_contracts.py --json verification/eviden
     "contracts": 21,
     "events": 159,
     "feature_sets": 16,
-    "implemented_additions": 28,
-    "implemented_operations": 105,
-    "implemented_overrides": 77,
-    "implemented_paths_added": 17,
-    "operations": 962,
-    "paths": 727,
-    "skeleton_operations": 857,
+    "implemented_additions": 31,
+    "implemented_operations": 124,
+    "implemented_overrides": 93,
+    "implemented_paths_added": 20,
+    "operations": 965,
+    "paths": 730,
+    "skeleton_operations": 841,
     "spec_operations": 934,
     "spec_paths": 710
   },
   "app": {
-    "mounted_operations": 120,
-    "openapi_operations": 106,
-    "openapi_paths": 78
+    "mounted_operations": 136,
+    "openapi_operations": 124,
+    "openapi_paths": 96
   },
   "builder_fragment": {
-    "hashed": "1280f2319738ab723febbf69407d41acb7dd7395d612c5357900aaf13f228180",
-    "operations": 105,
-    "paths": 77,
-    "skipped_unscoped": [
-      "GET /api/v1/me/memberships"
-    ]
+    "hashed": "66362eb45e2babde345db94a5c91b0fa7da7bde6c1c1a7b0859b4a345800d696",
+    "operations": 124,
+    "paths": 96,
+    "skipped_unscoped": []
   },
   "events": {
     "fs00_contract_events": 33,
@@ -89,66 +87,49 @@ $ python3 verification/evidence/C0/count_contracts.py --json verification/eviden
       "POST /api/v1/admin/fiscal-periods",
       "POST /api/v1/admin/invitations/{invitation_id}/resend",
       "POST /api/v1/admin/invitations/{invitation_id}/revoke",
-      "POST /api/v1/document-links"
+      "POST /api/v1/document-links",
+      "POST /api/v1/internal/outbox/replay",
+      "PUT /api/v1/internal/finance/exchange-rates",
+      "PUT /api/v1/internal/order-boundary/demand-doubles"
     ],
-    "added_operations": 28,
-    "fragment_operations": 130,
-    "fragment_paths": 101,
-    "implemented_operations": 105,
-    "overridden_spec_operations": 77,
+    "added_operations": 31,
+    "fragment_operations": 133,
+    "fragment_paths": 104,
+    "implemented_operations": 124,
+    "overridden_spec_operations": 93,
     "residual_skeleton_list": [
-      "GET /api/v1/admin/job-runs",
-      "GET /api/v1/admin/job-runs/{run_id}",
-      "GET /api/v1/audit-events",
-      "GET /api/v1/custom-field-values",
       "GET /api/v1/finance/journal-intents/{id}",
-      "GET /api/v1/finance/period-status",
-      "GET /api/v1/order/demand/open",
-      "GET /api/v1/reference/exchange-rates",
       "GET /internal/deps",
       "GET /openapi.json",
-      "PATCH /api/v1/admin/approval-definitions/{definition_id}",
-      "PATCH /api/v1/admin/number-sequences/{sequence_id}",
-      "POST /api/v1/admin/api-keys/{key_id}/revoke",
       "POST /api/v1/admin/invitations/{id}/revoke",
-      "POST /api/v1/admin/job-runs/{run_id}/cancel",
-      "POST /api/v1/admin/jobs/{name}/run",
       "POST /api/v1/admin/users",
-      "POST /api/v1/platform/tenants/{tenant_id}/bootstrap-admin",
-      "POST /api/v1/platform/tenants/{tenant_id}/offboard",
       "POST /internal/outbox/replay",
-      "PUT /api/v1/admin/custom-field-values",
-      "PUT /api/v1/admin/users/{user_id}/data-scopes",
       "PUT /internal/finance/exchange-rates",
       "PUT /internal/finance/fiscal-periods",
       "PUT /internal/order-boundary/demand-doubles"
     ],
-    "skeleton_operations": 25,
+    "skeleton_operations": 9,
     "spec_operations": 102
   },
   "hashes": {
     "app/contracts/order_boundary/openapi.fragment.json": "0d9aefb68bc12bf2f7fe66068a0dd903489b9ef59d5df92a98af1675146821ea",
-    "app/contracts/platform/openapi.fragment.json": "1280f2319738ab723febbf69407d41acb7dd7395d612c5357900aaf13f228180",
+    "app/contracts/platform/openapi.fragment.json": "66362eb45e2babde345db94a5c91b0fa7da7bde6c1c1a7b0859b4a345800d696",
     "contracts/events/registry.json": "80c0fa9949f3ae976ce4e8553225371399a7dd8e26d36f85049dc446e923f79c",
     "contracts/openapi/contracts.json": "9bef85742bdae40b27bf22d4e2680d45052a6de2810d22e35c7372ad45610c6d",
-    "contracts/openapi/fragments/FS-00.openapi.json": "62812628f84a7fb22a26034bdf42e2291faaf195029a69cdcd9bf57cb8f3bd88",
-    "contracts/openapi/openapi.json": "1c7135c67053c447a80284df29f52490856d7e86b96bcd0bc3b1a7fd98834c5d",
-    "contracts/openapi/openapi.yaml": "1c7135c67053c447a80284df29f52490856d7e86b96bcd0bc3b1a7fd98834c5d"
+    "contracts/openapi/fragments/FS-00.openapi.json": "b1798275aad9b075fec0d2fe991a9b4944afd7aa29ca52a98ba9db59469a5e19",
+    "contracts/openapi/openapi.json": "90d1ef6dcab1a54d4e4d3e15c8eb35e5ea557c88857385ed6392b76a0b57c6ec",
+    "contracts/openapi/openapi.yaml": "90d1ef6dcab1a54d4e4d3e15c8eb35e5ea557c88857385ed6392b76a0b57c6ec"
   },
   "plan_version": "1.5.0",
   "route_scope": {
     "framework_operational": 4,
     "public": 8,
-    "scoped": 99,
+    "scoped": 118,
     "self_service": 6,
-    "unresolved": [
-      "POST /api/v1/auth/invitations/{token}/accept",
-      "GET /api/v1/auth/me",
-      "GET /api/v1/me/memberships"
-    ]
+    "unresolved": []
   },
   "skeleton_by_feature_set": {
-    "FS-00": 25,
+    "FS-00": 9,
     "FS-01": 59,
     "FS-02": 64,
     "FS-03": 29,

@@ -1,36 +1,5 @@
 $ env C0_STRICT_ROUTE_SCOPE=1 python3 -m pytest app/tests/contracts/platform/test_route_scope_coverage.py -q
 
-F...                                                                     [100%]
-=================================== FAILURES ===================================
-_______________________ test_route_scope_coverage_report _______________________
+....                                                                     [100%]
 
-    def test_route_scope_coverage_report() -> None:
-        rows = utils.route_matrix()
-        report = _report(rows)
-        print(f"route-scope coverage: {report}")
-        assert report["duplicates"] == [], report
-        assert report["unknown_scopes"] == [], report
-        assert report["multi_scope"] == [], report
-        assert report["scoped_without_scope"] == [], report
-        # Every unresolved (non-framework) route must be a known, owner-assigned shortfall.
-        assert set(report["unresolved"]) == set(utils.KNOWN_UNSCOPED_ROUTES), report
-        for key, expected in utils.KNOWN_UNSCOPED_ROUTES.items():
-            assert expected.get("owner") and expected.get("reason"), key
-        if os.environ.get("C0_STRICT_ROUTE_SCOPE") == "1":
->           assert report["unresolved"] == [], (
-                "C0 strict route-scope coverage fails: unmapped routes "
-                f"{report['unresolved']} (owners: { {k: v['owner'] for k, v in utils.KNOWN_UNSCOPED_ROUTES.items()} })"
-            )
-E           AssertionError: C0 strict route-scope coverage fails: unmapped routes ['GET /api/v1/auth/me', 'GET /api/v1/me/memberships', 'POST /api/v1/auth/invitations/{token}/accept'] (owners: {'GET /api/v1/me/memberships': 'platform tenants router (task-39) + Lead (design/permissions.json allowlist)', 'GET /api/v1/auth/me': 'FS-00 auth router (task-38)', 'POST /api/v1/auth/invitations/{token}/accept': 'FS-00 auth router (task-38)'})
-E           assert ['GET /api/v1...oken}/accept'] == []
-E             
-E             Left contains 3 more items, first extra item: 'GET /api/v1/auth/me'
-E             Use -v to get more diff
-
-app/tests/contracts/platform/test_route_scope_coverage.py:50: AssertionError
------------------------------ Captured stdout call -----------------------------
-route-scope coverage: {'mounted_operations': 120, 'scoped': 102, 'public': 8, 'self_service': 6, 'framework': 4, 'unknown_scopes': [], 'multi_scope': [], 'duplicates': [], 'unresolved': ['GET /api/v1/auth/me', 'GET /api/v1/me/memberships', 'POST /api/v1/auth/invitations/{token}/accept'], 'scoped_without_scope': []}
-=========================== short test summary info ============================
-FAILED app/tests/contracts/platform/test_route_scope_coverage.py::test_route_scope_coverage_report
-
-exit_code=1
+exit_code=0

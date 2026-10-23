@@ -1,0 +1,36 @@
+== FS-00 exit gate attempt 3 2026-10-23T13:41:33Z ==
+RC=0 :: pytest app/tests/integration/platform -q
+.............................                                            [100%]
+RC=0 :: pytest app/tests/contracts/test_fs00_provider_contract.py -q
+.....                                                                    [100%]
+RC=0 :: pytest app/tests/invariants/test_rls_tenant_isolation.py app/tests/invariants/test_append_only_privileges.py -q
+.........s                                                               [100%]
+RC=0 :: pytest app/tests/integration/finance_port/test_journal_intent_read_api.py -q
+....                                                                     [100%]
+RC=0 :: pytest app/tests/invariants/test_mt_tenant_user_isolation.py -q
+.....                                                                    [100%]
+RC=0 :: pytest app/tests/integration/platform/test_mt_auth_flows.py -q
+......                                                                   [100%]
+RC=0 :: pytest app/tests/integration/platform/test_mt_invitations_sessions.py -q
+.....                                                                    [100%]
+RC=0 :: pytest app/tests/invariants/test_mt_identity_rules.py -q
+..........                                                               [100%]
+RC=0 :: python tools/feature_sets.py permissions
+  allowlists: public=9, self-service=6; route-guard test: app/tests/security/test_route_scope_coverage.py
+  spec reconciliation: 16 specs, 791 endpoint rows scanned, 188 catalogue scope references, 0 unknown, 67 unreferenced warning(s)
+RC=0 :: pytest app/tests/security/test_route_scope_coverage.py -q
+....                                                                     [100%]
+RC=0 :: pytest app/tests/integration/platform/test_rbac_roles.py -q
+.....                                                                    [100%]
+RC=0 :: pytest app/tests/integration/platform/test_sod_policy.py -q
+....                                                                     [100%]
+RC=0 :: pytest app/tests/integration/platform/test_sso_oidc_flow.py -q
+...                                                                      [100%]
+RC=0 :: pytest app/tests/integration/platform/test_sso_tenant_isolation.py -q
+...                                                                      [100%]
+RC=0 :: pytest app/tests/integration/platform/test_sso_group_mapping.py -q
+...                                                                      [100%]
+---- full suite
+FULL_RC=0
+........................................................................ [ 96%]
+...........................                                              [100%]

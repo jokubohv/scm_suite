@@ -38,6 +38,8 @@ This file is the shared briefing for each window.
 7. **S0-07** seed/reference bootstrap: SYSTEM_TENANT, permission catalogue + 7 role templates from `design/permissions.json`, currency/UoM/transaction types/statuses/flags/sequences; idempotent loader — after S0-03/S0-04.
 
 **S0-GATE:** `python tools/check_parallel_plan.py --s0` (execution-ready YES) + all S0 exit checks from `design/parallel-plan.json`; record evidence under `verification/evidence/S0/`.
+| 2 | 2026-10-23 09:14 | in progress | **FS-00 verified / 0A deployed**: C0 contract freeze recorded (`verification/evidence/C0/C0-FREEZE.md`), 17-command exit gate green (`verification/evidence/FS00-EXIT/attempt-3.log`), `deployment-state.dev.json` FS-00 verified; stack rebuilt/recovered; seed SQLAlchemy repo done; B2 started (FS-01 ∥ FS-02 build) | C0 gates: contract lint/generate/route-scope strict PASS; provider contract tests PASS; full suite green; Docker 7/7 healthy; `docker compose run api alembic upgrade head` PASS | FS-01/FS-02 in build (spec-wave0a/spec-wave0b); then C1 freeze + 0B deploy; FS-02 deploy after FS-01 |
+
 
 ## Suggested agent assignment (reuse inactive teammates; 8-member cap)
 

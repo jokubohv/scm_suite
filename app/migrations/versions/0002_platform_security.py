@@ -68,6 +68,11 @@ def upgrade() -> None:
     op.execute("UPDATE platform.app_user SET identity_id = gen_random_uuid() WHERE identity_id IS NULL")
     op.alter_column("app_user", "identity_id", nullable=False, schema="platform")
     op.alter_column("app_user", "membership_status", nullable=False, server_default=sa.text("'INVITED'"), schema="platform")
+    # DM-PLAT-12/13: membership/status/token-version integrity (model metadata declares these; the
+    # expand-contract revision must add them to the legacy table too).
+    op.create_check_constraint("app_user_status", "app_user", "status IN ('ACTIVE','INACTIVE')", schema="platform")
+    op.create_check_constraint("app_user_membership_status", "app_user", "membership_status IN ('INVITED','ACTIVE','SUSPENDED')", schema="platform")
+    op.create_check_constraint("app_user_token_version", "app_user", "token_version >= 0", schema="platform")
     op.create_foreign_key("fk_app_user_identity", "app_user", "user_identity", ["identity_id"], ["id"], source_schema="platform", referent_schema="platform")
     op.drop_constraint("uq_app_user_email", "app_user", type_="unique", schema="platform")
     op.create_unique_constraint("uq_app_user_identity", "app_user", ["tenant_id", "identity_id"], schema="platform")
@@ -75,6 +80,15 @@ def upgrade() -> None:
     op.create_foreign_key("fk_app_user_invited_by", "app_user", "app_user", ["tenant_id", "invited_by"], ["tenant_id", "id"], source_schema="platform", referent_schema="platform")
     # 3. Invitations/sessions + Δ-SSO federation tables.
     create_tables(op, tuple(table for table in SECURITY_TABLES if table.name not in {"user_identity", "audit_event", "finance_journal_intent"}))
+    # DM-PLAT-14/Δ-MT: at most one PENDING invitation per tenant+email.
+    op.create_index(
+        "uq_tenant_invitation_pending_email",
+        "tenant_invitation",
+        ["tenant_id", "email"],
+        unique=True,
+        schema="platform",
+        postgresql_where=sa.text("status = 'PENDING'"),
+    )
     # 4. Audit trail (append-only, monthly partitions) + finance journal intents (append-only).
     create_partitioned(op, models.audit_event)
     create_table(op, models.finance_journal_intent)
@@ -90,6 +104,9 @@ def downgrade() -> None:
     disable_tenant_rls(op, RLS_TABLES)
     op.execute('DROP TABLE IF EXISTS platform.audit_event CASCADE')
     drop_table(op, models.finance_journal_intent)
+    op.drop_index("uq_tenant_invitation_pending_email", table_name="tenant_invitation", schema="platform")
+    for check in ("app_user_token_version", "app_user_membership_status", "app_user_status"):
+        op.drop_constraint(check, "app_user", type_="check", schema="platform")
     op.drop_constraint("fk_app_user_invited_by", "app_user", type_="foreignkey", schema="platform")
     op.drop_index("ix_app_user_membership_status", table_name="app_user", schema="platform")
     op.drop_constraint("uq_app_user_identity", "app_user", type_="unique", schema="platform")

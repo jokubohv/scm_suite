@@ -1,0 +1,8 @@
+port 28000 (compose API):
+/healthz 200
+/api/v1/openapi.json 200
+/api/v1/auth/providers 200
+/api/v1/admin/permissions 401
+/api/v1/me 401
+port 8000 (host process, unrelated project):
+/Users/jokubo/Documents/hive/serebo/apps/api/.venv/bin/python -m uvicorn serebo.main:app --app-dir /Users/jokubo/Documents/hive/serebo/apps/api/src --log-config

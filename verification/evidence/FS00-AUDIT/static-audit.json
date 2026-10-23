@@ -1,0 +1,614 @@
+{
+ "spec_rows": 102,
+ "expected_ops": 102,
+ "implemented_ops": 106,
+ "missing_ops": [
+  [
+   "GET",
+   "/api/v1/admin/job-runs"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/job-runs/{}"
+  ],
+  [
+   "GET",
+   "/api/v1/audit-events"
+  ],
+  [
+   "GET",
+   "/api/v1/custom-field-values"
+  ],
+  [
+   "GET",
+   "/api/v1/finance/period-status"
+  ],
+  [
+   "GET",
+   "/api/v1/order/demand/open"
+  ],
+  [
+   "GET",
+   "/api/v1/reference/exchange-rates"
+  ],
+  [
+   "GET",
+   "/internal/deps"
+  ],
+  [
+   "GET",
+   "/openapi.json"
+  ],
+  [
+   "PATCH",
+   "/api/v1/admin/approval-definitions/{}"
+  ],
+  [
+   "PATCH",
+   "/api/v1/admin/number-sequences/{}"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/api-keys/{}/revoke"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/job-runs/{}/cancel"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/jobs/{}/run"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/users"
+  ],
+  [
+   "POST",
+   "/api/v1/platform/tenants/{}/bootstrap-admin"
+  ],
+  [
+   "POST",
+   "/api/v1/platform/tenants/{}/offboard"
+  ],
+  [
+   "POST",
+   "/internal/outbox/replay"
+  ],
+  [
+   "PUT",
+   "/api/v1/admin/custom-field-values"
+  ],
+  [
+   "PUT",
+   "/api/v1/admin/users/{}/data-scopes"
+  ],
+  [
+   "PUT",
+   "/internal/finance/exchange-rates"
+  ],
+  [
+   "PUT",
+   "/internal/finance/fiscal-periods"
+  ],
+  [
+   "PUT",
+   "/internal/order-boundary/demand-doubles"
+  ]
+ ],
+ "extra_ops": [
+  [
+   "DELETE",
+   "/api/v1/admin/api-keys/{}"
+  ],
+  [
+   "DELETE",
+   "/api/v1/admin/custom-fields/{}"
+  ],
+  [
+   "DELETE",
+   "/api/v1/attachments/{}"
+  ],
+  [
+   "DELETE",
+   "/api/v1/document-links/{}"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/audit-events"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/currencies"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/currencies/{}"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/custom-fields/{}"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/fiscal-periods"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/flags"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/flags/{}"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/jobs/{}/runs"
+  ],
+  [
+   "GET",
+   "/api/v1/admin/sequences"
+  ],
+  [
+   "GET",
+   "/api/v1/approvals/{}/status"
+  ],
+  [
+   "GET",
+   "/api/v1/document-links/{}"
+  ],
+  [
+   "GET",
+   "/api/v1/internal/outbox/stats"
+  ],
+  [
+   "GET",
+   "/api/v1/me/memberships"
+  ],
+  [
+   "GET",
+   "/api/v1/platform/tenants/{}/memberships"
+  ],
+  [
+   "PATCH",
+   "/api/v1/admin/currencies/{}"
+  ],
+  [
+   "PATCH",
+   "/api/v1/admin/flags/{}"
+  ],
+  [
+   "PATCH",
+   "/api/v1/admin/tenant-settings"
+  ],
+  [
+   "PATCH",
+   "/api/v1/admin/tenant-settings/{}/{}"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/api-keys/{}/rotate"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/currencies"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/fiscal-periods"
+  ],
+  [
+   "POST",
+   "/api/v1/admin/invitations/{}/resend"
+  ],
+  [
+   "POST",
+   "/api/v1/document-links"
+  ]
+ ],
+ "missing_scope_routes": [
+  "GET /api/v1/me/memberships",
+  "GET /api/v1/platform/tenants",
+  "GET /api/v1/platform/tenants/{}",
+  "GET /api/v1/platform/tenants/{}/memberships",
+  "GET /healthz",
+  "GET /readyz",
+  "PATCH /api/v1/platform/tenants/{}",
+  "POST /api/v1/platform/tenants",
+  "POST /api/v1/platform/tenants/{}/reactivate",
+  "POST /api/v1/platform/tenants/{}/suspend"
+ ],
+ "tables": {
+  "spec": 34,
+  "models": 34,
+  "migration_names": 28,
+  "table_gap": [],
+  "model_extra": []
+ },
+ "migrations": {
+  "files": 3,
+  "revisions": [
+   "0001_platform_core",
+   "0002_platform_security",
+   "0003_platform_events"
+  ],
+  "heads": [
+   "0003_platform_events"
+  ]
+ },
+ "events": {
+  "expected": 33,
+  "missing": []
+ },
+ "jobs": {
+  "expected": 6,
+  "expected_names": [
+   "platform.health.reconcile",
+   "platform.jobs.scheduler",
+   "platform.outbox.relay",
+   "platform.partition.maintenance",
+   "platform.retention.purge",
+   "platform.sso.health.monitor"
+  ],
+  "missing": [
+   "platform.health.reconcile",
+   "platform.partition.maintenance"
+  ]
+ },
+ "exit_checks": [
+  {
+   "command": "docker compose run --rm api alembic upgrade head",
+   "status": "BLOCKED_DB"
+  },
+  {
+   "command": "pytest app/tests/integration/platform -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform"
+   ],
+   "tests": [
+    "app/tests/integration/platform"
+   ]
+  },
+  {
+   "command": "pytest app/tests/contracts/test_fs00_provider_contract.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/contracts/test_fs00_provider_contract.py"
+   ],
+   "tests": [
+    "app/tests/contracts/test_fs00_provider_contract.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/invariants/test_rls_tenant_isolation.py app/tests/invariants/test_append_only_privileges.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/invariants/test_rls_tenant_isolation.py",
+    "app/tests/invariants/test_append_only_privileges.py"
+   ],
+   "tests": [
+    "app/tests/invariants/test_rls_tenant_isolation.py",
+    "app/tests/invariants/test_append_only_privileges.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/finance_port/test_journal_intent_read_api.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/finance_port/test_journal_intent_read_api.py"
+   ],
+   "tests": [
+    "app/tests/integration/finance_port/test_journal_intent_read_api.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/invariants/test_mt_tenant_user_isolation.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/invariants/test_mt_tenant_user_isolation.py"
+   ],
+   "tests": [
+    "app/tests/invariants/test_mt_tenant_user_isolation.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/platform/test_mt_auth_flows.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform/test_mt_auth_flows.py"
+   ],
+   "tests": [
+    "app/tests/integration/platform/test_mt_auth_flows.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/platform/test_mt_invitations_sessions.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform/test_mt_invitations_sessions.py"
+   ],
+   "tests": [
+    "app/tests/integration/platform/test_mt_invitations_sessions.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/invariants/test_mt_identity_rules.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/invariants/test_mt_identity_rules.py"
+   ],
+   "tests": [
+    "app/tests/invariants/test_mt_identity_rules.py"
+   ]
+  },
+  {
+   "command": "python tools/feature_sets.py permissions",
+   "status": "PASS_STATIC",
+   "output": [
+    "WARN W-PERM-SERVICE-SCOPES: service_scopes lists 1 of the 13 service-only catalogue scopes (job/task scopes may be system-internal only)",
+    "WARN W-PERM-UNREFERENCED: 67 catalogue scope(s) are not referenced by any spec endpoint auth scope: atp.rebuild, consigned.agreement.manage, consigned.ownership.transfer, costing.cost.view, costing.landedcost.manage, costing.method.manage, costing.read, costing.recalculate, costing.revaluation.approve, costing.rollup, counts.snapshot.refresh, coupons.validate, customerpart.manage, demand_plan.create, demand_plan_line.override, inventory.adjustment.approve, inventory.commitment.manage, inventory.cost.view, inventory.receipt.post, inventory.worksheet.approve, ledger.commit_orders.schedule, ledger.negative_inventory.scan, manufacturing.bom.manage, manufacturing.build.post, manufacturing.wip.post, manufacturing.wo.create, manufacturing.wo.release, mfg.scheduling.run, order_items.read, planning.allocation.run ..."
+   ]
+  },
+  {
+   "command": "pytest app/tests/security/test_route_scope_coverage.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/security/test_route_scope_coverage.py"
+   ],
+   "tests": [
+    "app/tests/security/test_route_scope_coverage.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/platform/test_rbac_roles.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform/test_rbac_roles.py"
+   ],
+   "tests": [
+    "app/tests/integration/platform/test_rbac_roles.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/platform/test_sod_policy.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform/test_sod_policy.py"
+   ],
+   "tests": [
+    "app/tests/integration/platform/test_sod_policy.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/platform/test_sso_oidc_flow.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform/test_sso_oidc_flow.py"
+   ],
+   "tests": [
+    "app/tests/integration/platform/test_sso_oidc_flow.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/platform/test_sso_tenant_isolation.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform/test_sso_tenant_isolation.py"
+   ],
+   "tests": [
+    "app/tests/integration/platform/test_sso_tenant_isolation.py"
+   ]
+  },
+  {
+   "command": "pytest app/tests/integration/platform/test_sso_group_mapping.py -q",
+   "status": "FAIL_MISSING_TEST",
+   "missing": [
+    "app/tests/integration/platform/test_sso_group_mapping.py"
+   ],
+   "tests": [
+    "app/tests/integration/platform/test_sso_group_mapping.py"
+   ]
+  },
+  {
+   "command": "python tools/feature_sets.py record --set FS-00 --env $ENV --status verified",
+   "status": "BLOCKED_GATE"
+  }
+ ],
+ "security": {
+  "scopes": 255,
+  "assignable": 241,
+  "service_only": 13,
+  "platform_only": 1,
+  "roles": 7,
+  "sod_pairs": 14
+ },
+ "test_existence": {
+  "app/tests/invariants/test_rls_tenant_isolation.py": false,
+  "app/tests/invariants/test_append_only_privileges.py": false,
+  "app/tests/invariants/test_mt_tenant_user_isolation.py": false,
+  "app/tests/invariants/test_mt_identity_rules.py": false,
+  "app/tests/security/test_route_scope_coverage.py": false,
+  "app/tests/integration/platform/test_mt_auth_flows.py": false,
+  "app/tests/integration/platform/test_mt_invitations_sessions.py": false,
+  "app/tests/integration/platform/test_rbac_roles.py": false,
+  "app/tests/integration/platform/test_sod_policy.py": false,
+  "app/tests/integration/platform/test_sso_oidc_flow.py": false,
+  "app/tests/integration/platform/test_sso_tenant_isolation.py": false,
+  "app/tests/integration/platform/test_sso_group_mapping.py": false,
+  "app/tests/integration/finance_port/test_journal_intent_read_api.py": false,
+  "app/tests/contracts/test_fs00_provider_contract.py": false
+ },
+ "actual_test_count": 61,
+ "db": "UP",
+ "missing_event_emissions": {
+  "count": 21,
+  "names": [
+   "auth.login.failed",
+   "auth.tenant_switched",
+   "document.approved",
+   "document.closed",
+   "document.rejected",
+   "document.reversed",
+   "document.submitted",
+   "finance.journal_intent.recorded",
+   "membership.activated",
+   "membership.roles.changed",
+   "membership.suspended",
+   "order.demand.changed",
+   "platform.audit.recorded",
+   "role.cloned",
+   "role.permissions.changed",
+   "sod.violation.blocked",
+   "sso.connection.disabled",
+   "sso.connection.error",
+   "sso.login.failed",
+   "user.invited",
+   "user.session.revoked"
+  ]
+ },
+ "missing_classified": [
+  {
+   "op": "GET /api/v1/admin/job-runs",
+   "alias_candidates": [
+    "GET /api/v1/admin/audit-events (similarity 0.71)",
+    "GET /api/v1/admin/currencies (similarity 0.74)"
+   ]
+  },
+  {
+   "op": "GET /api/v1/admin/job-runs/{}",
+   "alias_candidates": [
+    "GET /api/v1/admin/audit-events (similarity 0.67)",
+    "GET /api/v1/admin/currencies (similarity 0.69)"
+   ]
+  },
+  {
+   "op": "GET /api/v1/audit-events",
+   "alias_candidates": [
+    "GET /api/v1/admin/audit-events (similarity 0.87)",
+    "GET /api/v1/admin/currencies (similarity 0.59)"
+   ]
+  },
+  {
+   "op": "GET /api/v1/custom-field-values",
+   "alias_candidates": [
+    "GET /api/v1/admin/audit-events (similarity 0.38)",
+    "GET /api/v1/admin/currencies (similarity 0.51)"
+   ]
+  },
+  {
+   "op": "GET /api/v1/finance/period-status",
+   "alias_candidates": [
+    "GET /api/v1/admin/audit-events (similarity 0.47)",
+    "GET /api/v1/admin/currencies (similarity 0.53)"
+   ]
+  },
+  {
+   "op": "GET /api/v1/order/demand/open",
+   "alias_candidates": [
+    "GET /api/v1/admin/audit-events (similarity 0.47)",
+    "GET /api/v1/admin/currencies (similarity 0.49)"
+   ]
+  },
+  {
+   "op": "GET /api/v1/reference/exchange-rates",
+   "alias_candidates": [
+    "GET /api/v1/admin/audit-events (similarity 0.45)",
+    "GET /api/v1/admin/currencies (similarity 0.54)"
+   ]
+  },
+  {
+   "op": "PATCH /api/v1/admin/approval-definitions/{}",
+   "alias_candidates": [
+    "PATCH /api/v1/admin/currencies/{} (similarity 0.66)",
+    "PATCH /api/v1/admin/flags/{} (similarity 0.64)"
+   ]
+  },
+  {
+   "op": "PATCH /api/v1/admin/number-sequences/{}",
+   "alias_candidates": [
+    "PATCH /api/v1/admin/currencies/{} (similarity 0.80)",
+    "PATCH /api/v1/admin/flags/{} (similarity 0.65)"
+   ]
+  },
+  {
+   "op": "POST /api/v1/admin/api-keys/{}/revoke",
+   "alias_candidates": [
+    "POST /api/v1/admin/api-keys/{}/rotate (similarity 0.88)",
+    "POST /api/v1/admin/currencies (similarity 0.61)"
+   ]
+  },
+  {
+   "op": "POST /api/v1/admin/job-runs/{}/cancel",
+   "alias_candidates": [
+    "POST /api/v1/admin/api-keys/{}/rotate (similarity 0.69)",
+    "POST /api/v1/admin/currencies (similarity 0.64)"
+   ]
+  },
+  {
+   "op": "POST /api/v1/admin/jobs/{}/run",
+   "alias_candidates": [
+    "POST /api/v1/admin/api-keys/{}/rotate (similarity 0.70)",
+    "POST /api/v1/admin/currencies (similarity 0.61)"
+   ]
+  },
+  {
+   "op": "POST /api/v1/admin/users",
+   "alias_candidates": [
+    "POST /api/v1/admin/api-keys/{}/rotate (similarity 0.63)",
+    "POST /api/v1/admin/currencies (similarity 0.74)"
+   ]
+  },
+  {
+   "op": "POST /api/v1/platform/tenants/{}/bootstrap-admin",
+   "alias_candidates": [
+    "POST /api/v1/admin/api-keys/{}/rotate (similarity 0.48)",
+    "POST /api/v1/admin/currencies (similarity 0.39)"
+   ]
+  },
+  {
+   "op": "POST /api/v1/platform/tenants/{}/offboard",
+   "alias_candidates": [
+    "POST /api/v1/admin/api-keys/{}/rotate (similarity 0.50)",
+    "POST /api/v1/admin/currencies (similarity 0.43)"
+   ]
+  },
+  {
+   "op": "POST /internal/outbox/replay",
+   "alias_candidates": []
+  },
+  {
+   "op": "PUT /api/v1/admin/custom-field-values",
+   "alias_candidates": []
+  },
+  {
+   "op": "PUT /api/v1/admin/users/{}/data-scopes",
+   "alias_candidates": []
+  },
+  {
+   "op": "PUT /internal/finance/exchange-rates",
+   "alias_candidates": []
+  },
+  {
+   "op": "PUT /internal/finance/fiscal-periods",
+   "alias_candidates": []
+  },
+  {
+   "op": "PUT /internal/order-boundary/demand-doubles",
+   "alias_candidates": []
+  }
+ ],
+ "real_missing": 21,
+ "real_extra": 27,
+ "scope_missing": [
+  "GET /api/v1/me/memberships",
+  "GET /api/v1/platform/tenants",
+  "GET /api/v1/platform/tenants/{}",
+  "GET /api/v1/platform/tenants/{}/memberships",
+  "PATCH /api/v1/platform/tenants/{}",
+  "POST /api/v1/platform/tenants",
+  "POST /api/v1/platform/tenants/{}/reactivate",
+  "POST /api/v1/platform/tenants/{}/suspend"
+ ],
+ "scope_missing_count": 8
+}

@@ -1,15 +1,27 @@
 $ git status --short
 
- M app/seed/cli.py
- M app/seed/repository.py
- M app/seed/tests/test_cli.py
- M app/seed/tests/test_repository.py
+ M app/api/main.py
+ M app/contracts/lint.py
+ M app/contracts/platform/openapi.fragment.json
+ M app/migrations/versions/0002_platform_security.py
+ M app/tests/contracts/base/schema_validation.py
+D  app/tests/contracts/platform/test_fs00_provider_contract.py
+ M contracts/README.md
+ M contracts/openapi/fragments/FS-00.openapi.json
+ M contracts/openapi/openapi.json
+ M contracts/openapi/openapi.yaml
+ M verification/evidence/C0/03-lint.log
+ M verification/evidence/C0/05-route-scope-tests.log
+ M verification/evidence/C0/06-route-scope-strict.log
+ M verification/evidence/C0/07-contract-diff.log
+ M verification/evidence/C0/08-counts.log
+ M verification/evidence/C0/09-lint-json.log
  M verification/evidence/C0/10-git-head.log
  M verification/evidence/C0/11-working-tree.log
-?? app/seed/tests/conftest.py
-?? app/seed/tests/test_cli_sqlalchemy_live.py
-?? app/seed/tests/test_sqlalchemy_live.py
+ M verification/evidence/C0/12-artifact-sha256.log
+ M verification/evidence/C0/counts.json
 ?? verification/evidence/FS00-AUDIT/
+?? verification/evidence/FS00-EXIT/
 ?? verification/evidence/W2/
 
 exit_code=0

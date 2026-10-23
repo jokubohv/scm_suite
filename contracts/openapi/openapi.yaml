@@ -409,46 +409,127 @@
     },
     "/api/v1/admin/api-keys/{key_id}/revoke": {
       "post": {
+        "description": "Canonical FS-00 §6 revoke path (``{reason}``) — alias of DELETE, idempotent and audited.\n\nThe durable idempotency ledger makes retries replay the stored key state instead of re-revoking or\nproducing a different response; a different payload under the same key is rejected (409).",
         "operationId": "fs00_post_api-v1-admin-api-keys-key-id-revoke",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key_id",
+            "required": true,
+            "schema": {
+              "title": "Key Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "reason": {
+                    "maxLength": 500,
+                    "minLength": 3,
+                    "title": "Reason",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reason"
+                ],
+                "title": "ApiKeyRevokeIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Revoke Api Key Alias Api V1 Admin Api Keys  Key Id  Revoke Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Revoke key",
+        "summary": "Revoke Api Key Alias",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-api-keys"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
-        "x-idempotency": "required",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.admin"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/api-keys/{key_id}/rotate": {
@@ -814,44 +895,181 @@
     "/api/v1/admin/approval-definitions/{definition_id}": {
       "patch": {
         "operationId": "fs00_patch_api-v1-admin-approval-definitions-definition-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "definition_id",
+            "required": true,
+            "schema": {
+              "title": "Definition Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "If-Match",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "condition": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": true,
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Condition"
+                  },
+                  "is_enabled": {
+                    "anyOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Is Enabled"
+                  },
+                  "priority": {
+                    "anyOf": [
+                      {
+                        "maximum": 100000.0,
+                        "minimum": 0.0,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Priority"
+                  },
+                  "steps": {
+                    "anyOf": [
+                      {
+                        "items": {},
+                        "type": "array"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Steps"
+                  }
+                },
+                "title": "ApprovalDefinitionPatch",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Patch Approval Definition Api V1 Admin Approval Definitions  Definition Id  Patch",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Edit rule",
+        "summary": "Patch Approval Definition",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.approval.definition.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/audit-events": {
@@ -1526,46 +1744,149 @@
     },
     "/api/v1/admin/custom-field-values": {
       "put": {
+        "description": "Validate + upsert typed custom-field values for one entity (FS-00 §6 contract).",
         "operationId": "fs00_put_api-v1-admin-custom-field-values",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "entity_id": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "title": "Entity Id",
+                    "type": "string"
+                  },
+                  "entity_type": {
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "title": "Entity Type",
+                    "type": "string"
+                  },
+                  "values": {
+                    "additionalProperties": true,
+                    "minProperties": 1,
+                    "title": "Values",
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "entity_type",
+                  "entity_id",
+                  "values"
+                ],
+                "title": "CustomFieldValuesPut",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Put Custom Field Values Api V1 Admin Custom Field Values Put",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Upsert values with validation",
+        "summary": "Put Custom Field Values",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
-        "x-idempotency": "required",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.customfield.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/custom-fields": {
@@ -3824,131 +4145,427 @@
     "/api/v1/admin/job-runs": {
       "get": {
         "operationId": "fs00_get_api-v1-admin-job-runs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "job_definition_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Job Definition Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Job Runs List Api V1 Admin Job Runs Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "List runs",
+        "summary": "Job Runs List",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-boundary"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.job.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/job-runs/{run_id}": {
       "get": {
         "operationId": "fs00_get_api-v1-admin-job-runs-run-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Job Run Detail Api V1 Admin Job Runs  Run Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Run detail",
+        "summary": "Job Run Detail",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-boundary"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.job.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/job-runs/{run_id}/cancel": {
       "post": {
         "operationId": "fs00_post_api-v1-admin-job-runs-run-id-cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "reason": {
+                    "maxLength": 500,
+                    "minLength": 3,
+                    "title": "Reason",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reason"
+                ],
+                "title": "CancelRunIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Job Run Cancel Api V1 Admin Job Runs  Run Id  Cancel Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Cancel queued/running run",
+        "summary": "Job Run Cancel",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-boundary"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
-        "x-idempotency": "required",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.job.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/jobs": {
@@ -4159,45 +4776,158 @@
     "/api/v1/admin/jobs/{name}/run": {
       "post": {
         "operationId": "fs00_post_api-v1-admin-jobs-name-run",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
           },
-          "default": {
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "properties": {
+                      "params": {
+                        "anyOf": [
+                          {
+                            "additionalProperties": true,
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "title": "Params"
+                      },
+                      "run_key": {
+                        "anyOf": [
+                          {
+                            "maxLength": 200,
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ],
+                        "title": "Run Key"
+                      }
+                    },
+                    "title": "JobRunIn",
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Run Job Api V1 Admin Jobs  Name  Run Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Trigger job run",
+        "summary": "Run Job",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-boundary"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
-        "x-idempotency": "required",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.job.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/number-sequences": {
@@ -4325,44 +5055,194 @@
     "/api/v1/admin/number-sequences/{sequence_id}": {
       "patch": {
         "operationId": "fs00_patch_api-v1-admin-number-sequences-sequence-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sequence_id",
+            "required": true,
+            "schema": {
+              "title": "Sequence Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "If-Match",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "If-Match"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "gap_policy": {
+                    "anyOf": [
+                      {
+                        "maxLength": 16,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Gap Policy"
+                  },
+                  "next_value": {
+                    "anyOf": [
+                      {
+                        "minimum": 1.0,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Next Value"
+                  },
+                  "padding": {
+                    "anyOf": [
+                      {
+                        "maximum": 12.0,
+                        "minimum": 1.0,
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Padding"
+                  },
+                  "prefix": {
+                    "anyOf": [
+                      {
+                        "maxLength": 32,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Prefix"
+                  },
+                  "reset_policy": {
+                    "anyOf": [
+                      {
+                        "maxLength": 16,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Reset Policy"
+                  }
+                },
+                "title": "NumberSequencePatch",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Patch Number Sequence Api V1 Admin Number Sequences  Sequence Id  Patch",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Adjust prefix/padding/reset/gap policy (never decrease next_value)",
+        "summary": "Patch Number Sequence",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.sequence.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/permissions": {
@@ -8538,46 +9418,168 @@
     },
     "/api/v1/admin/users/{user_id}/data-scopes": {
       "put": {
+        "description": "Replace the user's data-scope rows (tenant-scoped; user from another tenant → 404).",
         "operationId": "fs00_put_api-v1-admin-users-user-id-data-scopes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "title": "User Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "scopes": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "include_descendants": {
+                          "default": false,
+                          "title": "Include Descendants",
+                          "type": "boolean"
+                        },
+                        "scope_type": {
+                          "maxLength": 32,
+                          "minLength": 1,
+                          "title": "Scope Type",
+                          "type": "string"
+                        },
+                        "scope_value": {
+                          "maxLength": 200,
+                          "minLength": 1,
+                          "title": "Scope Value",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "scope_type",
+                        "scope_value"
+                      ],
+                      "title": "DataScopeIn",
+                      "type": "object"
+                    },
+                    "maxItems": 500,
+                    "title": "Scopes",
+                    "type": "array"
+                  }
+                },
+                "title": "DataScopesPut",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Replace User Data Scopes Api V1 Admin Users  User Id  Data Scopes Put",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Replace data-scope rows",
+        "summary": "Replace User Data Scopes",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
-        "x-idempotency": "required",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.data_scope.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/admin/users/{user_id}/effective-permissions": {
@@ -11543,45 +12545,210 @@
     },
     "/api/v1/audit-events": {
       "get": {
+        "description": "Canonical audit read alias (tenant-scoped; ``/admin/audit-events`` remains for compatibility).",
         "operationId": "fs00_get_api-v1-audit-events",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "resource_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Resource Type"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resource_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Resource Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "actor_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Actor Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Query Audit Events Api V1 Audit Events Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Query audit trail",
+        "summary": "Query Audit Events",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.audit.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/auth/login": {
@@ -16865,44 +18032,116 @@
     "/api/v1/custom-field-values": {
       "get": {
         "operationId": "fs00_get_api-v1-custom-field-values",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "entity_type",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "minLength": 1,
+              "title": "Entity Type",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "entity_id",
+            "required": true,
+            "schema": {
+              "maxLength": 64,
+              "minLength": 1,
+              "title": "Entity Id",
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Read Custom Field Values Api V1 Custom Field Values Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Read values for an entity",
+        "summary": "Read Custom Field Values",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.customfield.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/customer-groups": {
@@ -19429,44 +20668,105 @@
     "/api/v1/finance/period-status": {
       "get": {
         "operationId": "fs00_get_api-v1-finance-period-status",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Date",
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Finance Period Status Api V1 Finance Period Status Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "FinancePort read: status for a date",
+        "summary": "Finance Period Status",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-boundary"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
+        "x-contracts": [
           "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.finance.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/fulfillments": {
@@ -20032,6 +21332,462 @@
         ],
         "x-skeleton": true,
         "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+      }
+    },
+    "/api/v1/internal/finance/exchange-rates": {
+      "put": {
+        "operationId": "sync_exchange_rates_api_v1_internal_finance_exchange_rates_put",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "rates": {
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "maxItems": 1000,
+                    "title": "Rates",
+                    "type": "array"
+                  }
+                },
+                "title": "ExchangeRatesIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Sync Exchange Rates Api V1 Internal Finance Exchange Rates Put",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Sync Exchange Rates",
+        "tags": [
+          "platform-boundary"
+        ],
+        "x-contracts": [
+          "platform.finance",
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.finance.sync"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
+    "/api/v1/internal/order-boundary/demand-doubles": {
+      "put": {
+        "operationId": "replace_demand_doubles_api_v1_internal_order_boundary_demand_doubles_put",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "fixture_version": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "title": "Fixture Version",
+                    "type": "string"
+                  },
+                  "rows": {
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "maxItems": 5000,
+                    "title": "Rows",
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "fixture_version"
+                ],
+                "title": "DemandDoublesIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Replace Demand Doubles Api V1 Internal Order Boundary Demand Doubles Put",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Replace Demand Doubles",
+        "tags": [
+          "platform-boundary"
+        ],
+        "x-contracts": [
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
+    "/api/v1/internal/outbox/replay": {
+      "post": {
+        "operationId": "internal_outbox_replay_api_v1_internal_outbox_replay_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "aggregate": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "title": "Id",
+                            "type": "string"
+                          },
+                          "type": {
+                            "maxLength": 100,
+                            "minLength": 1,
+                            "title": "Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id"
+                        ],
+                        "title": "OutboxAggregateIn",
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dry_run": {
+                    "default": false,
+                    "title": "Dry Run",
+                    "type": "boolean"
+                  },
+                  "event_ids": {
+                    "anyOf": [
+                      {
+                        "items": {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Event Ids"
+                  },
+                  "from_occurred_at": {
+                    "anyOf": [
+                      {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "From Occurred At"
+                  },
+                  "limit": {
+                    "default": 1000,
+                    "maximum": 1000.0,
+                    "minimum": 1.0,
+                    "title": "Limit",
+                    "type": "integer"
+                  },
+                  "to_occurred_at": {
+                    "anyOf": [
+                      {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "To Occurred At"
+                  }
+                },
+                "title": "OutboxReplayIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Internal Outbox Replay Api V1 Internal Outbox Replay Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Internal Outbox Replay",
+        "tags": [
+          "platform-boundary"
+        ],
+        "x-contracts": [
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/internal/outbox/stats": {
@@ -29467,44 +31223,223 @@
     "/api/v1/order/demand/open": {
       "get": {
         "operationId": "fs00_get_api-v1-order-demand-open",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "item_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Item Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "location_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Location Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "required_by_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Required By From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "required_by_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Required By To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Priority"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Open Order Demand Api V1 Order Demand Open Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "**D3/FIX-4** read paged OPEN demand from the external order boundary (required-by dated, base-UoM qty, committed flag)",
+        "summary": "Open Order Demand",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-boundary"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "inventory.balance.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/outsourced-operations": {
@@ -31374,46 +33309,144 @@
     },
     "/api/v1/platform/tenants/{tenant_id}/bootstrap-admin": {
       "post": {
+        "description": "Re-issue the tenant bootstrap-admin invitation (no plaintext token is returned).",
         "operationId": "fs00_post_api-v1-platform-tenants-tenant-id-bootstrap-admin",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenant_id",
+            "required": true,
+            "schema": {
+              "title": "Tenant Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "email": {
+                    "maxLength": 320,
+                    "minLength": 3,
+                    "title": "Email",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ],
+                "title": "BootstrapAdminIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Bootstrap Admin Api V1 Platform Tenants  Tenant Id  Bootstrap Admin Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "**Δ-MT** Re-issue bootstrap admin invitation",
+        "summary": "Bootstrap Admin",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
-        "x-idempotency": "required",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.tenant.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/platform/tenants/{tenant_id}/memberships": {
@@ -31566,46 +33599,149 @@
     },
     "/api/v1/platform/tenants/{tenant_id}/offboard": {
       "post": {
+        "description": "OFFBOARDING soft-state + export marker; revoked sessions; ledger/audit retained (DM-PLAT-09).",
         "operationId": "fs00_post_api-v1-platform-tenants-tenant-id-offboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "tenant_id",
+            "required": true,
+            "schema": {
+              "title": "Tenant Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "export": {
+                    "default": true,
+                    "title": "Export",
+                    "type": "boolean"
+                  },
+                  "reason": {
+                    "maxLength": 500,
+                    "minLength": 3,
+                    "title": "Reason",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reason"
+                ],
+                "title": "OffboardIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Offboard Tenant Api V1 Platform Tenants  Tenant Id  Offboard Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Offboarding + export package (soft-state, retains ledger/audit)",
+        "summary": "Offboard Tenant",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-extras"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+        "x-contracts": [
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
-        "x-idempotency": "required",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.tenant.manage"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/platform/tenants/{tenant_id}/reactivate": {
@@ -35861,44 +37997,173 @@
     "/api/v1/reference/exchange-rates": {
       "get": {
         "operationId": "fs00_get_api-v1-reference-exchange-rates",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "base",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Base"
+            }
+          },
+          {
+            "in": "query",
+            "name": "quote",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Quote"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 200,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Reference Exchange Rates Api V1 Reference Exchange Rates Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "FX rates",
+        "summary": "Reference Exchange Rates",
         "tags": [
-          "FS-00",
-          "platform.core",
-          "platform.events",
-          "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform-boundary"
         ],
-        "x-contract": [
-          "platform.core",
-          "platform.events",
+        "x-contracts": [
           "platform.finance",
-          "order.demand",
-          "order.supply"
+          "platform.core"
         ],
         "x-feature-set": "FS-00",
-        "x-fragment": "contracts/openapi/fragments/FS-00.openapi.json",
+        "x-implemented": true,
         "x-required-scopes": [
           "platform.reference.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
       }
     },
     "/api/v1/reference/fiscal-periods": {
@@ -46578,13 +48843,13 @@
     "contracts": 21,
     "events": 159,
     "feature_sets": 16,
-    "implemented_additions": 28,
-    "implemented_operations": 105,
-    "implemented_overrides": 77,
-    "implemented_paths_added": 17,
-    "operations": 962,
-    "paths": 727,
-    "skeleton_operations": 857,
+    "implemented_additions": 31,
+    "implemented_operations": 124,
+    "implemented_overrides": 93,
+    "implemented_paths_added": 20,
+    "operations": 965,
+    "paths": 730,
+    "skeleton_operations": 841,
     "spec_operations": 934,
     "spec_paths": 710
   },

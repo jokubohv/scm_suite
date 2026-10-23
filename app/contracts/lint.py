@@ -148,7 +148,7 @@ def _check_aggregate(model: ContractModel, issues: list[dict[str, str]], stats: 
                 duplicates.append(operation_id)
             operation_ids.add(operation_id)
             responses = operation.get("responses") or {}
-            if "200" not in responses and "201" not in responses and "204" not in responses:
+            if not any(code in responses for code in ("200", "201", "202", "204")):
                 issues.append(_issue(ERROR, "OP_RESPONSES", f"missing success response: {method.upper()} {raw_path}", paths.relpath(aggregate_path)))
             scopes = operation.get("x-required-scopes") or []
             allowlist = operation.get("x-allowlist") or ""

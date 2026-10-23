@@ -1,0 +1,20 @@
+FS-00 manifest exit_checks status (static audit; DB/stack live as of REPORT)
+READY_STATIC       docker compose run --rm api alembic upgrade head (DB already at 0003 head; not re-run read-only)
+FAIL_MISSING_TEST  pytest app/tests/integration/platform -q
+FAIL_MISSING_TEST  pytest app/tests/contracts/test_fs00_provider_contract.py -q
+FAIL_MISSING_TEST  pytest app/tests/invariants/test_rls_tenant_isolation.py app/tests/invariants/test_append_only_privileges.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/finance_port/test_journal_intent_read_api.py -q
+FAIL_MISSING_TEST  pytest app/tests/invariants/test_mt_tenant_user_isolation.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/platform/test_mt_auth_flows.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/platform/test_mt_invitations_sessions.py -q
+FAIL_MISSING_TEST  pytest app/tests/invariants/test_mt_identity_rules.py -q
+PASS_STATIC        python tools/feature_sets.py permissions
+FAIL_MISSING_TEST  pytest app/tests/security/test_route_scope_coverage.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/platform/test_rbac_roles.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/platform/test_sod_policy.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/platform/test_sso_oidc_flow.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/platform/test_sso_tenant_isolation.py -q
+FAIL_MISSING_TEST  pytest app/tests/integration/platform/test_sso_group_mapping.py -q
+BLOCKED_GATE       python tools/feature_sets.py record --set FS-00 --env $ENV --status verified
+
+DB: UP

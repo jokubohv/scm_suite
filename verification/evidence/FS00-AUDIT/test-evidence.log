@@ -1,0 +1,3 @@
+unit: 367 collected/run PASS
+integration: 105 collected, 104 pass / 1 fail (stale seed assertion)
+failure: app/tests/integration/platform_data/test_platform_schema_live.py:82-83 expects tenant==1/currency==10; live seeded DB has tenant==2/currency==102 (jobs==4 matches)

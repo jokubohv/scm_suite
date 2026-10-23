@@ -1,0 +1,14 @@
+== W2 migrations 2026-10-23T13:21:36Z ==
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001_platform_core, 0001_platform_core — platform schema bootstrap (FS-00, DATA-MODEL §21.1 M00).
+INFO  [alembic.runtime.migration] Running upgrade 0001_platform_core -> 0002_platform_security, 0002_platform_security — identity/membership (Δ-MT), enterprise SSO (Δ-SSO), RBAC guards,
+audit trail, finance journal intents, RLS bootstrap and grants (FS-00, DATA-MODEL §21.1 M00).
+INFO  [alembic.runtime.migration] Running upgrade 0002_platform_security -> 0003_platform_events, 0003_platform_events — transactional outbox (partitioned), consumer checkpoints, job catalogue/runs,
+idempotency keys (FS-00, DATA-MODEL §21.1 M00 row).
+-- tables:
+42
+-- seed validate:
+seed sources valid
+-- seed memory dry-run:
+  WARN: deferred_datasets: 31 seed rows not written — owning tables not migrated yet: catalog.sod_pair (FS-00), catalog.transaction_type (FS-04), item_master.uom (FS-01), item_master.uom_type (FS-01), traceability.inventory_status (FS-03)
+  ERROR [currencies]: read failed for key ('SYSTEM', 'AED'): table 'platform.currency' expects natural key ('code',), got 2 parts
+  ERROR: currencies: read failed for key ('SYSTEM', 'AED'): table 'platform.currency' expects natural key ('code',), got 2 parts

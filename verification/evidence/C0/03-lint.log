@@ -1,7 +1,7 @@
 $ python3 -m app.contracts.cli lint
 
 contract lint: PASS — errors=0 warnings=2
-  feature_sets=16 contracts=21 fragments=16 operations=962 paths=727 event_schemas=159 plan=1.5.0
+  feature_sets=16 contracts=21 fragments=16 operations=965 paths=730 event_schemas=159 plan=1.5.0
   WARN  [OP_SCOPE_UNKNOWN] spec scope(s) not in permissions.json catalogue (reconcile with owner): ['extensions.admin'] on GET /api/v1/extensions/settings (contracts/openapi/openapi.json)
   WARN  [OP_SCOPE_UNKNOWN] spec scope(s) not in permissions.json catalogue (reconcile with owner): ['extensions.admin'] on PATCH /api/v1/extensions/settings (contracts/openapi/openapi.json)
 

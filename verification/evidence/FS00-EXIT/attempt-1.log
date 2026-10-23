@@ -1,0 +1,58 @@
+== FS-00 exit gate attempt 2026-10-23T13:35:57Z ==
+---- $ pytest app/tests/integration/platform -q
+.............................                                            [100%]
+RC=0
+---- $ pytest app/tests/contracts/test_fs00_provider_contract.py -q
+.....                                                                    [100%]
+RC=0
+---- $ pytest app/tests/invariants/test_rls_tenant_isolation.py app/tests/invariants/test_append_only_privileges.py -q
+.........s                                                               [100%]
+RC=0
+---- $ pytest app/tests/integration/finance_port/test_journal_intent_read_api.py -q
+
+app/tests/integration/finance_port/test_journal_intent_read_api.py:157: TypeError
+=========================== short test summary info ============================
+FAILED app/tests/integration/finance_port/test_journal_intent_read_api.py::test_finance_intent_requires_the_finance_read_scope
+RC=1
+---- $ pytest app/tests/invariants/test_mt_tenant_user_isolation.py -q
+
+app/tests/invariants/test_mt_tenant_user_isolation.py:210: Failed
+=========================== short test summary info ============================
+FAILED app/tests/invariants/test_mt_tenant_user_isolation.py::test_membership_status_values_are_constrained
+RC=1
+---- $ pytest app/tests/integration/platform/test_mt_auth_flows.py -q
+......                                                                   [100%]
+RC=0
+---- $ pytest app/tests/integration/platform/test_mt_invitations_sessions.py -q
+.....                                                                    [100%]
+RC=0
+---- $ pytest app/tests/invariants/test_mt_identity_rules.py -q
+
+../../../../.pyenv/versions/3.12.4/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:797: IntegrityError
+=========================== short test summary info ============================
+FAILED app/tests/invariants/test_mt_identity_rules.py::test_invitation_is_single_use_and_expiry_checked
+RC=1
+---- $ python tools/feature_sets.py permissions
+WARN W-PERM-UNREFERENCED: 67 catalogue scope(s) are not referenced by any spec endpoint auth scope: atp.rebuild, consigned.agreement.manage, consigned.ownership.transfer, costing.cost.view, costing.landedcost.manage, costing.method.manage, costing.read, costing.recalculate, costing.revaluation.approve, costing.rollup, counts.snapshot.refresh, coupons.validate, customerpart.manage, demand_plan.create, demand_plan_line.override, inventory.adjustment.approve, inventory.commitment.manage, inventory.cost.view, inventory.receipt.post, inventory.worksheet.approve, ledger.commit_orders.schedule, ledger.negative_inventory.scan, manufacturing.bom.manage, manufacturing.build.post, manufacturing.wip.post, manufacturing.wo.create, manufacturing.wo.release, mfg.scheduling.run, order_items.read, planning.allocation.run ...
+PERMISSIONS OK: 255 scopes (241 assignable, 13 service-only, 1 platform-only, 18 requires-approval, 1 alias(es)); 7 role templates; 14 SoD pairs; 6 global rules
+  allowlists: public=9, self-service=6; route-guard test: app/tests/security/test_route_scope_coverage.py
+  spec reconciliation: 16 specs, 791 endpoint rows scanned, 188 catalogue scope references, 0 unknown, 67 unreferenced warning(s)
+RC=0
+---- $ pytest app/tests/security/test_route_scope_coverage.py -q
+....                                                                     [100%]
+RC=0
+---- $ pytest app/tests/integration/platform/test_rbac_roles.py -q
+.....                                                                    [100%]
+RC=0
+---- $ pytest app/tests/integration/platform/test_sod_policy.py -q
+....                                                                     [100%]
+RC=0
+---- $ pytest app/tests/integration/platform/test_sso_oidc_flow.py -q
+...                                                                      [100%]
+RC=0
+---- $ pytest app/tests/integration/platform/test_sso_tenant_isolation.py -q
+...                                                                      [100%]
+RC=0
+---- $ pytest app/tests/integration/platform/test_sso_group_mapping.py -q
+...                                                                      [100%]
+RC=0

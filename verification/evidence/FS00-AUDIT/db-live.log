@@ -1,0 +1,16 @@
+alembic head: 0003_platform_events
+base tables: 34
+rls tables: 33
+policies: 66
+append-only triggers: 13
+partitioned: ['audit_event', 'outbox_event']
+permission_scope 0
+role 0
+role_permission 0
+number_sequence 0
+tenant_setting 0
+feature_flag 0
+job_definition 4
+tenant 1
+currency 102
+jobs: ['platform.jobs.scheduler', 'platform.outbox.relay', 'platform.retention.purge', 'platform.sso.health.monitor']

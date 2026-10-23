@@ -1,0 +1,47 @@
+........F............................................................... [ 20%]
+........................................................................ [ 40%]
+........................................................................ [ 60%]
+........................................................................ [ 81%]
+...................................................................      [100%]
+=================================== FAILURES ===================================
+______________ test_sequential_allocation_per_tenant_and_doc_type ______________
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1079947d0>
+
+    async def test_sequential_allocation_per_tenant_and_doc_type(db_session) -> None:
+        tenant_id = await create_tenant(db_session, code="SEQ-A")
+        other_tenant = await create_tenant(db_session, code="SEQ-B")
+        service = SequenceService(db_session)
+    
+        first = await service.next(tenant_id, "PO")
+        assert (first.value, first.formatted, first.period_key, first.reset_policy) == (
+            1,
+            "PO000001",
+            None,
+            ResetPolicy.NEVER,
+        )
+        second = await service.next(tenant_id, "PO")
+        assert second.value == 2 and second.formatted == "PO000002"
+        invoice = await service.next(tenant_id, "IR")
+        assert invoice.value == 1 and invoice.formatted == "IR000001"
+        other = await service.next(other_tenant, "PO")
+        assert other.value == 1
+    
+        preview = await service.preview(tenant_id, "PO")
+        assert preview.value == 3
+        assert (await service.next(tenant_id, "PO")).value == 3
+        state = await service.state(tenant_id, "PO")
+        assert state is not None and state.next_value == 4 and state.last_value == 3
+    
+        rows = (
+            await db_session.execute(
+                select(number_sequence.c.doc_type, number_sequence.c.tenant_id, number_sequence.c.next_value)
+            )
+        ).all()
+>       assert len(rows) == 3
+E       AssertionError: assert 30 == 3
+E        +  where 30 = len([('SHIP', UUID('dd6a62f8-5982-4f4b-8b69-c053ff8f8467'), 1), ('SP', UUID('dd6a62f8-5982-4f4b-8b69-c053ff8f8467'), 1), (...'AIM', UUID('dd6a62f8-5982-4f4b-8b69-c053ff8f8467'), 1), ('ALC', UUID('dd6a62f8-5982-4f4b-8b69-c053ff8f8467'), 1), ...])
+
+app/tests/unit/core_services/sequences/test_sequences.py:105: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/unit/core_services/sequences/test_sequences.py::test_sequential_allocation_per_tenant_and_doc_type

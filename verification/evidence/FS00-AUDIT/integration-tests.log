@@ -1,0 +1,53 @@
+........................................................................ [ 68%]
+.................F...............                                        [100%]
+=================================== FAILURES ===================================
+_____________________ test_seed_rows_and_identity_columns ______________________
+
+    def test_seed_rows_and_identity_columns() -> None:
+        async def check():
+            conn = await _try_connect()
+            if conn is None:
+                pytest.skip("database unavailable")
+            try:
+                assert await conn.fetchval("select count(*) from platform.tenant") == 1
+                assert await conn.fetchval("select count(*) from platform.currency") == 10
+                assert await conn.fetchval("select count(*) from platform.job_definition") == 4
+                cols = {r["column_name"] for r in await conn.fetch(
+                    "select column_name from information_schema.columns where table_schema='platform' and table_name='app_user'"
+                )}
+                assert {"identity_id", "membership_status", "token_version", "joined_at"} <= cols
+                sso_tables = {r["tablename"] for r in await conn.fetch(
+                    "select tablename from pg_tables where schemaname='platform'"
+                )}
+                assert {"tenant_sso_connection", "user_identity_link", "sso_group_role_map", "user_session", "tenant_invitation"} <= sso_tables
+            finally:
+                await conn.close()
+>       _run(check())
+
+app/tests/integration/platform_data/test_platform_schema_live.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+app/tests/integration/platform_data/test_platform_schema_live.py:28: in _run
+    return asyncio.run(coro)
+           ^^^^^^^^^^^^^^^^^
+../../../../.pyenv/versions/3.12.4/lib/python3.12/asyncio/runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+../../../../.pyenv/versions/3.12.4/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../.pyenv/versions/3.12.4/lib/python3.12/asyncio/base_events.py:687: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def check():
+        conn = await _try_connect()
+        if conn is None:
+            pytest.skip("database unavailable")
+        try:
+>           assert await conn.fetchval("select count(*) from platform.tenant") == 1
+E           assert 2 == 1
+
+app/tests/integration/platform_data/test_platform_schema_live.py:82: AssertionError
+=========================== short test summary info ============================
+FAILED app/tests/integration/platform_data/test_platform_schema_live.py::test_seed_rows_and_identity_columns

@@ -28,7 +28,7 @@ def assert_operation_shape(raw_path: str, method: str, operation: dict[str, Any]
     assert raw_path.startswith("/"), f"path must be absolute: {raw_path}"
     assert operation.get("operationId"), f"missing operationId: {method} {raw_path}"
     responses = operation.get("responses") or {}
-    assert any(code in responses for code in ("200", "201", "204")), f"missing success response: {method} {raw_path}"
+    assert any(code in responses for code in ("200", "201", "202", "204")), f"missing success response: {method} {raw_path}"
     has_scope = bool(operation.get("x-required-scopes"))
     has_allowlist = bool(operation.get("x-allowlist"))
     assert has_scope or has_allowlist, f"missing capability scope or allowlist: {method} {raw_path}"

@@ -1,0 +1,25 @@
+events expected: 33
+events without app emission point: 21
+auth.login.failed
+auth.tenant_switched
+document.approved
+document.closed
+document.rejected
+document.reversed
+document.submitted
+finance.journal_intent.recorded
+membership.activated
+membership.roles.changed
+membership.suspended
+order.demand.changed
+platform.audit.recorded
+role.cloned
+role.permissions.changed
+sod.violation.blocked
+sso.connection.disabled
+sso.connection.error
+sso.login.failed
+user.invited
+user.session.revoked
+jobs expected: ['platform.health.reconcile', 'platform.jobs.scheduler', 'platform.outbox.relay', 'platform.partition.maintenance', 'platform.retention.purge', 'platform.sso.health.monitor']
+jobs missing implementation/seed: ['platform.health.reconcile', 'platform.partition.maintenance']
