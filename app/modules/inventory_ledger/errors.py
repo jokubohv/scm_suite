@@ -54,6 +54,11 @@ class UnsupportedPostingType(LedgerError):
     http_status = 422
 
 
+class StaleVersion(LedgerError):
+    code = "STALE_VERSION"
+    http_status = 412
+
+
 class IdempotencyKeyRequired(LedgerError):
     code = "IDEMPOTENCY_KEY_REQUIRED"
     http_status = 400
@@ -74,6 +79,7 @@ __all__ = [
     "InsufficientAvailable",
     "InsufficientOnHand",
     "InvalidStateTransition",
+    "StaleVersion",
     "LedgerError",
     "NegativeInventoryBlocked",
     "TransactionNotFound",

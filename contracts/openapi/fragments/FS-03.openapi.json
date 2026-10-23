@@ -12,9 +12,9 @@
     ],
     "x-feature-set": "FS-03",
     "x-implementation-status": "implementation-backed",
-    "x-implemented-additions": 20,
+    "x-implemented-additions": 0,
     "x-implemented-operations": 29,
-    "x-implemented-overrides": 9,
+    "x-implemented-overrides": 29,
     "x-status": "skeleton",
     "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
     "x-wave": "0C"
@@ -346,16 +346,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/bins/{bin_id}": {
+    "/api/v1/bins/{id}": {
       "get": {
-        "operationId": "fs03_get_api_v1_bins_bin_id",
+        "operationId": "fs03_get_api_v1_bins_id",
         "parameters": [
           {
             "in": "path",
-            "name": "bin_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Bin Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -382,7 +382,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Get Bin Api V1 Bins  Bin Id  Get",
+                  "title": "Response Get Bin Api V1 Bins  Id  Get",
                   "type": "object"
                 }
               }
@@ -463,14 +463,14 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs03_patch_api_v1_bins_bin_id",
+        "operationId": "fs03_patch_api_v1_bins_id",
         "parameters": [
           {
             "in": "path",
-            "name": "bin_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Bin Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -525,7 +525,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Patch Bin Api V1 Bins  Bin Id  Patch",
+                  "title": "Response Patch Bin Api V1 Bins  Id  Patch",
                   "type": "object"
                 }
               }
@@ -606,16 +606,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/bins/{bin_id}/activate": {
+    "/api/v1/bins/{id}/activate": {
       "post": {
-        "operationId": "fs03_post_api_v1_bins_bin_id_activate",
+        "operationId": "fs03_post_api_v1_bins_id_activate",
         "parameters": [
           {
             "in": "path",
-            "name": "bin_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Bin Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -676,7 +676,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Activate Bin Api V1 Bins  Bin Id  Activate Post",
+                  "title": "Response Activate Bin Api V1 Bins  Id  Activate Post",
                   "type": "object"
                 }
               }
@@ -758,16 +758,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/bins/{bin_id}/inactivate": {
+    "/api/v1/bins/{id}/inactivate": {
       "post": {
-        "operationId": "fs03_post_api_v1_bins_bin_id_inactivate",
+        "operationId": "fs03_post_api_v1_bins_id_inactivate",
         "parameters": [
           {
             "in": "path",
-            "name": "bin_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Bin Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -824,7 +824,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Inactivate Bin Api V1 Bins  Bin Id  Inactivate Post",
+                  "title": "Response Inactivate Bin Api V1 Bins  Id  Inactivate Post",
                   "type": "object"
                 }
               }
@@ -904,150 +904,6 @@
           "inventory.bin.manage"
         ],
         "x-skeleton": false
-      }
-    },
-    "/api/v1/bins/{id}": {
-      "get": {
-        "operationId": "fs03_get_api-v1-bins-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Read bin",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/bins/{id}",
-        "x-required-scopes": [
-          "inventory.bin.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      },
-      "patch": {
-        "operationId": "fs03_patch_api-v1-bins-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Update bin (zone/name/type/pickable/capacity)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/bins/{id}",
-        "x-required-scopes": [
-          "inventory.bin.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/bins/{id}/activate": {
-      "post": {
-        "operationId": "fs03_post_api-v1-bins-id-activate",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Activate bin",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/bins/{id}/activate",
-        "x-required-scopes": [
-          "inventory.bin.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/bins/{id}/inactivate": {
-      "post": {
-        "operationId": "fs03_post_api-v1-bins-id-inactivate",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Inactivate bin (§5.4.1 guard)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/bins/{id}/inactivate",
-        "x-required-scopes": [
-          "inventory.bin.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
       }
     },
     "/api/v1/inventory-statuses": {
@@ -1343,195 +1199,14 @@
     },
     "/api/v1/inventory-statuses/{id}": {
       "get": {
-        "operationId": "fs03_get_api-v1-inventory-statuses-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Read status",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/inventory-statuses/{id}",
-        "x-required-scopes": [
-          "inventory.status.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      },
-      "patch": {
-        "operationId": "fs03_patch_api-v1-inventory-statuses-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Update status flags (§5.2 rules)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/inventory-statuses/{id}",
-        "x-required-scopes": [
-          "inventory.status.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/inventory-statuses/{id}/activate": {
-      "post": {
-        "operationId": "fs03_post_api-v1-inventory-statuses-id-activate",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Activate status",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/inventory-statuses/{id}/activate",
-        "x-required-scopes": [
-          "inventory.status.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/inventory-statuses/{id}/inactivate": {
-      "post": {
-        "operationId": "fs03_post_api-v1-inventory-statuses-id-inactivate",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Inactivate status (guards)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/inventory-statuses/{id}/inactivate",
-        "x-required-scopes": [
-          "inventory.status.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/inventory-statuses/{id}/set-default": {
-      "post": {
-        "operationId": "fs03_post_api-v1-inventory-statuses-id-set-default",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Set tenant default status",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/inventory-statuses/{id}/set-default",
-        "x-required-scopes": [
-          "inventory.status.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/inventory-statuses/{status_id}": {
-      "get": {
-        "operationId": "fs03_get_api_v1_inventory-statuses_status_id",
+        "operationId": "fs03_get_api_v1_inventory-statuses_id",
         "parameters": [
           {
             "in": "path",
-            "name": "status_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Status Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -1558,7 +1233,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Get Status Api V1 Inventory Statuses  Status Id  Get",
+                  "title": "Response Get Status Api V1 Inventory Statuses  Id  Get",
                   "type": "object"
                 }
               }
@@ -1639,14 +1314,14 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs03_patch_api_v1_inventory-statuses_status_id",
+        "operationId": "fs03_patch_api_v1_inventory-statuses_id",
         "parameters": [
           {
             "in": "path",
-            "name": "status_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Status Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -1701,7 +1376,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Patch Status Api V1 Inventory Statuses  Status Id  Patch",
+                  "title": "Response Patch Status Api V1 Inventory Statuses  Id  Patch",
                   "type": "object"
                 }
               }
@@ -1782,16 +1457,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/inventory-statuses/{status_id}/activate": {
+    "/api/v1/inventory-statuses/{id}/activate": {
       "post": {
-        "operationId": "fs03_post_api_v1_inventory-statuses_status_id_activate",
+        "operationId": "fs03_post_api_v1_inventory-statuses_id_activate",
         "parameters": [
           {
             "in": "path",
-            "name": "status_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Status Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -1852,7 +1527,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Activate Status Api V1 Inventory Statuses  Status Id  Activate Post",
+                  "title": "Response Activate Status Api V1 Inventory Statuses  Id  Activate Post",
                   "type": "object"
                 }
               }
@@ -1934,16 +1609,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/inventory-statuses/{status_id}/inactivate": {
+    "/api/v1/inventory-statuses/{id}/inactivate": {
       "post": {
-        "operationId": "fs03_post_api_v1_inventory-statuses_status_id_inactivate",
+        "operationId": "fs03_post_api_v1_inventory-statuses_id_inactivate",
         "parameters": [
           {
             "in": "path",
-            "name": "status_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Status Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -2000,7 +1675,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Inactivate Status Api V1 Inventory Statuses  Status Id  Inactivate Post",
+                  "title": "Response Inactivate Status Api V1 Inventory Statuses  Id  Inactivate Post",
                   "type": "object"
                 }
               }
@@ -2082,16 +1757,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/inventory-statuses/{status_id}/set-default": {
+    "/api/v1/inventory-statuses/{id}/set-default": {
       "post": {
-        "operationId": "fs03_post_api_v1_inventory-statuses_status_id_set-default",
+        "operationId": "fs03_post_api_v1_inventory-statuses_id_set-default",
         "parameters": [
           {
             "in": "path",
-            "name": "status_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Status Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -2127,7 +1802,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Set Default Status Api V1 Inventory Statuses  Status Id  Set Default Post",
+                  "title": "Response Set Default Status Api V1 Inventory Statuses  Id  Set Default Post",
                   "type": "object"
                 }
               }
@@ -2535,302 +2210,14 @@
     },
     "/api/v1/locations/{id}": {
       "get": {
-        "operationId": "fs03_get_api-v1-locations-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Read location",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/locations/{id}",
-        "x-required-scopes": [
-          "inventory.location.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      },
-      "patch": {
-        "operationId": "fs03_patch_api-v1-locations-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Update location (whitelisted fields)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/locations/{id}",
-        "x-required-scopes": [
-          "inventory.location.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/locations/{id}/activate": {
-      "post": {
-        "operationId": "fs03_post_api-v1-locations-id-activate",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Activate",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/locations/{id}/activate",
-        "x-required-scopes": [
-          "inventory.location.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/locations/{id}/bins": {
-      "get": {
-        "operationId": "fs03_get_api-v1-locations-id-bins",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Bins at location",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/locations/{id}/bins",
-        "x-required-scopes": [
-          "inventory.bin.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/locations/{id}/children": {
-      "get": {
-        "operationId": "fs03_get_api-v1-locations-id-children",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Direct children",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/locations/{id}/children",
-        "x-required-scopes": [
-          "inventory.location.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/locations/{id}/descendants": {
-      "get": {
-        "operationId": "fs03_get_api-v1-locations-id-descendants",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Full descendant id/code tree (data-scope hook)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/locations/{id}/descendants",
-        "x-required-scopes": [
-          "inventory.location.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/locations/{id}/inactivate": {
-      "post": {
-        "operationId": "fs03_post_api-v1-locations-id-inactivate",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Inactivate (guards §5.4)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/locations/{id}/inactivate",
-        "x-required-scopes": [
-          "inventory.location.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/locations/{id}/posting-eligibility": {
-      "get": {
-        "operationId": "fs03_get_api-v1-locations-id-posting-eligibility",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Registry validation for a candidate posting position",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/locations/{id}/posting-eligibility",
-        "x-required-scopes": [
-          "inventory.location.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/locations/{location_id}": {
-      "get": {
-        "operationId": "fs03_get_api_v1_locations_location_id",
+        "operationId": "fs03_get_api_v1_locations_id",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -2857,7 +2244,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Get Location Api V1 Locations  Location Id  Get",
+                  "title": "Response Get Location Api V1 Locations  Id  Get",
                   "type": "object"
                 }
               }
@@ -2938,14 +2325,14 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs03_patch_api_v1_locations_location_id",
+        "operationId": "fs03_patch_api_v1_locations_id",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -3000,7 +2387,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Patch Location Api V1 Locations  Location Id  Patch",
+                  "title": "Response Patch Location Api V1 Locations  Id  Patch",
                   "type": "object"
                 }
               }
@@ -3081,16 +2468,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/locations/{location_id}/activate": {
+    "/api/v1/locations/{id}/activate": {
       "post": {
-        "operationId": "fs03_post_api_v1_locations_location_id_activate",
+        "operationId": "fs03_post_api_v1_locations_id_activate",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -3151,7 +2538,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Activate Location Api V1 Locations  Location Id  Activate Post",
+                  "title": "Response Activate Location Api V1 Locations  Id  Activate Post",
                   "type": "object"
                 }
               }
@@ -3233,16 +2620,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/locations/{location_id}/bins": {
+    "/api/v1/locations/{id}/bins": {
       "get": {
-        "operationId": "fs03_get_api_v1_locations_location_id_bins",
+        "operationId": "fs03_get_api_v1_locations_id_bins",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -3335,7 +2722,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Location Bins Api V1 Locations  Location Id  Bins Get",
+                  "title": "Response Location Bins Api V1 Locations  Id  Bins Get",
                   "type": "object"
                 }
               }
@@ -3416,16 +2803,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/locations/{location_id}/children": {
+    "/api/v1/locations/{id}/children": {
       "get": {
-        "operationId": "fs03_get_api_v1_locations_location_id_children",
+        "operationId": "fs03_get_api_v1_locations_id_children",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -3468,7 +2855,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Location Children Api V1 Locations  Location Id  Children Get",
+                  "title": "Response Location Children Api V1 Locations  Id  Children Get",
                   "type": "object"
                 }
               }
@@ -3549,16 +2936,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/locations/{location_id}/descendants": {
+    "/api/v1/locations/{id}/descendants": {
       "get": {
-        "operationId": "fs03_get_api_v1_locations_location_id_descendants",
+        "operationId": "fs03_get_api_v1_locations_id_descendants",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -3613,7 +3000,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Location Descendants Api V1 Locations  Location Id  Descendants Get",
+                  "title": "Response Location Descendants Api V1 Locations  Id  Descendants Get",
                   "type": "object"
                 }
               }
@@ -3694,16 +3081,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/locations/{location_id}/inactivate": {
+    "/api/v1/locations/{id}/inactivate": {
       "post": {
-        "operationId": "fs03_post_api_v1_locations_location_id_inactivate",
+        "operationId": "fs03_post_api_v1_locations_id_inactivate",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -3760,7 +3147,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Inactivate Location Api V1 Locations  Location Id  Inactivate Post",
+                  "title": "Response Inactivate Location Api V1 Locations  Id  Inactivate Post",
                   "type": "object"
                 }
               }
@@ -3842,16 +3229,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/locations/{location_id}/posting-eligibility": {
+    "/api/v1/locations/{id}/posting-eligibility": {
       "get": {
-        "operationId": "fs03_get_api_v1_locations_location_id_posting-eligibility",
+        "operationId": "fs03_get_api_v1_locations_id_posting-eligibility",
         "parameters": [
           {
             "in": "path",
-            "name": "location_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Location Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -3942,7 +3329,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Posting Eligibility Api V1 Locations  Location Id  Posting Eligibility Get",
+                  "title": "Response Posting Eligibility Api V1 Locations  Id  Posting Eligibility Get",
                   "type": "object"
                 }
               }
@@ -4425,121 +3812,14 @@
     },
     "/api/v1/zones/{id}": {
       "get": {
-        "operationId": "fs03_get_api-v1-zones-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Read zone",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/zones/{id}",
-        "x-required-scopes": [
-          "inventory.bin.read"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      },
-      "patch": {
-        "operationId": "fs03_patch_api-v1-zones-id",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Update zone (name, priority, zone_type?)",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-original-path": "/v1/zones/{id}",
-        "x-required-scopes": [
-          "inventory.bin.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/zones/{id}/inactivate": {
-      "post": {
-        "operationId": "fs03_post_api-v1-zones-id-inactivate",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
-            "content": {
-              "application/problem+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "problem+json"
-          }
-        },
-        "summary": "Inactivate zone",
-        "tags": [
-          "FS-03",
-          "traceability.registry"
-        ],
-        "x-contract": [
-          "traceability.registry"
-        ],
-        "x-feature-set": "FS-03",
-        "x-fragment": "contracts/openapi/fragments/FS-03.openapi.json",
-        "x-idempotency": "Idempotency-Key` required",
-        "x-original-path": "/v1/zones/{id}/inactivate",
-        "x-required-scopes": [
-          "inventory.bin.manage"
-        ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
-      }
-    },
-    "/api/v1/zones/{zone_id}": {
-      "get": {
-        "operationId": "fs03_get_api_v1_zones_zone_id",
+        "operationId": "fs03_get_api_v1_zones_id",
         "parameters": [
           {
             "in": "path",
-            "name": "zone_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Zone Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -4566,7 +3846,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Get Zone Api V1 Zones  Zone Id  Get",
+                  "title": "Response Get Zone Api V1 Zones  Id  Get",
                   "type": "object"
                 }
               }
@@ -4647,14 +3927,14 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs03_patch_api_v1_zones_zone_id",
+        "operationId": "fs03_patch_api_v1_zones_id",
         "parameters": [
           {
             "in": "path",
-            "name": "zone_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Zone Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -4709,7 +3989,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Patch Zone Api V1 Zones  Zone Id  Patch",
+                  "title": "Response Patch Zone Api V1 Zones  Id  Patch",
                   "type": "object"
                 }
               }
@@ -4790,16 +4070,16 @@
         "x-skeleton": false
       }
     },
-    "/api/v1/zones/{zone_id}/inactivate": {
+    "/api/v1/zones/{id}/inactivate": {
       "post": {
-        "operationId": "fs03_post_api_v1_zones_zone_id_inactivate",
+        "operationId": "fs03_post_api_v1_zones_id_inactivate",
         "parameters": [
           {
             "in": "path",
-            "name": "zone_id",
+            "name": "id",
             "required": true,
             "schema": {
-              "title": "Zone Id",
+              "title": "Id",
               "type": "string"
             }
           },
@@ -4860,7 +4140,7 @@
               "application/json": {
                 "schema": {
                   "additionalProperties": true,
-                  "title": "Response Inactivate Zone Api V1 Zones  Zone Id  Inactivate Post",
+                  "title": "Response Inactivate Zone Api V1 Zones  Id  Inactivate Post",
                   "type": "object"
                 }
               }

@@ -26,21 +26,57 @@ def test_contract_versions_and_metadata() -> None:
     assert ledger_meta["contract"] == "inventory.ledger" and ledger_meta["version"] == "1.0.0"
     assert balances_meta["contract"] == "inventory.balances" and balances_meta["version"] == "1.0.0"
     dependencies = set(ledger_meta["depends_on"])
-    assert {"platform.core", "platform.events", "platform.finance", "order.demand", "item.master", "pricing.engine", "traceability.registry"} <= dependencies
+    assert {
+        "platform.core",
+        "platform.events",
+        "platform.finance",
+        "order.demand",
+        "item.master",
+        "pricing.engine",
+        "traceability.registry",
+    } <= dependencies
 
 
 def test_posting_port_surface() -> None:
     port = facade.PostingPort
     expected = {
-        "post", "reverse", "post_receipt", "reverse_receipt", "post_vendor_return", "post_vendor_bill",
-        "post_vendor_credit", "post_variance", "post_adjustment", "post_worksheet", "post_transfer",
-        "post_fulfillment", "post_return", "post_kit_fulfillment", "post_assembly_build",
-        "post_assembly_unbuild", "post_wip_issue", "post_wip_completion", "post_wip_close",
-        "post_count_variance", "post_consigned_receipt", "post_consigned_ownership",
-        "post_consigned_adjustment", "post_revaluation", "post_cogs_adjustment", "post_landed_cost",
-        "post_estimated_landed_cost", "post_drop_ship", "post_bin_transfer", "post_status_change",
-        "post_import_rows", "commit", "release_commitment", "get_commitment", "get_balance",
-        "list_availability", "apply_on_order_delta",
+        "post",
+        "reverse",
+        "post_receipt",
+        "reverse_receipt",
+        "post_vendor_return",
+        "post_vendor_bill",
+        "post_vendor_credit",
+        "post_variance",
+        "post_adjustment",
+        "post_worksheet",
+        "post_transfer",
+        "post_fulfillment",
+        "post_return",
+        "post_kit_fulfillment",
+        "post_assembly_build",
+        "post_assembly_unbuild",
+        "post_wip_issue",
+        "post_wip_completion",
+        "post_wip_close",
+        "post_count_variance",
+        "post_consigned_receipt",
+        "post_consigned_ownership",
+        "post_consigned_adjustment",
+        "post_revaluation",
+        "post_cogs_adjustment",
+        "post_landed_cost",
+        "post_estimated_landed_cost",
+        "post_drop_ship",
+        "post_bin_transfer",
+        "post_status_change",
+        "post_import_rows",
+        "commit",
+        "release_commitment",
+        "get_commitment",
+        "get_balance",
+        "list_availability",
+        "apply_on_order_delta",
     }
     for name in expected:
         assert callable(getattr(port, name, None)), name
@@ -59,8 +95,14 @@ def test_openapi_fragments_are_implementation_backed() -> None:
     required = {
         "/api/v1/inventory-transactions": {"get", "post"},
         "/api/v1/inventory-adjustments": {"post", "get"},
-        "/api/v1/inventory-transfers": {"post"},
-        "/api/v1/transfer-orders": {"post"},
+        "/api/v1/inventory-adjustments/{id}": {"get", "patch"},
+        "/api/v1/inventory-transfers": {"post", "get", "patch"},
+        "/api/v1/inventory-transfers/{id}": {"get", "patch"},
+        "/api/v1/inventory-worksheets": {"post", "get", "patch"},
+        "/api/v1/inventory-worksheets/{id}": {"get", "patch"},
+        "/api/v1/transfer-orders": {"post", "get", "patch"},
+        "/api/v1/transfer-orders/{id}": {"get", "patch"},
+        "/api/v1/inventory/distributions/{id}/approve": {"post"},
         "/api/v1/fulfillments": {"post"},
         "/api/v1/returns": {"post"},
         "/api/v1/imports": {"post"},
@@ -90,13 +132,19 @@ def test_event_envelope_payload_shape() -> None:
 
 
 def test_validate_command_accepts_ledger_owned_types() -> None:
-    command = validate_command({
-        "posting_type": "T-07", "transaction_date": "2026-10-23",
-        "movements": [{
-            "item_id": "11111111-1111-1111-1111-111111111111",
-            "location_id": "22222222-2222-2222-2222-222222222222",
-            "inventory_status_id": "33333333-3333-3333-3333-333333333333",
-            "qty": "1", "movement_type": "ADJUSTMENT",
-        }],
-    })
+    command = validate_command(
+        {
+            "posting_type": "T-07",
+            "transaction_date": "2026-10-23",
+            "movements": [
+                {
+                    "item_id": "11111111-1111-1111-1111-111111111111",
+                    "location_id": "22222222-2222-2222-2222-222222222222",
+                    "inventory_status_id": "33333333-3333-3333-3333-333333333333",
+                    "qty": "1",
+                    "movement_type": "ADJUSTMENT",
+                }
+            ],
+        }
+    )
     assert command["posting_type"] == "T-07"

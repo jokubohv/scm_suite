@@ -49,6 +49,23 @@ def test_builder_fragment_covers_all_implemented_routes() -> None:
     assert all(operation.get("x-implemented") for item in fragment["paths"].values() for operation in item.values())
 
 
+def test_parameterised_paths_use_frozen_id_placeholder() -> None:
+    fragment = _fragment()
+    for path, item in fragment["paths"].items():
+        placeholders = [
+            segment.strip("{}") for segment in path.split("/") if segment.startswith("{") and segment.endswith("}")
+        ]
+        if placeholders:
+            assert placeholders == ["id"], path
+            for method in item:
+                if method in {"get", "post", "put", "patch", "delete"}:
+                    assert path in {
+                        operation_path
+                        for operation_path, operations in fragment["paths"].items()
+                        if method in operations
+                    }
+
+
 def test_every_fragment_scope_is_catalogued_and_expected() -> None:
     catalogue = json.loads((HERE / "design" / "permissions.json").read_text(encoding="utf-8"))
     known = {row["scope"] for row in catalogue["catalogue"]}

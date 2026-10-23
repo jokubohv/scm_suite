@@ -34,32 +34,32 @@ STATUS_MANAGE = "inventory.status.manage"
 ROUTE_SCOPES: dict[tuple[str, str], str] = {
     ("POST", "/api/v1/locations"): LOCATION_MANAGE,
     ("GET", "/api/v1/locations"): LOCATION_READ,
-    ("GET", "/api/v1/locations/{location_id}"): LOCATION_READ,
-    ("PATCH", "/api/v1/locations/{location_id}"): LOCATION_MANAGE,
-    ("POST", "/api/v1/locations/{location_id}/activate"): LOCATION_MANAGE,
-    ("POST", "/api/v1/locations/{location_id}/inactivate"): LOCATION_MANAGE,
-    ("GET", "/api/v1/locations/{location_id}/children"): LOCATION_READ,
-    ("GET", "/api/v1/locations/{location_id}/descendants"): LOCATION_READ,
-    ("GET", "/api/v1/locations/{location_id}/bins"): BIN_READ,
-    ("GET", "/api/v1/locations/{location_id}/posting-eligibility"): LOCATION_READ,
+    ("GET", "/api/v1/locations/{id}"): LOCATION_READ,
+    ("PATCH", "/api/v1/locations/{id}"): LOCATION_MANAGE,
+    ("POST", "/api/v1/locations/{id}/activate"): LOCATION_MANAGE,
+    ("POST", "/api/v1/locations/{id}/inactivate"): LOCATION_MANAGE,
+    ("GET", "/api/v1/locations/{id}/children"): LOCATION_READ,
+    ("GET", "/api/v1/locations/{id}/descendants"): LOCATION_READ,
+    ("GET", "/api/v1/locations/{id}/bins"): BIN_READ,
+    ("GET", "/api/v1/locations/{id}/posting-eligibility"): LOCATION_READ,
     ("POST", "/api/v1/zones"): BIN_MANAGE,
     ("GET", "/api/v1/zones"): BIN_READ,
-    ("GET", "/api/v1/zones/{zone_id}"): BIN_READ,
-    ("PATCH", "/api/v1/zones/{zone_id}"): BIN_MANAGE,
-    ("POST", "/api/v1/zones/{zone_id}/inactivate"): BIN_MANAGE,
+    ("GET", "/api/v1/zones/{id}"): BIN_READ,
+    ("PATCH", "/api/v1/zones/{id}"): BIN_MANAGE,
+    ("POST", "/api/v1/zones/{id}/inactivate"): BIN_MANAGE,
     ("POST", "/api/v1/bins"): BIN_MANAGE,
     ("GET", "/api/v1/bins"): BIN_READ,
-    ("GET", "/api/v1/bins/{bin_id}"): BIN_READ,
-    ("PATCH", "/api/v1/bins/{bin_id}"): BIN_MANAGE,
-    ("POST", "/api/v1/bins/{bin_id}/activate"): BIN_MANAGE,
-    ("POST", "/api/v1/bins/{bin_id}/inactivate"): BIN_MANAGE,
+    ("GET", "/api/v1/bins/{id}"): BIN_READ,
+    ("PATCH", "/api/v1/bins/{id}"): BIN_MANAGE,
+    ("POST", "/api/v1/bins/{id}/activate"): BIN_MANAGE,
+    ("POST", "/api/v1/bins/{id}/inactivate"): BIN_MANAGE,
     ("POST", "/api/v1/inventory-statuses"): STATUS_MANAGE,
     ("GET", "/api/v1/inventory-statuses"): STATUS_READ,
-    ("GET", "/api/v1/inventory-statuses/{status_id}"): STATUS_READ,
-    ("PATCH", "/api/v1/inventory-statuses/{status_id}"): STATUS_MANAGE,
-    ("POST", "/api/v1/inventory-statuses/{status_id}/activate"): STATUS_MANAGE,
-    ("POST", "/api/v1/inventory-statuses/{status_id}/inactivate"): STATUS_MANAGE,
-    ("POST", "/api/v1/inventory-statuses/{status_id}/set-default"): STATUS_MANAGE,
+    ("GET", "/api/v1/inventory-statuses/{id}"): STATUS_READ,
+    ("PATCH", "/api/v1/inventory-statuses/{id}"): STATUS_MANAGE,
+    ("POST", "/api/v1/inventory-statuses/{id}/activate"): STATUS_MANAGE,
+    ("POST", "/api/v1/inventory-statuses/{id}/inactivate"): STATUS_MANAGE,
+    ("POST", "/api/v1/inventory-statuses/{id}/set-default"): STATUS_MANAGE,
     ("GET", "/api/v1/traceability/bootstrap"): LOCATION_READ,
 }
 
@@ -77,8 +77,9 @@ class LifecycleIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
     reason: str | None = None
 
+    # --------------------------------------------------------------------------- dependencies ------
 
-# --------------------------------------------------------------------------- dependencies ------
+
 def _service(db: DbDep) -> TraceabilityService:
     return TraceabilityService(db)
 
@@ -242,8 +243,9 @@ async def _run_write(
         resource_id=resource_id,
     )
 
+    # =========================================================================== locations =========
 
-# =========================================================================== locations =========
+
 @router.post("/locations", status_code=201, dependencies=[Depends(require_scope(LOCATION_MANAGE))])
 async def create_location(
     body: dict[str, Any],
@@ -296,12 +298,12 @@ async def list_locations(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/locations/{location_id}", dependencies=[Depends(require_scope(LOCATION_READ))])
-async def get_location(location_id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
+@router.get("/locations/{id}", dependencies=[Depends(require_scope(LOCATION_READ))])
+async def get_location(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     service = _service(db)
     try:
-        location = await service.get_location(principal.tenant_id, location_id)
+        location = await service.get_location(principal.tenant_id, id)
         resolved_flags = {
             "bins_enabled_global": await service.bins_enabled_for_tenant(principal.tenant_id),
             "statuses_enabled_global": await service.statuses_enabled_for_tenant(principal.tenant_id),
@@ -312,16 +314,16 @@ async def get_location(location_id: str, db: DbDep, principal: PrincipalDep, gat
     return {"location": location, "resolved_flags": resolved_flags}
 
 
-@router.patch("/locations/{location_id}", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
+@router.patch("/locations/{id}", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
 async def patch_location(
-    location_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
     del gate
     service = _service(db)
     try:
         location = await service.update_location(
             tenant_id=principal.tenant_id,
-            location_id=location_id,
+            location_id=id,
             values=body,
             actor_id=principal.identity_id,
             expected_version=_version(if_match),
@@ -331,9 +333,9 @@ async def patch_location(
     return {"location": location}
 
 
-@router.post("/locations/{location_id}/activate", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
+@router.post("/locations/{id}/activate", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
 async def activate_location(
-    location_id: str,
+    id: str,
     body: LifecycleIn,
     db: DbDep,
     principal: PrincipalDep,
@@ -347,21 +349,19 @@ async def activate_location(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:locations:{location_id}:activate",
+        endpoint_id=f"traceability:locations:{id}:activate",
         method="POST",
-        path=f"/api/v1/locations/{location_id}/activate",
+        path=f"/api/v1/locations/{id}/activate",
         body=body.model_dump(),
         key=idempotency_key,
-        action=service.activate_location(
-            tenant_id=principal.tenant_id, location_id=location_id, actor_id=principal.identity_id
-        ),
+        action=service.activate_location(tenant_id=principal.tenant_id, location_id=id, actor_id=principal.identity_id),
         envelope="location",
     )
 
 
-@router.post("/locations/{location_id}/inactivate", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
+@router.post("/locations/{id}/inactivate", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
 async def inactivate_location(
-    location_id: str,
+    id: str,
     body: InactivateIn,
     db: DbDep,
     principal: PrincipalDep,
@@ -375,36 +375,36 @@ async def inactivate_location(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:locations:{location_id}:inactivate",
+        endpoint_id=f"traceability:locations:{id}:inactivate",
         method="POST",
-        path=f"/api/v1/locations/{location_id}/inactivate",
+        path=f"/api/v1/locations/{id}/inactivate",
         body=body.model_dump(),
         key=idempotency_key,
         action=service.inactivate_location(
-            tenant_id=principal.tenant_id, location_id=location_id, reason=body.reason, actor_id=principal.identity_id
+            tenant_id=principal.tenant_id, location_id=id, reason=body.reason, actor_id=principal.identity_id
         ),
         envelope="location",
     )
 
 
-@router.get("/locations/{location_id}/children", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations/{id}/children", dependencies=[Depends(require_scope(LOCATION_READ))])
 async def location_children(
-    location_id: str, db: DbDep, principal: PrincipalDep, gate: Gate, active: bool | None = None
+    id: str, db: DbDep, principal: PrincipalDep, gate: Gate, active: bool | None = None
 ) -> dict[str, Any]:
     del gate
     service = _service(db)
     try:
         items = await service.children(
-            principal.tenant_id, location_id, active_only=bool(active) if active is not None else False
+            principal.tenant_id, id, active_only=bool(active) if active is not None else False
         )
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return {"items": items}
 
 
-@router.get("/locations/{location_id}/descendants", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations/{id}/descendants", dependencies=[Depends(require_scope(LOCATION_READ))])
 async def location_descendants(
-    location_id: str,
+    id: str,
     db: DbDep,
     principal: PrincipalDep,
     gate: Gate,
@@ -414,7 +414,7 @@ async def location_descendants(
     del gate
     service = _service(db)
     try:
-        items = await service.descendants(principal.tenant_id, location_id)
+        items = await service.descendants(principal.tenant_id, id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     if active is not None:
@@ -423,9 +423,9 @@ async def location_descendants(
     return {"items": items, "depth": max((int(item["depth"]) for item in items), default=0)}
 
 
-@router.get("/locations/{location_id}/bins", dependencies=[Depends(require_scope(BIN_READ))])
+@router.get("/locations/{id}/bins", dependencies=[Depends(require_scope(BIN_READ))])
 async def location_bins(
-    location_id: str,
+    id: str,
     db: DbDep,
     principal: PrincipalDep,
     gate: Gate,
@@ -440,7 +440,7 @@ async def location_bins(
     try:
         items = await service.location_bins(
             principal.tenant_id,
-            location_id,
+            id,
             zone_id=zone_id,
             is_active=None if active is None else active,
             pickable_only=clickable_only,
@@ -452,9 +452,9 @@ async def location_bins(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/locations/{location_id}/posting-eligibility", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations/{id}/posting-eligibility", dependencies=[Depends(require_scope(LOCATION_READ))])
 async def posting_eligibility(
-    location_id: str,
+    id: str,
     item_id: UUID,
     db: DbDep,
     principal: PrincipalDep,
@@ -487,9 +487,9 @@ async def posting_eligibility(
         )
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    result["requested_location_id"] = location_id
+    result["requested_location_id"] = id
     try:
-        location = await service.get_location(principal.tenant_id, location_id)
+        location = await service.get_location(principal.tenant_id, id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     if str(location["id"]) != str(result["location_id"]):
@@ -498,13 +498,14 @@ async def posting_eligibility(
             detail={
                 "code": "LOCATION_MISMATCH",
                 "message": "resolved bin does not belong to the requested location",
-                "details": {"requested_location_id": location_id, "resolved_location_id": result["location_id"]},
+                "details": {"requested_location_id": id, "resolved_location_id": result["location_id"]},
             },
         )
     return result
 
+    # =========================================================================== zones =============
 
-# =========================================================================== zones =============
+
 @router.post("/zones", status_code=201, dependencies=[Depends(require_scope(BIN_MANAGE))])
 async def create_zone(
     body: dict[str, Any],
@@ -547,25 +548,25 @@ async def list_zones(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/zones/{zone_id}", dependencies=[Depends(require_scope(BIN_READ))])
-async def get_zone(zone_id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
+@router.get("/zones/{id}", dependencies=[Depends(require_scope(BIN_READ))])
+async def get_zone(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
-        zone = await _service(db).get_zone(principal.tenant_id, zone_id)
+        zone = await _service(db).get_zone(principal.tenant_id, id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return {"zone": zone}
 
 
-@router.patch("/zones/{zone_id}", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.patch("/zones/{id}", dependencies=[Depends(require_scope(BIN_MANAGE))])
 async def patch_zone(
-    zone_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
     del gate
     try:
         zone = await _service(db).update_zone(
             tenant_id=principal.tenant_id,
-            zone_id=zone_id,
+            zone_id=id,
             values=body,
             actor_id=principal.identity_id,
             expected_version=_version(if_match),
@@ -575,9 +576,9 @@ async def patch_zone(
     return {"zone": zone}
 
 
-@router.post("/zones/{zone_id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/zones/{id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))])
 async def inactivate_zone(
-    zone_id: str,
+    id: str,
     body: LifecycleIn,
     db: DbDep,
     principal: PrincipalDep,
@@ -591,17 +592,18 @@ async def inactivate_zone(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:zones:{zone_id}:inactivate",
+        endpoint_id=f"traceability:zones:{id}:inactivate",
         method="POST",
-        path=f"/api/v1/zones/{zone_id}/inactivate",
+        path=f"/api/v1/zones/{id}/inactivate",
         body=body.model_dump(),
         key=idempotency_key,
-        action=service.inactivate_zone(tenant_id=principal.tenant_id, zone_id=zone_id, actor_id=principal.identity_id),
+        action=service.inactivate_zone(tenant_id=principal.tenant_id, zone_id=id, actor_id=principal.identity_id),
         envelope="zone",
     )
 
+    # =========================================================================== bins ==============
 
-# =========================================================================== bins ==============
+
 @router.post("/bins", status_code=201, dependencies=[Depends(require_scope(BIN_MANAGE))])
 async def create_bin(
     body: dict[str, Any],
@@ -653,25 +655,25 @@ async def list_bins(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/bins/{bin_id}", dependencies=[Depends(require_scope(BIN_READ))])
-async def get_bin(bin_id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
+@router.get("/bins/{id}", dependencies=[Depends(require_scope(BIN_READ))])
+async def get_bin(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
-        bin_row = await _service(db).get_bin(principal.tenant_id, bin_id)
+        bin_row = await _service(db).get_bin(principal.tenant_id, id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return {"bin": bin_row}
 
 
-@router.patch("/bins/{bin_id}", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.patch("/bins/{id}", dependencies=[Depends(require_scope(BIN_MANAGE))])
 async def patch_bin(
-    bin_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
     del gate
     try:
         bin_row = await _service(db).update_bin(
             tenant_id=principal.tenant_id,
-            bin_id=bin_id,
+            bin_id=id,
             values=body,
             actor_id=principal.identity_id,
             expected_version=_version(if_match),
@@ -681,9 +683,9 @@ async def patch_bin(
     return {"bin": bin_row}
 
 
-@router.post("/bins/{bin_id}/activate", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/bins/{id}/activate", dependencies=[Depends(require_scope(BIN_MANAGE))])
 async def activate_bin(
-    bin_id: str,
+    id: str,
     body: LifecycleIn,
     db: DbDep,
     principal: PrincipalDep,
@@ -697,19 +699,19 @@ async def activate_bin(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:bins:{bin_id}:activate",
+        endpoint_id=f"traceability:bins:{id}:activate",
         method="POST",
-        path=f"/api/v1/bins/{bin_id}/activate",
+        path=f"/api/v1/bins/{id}/activate",
         body=body.model_dump(),
         key=idempotency_key,
-        action=service.activate_bin(tenant_id=principal.tenant_id, bin_id=bin_id, actor_id=principal.identity_id),
+        action=service.activate_bin(tenant_id=principal.tenant_id, bin_id=id, actor_id=principal.identity_id),
         envelope="bin",
     )
 
 
-@router.post("/bins/{bin_id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/bins/{id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))])
 async def inactivate_bin(
-    bin_id: str,
+    id: str,
     body: InactivateIn,
     db: DbDep,
     principal: PrincipalDep,
@@ -723,19 +725,20 @@ async def inactivate_bin(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:bins:{bin_id}:inactivate",
+        endpoint_id=f"traceability:bins:{id}:inactivate",
         method="POST",
-        path=f"/api/v1/bins/{bin_id}/inactivate",
+        path=f"/api/v1/bins/{id}/inactivate",
         body=body.model_dump(),
         key=idempotency_key,
         action=service.inactivate_bin(
-            tenant_id=principal.tenant_id, bin_id=bin_id, reason=body.reason, actor_id=principal.identity_id
+            tenant_id=principal.tenant_id, bin_id=id, reason=body.reason, actor_id=principal.identity_id
         ),
         envelope="bin",
     )
 
+    # =========================================================================== statuses ==========
 
-# =========================================================================== statuses ==========
+
 @router.post("/inventory-statuses", status_code=201, dependencies=[Depends(require_scope(STATUS_MANAGE))])
 async def create_status(
     body: dict[str, Any],
@@ -779,25 +782,25 @@ async def list_statuses(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/inventory-statuses/{status_id}", dependencies=[Depends(require_scope(STATUS_READ))])
-async def get_status(status_id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
+@router.get("/inventory-statuses/{id}", dependencies=[Depends(require_scope(STATUS_READ))])
+async def get_status(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
-        status = await _service(db).get_status(principal.tenant_id, status_id)
+        status = await _service(db).get_status(principal.tenant_id, id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
     return {"inventory_status": status}
 
 
-@router.patch("/inventory-statuses/{status_id}", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.patch("/inventory-statuses/{id}", dependencies=[Depends(require_scope(STATUS_MANAGE))])
 async def patch_status(
-    status_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
     del gate
     try:
         status = await _service(db).update_status(
             tenant_id=principal.tenant_id,
-            status_id=status_id,
+            status_id=id,
             values=body,
             actor_id=principal.identity_id,
             expected_version=_version(if_match),
@@ -807,9 +810,9 @@ async def patch_status(
     return {"inventory_status": status}
 
 
-@router.post("/inventory-statuses/{status_id}/activate", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.post("/inventory-statuses/{id}/activate", dependencies=[Depends(require_scope(STATUS_MANAGE))])
 async def activate_status(
-    status_id: str,
+    id: str,
     body: LifecycleIn,
     db: DbDep,
     principal: PrincipalDep,
@@ -823,21 +826,19 @@ async def activate_status(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:statuses:{status_id}:activate",
+        endpoint_id=f"traceability:statuses:{id}:activate",
         method="POST",
-        path=f"/api/v1/inventory-statuses/{status_id}/activate",
+        path=f"/api/v1/inventory-statuses/{id}/activate",
         body=body.model_dump(),
         key=idempotency_key,
-        action=service.activate_status(
-            tenant_id=principal.tenant_id, status_id=status_id, actor_id=principal.identity_id
-        ),
+        action=service.activate_status(tenant_id=principal.tenant_id, status_id=id, actor_id=principal.identity_id),
         envelope="inventory_status",
     )
 
 
-@router.post("/inventory-statuses/{status_id}/inactivate", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.post("/inventory-statuses/{id}/inactivate", dependencies=[Depends(require_scope(STATUS_MANAGE))])
 async def inactivate_status(
-    status_id: str,
+    id: str,
     body: InactivateIn,
     db: DbDep,
     principal: PrincipalDep,
@@ -851,21 +852,21 @@ async def inactivate_status(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:statuses:{status_id}:inactivate",
+        endpoint_id=f"traceability:statuses:{id}:inactivate",
         method="POST",
-        path=f"/api/v1/inventory-statuses/{status_id}/inactivate",
+        path=f"/api/v1/inventory-statuses/{id}/inactivate",
         body=body.model_dump(),
         key=idempotency_key,
         action=service.inactivate_status(
-            tenant_id=principal.tenant_id, status_id=status_id, reason=body.reason, actor_id=principal.identity_id
+            tenant_id=principal.tenant_id, status_id=id, reason=body.reason, actor_id=principal.identity_id
         ),
         envelope="inventory_status",
     )
 
 
-@router.post("/inventory-statuses/{status_id}/set-default", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.post("/inventory-statuses/{id}/set-default", dependencies=[Depends(require_scope(STATUS_MANAGE))])
 async def set_default_status(
-    status_id: str, db: DbDep, principal: PrincipalDep, response: Response, gate: Gate, idempotency_key: IdempotencyKey
+    id: str, db: DbDep, principal: PrincipalDep, response: Response, gate: Gate, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:
     del gate
     service = _service(db)
@@ -873,19 +874,18 @@ async def set_default_status(
         response=response,
         db=db,
         principal=principal,
-        endpoint_id=f"traceability:statuses:{status_id}:set-default",
+        endpoint_id=f"traceability:statuses:{id}:set-default",
         method="POST",
-        path=f"/api/v1/inventory-statuses/{status_id}/set-default",
+        path=f"/api/v1/inventory-statuses/{id}/set-default",
         body={},
         key=idempotency_key,
-        action=service.set_default_status(
-            tenant_id=principal.tenant_id, status_id=status_id, actor_id=principal.identity_id
-        ),
+        action=service.set_default_status(tenant_id=principal.tenant_id, status_id=id, actor_id=principal.identity_id),
         envelope="inventory_status",
     )
 
+    # =========================================================================== bootstrap =========
 
-# =========================================================================== bootstrap =========
+
 @router.get("/traceability/bootstrap", dependencies=[Depends(require_scope(LOCATION_READ))])
 async def bootstrap_state(db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
