@@ -58,7 +58,7 @@ def _add_fks(deferred_fks: list) -> None:
         op.execute(
             f'ALTER TABLE {SCHEMA}."{fk.table.name}" ADD CONSTRAINT "{fk.name}" '
             f"FOREIGN KEY ({', '.join(local_columns)}) "
-            f"REFERENCES {ref_schema}.\"{ref_table}\" ({', '.join(ref_columns)})"
+            f'REFERENCES {ref_schema}."{ref_table}" ({", ".join(ref_columns)})'
         )
 
 
@@ -104,10 +104,14 @@ def _rls_and_grants(tables) -> None:
 
 
 def _condition_seeds() -> None:
-    rows = op.get_bind().execute(
-        text("SELECT id::text FROM platform.tenant WHERE id <> :system ORDER BY created_at"),
-        {"system": SYSTEM_TENANT_ID},
-    ).all()
+    rows = (
+        op.get_bind()
+        .execute(
+            text("SELECT id::text FROM platform.tenant WHERE id <> :system ORDER BY created_at"),
+            {"system": SYSTEM_TENANT_ID},
+        )
+        .all()
+    )
     insert = text(
         """
         INSERT INTO manufacturing.condition_code

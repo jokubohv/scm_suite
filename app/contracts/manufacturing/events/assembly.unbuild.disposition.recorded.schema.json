@@ -1,0 +1,94 @@
+{
+  "$id": "https://contracts.inventory-platform.local/manufacturing.execution/assembly.unbuild.disposition.recorded/1.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "manufacturing.execution@1.0.0 assembly.unbuild.disposition.recorded payload (final outbox envelope; data fields implemented).",
+  "properties": {
+    "aggregate": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "causation_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "lines": {},
+        "scrap_value": {},
+        "serial_lot_refs": {},
+        "tenant_id": {},
+        "unbuild_id": {}
+      },
+      "required": [
+        "unbuild_id",
+        "lines",
+        "scrap_value",
+        "serial_lot_refs"
+      ],
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "event_version": {
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "tenant_id",
+    "occurred_at",
+    "aggregate",
+    "data"
+  ],
+  "title": "assembly.unbuild.disposition.recorded",
+  "type": "object",
+  "x-contract": "manufacturing.execution",
+  "x-event-type": "assembly.unbuild.disposition.recorded",
+  "x-event-version": "1.0.0",
+  "x-feature-set": "FS-09",
+  "x-payload-key-fields": [
+    "tenant_id",
+    "unbuild_id",
+    "lines",
+    "scrap_value",
+    "serial_lot_refs"
+  ]
+}

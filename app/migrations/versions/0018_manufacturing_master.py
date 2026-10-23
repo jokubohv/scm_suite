@@ -96,9 +96,7 @@ def _dialect():
 
 
 def _create_table(table, deferred_fks: list) -> None:
-    op.execute(
-        str(CreateTable(table, include_foreign_key_constraints=[]).compile(dialect=_dialect())).strip()
-    )
+    op.execute(str(CreateTable(table, include_foreign_key_constraints=[]).compile(dialect=_dialect())).strip())
     for index in table.indexes:
         op.execute(str(CreateIndex(index).compile(dialect=_dialect())).strip())
     for fk in table.foreign_key_constraints:
@@ -114,7 +112,7 @@ def _add_fks(deferred_fks: list) -> None:
         op.execute(
             f'ALTER TABLE {SCHEMA}."{fk.table.name}" ADD CONSTRAINT "{fk.name}" '
             f"FOREIGN KEY ({', '.join(local_columns)}) "
-            f"REFERENCES {ref_schema}.\"{ref_table}\" ({', '.join(ref_columns)})"
+            f'REFERENCES {ref_schema}."{ref_table}" ({", ".join(ref_columns)})'
         )
 
 
@@ -227,9 +225,7 @@ def _seeds() -> None:
     )
     for tenant in _tenants():
         for key, value, value_type in SETTING_SEEDS:
-            raw = "null" if value is None else (
-                value if value_type in {"boolean", "number"} else json.dumps(value)
-            )
+            raw = "null" if value is None else (value if value_type in {"boolean", "number"} else json.dumps(value))
             op.get_bind().execute(
                 insert_setting,
                 {
@@ -243,9 +239,7 @@ def _seeds() -> None:
         for flag_key, enabled in FLAG_SEEDS:
             op.get_bind().execute(insert_flag, {"tenant_id": tenant, "flag_key": flag_key, "enabled": enabled})
         for doc_type, prefix in SEQUENCE_SEEDS:
-            op.get_bind().execute(
-                insert_sequence, {"tenant_id": tenant, "doc_type": doc_type, "prefix": prefix}
-            )
+            op.get_bind().execute(insert_sequence, {"tenant_id": tenant, "doc_type": doc_type, "prefix": prefix})
         if tenant != SYSTEM_TENANT_ID:
             for code, name in USED_STATUSES:
                 op.get_bind().execute(insert_status, {"tenant_id": tenant, "code": code, "name": name})

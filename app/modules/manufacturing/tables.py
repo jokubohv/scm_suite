@@ -107,6 +107,7 @@ PROVENANCES = ("MANUAL", "IMPORT", "EXT")
 #: Append-only tables (reject UPDATE/DELETE via trigger in the migration).
 APPEND_ONLY_TABLES: tuple[str, ...] = ("compat_configuration",)
 
+
 # --------------------------------------------------------------------------- helpers -----------
 def _audit(columns: list) -> None:
     columns.extend(
@@ -209,7 +210,9 @@ bom = mk(
     extra=[
         UniqueConstraint("tenant_id", "assembly_item_id", "bom_code", name="uq_bom_code"),
         CheckConstraint(f"status IN {BOM_STATUSES!r}", name="ck_bom_status"),
-        CheckConstraint("effective_to IS NULL OR effective_from IS NULL OR effective_to >= effective_from", name="ck_bom_dates"),
+        CheckConstraint(
+            "effective_to IS NULL OR effective_from IS NULL OR effective_to >= effective_from", name="ck_bom_dates"
+        ),
         _fk("assembly_item_id", "manufacturing", "assembly_item"),
     ],
     indexes=[("status", "status"), ("assembly", "assembly_item_id")],
@@ -288,7 +291,9 @@ bom_component_control = mk(
             "tenant_id", "bom_component_id", "control_type", "effective_from", name="uq_bom_component_control_scope"
         ),
         CheckConstraint(f"control_type IN {CONTROL_TYPES!r}", name="ck_bom_component_control_type"),
-        CheckConstraint("effective_to IS NULL OR effective_to >= effective_from", name="ck_bom_component_control_dates"),
+        CheckConstraint(
+            "effective_to IS NULL OR effective_to >= effective_from", name="ck_bom_component_control_dates"
+        ),
         _fk("bom_component_id", "manufacturing", "bom_component"),
     ],
     indexes=[("effective_from", "effective_from")],
@@ -330,7 +335,9 @@ routing = mk(
     extra=[
         UniqueConstraint("tenant_id", "item_id", "routing_code", name="uq_routing_code"),
         CheckConstraint(f"status IN {ROUTING_STATUSES!r}", name="ck_routing_status"),
-        CheckConstraint("effective_to IS NULL OR effective_from IS NULL OR effective_to >= effective_from", name="ck_routing_dates"),
+        CheckConstraint(
+            "effective_to IS NULL OR effective_from IS NULL OR effective_to >= effective_from", name="ck_routing_dates"
+        ),
         _fk("item_id", "item_master", "item"),
     ],
     indexes=[("item_status", "item_id", "status")],
@@ -884,7 +891,11 @@ assembly_unbuild_component = mk(
         _fk("target_bin_id", "traceability", "bin"),
         _fk("reason_code_id", "inventory_ledger", "inventory_reason_code"),
     ],
-    indexes=[("component", "component_item_id"), ("condition", "condition_code_id"), ("posted", "posted_transaction_id")],
+    indexes=[
+        ("component", "component_item_id"),
+        ("condition", "condition_code_id"),
+        ("posted", "posted_transaction_id"),
+    ],
 )
 
 outsourced_operation = mk(
@@ -1226,9 +1237,7 @@ compat_slot_def = mk(
         UniqueConstraint(
             "tenant_id", "assembly_item_id", "bom_revision_id", "slot_code", name="uq_compat_slot_def_scope"
         ),
-        CheckConstraint(
-            "assembly_item_id IS NOT NULL OR bom_revision_id IS NOT NULL", name="ck_compat_slot_def_owner"
-        ),
+        CheckConstraint("assembly_item_id IS NOT NULL OR bom_revision_id IS NOT NULL", name="ck_compat_slot_def_owner"),
         CheckConstraint(f"slot_type IN {COMPAT_SLOT_TYPES!r}", name="ck_compat_slot_def_type"),
         CheckConstraint("capacity > 0", name="ck_compat_slot_def_capacity"),
         CheckConstraint("units_per_component > 0", name="ck_compat_slot_def_units"),
@@ -1270,7 +1279,11 @@ compat_configuration = mk(
         CheckConstraint("configuration_hash <> ''", name="ck_compat_configuration_hash"),
         _fk("assembly_item_id", "manufacturing", "assembly_item"),
     ],
-    indexes=[("assembly_context", "assembly_item_id", "context", "validated_at"), ("result", "result"), ("hash", "configuration_hash")],
+    indexes=[
+        ("assembly_context", "assembly_item_id", "context", "validated_at"),
+        ("result", "result"),
+        ("hash", "configuration_hash"),
+    ],
     pk_columns=("id", "validated_at"),
 )
 

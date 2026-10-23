@@ -10,7 +10,6 @@ downgrade first).
 from __future__ import annotations
 
 from alembic import op
-from sqlalchemy import text
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.schema import CreateIndex, CreateTable
 
@@ -46,7 +45,7 @@ def _add_fks(deferred_fks: list) -> None:
         op.execute(
             f'ALTER TABLE {SCHEMA}."{fk.table.name}" ADD CONSTRAINT "{fk.name}" '
             f"FOREIGN KEY ({', '.join(local_columns)}) "
-            f"REFERENCES {ref_schema}.\"{ref_table}\" ({', '.join(ref_columns)})"
+            f'REFERENCES {ref_schema}."{ref_table}" ({", ".join(ref_columns)})'
         )
 
 

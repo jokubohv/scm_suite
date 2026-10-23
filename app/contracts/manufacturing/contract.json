@@ -23,6 +23,11 @@
           "version": "1.0.0"
         },
         {
+          "event": "assembly.unbuild.disposition.recorded",
+          "schema": "contracts/events/manufacturing.execution/assembly.unbuild.disposition.recorded.schema.json",
+          "version": "1.0.0"
+        },
+        {
           "event": "assembly.unbuilt",
           "schema": "contracts/events/manufacturing.execution/assembly.unbuilt.schema.json",
           "version": "1.0.0"
@@ -148,6 +153,6 @@
   ],
   "generated_by": "app.contracts.cli",
   "instructions": "Add OpenAPI paths to openapi.fragment.json and replace event payload stubs in contracts/events/<contract>/; run python -m app.contracts.cli generate && lint.",
-  "todo": "TODO(S0-04): FS builder replaces skeleton operations for this contract.",
+  "todo": "",
   "wave": "1C"
 }
