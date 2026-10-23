@@ -3640,6 +3640,131 @@
         "x-source": "app.openapi()"
       }
     },
+    "/api/v1/admin/invitations/{id}/revoke": {
+      "post": {
+        "description": "Canonical ``{id}`` spelling of the frozen FS-00 contract operation.",
+        "operationId": "fs00_post_api-v1-admin-invitations-id-revoke",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "reason": {
+                    "maxLength": 500,
+                    "minLength": 1,
+                    "title": "Reason",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "reason"
+                ],
+                "title": "ReasonIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Revoke Invitation Canonical Api V1 Admin Invitations  Id  Revoke Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Revoke Invitation Canonical",
+        "tags": [
+          "platform-rbac"
+        ],
+        "x-contracts": [
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.invitations.manage"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
     "/api/v1/admin/invitations/{invitation_id}/resend": {
       "post": {
         "operationId": "resend_invitation_api_v1_admin_invitations__invitation_id__resend_post",
@@ -13824,6 +13949,111 @@
         "x-source": "app.openapi()"
       }
     },
+    "/api/v1/finance/journal-intents/{id}": {
+      "get": {
+        "description": "Canonical ``{id}`` spelling of the frozen FS-00 contract operation.",
+        "operationId": "fs00_get_api-v1-finance-journal-intents-id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Finance Journal Intent Canonical Api V1 Finance Journal Intents  Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Finance Journal Intent Canonical",
+        "tags": [
+          "platform-artifacts"
+        ],
+        "x-contracts": [
+          "platform.finance",
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.finance.read"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
     "/api/v1/finance/journal-intents/{intent_id}": {
       "get": {
         "operationId": "get_finance_journal_intent_api_v1_finance_journal_intents__intent_id__get",
@@ -17190,6 +17420,715 @@
         "x-source": "app.openapi()"
       }
     },
+    "/internal/deps": {
+      "get": {
+        "operationId": "fs00_get_internal-deps",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Internal Deps Internal Deps Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Internal Deps",
+        "tags": [
+          "platform-internal"
+        ],
+        "x-contracts": [
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
+    "/internal/finance/exchange-rates": {
+      "put": {
+        "operationId": "fs00_put_internal-finance-exchange-rates",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "rates": {
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "maxItems": 1000,
+                    "title": "Rates",
+                    "type": "array"
+                  }
+                },
+                "title": "ExchangeRatesIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Finance Exchange Rates Internal Finance Exchange Rates Put",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Finance Exchange Rates",
+        "tags": [
+          "platform-internal"
+        ],
+        "x-contracts": [
+          "platform.finance",
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.finance.sync"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
+    "/internal/finance/fiscal-periods": {
+      "put": {
+        "operationId": "fs00_put_internal-finance-fiscal-periods",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "periods": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "end_date": {
+                          "format": "date",
+                          "title": "End Date",
+                          "type": "string"
+                        },
+                        "period_key": {
+                          "maxLength": 40,
+                          "minLength": 1,
+                          "title": "Period Key",
+                          "type": "string"
+                        },
+                        "source_version": {
+                          "default": 1,
+                          "minimum": 1.0,
+                          "title": "Source Version",
+                          "type": "integer"
+                        },
+                        "start_date": {
+                          "format": "date",
+                          "title": "Start Date",
+                          "type": "string"
+                        },
+                        "status": {
+                          "default": "OPEN",
+                          "pattern": "^(OPEN|CLOSED|LOCKED)$",
+                          "title": "Status",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "period_key",
+                        "start_date",
+                        "end_date"
+                      ],
+                      "title": "FiscalPeriodIn",
+                      "type": "object"
+                    },
+                    "maxItems": 5000,
+                    "title": "Periods",
+                    "type": "array"
+                  }
+                },
+                "title": "FiscalPeriodsIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Finance Fiscal Periods Internal Finance Fiscal Periods Put",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Finance Fiscal Periods",
+        "tags": [
+          "platform-internal"
+        ],
+        "x-contracts": [
+          "platform.finance",
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.finance.sync"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
+    "/internal/order-boundary/demand-doubles": {
+      "put": {
+        "operationId": "fs00_put_internal-order-boundary-demand-doubles",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "fixture_version": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "title": "Fixture Version",
+                    "type": "string"
+                  },
+                  "rows": {
+                    "items": {
+                      "additionalProperties": true,
+                      "type": "object"
+                    },
+                    "maxItems": 5000,
+                    "title": "Rows",
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "fixture_version"
+                ],
+                "title": "DemandDoublesIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Demand Doubles Internal Order Boundary Demand Doubles Put",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Demand Doubles",
+        "tags": [
+          "platform-internal"
+        ],
+        "x-contracts": [
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
+    "/internal/outbox/replay": {
+      "post": {
+        "operationId": "fs00_post_internal-outbox-replay",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "aggregate": {
+                    "anyOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "format": "uuid",
+                            "title": "Id",
+                            "type": "string"
+                          },
+                          "type": {
+                            "maxLength": 100,
+                            "minLength": 1,
+                            "title": "Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "id"
+                        ],
+                        "title": "OutboxAggregateIn",
+                        "type": "object"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "dry_run": {
+                    "default": false,
+                    "title": "Dry Run",
+                    "type": "boolean"
+                  },
+                  "event_ids": {
+                    "anyOf": [
+                      {
+                        "items": {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Event Ids"
+                  },
+                  "from_occurred_at": {
+                    "anyOf": [
+                      {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "From Occurred At"
+                  },
+                  "limit": {
+                    "default": 1000,
+                    "maximum": 1000.0,
+                    "minimum": 1.0,
+                    "title": "Limit",
+                    "type": "integer"
+                  },
+                  "to_occurred_at": {
+                    "anyOf": [
+                      {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "To Occurred At"
+                  }
+                },
+                "title": "OutboxReplayIn",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Outbox Replay Internal Outbox Replay Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Outbox Replay",
+        "tags": [
+          "platform-internal"
+        ],
+        "x-contracts": [
+          "platform.core"
+        ],
+        "x-feature-set": "FS-00",
+        "x-implemented": true,
+        "x-required-scopes": [
+          "platform.internal"
+        ],
+        "x-route-class": "scoped",
+        "x-skeleton": false,
+        "x-source": "app.openapi()"
+      }
+    },
     "/readyz": {
       "get": {
         "operationId": "fs00_get_readyz",
@@ -17224,7 +18163,7 @@
       }
     }
   },
-  "x-implemented-operations": 125,
+  "x-implemented-operations": 132,
   "x-skipped-unscoped-routes": [],
   "x-unresolved-openapi-paths": []
 }

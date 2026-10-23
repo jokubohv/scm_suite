@@ -74,6 +74,7 @@ ROUTE_SCOPES: dict[tuple[str, str], str] = {
     ("DELETE", "/api/v1/admin/document-links/{link_id}"): DOCUMENTLINK_READ,
     ("GET", "/api/v1/finance/journal-intents"): FINANCE_READ,
     ("GET", "/api/v1/finance/journal-intents/{intent_id}"): FINANCE_READ,
+    ("GET", "/api/v1/finance/journal-intents/{id}"): FINANCE_READ,
 }
 
 #: Storage port provider (dependency-injectable in tests / production adapters).
@@ -434,6 +435,17 @@ async def get_finance_journal_intent(
             detail={"code": "JOURNAL_INTENT_NOT_FOUND", "message": "journal intent not found", "details": {}},
         )
     return serialize_journal_intent(row, include_payload=True)
+
+
+@router.get("/finance/journal-intents/{id}", dependencies=[Depends(require_scope(FINANCE_READ))])
+async def get_finance_journal_intent_canonical(
+    id: UUID,
+    repo: RepoDep,
+    principal: PrincipalDep,
+    _: FinanceReader,
+) -> dict[str, Any]:
+    """Canonical ``{id}`` spelling of the frozen FS-00 contract operation."""
+    return await get_finance_journal_intent(id, repo, principal, _)
 
 
 __all__ = ["ROUTE_SCOPES", "get_upload_signer", "router"]

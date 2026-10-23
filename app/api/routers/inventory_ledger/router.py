@@ -631,14 +631,14 @@ async def patch_adjustment(
 
 
 @router.patch(
-    "/inventory-worksheets", dependencies=[Depends(require_scope(TX_READ)), Depends(require_scope(WS_CREATE))]
+    "/inventory-worksheets", dependencies=[Depends(require_scope(WS_CREATE))]
 )
 async def bulk_patch_worksheets(payload: dict[str, Any], principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
     return await _bulk_patch(db, principal, "inventory_worksheet", payload)
 
 
 @router.patch(
-    "/inventory-worksheets/{id}", dependencies=[Depends(require_scope(TX_READ)), Depends(require_scope(WS_CREATE))]
+    "/inventory-worksheets/{id}", dependencies=[Depends(require_scope(WS_CREATE))]
 )
 async def patch_worksheet(
     id: str, payload: dict[str, Any], principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
@@ -649,14 +649,14 @@ async def patch_worksheet(
 
 
 @router.patch(
-    "/inventory-transfers", dependencies=[Depends(require_scope(TX_READ)), Depends(require_scope(TRF_CREATE))]
+    "/inventory-transfers", dependencies=[Depends(require_scope(TRF_CREATE))]
 )
 async def bulk_patch_transfers(payload: dict[str, Any], principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
     return await _bulk_patch(db, principal, "inventory_transfer", payload)
 
 
 @router.patch(
-    "/inventory-transfers/{id}", dependencies=[Depends(require_scope(TX_READ)), Depends(require_scope(TRF_CREATE))]
+    "/inventory-transfers/{id}", dependencies=[Depends(require_scope(TRF_CREATE))]
 )
 async def patch_transfer(
     id: str, payload: dict[str, Any], principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
@@ -666,13 +666,13 @@ async def patch_transfer(
     )
 
 
-@router.patch("/transfer-orders", dependencies=[Depends(require_scope(TX_READ)), Depends(require_scope(TO_CREATE))])
+@router.patch("/transfer-orders", dependencies=[Depends(require_scope(TO_CREATE))])
 async def bulk_patch_transfer_orders(payload: dict[str, Any], principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
     return await _bulk_patch(db, principal, "transfer_order", payload)
 
 
 @router.patch(
-    "/transfer-orders/{id}", dependencies=[Depends(require_scope(TX_READ)), Depends(require_scope(TO_CREATE))]
+    "/transfer-orders/{id}", dependencies=[Depends(require_scope(TO_CREATE))]
 )
 async def patch_transfer_order(
     id: str, payload: dict[str, Any], principal: PrincipalDep, db: DbDep, if_match: IfMatch = None

@@ -35,18 +35,21 @@ Waves: `0A → 0B → 0C → 1A → 1B → 1C → 1D → 1E → 1F → 2`.
 
 ## Residual remediation (post-completion)
 
-See `verification/evidence/RESIDUALS/REMEDIATION-REPORT.md` for the full before/after register. Closed:
-canonical event payload schemas (**159/159** implementation-backed, 0 `x-todo`), widened tenant-setting
-namespace CHECK (dedicated namespaces allowed), FS-07 declarative approval wiring, FS-08 receipt/bill
-landed-cost T-27/T-26 bridge, FS-06 `0013` scratch down/up verification, and a contract/runtime drift
-checker (0 implemented operations unmounted, 0 mounted operations undeclared).
+See `verification/evidence/RESIDUALS/REMEDIATION-REPORT.md` for the full before/after register.
 
-Remaining accepted residuals: 374 contract-first skeleton (spec-only) operations; FS-15 V-21 ATB empty
-fallback pending an FS-09 persisted cache (plan-count change); scheduler/job handlers; tenant
-provisioning cloning of new sequences/settings plus a default `INVENTORY_COUNT` approval definition;
-landed-cost absorption true-up/reversal; FS-00 event producers for some platform/order events
-(structural schemas only); FS-04 partition deviation and FS-01/02 minor guards.
+Closed: canonical event payloads (159/159 implementation-backed), widened tenant-setting namespace
+CHECK, FS-07 declarative approvals, FS-08 landed-cost bridge + T-06/T-27 true-up/reversal, FS-06 0013
+scratch down/up verification, contract/runtime drift checker, FS-15 V-21 ATB pass-through (FS-09 event
++ reporting view), worker job-handler registry (57/57 seeded jobs), tenant provisioning/backfill
+(201 rows/tenant + default count approval), FS-00 outbox producers/routes, and **235 of 246**
+contract-declared unmounted operations (all 11 remaining are malformed frozen spec paths or a hidden
+infra alias; no implemented operation is unmounted).
 
+Remaining accepted residuals: 11 frozen-spec skeleton paths; 5 FS-00 producer action-point exceptions;
+FS-04 partition/enforcement deviations; FS-01/02 minor guards; 19 document/event-driven job no-ops;
+booked landed-cost/vendor-bill reversal; legacy settings prefixes and dev grant-role probes.
+
+## Repository
 ## Repository
 ## Repository
 

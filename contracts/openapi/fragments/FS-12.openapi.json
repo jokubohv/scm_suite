@@ -13,8 +13,8 @@
     "x-feature-set": "FS-12",
     "x-implementation-status": "implementation-backed",
     "x-implemented-additions": 22,
-    "x-implemented-operations": 36,
-    "x-implemented-overrides": 14,
+    "x-implemented-operations": 57,
+    "x-implemented-overrides": 35,
     "x-status": "skeleton",
     "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
     "x-wave": "1F"
@@ -715,23 +715,107 @@
     },
     "/api/v1/quality/coas/{id}": {
       "get": {
-        "operationId": "fs12_get_api-v1-quality-coas-id",
+        "operationId": "fs12_get_api_v1_quality_coas_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Coa Canonical Api V1 Quality Coas  Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "COA detail/lines",
+        "summary": "Get Coa Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -739,35 +823,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-original-path": "/v1/quality/coas/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/coas/{id}/issue": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-coas-id-issue",
+        "operationId": "fs12_post_api_v1_quality_coas_id_issue",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Issue Coa Canonical Api V1 Quality Coas  Id  Issue Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "DRAFT→ISSUED",
+        "summary": "Issue Coa Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -775,36 +963,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/coas/{id}/issue",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.coa.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/coas/{id}/revoke": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-coas-id-revoke",
+        "operationId": "fs12_post_api_v1_quality_coas_id_revoke",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Revoke Coa Canonical Api V1 Quality Coas  Id  Revoke Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "ISSUED→REVOKED (audited)",
+        "summary": "Revoke Coa Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -812,15 +1103,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/coas/{id}/revoke",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.coa.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspection-plans": {
@@ -972,23 +1261,109 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs12_patch_api-v1-quality-inspection-plans",
+        "operationId": "fs12_patch_api_v1_quality_inspection-plans",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Patch Plan Collection Api V1 Quality Inspection Plans Patch",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Manage plans",
+        "summary": "Patch Plan Collection",
         "tags": [
           "FS-12",
           "quality.management"
@@ -996,16 +1371,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required on POST",
-        "x-original-path": "/v1/quality/inspection-plans",
+        "x-implemented": true,
         "x-required-scopes": [
-          "quality.spec.write",
-          "quality.read"
+          "quality.spec.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       },
       "post": {
         "operationId": "fs12_post_api_v1_quality_inspection-plans",
@@ -1516,23 +1888,109 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs12_patch_api-v1-quality-inspection-queues",
+        "operationId": "fs12_patch_api_v1_quality_inspection-queues",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Patch Queue Collection Api V1 Quality Inspection Queues Patch",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Manage on-demand queues",
+        "summary": "Patch Queue Collection",
         "tags": [
           "FS-12",
           "quality.management"
@@ -1540,16 +1998,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required on POST",
-        "x-original-path": "/v1/quality/inspection-queues",
+        "x-implemented": true,
         "x-required-scopes": [
-          "quality.admin",
-          "quality.read"
+          "quality.admin"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       },
       "post": {
         "operationId": "fs12_post_api_v1_quality_inspection-queues",
@@ -1682,23 +2137,130 @@
     },
     "/api/v1/quality/inspection-queues/{id}/items": {
       "get": {
-        "operationId": "fs12_get_api-v1-quality-inspection-queues-id-items",
+        "operationId": "fs12_get_api_v1_quality_inspection-queues_id_items",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Queue Items Canonical Api V1 Quality Inspection Queues  Id  Items Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Queue contents (PENDING inspections)",
+        "summary": "Queue Items Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -1706,14 +2268,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-original-path": "/v1/quality/inspection-queues/{id}/items",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspection-queues/{queue_id}/items": {
@@ -2006,23 +2567,109 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs12_patch_api-v1-quality-inspection-triggers",
+        "operationId": "fs12_patch_api_v1_quality_inspection-triggers",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Patch Trigger Collection Api V1 Quality Inspection Triggers Patch",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Manage triggers + frequency/counters",
+        "summary": "Patch Trigger Collection",
         "tags": [
           "FS-12",
           "quality.management"
@@ -2030,16 +2677,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required on POST",
-        "x-original-path": "/v1/quality/inspection-triggers",
+        "x-implemented": true,
         "x-required-scopes": [
-          "quality.admin",
-          "quality.read"
+          "quality.admin"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       },
       "post": {
         "operationId": "fs12_post_api_v1_quality_inspection-triggers",
@@ -2172,23 +2816,128 @@
     },
     "/api/v1/quality/inspection-triggers/{id}/reset-counter": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspection-triggers-id-reset-counter",
+        "operationId": "fs12_post_api_v1_quality_inspection-triggers_id_reset-counter",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Reset Counter Canonical Api V1 Quality Inspection Triggers  Id  Reset Counter Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Scheduled/manual counter reset (iri-381)",
+        "summary": "Reset Counter Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -2196,15 +2945,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspection-triggers/{id}/reset-counter",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.admin"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspection-triggers/{trigger_id}": {
@@ -2929,23 +3676,107 @@
     },
     "/api/v1/quality/inspections/{id}": {
       "get": {
-        "operationId": "fs12_get_api-v1-quality-inspections-id",
+        "operationId": "fs12_get_api_v1_quality_inspections_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Inspection Canonical Api V1 Quality Inspections  Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Inspection detail + results + disposition + hold links",
+        "summary": "Get Inspection Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -2953,35 +3784,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-original-path": "/v1/quality/inspections/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/cancel": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-cancel",
+        "operationId": "fs12_post_api_v1_quality_inspections_id_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Cancel Inspection Canonical Api V1 Quality Inspections  Id  Cancel Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Cancel pre-completion",
+        "summary": "Cancel Inspection Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -2989,36 +3924,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/cancel",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.disposition"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/complete": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-complete",
+        "operationId": "fs12_post_api_v1_quality_inspections_id_complete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Complete Inspection Canonical Api V1 Quality Inspections  Id  Complete Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Derive disposition + close",
+        "summary": "Complete Inspection Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -3026,36 +4064,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/complete",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.disposition"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/hold": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-hold",
+        "operationId": "fs12_post_api_v1_quality_inspections_id_hold",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Hold Inspection Canonical Api V1 Quality Inspections  Id  Hold Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Apply quality hold via T-30",
+        "summary": "Hold Inspection Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -3063,36 +4204,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/hold",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.disposition"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/images": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-images",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
+        "operationId": "fs12_post_api_v1_quality_inspections_id_images",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
           },
-          "default": {
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Attach Image Canonical Api V1 Quality Inspections  Id  Images Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Attach quality image (iri-380)",
+        "summary": "Attach Image Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -3100,36 +4344,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/images",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.inspect"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/release-hold": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-release-hold",
+        "operationId": "fs12_post_api_v1_quality_inspections_id_release-hold",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Release Hold Canonical Api V1 Quality Inspections  Id  Release Hold Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Release hold via inverse T-30",
+        "summary": "Release Hold Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -3137,36 +4484,130 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/release-hold",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.disposition"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/results": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-results",
+        "operationId": "fs12_post_api_v1_quality_inspections_id_results",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Record Results Canonical Api V1 Quality Inspections  Id  Results Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Record/update results (batch)",
+        "summary": "Record Results Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -3174,36 +4615,130 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/results",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.inspect"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/start": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-start",
+        "operationId": "fs12_post_api_v1_quality_inspections_id_start",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Start Inspection Canonical Api V1 Quality Inspections  Id  Start Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "PENDING→IN_PROGRESS, assign inspector",
+        "summary": "Start Inspection Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -3211,36 +4746,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/start",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.inspect"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{id}/waive": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-inspections-id-waive",
+        "operationId": "fs12_post_api_v1_quality_inspections_id_waive",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Waive Inspection Canonical Api V1 Quality Inspections  Id  Waive Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "FAILED→WAIVED",
+        "summary": "Waive Inspection Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -3248,15 +4886,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/inspections/{id}/waive",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.disposition"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/inspections/{inspection_id}": {
@@ -5003,23 +6639,107 @@
     },
     "/api/v1/quality/specs/{id}": {
       "get": {
-        "operationId": "fs12_get_api-v1-quality-specs-id",
+        "operationId": "fs12_get_api_v1_quality_specs_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Spec Canonical Api V1 Quality Specs  Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Get spec + lines",
+        "summary": "Get Spec Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -5027,35 +6747,127 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-original-path": "/v1/quality/specs/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/specs/{id}/activate": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-specs-id-activate",
+        "operationId": "fs12_post_api_v1_quality_specs_id_activate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Activate Spec Canonical Api V1 Quality Specs  Id  Activate Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "DRAFT→ACTIVE",
+        "summary": "Activate Spec Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -5063,36 +6875,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/specs/{id}/activate",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.spec.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/specs/{id}/retire": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-specs-id-retire",
+        "operationId": "fs12_post_api_v1_quality_specs_id_retire",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Retire Spec Canonical Api V1 Quality Specs  Id  Retire Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "ACTIVE→RETIRED",
+        "summary": "Retire Spec Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -5100,36 +7015,139 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/specs/{id}/retire",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.spec.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/specs/{id}/versions": {
       "post": {
-        "operationId": "fs12_post_api-v1-quality-specs-id-versions",
-        "responses": {
-          "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
+        "operationId": "fs12_post_api_v1_quality_specs_id_versions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
           },
-          "default": {
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Body",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response New Spec Version Canonical Api V1 Quality Specs  Id  Versions Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Create new version of an ACTIVE spec",
+        "summary": "New Spec Version Canonical",
         "tags": [
           "FS-12",
           "quality.management"
@@ -5137,15 +7155,13 @@
         "x-contract": [
           "quality.management"
         ],
+        "x-contract-version": "1.0.0",
         "x-feature-set": "FS-12",
-        "x-fragment": "contracts/openapi/fragments/FS-12.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/quality/specs/{id}/versions",
+        "x-implemented": true,
         "x-required-scopes": [
           "quality.spec.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/quality/specs/{spec_id}": {

@@ -20,5 +20,6 @@ def test_readyz_and_internal_deps() -> None:
         deps = client.get("/internal/deps")
     assert ready.status_code == 200
     assert "checks" in ready.json()
-    assert deps.status_code == 200
-    assert deps.json()["config"]["env"]
+    # /internal/deps is a catalogued scoped operation (platform.internal); deny-by-default applies.
+    assert deps.status_code == 401
+    assert deps.headers.get("content-type", "").startswith("application/problem+json")

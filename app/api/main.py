@@ -27,6 +27,7 @@ from app.api.routers.platform import auth as platform_auth
 from app.api.routers.platform import boundary as platform_boundary
 from app.api.routers.platform import config as platform_config
 from app.api.routers.platform import extras as platform_extras
+from app.api.routers.platform import internal as platform_internal
 from app.api.routers.platform import ops as platform_ops
 from app.api.routers.platform import platform_admin as platform_admin
 from app.api.routers.platform import rbac as platform_rbac
@@ -76,6 +77,7 @@ def create_app() -> FastAPI:
     register_router(platform_sso.router)
     register_router(platform_tenants.router)
     register_router(platform_admin.router)
+    register_router(platform_internal.router)
     register_router(item_master_router)
     register_router(pricing_router)
     register_router(traceability_router)
@@ -104,10 +106,6 @@ def create_app() -> FastAPI:
             "redis": "unknown" if not os.environ.get("REDIS_URL") else "configured",
         }
         return {"status": "ok", "checks": checks}
-
-    @app.get("/internal/deps", tags=["platform"], include_in_schema=False)
-    async def internal_deps() -> dict[str, object]:
-        return {"version": __version__, "config": settings.public_dict()}
 
     return app
 

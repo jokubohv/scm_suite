@@ -31,3 +31,33 @@
 - Full suite after remediation: **1185 passed, 1 skipped** (live Postgres, head `0030_rls_grants_verify`).
 - Contracts: 21 contracts / 159 implementation-backed event schemas; `generate --check` PASS; `lint` PASS 0 errors / 0 warnings.
 - Deployment state: **16/16 verified** unchanged.
+
+## Wave 2 remediation (same date)
+
+Additional closed residuals:
+
+| Residual | Fix | Verification |
+|---|---|---|
+| FS-15 V-21 ATB empty fallback | FS-09 `available_to_build()` now emits a transactional `available_to_build.calculated` outbox event (atb-v1 result, per_level, deterministic input_hash); V-21 is a materialized pass-through over the latest event payload (no new base table/revision; live view recreated). | FS-09 27 / FS-15 29 passed, incl. exactly-one emission, latest-row/tenant-isolation and no-local-formula guards. |
+| Seeded jobs had no worker handlers | Central `app/core/jobs` registry + `app/worker.py`: **57/57** seeded job definitions registered (38 implemented service handlers, 19 documented idempotent no-ops with reasons). Unknown job → error; tenant-scoped transactions, advisory locks, retry/timeouts. | 13 worker/registry tests green; coverage test fails on seed drift. |
+| Tenant provisioning missing new sequences/settings + count approval | `app/core/tenant_provisioning.py` + create-tenant hook + `app/seed/backfill`: **38 sequences / 136 settings / 26 flags / 1 default INVENTORY_COUNT approval definition = 201 rows** per new tenant; idempotent replay inserts 0; existing-dev backfill CLI. | New tenant/replay/isolation/required-count tests + 82 FS-00 config/sequence tests. |
+| Landed-cost true-up/reversal absent | Actual-vs-estimate absorption variance → **T-06** (value-only, costing variance rows, idempotent); receipt reversal → **T-27 reversal** through PostingPort (no double-reverse; rejected after actual). | 6 new true-up tests; FS-08 15 integration/8 invariants/8 provider/5 unit; FS-05 34. |
+| FS-00 missing producers/routes | 24/29 declared FS-00 events now emitted transactionally (5 documented exceptions); `POST /admin/users`, internal router (deps/outbox/finance/order-boundary) + canonical finance/invitation `{id}` routes added; internal router registered. | FS-00 51 tests; generated fragments/aggregate updated; contract lint 0/0. |
+| 246 declared-unmounted routes (FS-03/04/05/06/07/08/09/10/12/13/14 + FS-00) | Closed via canonical `{id}` aliases and genuine gaps: FS-03 20/20, FS-04 45/50 (5 malformed spec paths), FS-05 30/35 (5 malformed), FS-06 8/8, FS-07 18/18, FS-08 62/62, FS-09 81/81, FS-10 40/40, FS-12 21/21, FS-13 13/13, FS-14 17/17; FS-00 alias routes added. Runtime/aggregate now: live **1251** ops, aggregate **1262**, **0** implemented-unmounted, **0** mounted-undeclared, **11** contract-first skeletons (10 malformed frozen paths + `/openapi.json` infra alias). | Each set’s route-surface tests + full suite **1287 passed, 1 skipped**; contract `generate --check`/`lint` PASS 0/0; runtime diff ok=true. |
+
+### Remaining (documented, non-blocking)
+
+1. **11 contract-first skeleton operations** — 5 FS-04 + 5 FS-05 malformed path-stitching defects in the frozen spec (no viable resource semantics; real `{id}` equivalents mounted) + hidden `/openapi.json` infrastructure alias.
+2. **FS-00 event producer exceptions (5)** — `document.closed`, `document.reversed` (owned by domain sets), `finance.journal_intent.recorded` (FS-00 only has a read projection), `sod.violation.blocked` (pure guard lacks DB/actor context), `sso.login.failed` (pre-repository callback error path).
+3. **FS-04 deviations** — transaction/line/detail tables are regular (not partitioned); simplified approval/flag/data-scope enforcement; inline import rows; some serial/lot dependent reversal checks pending.
+4. **FS-01/FS-02 minor guards** — type-migration workflow, UoM deactivation/in-use guards, matrix option-in-use checks, custom-field/EAV wiring; no gate failure.
+5. **19 job no-ops** remain for document/API/event-driven jobs (costing, pricing, quality trigger/derived-field, retention, SSO monitor, ledger import/partition) — explicit reasons in `coverage_summary().noop_jobs`.
+6. **Actual booked landed-cost/vendor-bill reversal** path (estimate reversal after actual is rejected by design); absorption variance rows remain OPEN for period-close processing.
+7. Legacy `inventory.*` settings prefixes retained (namespaces now allowed); dev DB lacks runtime grant roles (`platform_app` etc.) so live grant probes skip; tenant provisioning should run for existing tenants via `app.seed.backfill`.
+
+### Wave-2 evidence
+
+- Full suite: **1287 passed, 1 skipped**; contract generate `--check` PASS; lint PASS 0 errors/0 warnings.
+- `verification/evidence/RESIDUALS/contract-runtime-diff.json` (ok=true, 11 skeletons).
+- FS-00/05/06/07/08/09/10/12/13/14 route-surface test files under `app/tests/integration/*/test_*_route_surface.py` (renamed unique basenames to avoid pytest import collisions).
+- Runtime-diff / aggregate excludes malformed paths only; no mounted operation is undeclared.

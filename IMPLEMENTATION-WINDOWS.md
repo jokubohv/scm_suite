@@ -48,6 +48,8 @@ This file is the shared briefing for each window.
 
 | 6 | 2026-10-23 12:50 | in progress/final | **Residual remediation batch**: 159/159 event payloads synced, namespace CHECK widened, FS-07 approvals + FS-08 landed-cost bridge wired, FS-06 0013 scratch down/up verified, contract/runtime drift checker added; full suite 1185 passed/1 skipped | FS-07/08 re-verified + re-recorded; contract lint 0/0; 16/16 deployment state unchanged | Commit/push residual fixes; remaining residuals documented in `verification/evidence/RESIDUALS/REMEDIATION-REPORT.md` |
 
+| 7 | 2026-10-23 13:35 | in progress/final | **Residual wave 2**: FS-15 V-21 ATB pass-through, job registry 57/57, tenant provisioning 201 rows/tenant, landed-cost T-06/T-27 true-up, FS-00 producers/routes, 235/246 declared-unmounted routes closed with canonical aliases; remaining 11 frozen-spec/infra skeletons | full suite **1287 passed/1 skipped**; contract generate/lint PASS 0/0; live ops 1251 vs aggregate 1262; 0 implemented-unmounted/0 mounted-undeclared; route-surface tests added | Commit/push wave 2; document final residual register |
+
 
 ## Suggested agent assignment (reuse inactive teammates; 8-member cap)
 

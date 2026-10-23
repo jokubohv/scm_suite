@@ -13,8 +13,8 @@
     "x-feature-set": "FS-14",
     "x-implementation-status": "implementation-backed",
     "x-implemented-additions": 17,
-    "x-implemented-operations": 36,
-    "x-implemented-overrides": 19,
+    "x-implemented-operations": 53,
+    "x-implemented-overrides": 36,
     "x-status": "skeleton",
     "x-todo": "TODO(S0-04): FS builder replaces skeletons with implementation-backed contracts.",
     "x-wave": "1F"
@@ -573,23 +573,106 @@
     },
     "/api/v1/customer-parts/{id}": {
       "get": {
-        "operationId": "fs14_get_api-v1-customer-parts-id",
+        "operationId": "fs14_get_api_v1_customer-parts_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Customer Part Canonical Api V1 Customer Parts  Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Mapping detail",
+        "summary": "Get Customer Part Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -598,32 +681,135 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-original-path": "/v1/customer-parts/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs14_patch_api-v1-customer-parts-id",
+        "operationId": "fs14_patch_api_v1_customer-parts_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Patch Customer Part Canonical Api V1 Customer Parts  Id  Patch",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Update/deactivate mapping",
+        "summary": "Patch Customer Part Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -632,13 +818,11 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-original-path": "/v1/customer-parts/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.customerpart.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/customer-parts/{mapping_id}": {
@@ -1133,23 +1317,106 @@
     },
     "/api/v1/items/{id}/customer-parts": {
       "get": {
-        "operationId": "fs14_get_api-v1-items-id-customer-parts",
+        "operationId": "fs14_get_api_v1_items_id_customer-parts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response List Item Customer Parts Canonical Api V1 Items  Id  Customer Parts Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "List item's customer part numbers",
+        "summary": "List Item Customer Parts Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -1158,34 +1425,115 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-original-path": "/v1/items/{id}/customer-parts",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/items/{id}/warranty": {
       "get": {
-        "operationId": "fs14_get_api-v1-items-id-warranty",
+        "operationId": "fs14_get_api_v1_items_id_warranty",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Item Warranty Canonical Api V1 Items  Id  Warranty Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Read/replace default warranty terms",
+        "summary": "Get Item Warranty Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -1194,34 +1542,135 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required on PUT",
-        "x-original-path": "/v1/items/{id}/warranty",
+        "x-implemented": true,
         "x-required-scopes": [
-          "extensions.warranty.write",
           "extensions.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       },
       "put": {
-        "operationId": "fs14_put_api-v1-items-id-warranty",
+        "operationId": "fs14_put_api_v1_items_id_warranty",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Put Item Warranty Canonical Api V1 Items  Id  Warranty Put",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Read/replace default warranty terms",
+        "summary": "Put Item Warranty Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -1230,15 +1679,11 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required on PUT",
-        "x-original-path": "/v1/items/{id}/warranty",
+        "x-implemented": true,
         "x-required-scopes": [
-          "extensions.warranty.write",
-          "extensions.read"
+          "extensions.warranty.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/items/{item_id}/customer-parts": {
@@ -2246,23 +2691,106 @@
     },
     "/api/v1/upc-registry/{id}": {
       "get": {
-        "operationId": "fs14_get_api-v1-upc-registry-id",
+        "operationId": "fs14_get_api_v1_upc-registry_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Upc Canonical Api V1 Upc Registry  Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Assignment detail",
+        "summary": "Get Upc Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -2271,34 +2799,136 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-original-path": "/v1/upc-registry/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/upc-registry/{id}/retire": {
       "post": {
-        "operationId": "fs14_post_api-v1-upc-registry-id-retire",
+        "operationId": "fs14_post_api_v1_upc-registry_id_retire",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Retire Upc Canonical Api V1 Upc Registry  Id  Retire Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Retire UPC (never reuse)",
+        "summary": "Retire Upc Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -2307,14 +2937,11 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/upc-registry/{id}/retire",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.upc.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/upc-registry/{registry_id}": {
@@ -3815,23 +4442,106 @@
     },
     "/api/v1/warranty/claims/{id}": {
       "get": {
-        "operationId": "fs14_get_api-v1-warranty-claims-id",
+        "operationId": "fs14_get_api_v1_warranty_claims_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Claim Canonical Api V1 Warranty Claims  Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Claim detail + validation + actions",
+        "summary": "Get Claim Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -3840,34 +4550,137 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-original-path": "/v1/warranty/claims/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/claims/{id}/actions": {
       "post": {
-        "operationId": "fs14_post_api-v1-warranty-claims-id-actions",
+        "operationId": "fs14_post_api_v1_warranty_claims_id_actions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Add Claim Action Canonical Api V1 Warranty Claims  Id  Actions Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Append claim action",
+        "summary": "Add Claim Action Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -3876,35 +4689,136 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/warranty/claims/{id}/actions",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.claims.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/claims/{id}/approve": {
       "post": {
-        "operationId": "fs14_post_api-v1-warranty-claims-id-approve",
+        "operationId": "fs14_post_api_v1_warranty_claims_id_approve",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Approve Claim Canonical Api V1 Warranty Claims  Id  Approve Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "APPROVED (validation/override)",
+        "summary": "Approve Claim Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -3913,35 +4827,136 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/warranty/claims/{id}/approve",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.claims.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/claims/{id}/cancel": {
       "post": {
-        "operationId": "fs14_post_api-v1-warranty-claims-id-cancel",
+        "operationId": "fs14_post_api_v1_warranty_claims_id_cancel",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Cancel Claim Canonical Api V1 Warranty Claims  Id  Cancel Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "CANCELLED",
+        "summary": "Cancel Claim Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -3950,35 +4965,136 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/warranty/claims/{id}/cancel",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.claims.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/claims/{id}/complete": {
       "post": {
-        "operationId": "fs14_post_api-v1-warranty-claims-id-complete",
+        "operationId": "fs14_post_api_v1_warranty_claims_id_complete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Complete Claim Canonical Api V1 Warranty Claims  Id  Complete Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "COMPLETED",
+        "summary": "Complete Claim Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -3987,35 +5103,137 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/warranty/claims/{id}/complete",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.claims.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/claims/{id}/reject": {
       "post": {
-        "operationId": "fs14_post_api-v1-warranty-claims-id-reject",
+        "operationId": "fs14_post_api_v1_warranty_claims_id_reject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Reject Claim Canonical Api V1 Warranty Claims  Id  Reject Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "REJECTED with reason",
+        "summary": "Reject Claim Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -4024,35 +5242,136 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/warranty/claims/{id}/reject",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.claims.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/claims/{id}/validate": {
       "post": {
-        "operationId": "fs14_post_api-v1-warranty-claims-id-validate",
+        "operationId": "fs14_post_api_v1_warranty_claims_id_validate",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Validate Claim Canonical Api V1 Warranty Claims  Id  Validate Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Recompute validation",
+        "summary": "Validate Claim Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -4061,14 +5380,11 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/warranty/claims/{id}/validate",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.claims.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/coverage": {
@@ -4662,23 +5978,106 @@
     },
     "/api/v1/warranty/registrations/{id}": {
       "get": {
-        "operationId": "fs14_get_api-v1-warranty-registrations-id",
+        "operationId": "fs14_get_api_v1_warranty_registrations_id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Get Registration Canonical Api V1 Warranty Registrations  Id  Get",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Registration detail + coverage",
+        "summary": "Get Registration Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -4687,34 +6086,136 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-original-path": "/v1/warranty/registrations/{id}",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.read"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/registrations/{id}/void": {
       "post": {
-        "operationId": "fs14_post_api-v1-warranty-registrations-id-void",
+        "operationId": "fs14_post_api_v1_warranty_registrations_id_void",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Void Registration Canonical Api V1 Warranty Registrations  Id  Void Post",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Void registration",
+        "summary": "Void Registration Canonical",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -4723,14 +6224,11 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required",
-        "x-original-path": "/v1/warranty/registrations/{id}/void",
+        "x-implemented": true,
         "x-required-scopes": [
           "extensions.warranty.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       }
     },
     "/api/v1/warranty/registrations/{registration_id}": {
@@ -5154,23 +6652,119 @@
         "x-skeleton": false
       },
       "patch": {
-        "operationId": "fs14_patch_api-v1-warranty-repair-orders",
+        "operationId": "fs14_patch_api_v1_warranty_repair-orders",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "TODO(S0-04): response schema pending feature-set implementation."
-          },
-          "default": {
             "content": {
-              "application/problem+json": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Problem"
+                  "additionalProperties": true,
+                  "title": "Response Patch Repair Order Collection Api V1 Warranty Repair Orders Patch",
+                  "type": "object"
                 }
               }
             },
-            "description": "problem+json"
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "ctx": {
+                            "title": "Context",
+                            "type": "object"
+                          },
+                          "input": {
+                            "title": "Input"
+                          },
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "title": "Location",
+                            "type": "array"
+                          },
+                          "msg": {
+                            "title": "Message",
+                            "type": "string"
+                          },
+                          "type": {
+                            "title": "Error Type",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError",
+                        "type": "object"
+                      },
+                      "title": "Detail",
+                      "type": "array"
+                    }
+                  },
+                  "title": "HTTPValidationError",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Manage repair-order data",
+        "summary": "Patch Repair Order Collection",
         "tags": [
           "FS-14",
           "extensions.registry"
@@ -5179,15 +6773,11 @@
           "extensions.registry"
         ],
         "x-feature-set": "FS-14",
-        "x-fragment": "contracts/openapi/fragments/FS-14.openapi.json",
-        "x-idempotency": "required on POST",
-        "x-original-path": "/v1/warranty/repair-orders",
+        "x-implemented": true,
         "x-required-scopes": [
-          "extensions.warranty.write",
-          "extensions.read"
+          "extensions.warranty.write"
         ],
-        "x-skeleton": true,
-        "x-todo": "TODO(S0-04): implement handler + request/response schemas."
+        "x-skeleton": false
       },
       "post": {
         "operationId": "fs14_post_api_v1_warranty_repair-orders",

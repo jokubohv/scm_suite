@@ -857,6 +857,17 @@ async def revoke_invitation(
     return result
 
 
+@router.post("/admin/invitations/{id}/revoke", dependencies=[Depends(require_scope(INVITATION_ADMIN))])
+async def revoke_invitation_canonical(
+    id: str,
+    body: ReasonIn,
+    repo: RepoDep,
+    principal: PrincipalDep,
+) -> dict[str, Any]:
+    """Canonical ``{id}`` spelling of the frozen FS-00 contract operation."""
+    return await revoke_invitation(id, body, repo, principal)
+
+
 # ---------------------------------------------------------------------- tenant settings ----
 @router.get("/admin/tenant-settings", dependencies=[Depends(require_scope(TENANT_ADMIN))])
 async def list_tenant_settings(
