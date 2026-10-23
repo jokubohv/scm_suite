@@ -12,6 +12,7 @@ from app.api.routers.platform.artifacts import ROUTE_SCOPES, router
 from app.core.repositories.artifacts import (
     DEFAULT_PAGE_LIMIT,
     MAX_PAGE_LIMIT,
+    ArtifactsValidation,
     InvalidCursor,
     NullUploadSigner,
     PresignedUpload,
@@ -189,7 +190,7 @@ def test_limit_clamping() -> None:
     assert clamp_limit(1) == 1
     assert clamp_limit(MAX_PAGE_LIMIT) == MAX_PAGE_LIMIT
     for bad in (0, -1, MAX_PAGE_LIMIT + 1):
-        with pytest.raises(Exception):
+        with pytest.raises(ArtifactsValidation):
             clamp_limit(bad)
 
 
@@ -209,12 +210,12 @@ def test_journal_filters_normalise_status_and_dates() -> None:
 
 
 def test_journal_filters_reject_bad_status_and_reversed_dates() -> None:
-    with pytest.raises(Exception):
+    with pytest.raises(ArtifactsValidation):
         validate_journal_filters(
             transaction_id=None, source_doc_type=None, source_doc_id=None, posting_rule_id=None,
             status="POSTED", date_from=None, date_to=None,
         )
-    with pytest.raises(Exception):
+    with pytest.raises(ArtifactsValidation):
         validate_journal_filters(
             transaction_id=None, source_doc_type=None, source_doc_id=None, posting_rule_id=None,
             status=None, date_from=date(2026, 10, 2), date_to=date(2026, 10, 1),
