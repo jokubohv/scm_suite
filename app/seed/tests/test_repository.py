@@ -5,6 +5,8 @@ from __future__ import annotations
 import pytest
 
 from app.seed.repository import (
+    DEFERRED_DATASETS,
+    TABLE_MODELS,
     MemoryRepository,
     SeedRepositoryError,
     SqlAlchemySeedRepository,
@@ -82,11 +84,19 @@ def test_build_repository_profiles() -> None:
     assert isinstance(build_repository("memory"), MemoryRepository)
     sqlalchemy_repo = build_repository("sqlalchemy")
     assert isinstance(sqlalchemy_repo, SqlAlchemySeedRepository)
+    try:
+        # 8 physical platform tables are writable; 5 datasets are deferred until their tables exist.
+        assert set(sqlalchemy_repo.tables()) == set(TABLE_MODELS)
+        assert sqlalchemy_repo.deferred_datasets == sorted(DEFERRED_DATASETS)
+        assert sqlalchemy_repo.get("catalog.sod_pair", ("t", "a", "b")) is None
+        assert sqlalchemy_repo.upsert("catalog.sod_pair", ("t", "a", "b"), {"a": "x"}) == "unchanged"
+        with pytest.raises(SeedRepositoryError):
+            sqlalchemy_repo.get("unknown.table", ("x",))
+    finally:
+        sqlalchemy_repo.close()
     with pytest.raises(SeedRepositoryError):
         build_repository("unknown")
     with pytest.raises(SeedRepositoryError):
-        SqlAlchemySeedRepository().get("platform.tenant", ("x",))
-    with pytest.raises(NotImplementedError):
         SqlAlchemySeedRepository(
-            session_factory=lambda: None, table_registry={"platform.tenant": object()}
-        ).upsert("platform.tenant", ("x",), {"id": "x"})
+            "postgresql+asyncpg://nobody:nobody@127.0.0.1:9/unreachable"
+        ).get("unknown.table", ("x",))

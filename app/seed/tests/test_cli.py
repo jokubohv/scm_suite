@@ -58,7 +58,7 @@ def test_report_file_written_on_real_run(tmp_path: Path) -> None:
 
 
 def test_system_tenant_only_loads_global_datasets(capsys) -> None:
-    assert main(["--tenant", str(SYSTEM_TENANT_ID), "--json"]) == 0
+    assert main(["--tenant", str(SYSTEM_TENANT_ID), "--profile", "memory", "--json"]) == 0
     report = _json_stdout(capsys)
     assert {dataset["name"] for dataset in report["datasets"]} == {
         "system_tenant",
@@ -72,13 +72,25 @@ def test_invalid_tenant_uuid_exits_two(capsys) -> None:
     assert "invalid tenant" in capsys.readouterr().err
 
 
-def test_sqlalchemy_profile_reports_clear_error(capsys) -> None:
-    assert main(["--tenant", TENANT, "--profile", "sqlalchemy"]) == 2
-    assert "requires an async session factory" in capsys.readouterr().err
+def test_sqlalchemy_profile_unreachable_database_reports_clean_error(capsys) -> None:
+    assert (
+        main(
+            [
+                "--tenant",
+                TENANT,
+                "--profile",
+                "sqlalchemy",
+                "--database-url",
+                "postgresql+asyncpg://nobody:nobody@127.0.0.1:9/unreachable",
+            ]
+        )
+        == 2
+    )
+    assert "unavailable" in capsys.readouterr().err
 
 
 def test_no_system_skips_global_datasets(capsys) -> None:
-    assert main(["--tenant", TENANT, "--no-system", "--json"]) == 0
+    assert main(["--tenant", TENANT, "--profile", "memory", "--no-system", "--json"]) == 0
     report = _json_stdout(capsys)
     names = {dataset["name"] for dataset in report["datasets"]}
     assert "currencies" not in names
@@ -86,7 +98,7 @@ def test_no_system_skips_global_datasets(capsys) -> None:
 
 
 def test_symbolic_system_tenant(capsys) -> None:
-    assert main(["--tenant", "system", "--json"]) == 0
+    assert main(["--tenant", "system", "--profile", "memory", "--json"]) == 0
     report = _json_stdout(capsys)
     assert report["tenant_id"] == str(SYSTEM_TENANT_ID)
     assert {dataset["name"] for dataset in report["datasets"]} == {
@@ -97,7 +109,7 @@ def test_symbolic_system_tenant(capsys) -> None:
 
 
 def test_no_tenant_defaults_to_system_only(capsys) -> None:
-    assert main(["--json"]) == 0
+    assert main(["--profile", "memory", "--json"]) == 0
     report = _json_stdout(capsys)
     assert report["tenant_id"] == str(SYSTEM_TENANT_ID)
     assert len(report["datasets"]) == 3
@@ -105,7 +117,7 @@ def test_no_tenant_defaults_to_system_only(capsys) -> None:
 
 def test_seed_tenant_env_var_selects_tenant(monkeypatch, capsys) -> None:
     monkeypatch.setenv("SEED_TENANT_ID", TENANT)
-    assert main(["--dry-run", "--json"]) == 0
+    assert main(["--dry-run", "--profile", "memory", "--json"]) == 0
     report = _json_stdout(capsys)
     assert report["tenant_id"] == TENANT
     assert len(report["datasets"]) == 13
@@ -134,3 +146,9 @@ def test_python_module_entrypoint_runs() -> None:
     report = json.loads(result.stdout)
     assert report["valid"] is True
     assert report["dry_run"] is True
+
+
+def test_json_report_carries_repository_metadata(capsys) -> None:
+    assert main(["--tenant", TENANT, "--profile", "memory", "--dry-run", "--json"]) == 0
+    report = _json_stdout(capsys)
+    assert report["repository"] == {"profile": "memory", "deferred_datasets": []}
