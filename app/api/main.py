@@ -16,6 +16,7 @@ from app.api.routers.platform import approvals as platform_approvals
 from app.api.routers.platform import auth as platform_auth
 from app.api.routers.platform import ops as platform_ops
 from app.api.routers.platform import rbac as platform_rbac
+from app.api.routers.platform import sso as platform_sso
 from app.api.routers.platform import tenants as platform_tenants
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -44,6 +45,7 @@ def create_app() -> FastAPI:
     register_router(platform_approvals.router)
     register_router(platform_rbac.router)
     register_router(platform_auth.router)
+    register_router(platform_sso.router)
     register_router(platform_tenants.router)
     include_routers(app)
 
