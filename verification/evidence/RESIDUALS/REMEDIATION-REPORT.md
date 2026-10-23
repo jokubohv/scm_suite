@@ -61,3 +61,25 @@ Additional closed residuals:
 - `verification/evidence/RESIDUALS/contract-runtime-diff.json` (ok=true, 11 skeletons).
 - FS-00/05/06/07/08/09/10/12/13/14 route-surface test files under `app/tests/integration/*/test_*_route_surface.py` (renamed unique basenames to avoid pytest import collisions).
 - Runtime-diff / aggregate excludes malformed paths only; no mounted operation is undeclared.
+
+## Wave 3 remediation (same date)
+
+| Residual | Outcome |
+|---|---|
+| FS-01/FS-02 minor guards/type migration | Closed: `convert-to-inventory` workflow, UoM/matrix in-use guards, custom-field/EAV wiring, planning-values durable idempotency, exact LOCATION data-scope filtering, latent location-replace bug; new guard suite 7, FS-01/02 suites green. |
+| Remaining FS-00 event producers | Closed `sod.violation.blocked` and `sso.login.failed` producers; FS-00 coverage **26/29**. |
+| Job no-op handlers | **46 implemented / 11 no-ops** of 57 seeded jobs; converted costing/pricing/quality/ledger sweeps; remaining no-ops are external/payload/migration-driven with explicit reasons. |
+| Actual bill/landed-cost reversal + variance true-up | Posted vendor-bill cancel now reverses **T-04 + actual T-26 + T-06 absorption variance** atomically (paid/credit/double-reverse guards), unlocking receipt **T-27** estimate reversal; service-level `process_landed_cost_absorption_variances` closes OPEN T-06 rows. |
+| FS-03/04/05/06/07/08/09/10/12/13/14 declared-unmounted routes | All closed except 10 malformed frozen spec paths; canonical aliases/genuine gaps mounted with route-surface tests. |
+
+Final integrated gate: **1302 passed, 1 skipped**; contract `generate --check` PASS; lint **0 errors / 0 warnings**; runtime surface **1251 live ops / 1262 aggregate**, **0 implemented-unmounted / 0 mounted-undeclared**, **11 contract-first skeletons** (10 malformed frozen paths + hidden `/openapi.json` infra alias).
+
+### Remaining residual floor (documented, plan-bound)
+
+1. 11 frozen-spec/infrastructure skeleton operations (malformed path stitching; no viable resource semantics).
+2. 3 owner-blocked FS-00 events: `document.closed`, `document.reversed` (document-owning sets), `finance.journal_intent.recorded` (writers are FS-08/FS-13 action points; FS-00 owns read projection only).
+3. FS-04 deviations: transaction/line tables not partitioned; simplified approval/flag/data-scope enforcement; inline import rows; some cross-set serial/lot reversal checks.
+4. Cross-set item-inactivation referent checks and full descendant/CLASS/DEPARTMENT/SUBSIDIARY data-scope expansion (need FS-03/FS-04 ports + Principal context wiring).
+5. 11 job no-ops: external daemons (`platform.outbox.relay`, `platform.jobs.scheduler`), ops-only jobs, migration-owned partition maintenance, and payload/document-driven procedures.
+6. FS-02 manifest exit command points at a missing combined test path (`test_fs00_fs01_fs02_contract.py`); equivalent quote-boundary consumer test passes (spec/test-path drift).
+7. Dev DB runtime grant roles absent (`platform_app`/etc.), so live grant probes skip; legacy `inventory.*` settings prefixes retained; existing dev tenants need `app.seed.backfill`.
