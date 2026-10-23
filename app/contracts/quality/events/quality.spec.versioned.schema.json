@@ -1,0 +1,108 @@
+{
+  "$id": "https://inventory-platform/contracts/events/quality.management/quality.spec.versioned.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "aggregate": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "const": "quality"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "causation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data": {
+      "additionalProperties": true,
+      "properties": {
+        "coa_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "disposition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "inspection_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "item_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "plan_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "spec_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "trigger_id": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "event_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "event_type": {
+      "const": "quality.spec.versioned"
+    },
+    "event_version": {
+      "const": "1.0.0"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "aggregate",
+    "data",
+    "event_id",
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id"
+  ],
+  "title": "quality.management/quality.spec.versioned",
+  "type": "object",
+  "x-contract": "quality.management",
+  "x-contract-version": "1.0.0",
+  "x-event": "quality.spec.versioned",
+  "x-feature-set": "FS-12",
+  "x-todo": false
+}
