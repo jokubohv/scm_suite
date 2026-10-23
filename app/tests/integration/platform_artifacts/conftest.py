@@ -61,7 +61,13 @@ def upload_signer() -> FakeUploadSigner:
 @pytest.fixture()
 def artifacts_app(db_session: Any, upload_signer: FakeUploadSigner) -> Any:
     app = create_app()
-    app.include_router(artifacts_router)
+    # ``app/api/main.py`` may already register the artifacts router (integrator-owned wiring);
+    # only mount it here when it is not registered yet so the OpenAPI schema has no duplicates.
+    already_mounted = any(
+        getattr(route, "path", "").startswith("/api/v1/attachments") for route in app.routes
+    )
+    if not already_mounted:
+        app.include_router(artifacts_router)
 
     async def _override_db() -> Any:
         yield db_session
