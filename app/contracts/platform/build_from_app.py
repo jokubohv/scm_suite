@@ -148,9 +148,12 @@ def build_platform_fragment() -> dict[str, Any]:
     paths: dict[str, Any] = {}
     missing_meta: list[str] = []
     skipped_unscoped: list[str] = []
+    non_platform_tags = {"item-master", "pricing", "traceability", "inventory-ledger", "costing"}
     for raw_path, item in (spec.get("paths") or {}).items():
         for method, operation in item.items():
             if method not in METHODS:
+                continue
+            if non_platform_tags.intersection(operation.get("tags") or ()):
                 continue
             meta = route_meta.get((raw_path, method))
             if meta is None:

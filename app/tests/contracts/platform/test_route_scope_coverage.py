@@ -89,10 +89,18 @@ def test_public_and_self_service_routes_are_allowlisted() -> None:
 def test_contract_scope_alignment() -> None:
     """Implemented contract operations must publish the same single scope the router enforces."""
     fragment_ops = utils.fragment_operations(utils.platform_fragment())
+    platform_prefixes = (
+        "/api/v1/auth", "/api/v1/me", "/api/v1/admin", "/api/v1/platform", "/api/v1/finance",
+        "/api/v1/reference", "/api/v1/order", "/api/v1/internal", "/api/v1/attachments",
+        "/api/v1/document-links", "/api/v1/custom-field-values", "/api/v1/audit-events",
+        "/healthz", "/readyz", "/openapi.json",
+    )
     mismatches: list[str] = []
     missing_from_contract: list[str] = []
     for row in utils.route_matrix():
         if row.framework or row.unresolved or not row.in_schema:
+            continue
+        if not row.path.startswith(platform_prefixes):
             continue
         operation = fragment_ops.get((row.method, row.path))
         if operation is None:

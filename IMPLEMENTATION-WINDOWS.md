@@ -40,6 +40,8 @@ This file is the shared briefing for each window.
 **S0-GATE:** `python tools/check_parallel_plan.py --s0` (execution-ready YES) + all S0 exit checks from `design/parallel-plan.json`; record evidence under `verification/evidence/S0/`.
 | 2 | 2026-10-23 09:14 | in progress | **FS-00 verified / 0A deployed**: C0 contract freeze recorded (`verification/evidence/C0/C0-FREEZE.md`), 17-command exit gate green (`verification/evidence/FS00-EXIT/attempt-3.log`), `deployment-state.dev.json` FS-00 verified; stack rebuilt/recovered; seed SQLAlchemy repo done; B2 started (FS-01 ∥ FS-02 build) | C0 gates: contract lint/generate/route-scope strict PASS; provider contract tests PASS; full suite green; Docker 7/7 healthy; `docker compose run api alembic upgrade head` PASS | FS-01/FS-02 in build (spec-wave0a/spec-wave0b); then C1 freeze + 0B deploy; FS-02 deploy after FS-01 |
 
+| 3 | 2026-10-23 10:18 | in progress | **0B/0C deployed**: FS-01/02 verified (0B), FS-03/04/05 verified (0C); C1/C2 freezes recorded; B4a opened (FS-06/07/08 build) | contract lint/generate/route-scope PASS; full suite green (900+ tests); stack 7/7; heads 0012; deployment-state has FS-00..05 verified | B4a FS-06/07/08 implementation; then 1A/1B deploy + C3 freeze; B4b (FS-09..14) + FS-15 after |
+
 
 ## Suggested agent assignment (reuse inactive teammates; 8-member cap)
 

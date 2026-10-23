@@ -39,7 +39,7 @@ def test_platform_schema_present() -> None:
                 "select count(*) from pg_tables where schemaname='platform' and tablename not like '%\\_20%'"
             )
             assert tables == 34, tables
-            assert head.startswith(("0002_platform_security", "0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing"))
+            assert head in {"0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing", "0007_traceability_registry", "0008_ledger_core", "0009_ledger_commitment_guards", "0010_ledger_balances", "0011_costing", "0012_costing_standard"}
         finally:
             await conn.close()
     _run(check())

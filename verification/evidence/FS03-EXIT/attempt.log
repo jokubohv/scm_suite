@@ -1,0 +1,16 @@
+== FS-03 exit gate 2026-10-23T14:42:44Z ==
+-- entry
+ENTRY GATE PASS for FS-03 (phase 1, wave 0C) against state file deployment-state.dev.json: 3/3 dependency contract(s) verified
+  note: FS-03 has no deployment record yet in this environment
+-- migration
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+---- pytest app/tests/integration/traceability/registry -q
+RC=0
+.............                                                            [100%]
+---- pytest app/tests/contracts/test_fs03_provider_contract.py -q
+RC=0
+......                                                                   [100%]
+---- pytest app/tests/invariants/test_status_availability_flags.py -q
+RC=0
+........                                                                 [100%]

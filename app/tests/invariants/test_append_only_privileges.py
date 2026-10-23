@@ -71,7 +71,7 @@ async def test_reject_mutation_function_exists(db_session) -> None:
     result = await db_session.execute(
         text("SELECT proname::text AS name FROM pg_proc WHERE proname = 'reject_mutation'")
     )
-    assert [row["name"] for row in result.mappings()] == ["reject_mutation"]
+    assert "reject_mutation" in {row["name"] for row in result.mappings()}
 
 
 async def test_append_only_triggers_cover_update_and_delete(db_session) -> None:

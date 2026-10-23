@@ -166,7 +166,7 @@ def test_upgrade_downgrade_roundtrip_on_empty_database() -> None:
         upgrade = _run_alembic(temp_url, "upgrade", "head")
         assert upgrade.returncode == 0, upgrade.stdout + upgrade.stderr
         state = asyncio.run(_inspect())
-        assert state["head"] in {"0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing"}
+        assert state["head"] in {"0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing", "0007_traceability_registry", "0008_ledger_core", "0009_ledger_commitment_guards", "0010_ledger_balances", "0011_costing", "0012_costing_standard"}
         assert set(EXPECTED_TABLES) <= state["tables"]
         assert state["partitioned"] == {"audit_event", "outbox_event"}
         assert state["rls"] >= 32
@@ -179,7 +179,7 @@ def test_upgrade_downgrade_roundtrip_on_empty_database() -> None:
         reupgrade = _run_alembic(temp_url, "upgrade", "head")
         assert reupgrade.returncode == 0, reupgrade.stdout + reupgrade.stderr
         final = asyncio.run(_inspect())
-        assert final["head"] in {"0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing"} and set(EXPECTED_TABLES) <= final["tables"]
+        assert final["head"] in {"0003_platform_events", "0004_item_master", "0005_item_master_uom", "0006_pricing", "0007_traceability_registry", "0008_ledger_core", "0009_ledger_commitment_guards", "0010_ledger_balances", "0011_costing", "0012_costing_standard"} and set(EXPECTED_TABLES) <= final["tables"]
     finally:
         try:
             asyncio.run(_drop())

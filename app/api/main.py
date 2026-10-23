@@ -12,6 +12,8 @@ from app import __version__
 from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
+from app.api.routers.costing import router as costing_router
+from app.api.routers.inventory_ledger import router as inventory_ledger_router
 from app.api.routers.item_master import router as item_master_router
 from app.api.routers.platform import api_keys as platform_api_keys
 from app.api.routers.platform import approval_actions as platform_approval_actions
@@ -27,6 +29,7 @@ from app.api.routers.platform import rbac as platform_rbac
 from app.api.routers.platform import sso as platform_sso
 from app.api.routers.platform import tenants as platform_tenants
 from app.api.routers.pricing import router as pricing_router
+from app.api.routers.traceability import router as traceability_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 
@@ -65,6 +68,9 @@ def create_app() -> FastAPI:
     register_router(platform_admin.router)
     register_router(item_master_router)
     register_router(pricing_router)
+    register_router(traceability_router)
+    register_router(inventory_ledger_router)
+    register_router(costing_router)
     include_routers(app)
 
     @app.get("/healthz", tags=["platform"])
