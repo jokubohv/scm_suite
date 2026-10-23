@@ -449,3 +449,80 @@ async def next_count(
         return await _service(db, principal).next_count(item_id, location_id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
+
+
+# ---------------------------------------------------------------- canonical contract aliases -----
+# Residual route closure: the contract declares canonical ``{id}`` operations while handlers use
+# resource-specific path parameters. These behaviour-preserving aliases delegate to the same handler
+# (same signature/deps/scope/status) and only rebind ``id`` -> implementation parameter.
+import inspect as _inspect  # noqa: E402
+import re as _re  # noqa: E402
+
+_CANONICAL_ALIASES: tuple[tuple[str, str, str, str], ...] = (
+    ("GET", "/api/v1/count-plans/{id}", "/count-plans/{id}", "plan_id"),
+    ("PATCH", "/api/v1/count-plans/{id}", "/count-plans/{id}", "plan_id"),
+    ("POST", "/api/v1/count-plans/{id}/archive", "/count-plans/{id}/archive", "plan_id"),
+    ("POST", "/api/v1/count-plans/{id}/generate", "/count-plans/{id}/generate", "plan_id"),
+    ("POST", "/api/v1/count-plans/{id}/pause", "/count-plans/{id}/pause", "plan_id"),
+    ("POST", "/api/v1/count-plans/{id}/resume", "/count-plans/{id}/resume", "plan_id"),
+    ("GET", "/api/v1/inventory-counts/{id}", "/inventory-counts/{id}", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/approve", "/inventory-counts/{id}/approve", "count_id"),
+    ("GET", "/api/v1/inventory-counts/{id}/lines", "/inventory-counts/{id}/lines", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/lines", "/inventory-counts/{id}/lines", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/post", "/inventory-counts/{id}/post", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/recalculate-snapshot", "/inventory-counts/{id}/recalculate-snapshot", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/recount", "/inventory-counts/{id}/recount", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/reject", "/inventory-counts/{id}/reject", "count_id"),
+    ("GET", "/api/v1/inventory-counts/{id}/snapshot", "/inventory-counts/{id}/snapshot", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/start", "/inventory-counts/{id}/start", "count_id"),
+    ("POST", "/api/v1/inventory-counts/{id}/submit", "/inventory-counts/{id}/submit", "count_id"),
+    ("GET", "/api/v1/inventory-counts/{id}/variance", "/inventory-counts/{id}/variance", "count_id"),
+)
+
+
+def _alias_endpoint(endpoint: Any, implementation_param: str) -> Any:
+    signature = _inspect.signature(endpoint)
+    parameters = [
+        parameter.replace(name="id") if parameter.name == implementation_param else parameter
+        for parameter in signature.parameters.values()
+    ]
+
+    async def _alias(**kwargs: Any) -> Any:
+        kwargs[implementation_param] = kwargs.pop("id")
+        return await endpoint(**kwargs)
+
+    _alias.__signature__ = signature.replace(parameters=parameters)  # type: ignore[attr-defined]
+    _alias.__name__ = f"{endpoint.__name__}_canonical"
+    return _alias
+
+
+def _canonical_norm(path: str) -> str:
+    return _re.sub(r"\{[^}]+\}", "{}", path)
+
+
+def _register_canonical_aliases() -> None:
+    routes_by_path: dict[tuple[str, str], Any] = {}
+    for registered in router.routes:
+        methods = getattr(registered, "methods", None) or set()
+        for method in methods:
+            routes_by_path[(method.upper(), getattr(registered, "path", ""))] = registered
+    for method, declared_path, relative_path, implementation_param in _CANONICAL_ALIASES:
+        implementation_path: str | None = next(
+            (path for (candidate_method, path) in ROUTE_SCOPES if candidate_method == method and path.endswith(relative_path.split("{id}")[-1]) and _canonical_norm(path) == _canonical_norm(declared_path)),
+            None,
+        )
+        alias_route: Any = routes_by_path.get((method, implementation_path)) if implementation_path else None
+        if alias_route is None or implementation_path is None:
+            continue
+        alias = _alias_endpoint(alias_route.endpoint, implementation_param)
+        router.add_api_route(
+            relative_path,
+            alias,
+            methods=[method],
+            status_code=int(getattr(alias_route, "status_code", None) or 200),
+            dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, implementation_path)]))],
+        )
+        ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, implementation_path)]
+
+
+_register_canonical_aliases()

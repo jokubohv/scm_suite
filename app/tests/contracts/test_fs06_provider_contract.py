@@ -98,7 +98,6 @@ def test_committed_fragment_is_router_derived_and_deterministic() -> None:
     fragment = _load(FRAGMENT)
     assert fragment["info"]["x-feature-set"] == "FS-06"
     assert fragment["info"]["x-contract"] == CONTRACT
-    assert fragment["x-implemented-operations"] == 14
 
     from app.api.routers.traceability_numbered import ROUTE_SCOPES
 
@@ -107,7 +106,8 @@ def test_committed_fragment_is_router_derived_and_deterministic() -> None:
         for path, item in fragment["paths"].items()
         for method, operation in item.items()
     ]
-    assert len(operations) == 14
+    assert fragment["x-implemented-operations"] == len(ROUTE_SCOPES)
+    assert len(operations) == len(ROUTE_SCOPES)
     assert {(method, path) for method, path, _ in operations} == set(ROUTE_SCOPES)
     catalogue = _catalogue_scopes()
     problems: list[str] = []
