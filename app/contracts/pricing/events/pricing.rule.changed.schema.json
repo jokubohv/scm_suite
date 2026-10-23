@@ -1,0 +1,30 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "change": {
+      "enum": [
+        "CREATED",
+        "UPDATED",
+        "DISABLED",
+        "GENERATED"
+      ],
+      "title": "Change",
+      "type": "string"
+    },
+    "price_rule_id": {
+      "title": "Price Rule Id",
+      "type": "string"
+    },
+    "priority": {
+      "title": "Priority",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "price_rule_id",
+    "change",
+    "priority"
+  ],
+  "title": "RuleChangedEvent",
+  "type": "object"
+}

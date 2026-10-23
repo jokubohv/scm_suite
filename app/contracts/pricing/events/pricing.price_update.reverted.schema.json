@@ -1,0 +1,24 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "price_update_id": {
+      "title": "Price Update Id",
+      "type": "string"
+    },
+    "reverted_at": {
+      "title": "Reverted At",
+      "type": "string"
+    },
+    "target_ref": {
+      "title": "Target Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "price_update_id",
+    "target_ref",
+    "reverted_at"
+  ],
+  "title": "PriceUpdateRevertedEvent",
+  "type": "object"
+}

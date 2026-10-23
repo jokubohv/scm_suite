@@ -1,0 +1,29 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effective_start": {
+      "title": "Effective Start",
+      "type": "string"
+    },
+    "price_update_id": {
+      "title": "Price Update Id",
+      "type": "string"
+    },
+    "superseded_by_id": {
+      "title": "Superseded By Id",
+      "type": "string"
+    },
+    "target_ref": {
+      "title": "Target Ref",
+      "type": "string"
+    }
+  },
+  "required": [
+    "price_update_id",
+    "superseded_by_id",
+    "target_ref",
+    "effective_start"
+  ],
+  "title": "PriceUpdateSupersededEvent",
+  "type": "object"
+}

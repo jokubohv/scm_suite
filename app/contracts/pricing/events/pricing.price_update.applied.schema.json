@@ -1,0 +1,46 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "effective_end": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective End"
+    },
+    "effective_start": {
+      "title": "Effective Start",
+      "type": "string"
+    },
+    "price_update_id": {
+      "title": "Price Update Id",
+      "type": "string"
+    },
+    "rows_written": {
+      "title": "Rows Written",
+      "type": "integer"
+    },
+    "target_ref": {
+      "title": "Target Ref",
+      "type": "string"
+    },
+    "update_type": {
+      "title": "Update Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "price_update_id",
+    "update_type",
+    "target_ref",
+    "effective_start",
+    "rows_written"
+  ],
+  "title": "PriceUpdateAppliedEvent",
+  "type": "object"
+}

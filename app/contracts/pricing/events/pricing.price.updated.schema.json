@@ -1,0 +1,74 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "currency_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Currency Code"
+    },
+    "effective_from": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective From"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective To"
+    },
+    "item_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Item Ids",
+      "type": "array"
+    },
+    "price_level_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Price Level Id"
+    },
+    "source": {
+      "default": "ROW",
+      "enum": [
+        "ROW",
+        "BULK",
+        "SWAP",
+        "UPDATE",
+        "RULE"
+      ],
+      "title": "Source",
+      "type": "string"
+    }
+  },
+  "title": "PriceUpdatedEvent",
+  "type": "object"
+}

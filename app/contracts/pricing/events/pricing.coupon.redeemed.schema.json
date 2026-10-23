@@ -1,0 +1,46 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "coupon_code": {
+      "title": "Coupon Code",
+      "type": "string"
+    },
+    "discount_amount": {
+      "title": "Discount Amount",
+      "type": "string"
+    },
+    "document_id": {
+      "title": "Document Id",
+      "type": "string"
+    },
+    "document_type": {
+      "title": "Document Type",
+      "type": "string"
+    },
+    "max_uses": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Max Uses"
+    },
+    "uses_count": {
+      "title": "Uses Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "coupon_code",
+    "document_type",
+    "document_id",
+    "uses_count",
+    "discount_amount"
+  ],
+  "title": "CouponRedeemedEvent",
+  "type": "object"
+}

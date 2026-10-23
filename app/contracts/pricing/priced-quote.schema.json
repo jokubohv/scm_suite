@@ -1,0 +1,255 @@
+{
+  "$defs": {
+    "ResolutionLine": {
+      "additionalProperties": true,
+      "properties": {
+        "calculation_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Calculation Mode"
+        },
+        "coupon_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Coupon Code"
+        },
+        "currency_code": {
+          "title": "Currency Code",
+          "type": "string"
+        },
+        "discount_amount": {
+          "default": "0",
+          "title": "Discount Amount",
+          "type": "string"
+        },
+        "effective_at": {
+          "title": "Effective At",
+          "type": "string"
+        },
+        "extended_price": {
+          "title": "Extended Price",
+          "type": "string"
+        },
+        "fallback_used": {
+          "default": false,
+          "title": "Fallback Used",
+          "type": "boolean"
+        },
+        "item_id": {
+          "title": "Item Id",
+          "type": "string"
+        },
+        "line_ref": {
+          "title": "Line Ref",
+          "type": "string"
+        },
+        "marginal_applied": {
+          "default": false,
+          "title": "Marginal Applied",
+          "type": "boolean"
+        },
+        "policy_version": {
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "price_level_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Price Level Id"
+        },
+        "price_rule_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Price Rule Id"
+        },
+        "price_source": {
+          "enum": [
+            "LEVEL",
+            "PRICING_GROUP",
+            "RULE",
+            "COUPON",
+            "SCHEDULE",
+            "NONE"
+          ],
+          "title": "Price Source",
+          "type": "string"
+        },
+        "quantity": {
+          "title": "Quantity",
+          "type": "string"
+        },
+        "quantity_basis": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quantity Basis"
+        },
+        "quantity_break": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Quantity Break"
+        },
+        "quote_hash": {
+          "title": "Quote Hash",
+          "type": "string"
+        },
+        "rules_applied": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rules Applied",
+          "type": "array"
+        },
+        "schedule_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schedule Id"
+        },
+        "trace": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Trace",
+          "type": "array"
+        },
+        "unit_price": {
+          "title": "Unit Price",
+          "type": "string"
+        },
+        "uom": {
+          "title": "Uom",
+          "type": "string"
+        }
+      },
+      "required": [
+        "line_ref",
+        "item_id",
+        "uom",
+        "quantity",
+        "unit_price",
+        "extended_price",
+        "currency_code",
+        "price_source",
+        "effective_at",
+        "policy_version",
+        "quote_hash"
+      ],
+      "title": "ResolutionLine",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Immutable authoritative quote returned to the external order boundary (D3/\u0394-2).",
+  "properties": {
+    "currency_code": {
+      "title": "Currency Code",
+      "type": "string"
+    },
+    "customer_group_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Customer Group Id"
+    },
+    "document_date": {
+      "title": "Document Date",
+      "type": "string"
+    },
+    "external_customer_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "External Customer Ref"
+    },
+    "line_count": {
+      "title": "Line Count",
+      "type": "integer"
+    },
+    "lines": {
+      "items": {
+        "$ref": "#/$defs/ResolutionLine"
+      },
+      "title": "Lines",
+      "type": "array"
+    },
+    "policy_version": {
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "quote_hash": {
+      "title": "Quote Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "policy_version",
+    "currency_code",
+    "document_date",
+    "lines",
+    "quote_hash",
+    "line_count"
+  ],
+  "title": "PricedQuote",
+  "type": "object"
+}
