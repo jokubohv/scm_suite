@@ -12,6 +12,7 @@ from app import __version__
 from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
+from app.api.routers.platform import api_keys as platform_api_keys
 from app.api.routers.platform import approvals as platform_approvals
 from app.api.routers.platform import auth as platform_auth
 from app.api.routers.platform import ops as platform_ops
@@ -43,6 +44,7 @@ def create_app() -> FastAPI:
     app.add_middleware(RequestContextMiddleware)
     register_router(platform_ops.router)
     register_router(platform_approvals.router)
+    register_router(platform_api_keys.router)
     register_router(platform_rbac.router)
     register_router(platform_auth.router)
     register_router(platform_sso.router)

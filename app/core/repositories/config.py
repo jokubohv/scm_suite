@@ -33,7 +33,7 @@ from datetime import UTC, date, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import and_, delete, func, insert, or_, select, update
+from sqlalchemy import and_, delete, func, insert, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -48,7 +48,7 @@ FLAG_KEY_PATTERN = re.compile(r"^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$")
 PERIOD_KEY_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$")
 DOC_TYPE_PATTERN = re.compile(r"^[A-Z][A-Z0-9_]{0,31}$")
 
-CURRENCY_DATA_TYPES = frozenset({"TEXT", "NUMBER", "DATE", "BOOL", "SELECT"})
+CUSTOM_FIELD_DATA_TYPES = frozenset({"TEXT", "NUMBER", "DATE", "BOOL", "SELECT"})
 CUSTOM_FIELD_ENTITY_TYPES = frozenset({"ITEM", "LOT", "SERIAL", "WORK_ORDER"})
 FISCAL_PERIOD_STATUSES = frozenset({"OPEN", "CLOSED", "LOCKED"})
 RESET_POLICIES = frozenset({"NEVER", "ANNUAL", "MONTHLY"})
@@ -422,11 +422,11 @@ def validate_custom_field_create(payload: Mapping[str, Any]) -> dict[str, Any]:
     if label is None:
         raise ConfigError("label is required", code="VALIDATION_ERROR", details={"field": "label"})
     data_type = str(payload.get("data_type", "")).upper()
-    if data_type not in CURRENCY_DATA_TYPES:
+    if data_type not in CUSTOM_FIELD_DATA_TYPES:
         raise ConfigError(
-            f"data_type must be one of {sorted(CURRENCY_DATA_TYPES)}",
+            f"data_type must be one of {sorted(CUSTOM_FIELD_DATA_TYPES)}",
             code="CUSTOM_FIELD_TYPE_INVALID",
-            details={"field": "data_type", "allowed": sorted(CURRENCY_DATA_TYPES)},
+            details={"field": "data_type", "allowed": sorted(CUSTOM_FIELD_DATA_TYPES)},
         )
     return {
         "entity_type": entity_type,
@@ -1168,7 +1168,7 @@ __all__ = [
     "ConfigRepository",
     "ConfigStale",
     "CUSTOM_FIELD_ENTITY_TYPES",
-    "CURRENCY_DATA_TYPES",
+    "CUSTOM_FIELD_DATA_TYPES",
     "FISCAL_PERIOD_STATUSES",
     "GAP_POLICIES",
     "ISO_NUMERIC_MAX",

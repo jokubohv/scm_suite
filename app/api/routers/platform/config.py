@@ -91,6 +91,8 @@ class CurrencyCreate(BaseModel):
 
 
 class CurrencyUpdate(BaseModel):
+    # Accepted only to return the documented immutable-primary-key error (repo validates it).
+    code: str | None = Field(default=None, description="immutable ISO-4217 code")
     numeric_code: int | None = Field(default=None, ge=1, le=999)
     minor_units: int | None = Field(default=None, ge=0, le=4)
     is_active: bool | None = None
