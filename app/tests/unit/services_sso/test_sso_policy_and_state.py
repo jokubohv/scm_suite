@@ -3,7 +3,6 @@ group-mapping bounds/SoD and the in-memory single-use state store (no DB/network
 
 from __future__ import annotations
 
-import time
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -17,7 +16,7 @@ from app.core.security.errors import (
     SsoIdTokenInvalid,
     SsoStateInvalid,
 )
-from app.core.security.scopes import SodContext, load_catalogue
+from app.core.security.scopes import load_catalogue
 
 
 def _connection(
@@ -59,12 +58,13 @@ def test_authorization_request_is_tenant_bound_and_single_use() -> None:
     assert "code_challenge_method=S256" in url
     assert f"state={request.state}" in url and f"nonce={request.nonce}" in url
 
-    used = authn.validate_callback_state(request, state=request.state)
+    now = datetime(2026, 1, 1, tzinfo=UTC)
+    used = authn.validate_callback_state(request, state=request.state, now=now)
     assert used.used is True
     with pytest.raises(SsoStateInvalid):
-        authn.validate_callback_state(used, state=request.state)
+        authn.validate_callback_state(used, state=request.state, now=now)
     with pytest.raises(SsoStateInvalid):
-        authn.validate_callback_state(request, state="wrong-state")
+        authn.validate_callback_state(request, state="wrong-state", now=now)
 
 
 def test_callback_state_expiry_rejected() -> None:
@@ -77,15 +77,21 @@ def test_callback_state_expiry_rejected() -> None:
         ttl_seconds=5,
     )
     with pytest.raises(SsoStateInvalid):
-        authn.validate_callback_state(request, state=request.state, now=datetime(2026, 1, 1, tzinfo=UTC) + timedelta(seconds=6))
+        authn.validate_callback_state(
+            request, state=request.state, now=datetime(2026, 1, 1, tzinfo=UTC) + timedelta(seconds=6)
+        )
 
 
 def test_disabled_connection_cannot_start_sso() -> None:
-    with pytest.raises(Exception) as excinfo:  # SsoDisabled
+    with pytest.raises(Exception) as excinfo:
+        authn.validate_connection_usable(_connection(status=authn.SsoConnectionStatus.DISABLED))
+    assert excinfo.value.code == "SSO_DISABLED"
+    # A non-ACTIVE connection is not discoverable for routing at all (no silent downgrade).
+    with pytest.raises(Exception) as not_found:
         authn.resolve_connection_for_start(
             "acme", connections=[_connection(status=authn.SsoConnectionStatus.DISABLED)]
         )
-    assert excinfo.value.code == "SSO_DISABLED"
+    assert not_found.value.code == "SSO_PROVIDER_NOT_FOUND"
 
 
 def test_redirect_uri_allowlist_enforced() -> None:

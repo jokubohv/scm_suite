@@ -9,11 +9,12 @@ from uuid import uuid4
 
 import pytest
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy import insert, select, func
+from sqlalchemy import insert
 
 from app.api.deps import get_db, token_service
 from app.api.main import create_app
-from app.api.routers.platform.sso import InMemorySsoStateStore, router as sso_router
+from app.api.routers.platform.sso import InMemorySsoStateStore
+from app.api.routers.platform.sso import router as sso_router
 from app.core.models.platform import app_user, permission_scope, role, role_permission, tenant, user_identity
 
 ISSUER = "http://localhost:5556/dex"
@@ -83,9 +84,7 @@ async def seed_tenant(
 ) -> dict[str, Any]:
     """Create a tenant + admin identity/membership + optional roles/scopes; return ids/token."""
     tenant_id, identity_id, user_id = uuid4(), uuid4(), uuid4()
-    await session.execute(
-        insert(tenant).values(id=tenant_id, code=code, name=f"{code} Inc", status="ACTIVE")
-    )
+    await session.execute(insert(tenant).values(id=tenant_id, code=code, name=f"{code} Inc", status="ACTIVE"))
     await session.execute(
         insert(user_identity).values(
             id=identity_id,
@@ -178,7 +177,9 @@ async def create_connection(client: AsyncClient, headers: dict[str, str], **over
     return response.json()
 
 
-def dex_claims(*, nonce: str, email: str = "dev@example.com", groups: list[str] | None = None, issuer: str = ISSUER) -> dict[str, Any]:
+def dex_claims(
+    *, nonce: str, email: str = "dev@example.com", groups: list[str] | None = None, issuer: str = ISSUER
+) -> dict[str, Any]:
     now = datetime.now(UTC)
     return {
         "iss": issuer,
