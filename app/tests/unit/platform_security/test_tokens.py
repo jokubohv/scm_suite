@@ -194,3 +194,86 @@ def test_api_key_generation_hash_and_constant_time_verify() -> None:
     assert constant_time_compare(b"abc", "abc") is True
     with pytest.raises(ValueError):
         ApiKeyHasher("")
+
+
+def test_rs256_signer_interface_round_trip() -> None:
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric import rsa
+
+    from app.core.security.tokens import AsymmetricTokenSigner
+
+    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    private_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    )
+    public_pem = private_key.public_key().public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo,
+    )
+    ref = StaticSigningKeyRef(
+        algorithm="RS256",
+        private_key_pem=private_pem,
+        public_key_pem=public_pem,
+        key_id="key-1",
+    )
+    signer = signer_from_key_ref(ref)
+    assert isinstance(signer, AsymmetricTokenSigner)
+    assert signer.algorithm == "RS256" and signer.key_id == "key-1"
+    clock = StepClock()
+    service = TokenService(signer, config=TokenConfig(issuer=ISSUER, audience=AUDIENCE), clock=clock)
+    pair = service.issue_token_pair(identity_id="i", app_user_id="u", tenant_id="t", token_version=0, scopes=(), session_id="s")
+    assert service.decode_access_token(pair.access_token).sub == "i"
+    # A different key pair must not verify the signature.
+    other_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    other_public = other_key.public_key().public_bytes(
+        encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    other_service = TokenService(
+        AsymmetricTokenSigner(other_public, algorithm="RS256"),
+        config=TokenConfig(issuer=ISSUER, audience=AUDIENCE),
+        clock=clock,
+    )
+    with pytest.raises(TokenInvalid):
+        other_service.decode_access_token(pair.access_token)
+
+
+def test_token_config_validation_and_malformed_claims() -> None:
+    with pytest.raises(ValueError):
+        TokenConfig(issuer="")
+    with pytest.raises(ValueError):
+        TokenConfig(access_ttl_seconds=0)
+    with pytest.raises(ValueError):
+        TokenConfig(leeway_seconds=-1)
+    service = make_service(StepClock())
+    with pytest.raises(TokenInvalid):
+        service.decode_access_token("")
+    signer = HmacTokenSigner(HMAC_SECRET.encode())
+    malformed = signer.sign(
+        {"iss": ISSUER, "aud": AUDIENCE, "sub": "i", "tid": "t", "tv": 0, "jti": "j", "iat": 1, "exp": 9_999_999_999, "typ": "access", "scopes": "not-a-list"}
+    )
+    with pytest.raises(TokenInvalid):
+        service.decode_access_token(malformed)
+    missing = signer.sign(
+        {"iss": ISSUER, "aud": AUDIENCE, "sub": "i", "tid": "t", "tv": 0, "jti": "j", "iat": 1, "exp": 9_999_999_999, "typ": "access", "scopes": []}
+    )
+    with pytest.raises(TokenInvalid):
+        service.decode_access_token(missing)  # uid missing
+
+
+def test_leeway_accepts_recently_expired_token() -> None:
+    clock = StepClock()
+    service = TokenService(
+        HmacTokenSigner(HMAC_SECRET.encode()),
+        config=TokenConfig(issuer=ISSUER, audience=AUDIENCE, leeway_seconds=60),
+        clock=clock,
+    )
+    access_token, _ = service.issue_access_token(
+        identity_id="i", app_user_id="u", tenant_id="t", token_version=0, scopes=(), ttl_seconds=10
+    )
+    clock.advance(30)  # expired 20s ago, inside the 60s leeway
+    assert service.decode_access_token(access_token).uid == "u"
+    clock.advance(60)  # now expired 80s ago, beyond leeway
+    with pytest.raises(TokenExpired):
+        service.decode_access_token(access_token)

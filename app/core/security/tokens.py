@@ -100,6 +100,9 @@ class SigningKeyRef(Protocol):
     @property
     def algorithm(self) -> str: ...
 
+    @property
+    def key_id(self) -> str | None: ...
+
     def private_key(self) -> str | bytes: ...
 
     def public_key(self) -> str | bytes: ...
@@ -196,7 +199,12 @@ class AsymmetricTokenSigner:
 
     @classmethod
     def from_ref(cls, key_ref: SigningKeyRef) -> AsymmetricTokenSigner:
-        return cls(key_ref.private_key(), public_key_pem=key_ref.public_key(), algorithm=key_ref.algorithm)
+        return cls(
+            key_ref.private_key(),
+            public_key_pem=key_ref.public_key(),
+            algorithm=key_ref.algorithm,
+            key_id=getattr(key_ref, "key_id", None),
+        )
 
     @property
     def algorithm(self) -> str:
@@ -232,7 +240,7 @@ def signer_from_key_ref(key_ref: SigningKeyRef) -> TokenSigner:
     """Build the signer matching a key reference algorithm (HS* → HMAC, RS* → asymmetric)."""
     algorithm = key_ref.algorithm.upper()
     if algorithm.startswith("HS"):
-        return HmacTokenSigner(key_ref.private_key(), algorithm=algorithm)
+        return HmacTokenSigner(key_ref.private_key(), algorithm=algorithm, key_id=getattr(key_ref, "key_id", None))
     if algorithm.startswith(("RS", "ES")):
         return AsymmetricTokenSigner.from_ref(key_ref)
     raise ValueError(f"unsupported signing algorithm {algorithm!r}")
