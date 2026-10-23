@@ -115,13 +115,6 @@ def _as_uuid(value: str | UUID) -> UUID:
     return value if isinstance(value, UUID) else UUID(str(value))
 
 
-def _now(now: datetime | None) -> datetime:
-    moment = now or utc_now()
-    if moment.tzinfo is None:
-        raise ValueError("idempotency timestamps must be timezone-aware (UTC)")
-    return moment.astimezone(moment.tzinfo) if False else moment
-
-
 def _record_from_row(row: Mapping[str, Any]) -> IdempotencyRecord:
     status = IdempotencyStatus(str(row["status"]))
     return IdempotencyRecord(
@@ -150,7 +143,7 @@ def response_hash(record: IdempotencyRecord) -> str:
     )
 
 
-async def _fetch(session: AsyncSession, tenant_id: UUID, endpoint_id: str, key: str) -> Mapping[str, Any] | None:
+async def _fetch(session: AsyncSession, tenant_id: UUID, endpoint_id: str, key: str) -> dict[str, Any] | None:
     result = await session.execute(
         select(p.idempotency_key).where(
             p.idempotency_key.c.tenant_id == tenant_id,
@@ -158,7 +151,8 @@ async def _fetch(session: AsyncSession, tenant_id: UUID, endpoint_id: str, key: 
             p.idempotency_key.c.key_value == key,
         )
     )
-    return result.mappings().first()
+    mapping = result.mappings().first()
+    return dict(mapping) if mapping is not None else None
 
 
 # --------------------------------------------------------------------------- public API --------
@@ -200,9 +194,7 @@ async def guard(
     if decision.outcome is not IdempotencyOutcome.PROCEED:
         return decision
 
-    fresh = begin_record(
-        key=key, request_hash=request_fingerprint_hash, now=moment, ttl_seconds=ttl_seconds
-    )
+    fresh = begin_record(key=key, request_hash=request_fingerprint_hash, now=moment, ttl_seconds=ttl_seconds)
     if row is None:
         insert_result = await session.execute(
             pg_insert(p.idempotency_key)
@@ -329,9 +321,7 @@ async def complete(
     return completed
 
 
-async def abort(
-    session: AsyncSession, *, tenant_id: str | UUID, endpoint_id: str, key: str
-) -> bool:
+async def abort(session: AsyncSession, *, tenant_id: str | UUID, endpoint_id: str, key: str) -> bool:
     """Release an IN_PROGRESS reservation (failure handled without rolling the transaction back)."""
     result = await session.execute(
         delete(p.idempotency_key).where(
