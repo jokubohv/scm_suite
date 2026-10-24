@@ -30,7 +30,7 @@ from typing import Annotated, Any, NoReturn
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, Response
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.deps import DbDep, PrincipalDep, require_account_creation_authority, require_scope
 from app.core.custom_fields import CustomFieldError
 from app.core.repositories.platform_extras import (
     PlatformExtrasError,
@@ -244,6 +244,7 @@ async def bootstrap_admin(
     response: Response,
     request: Request,
     _: Annotated[object, Depends(require_scope(TENANT_ADMIN))],
+    _account: Annotated[object, Depends(require_account_creation_authority)] = None,
     idempotency_key: IdempotencyKey = None,
 ) -> dict[str, Any]:
     """Re-issue the tenant bootstrap-admin invitation (no plaintext token is returned)."""

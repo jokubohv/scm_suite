@@ -32,6 +32,7 @@ tools/           plan-package gates (read-only reference)
 This repository ships a headless REST service (no UI). For deployment readiness, the authoritative
 runtime OpenAPI, health/readiness behavior, required production roles/secrets, scheduler/worker topology
 and the current production checklist, see `deployment/HEADLESS-READINESS.md`.
+VPS (Docker Compose + GitHub Actions) deployment: `deployment/VPS-DEPLOYMENT.md`.
 
 ## Dev stack quickstart
 

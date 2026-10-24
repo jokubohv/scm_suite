@@ -755,7 +755,7 @@ async def sso_callback(
         identity_exists=global_identity is not None,
         email_verified=claims.email_verified,
         domain_allowed=True,
-        jit_provisioning=connection.jit_provisioning,
+        jit_provisioning=bool(connection.jit_provisioning and get_settings().sso_jit_provisioning_enabled),
     )
     authn.require_identity_resolution_allowed(resolution)
     identity_id: str | None = resolution.identity_id
@@ -903,6 +903,10 @@ async def list_sso_connections(
 
 @router.post("/admin/sso-connections", status_code=201)
 async def create_sso_connection(payload: ConnectionCreate, repo: RepoDep, principal: ManageDep) -> dict[str, Any]:
+    if payload.jit_provisioning and not get_settings().sso_jit_provisioning_enabled:
+        raise HTTPException(status_code=403, detail={"code": "JIT_PROVISIONING_DISABLED",
+                                                     "message": "SSO JIT account creation is disabled by deployment policy",
+                                                     "details": {}})
     values = _validate_connection_values(
         payload.model_dump(exclude_none=True) | {"default_role_keys": payload.default_role_keys, "status": "DRAFT"}
     )
@@ -942,6 +946,10 @@ async def update_sso_connection(
 ) -> dict[str, Any]:
     current = await _connection_row_or_404(repo, principal.tenant_id, connection_id)
     changes = payload.model_dump(exclude_unset=True)
+    if changes.get("jit_provisioning") is True and not get_settings().sso_jit_provisioning_enabled:
+        raise HTTPException(status_code=403, detail={"code": "JIT_PROVISIONING_DISABLED",
+                                                     "message": "SSO JIT account creation is disabled by deployment policy",
+                                                     "details": {}})
     if changes.get("status") not in (None, "DRAFT", "DISABLED"):
         raise SsoConnectionInvalid("status changes to TESTING/ACTIVE go through the /test action")
     values = _validate_connection_values(changes)

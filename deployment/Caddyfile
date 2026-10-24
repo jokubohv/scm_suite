@@ -1,0 +1,5 @@
+{$DOMAIN} {
+	encode zstd gzip
+	# The API docs/OpenAPI are public; add basic_auth or an internal IP allowlist here if desired.
+	reverse_proxy api:8000
+}

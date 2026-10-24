@@ -22,7 +22,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import insert, select
 
-from app.api.deps import DbDep, PrincipalDep, require_scope, scope_registry
+from app.api.deps import DbDep, PrincipalDep, require_account_creation_authority, require_scope, scope_registry
 from app.core.models import platform as p
 from app.core.platform_events import emit_platform_event, sod_blocked
 from app.core.repositories.rbac import ALLOWED_SETTING_NAMESPACES, RbacRepository
@@ -598,7 +598,7 @@ async def list_users(
     }
 
 
-@router.post("/admin/users", status_code=201, dependencies=[Depends(require_scope(USER_ADMIN))])
+@router.post("/admin/users", status_code=201, dependencies=[Depends(require_scope(USER_ADMIN)), Depends(require_account_creation_authority)])
 async def create_user(body: UserCreate, repo: RepoDep, principal: PrincipalDep) -> dict[str, Any]:
     """Create an INVITED membership for an existing identity (or invitation email) and issue the invitation."""
     if not body.email and not body.identity_id:
@@ -795,7 +795,7 @@ async def revoke_user_sessions(
 
 
 # ------------------------------------------------------------------------- invitations --------
-@router.post("/admin/invitations", status_code=201, dependencies=[Depends(require_scope(INVITATION_ADMIN))])
+@router.post("/admin/invitations", status_code=201, dependencies=[Depends(require_scope(INVITATION_ADMIN)), Depends(require_account_creation_authority)])
 async def create_invitation(
     body: InvitationCreate,
     repo: RepoDep,

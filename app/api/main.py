@@ -24,6 +24,7 @@ from app.api.routers.platform import approval_actions as platform_approval_actio
 from app.api.routers.platform import approvals as platform_approvals
 from app.api.routers.platform import artifacts as platform_artifacts
 from app.api.routers.platform import auth as platform_auth
+from app.api.routers.platform import bootstrap as platform_bootstrap
 from app.api.routers.platform import boundary as platform_boundary
 from app.api.routers.platform import config as platform_config
 from app.api.routers.platform import extras as platform_extras
@@ -77,6 +78,7 @@ def create_app() -> FastAPI:
     register_router(platform_sso.router)
     register_router(platform_tenants.router)
     register_router(platform_admin.router)
+    register_router(platform_bootstrap.router)
     register_router(platform_internal.router)
     register_router(item_master_router)
     register_router(pricing_router)

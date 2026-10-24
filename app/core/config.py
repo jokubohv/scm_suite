@@ -40,6 +40,17 @@ class Settings(BaseSettings):
     s3_secret_key: str = "minio123"
     s3_bucket: str = "inventory"
 
+    # First-party account creation control. The bootstrap token is the only credential that can
+    # create tenants/accounts directly through /api/v1/bootstrap/*; empty disables bootstrap.
+    super_admin_token: str = ""
+    # When true (recommended for production), the regular tenant-admin account/invitation and
+    # tenant-provisioning routes also require the super-admin token, so no tenant admin can create
+    # accounts without the operator token.
+    account_creation_super_admin_only: bool = False
+    # SSO JIT account creation is disabled in hardened deployments; existing connections cannot
+    # auto-provision accounts when this is false. Production env sets it false.
+    sso_jit_provisioning_enabled: bool = True
+
     def public_dict(self) -> dict[str, str]:
         """Non-secret settings suitable for diagnostics."""
         return {

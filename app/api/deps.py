@@ -6,12 +6,13 @@ services; this module stays DB-thin so routers compose it explicitly.
 
 from __future__ import annotations
 
+import hmac
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import Annotated
 
-from fastapi import Depends, Header
+from fastapi import Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import Settings, get_settings
@@ -67,6 +68,60 @@ def scope_registry() -> ScopeRegistry:
 async def get_db() -> AsyncIterator[AsyncSession]:
     async with session_scope() as session:
         yield session
+
+
+def _super_admin_value() -> str:
+    """The configured bootstrap token, or empty when bootstrap is disabled."""
+    value = get_settings().super_admin_token or ""
+    return value.strip()
+
+
+def _require_super_admin_token(supplied: str | None) -> None:
+    expected = _super_admin_value()
+    if not expected or len(expected) < 24:
+        raise HTTPException(
+            status_code=503,
+            detail={"code": "BOOTSTRAP_DISABLED", "message": "super-admin bootstrap is not configured", "details": {}},
+        )
+    if not supplied or not hmac.compare_digest(supplied.encode("utf-8"), expected.encode("utf-8")):
+        raise HTTPException(
+            status_code=401,
+            detail={"code": "SUPER_ADMIN_TOKEN_INVALID", "message": "valid super-admin token required", "details": {}},
+        )
+
+
+async def require_super_admin(
+    x_super_admin_token: Annotated[str | None, Header(alias="X-Super-Admin-Token")] = None,
+    authorization: Annotated[str | None, Header()] = None,
+) -> None:
+    """FastAPI guard for operator-only bootstrap endpoints.
+
+    Accepts ``X-Super-Admin-Token`` (preferred) or ``Authorization: Bearer <SUPER_ADMIN_TOKEN>``.
+    The token is compared in constant time and never logged. Unset/short configuration disables the
+    endpoints with 503 rather than falling back to an insecure default.
+    """
+    supplied = x_super_admin_token
+    if not supplied and authorization and authorization.lower().startswith("bearer "):
+        supplied = authorization.split(" ", 1)[1].strip()
+    _require_super_admin_token(supplied)
+
+
+async def require_account_creation_authority(
+    x_super_admin_token: Annotated[str | None, Header(alias="X-Super-Admin-Token")] = None,
+    authorization: Annotated[str | None, Header()] = None,
+) -> None:
+    """Gate ordinary account/tenant-creation routes in hardened deployments.
+
+    With ``ACCOUNT_CREATION_SUPER_ADMIN_ONLY=true`` the regular tenant-admin invitation/user routes
+    and tenant provisioning require the operator token as well. In dev the setting defaults false so
+    existing tenant-admin tests/flows stay usable.
+    """
+    if not get_settings().account_creation_super_admin_only:
+        return
+    supplied = x_super_admin_token
+    if not supplied and authorization and authorization.lower().startswith("bearer "):
+        supplied = authorization.split(" ", 1)[1].strip()
+    _require_super_admin_token(supplied)
 
 
 async def get_bearer_token(authorization: Annotated[str | None, Header()] = None) -> str:

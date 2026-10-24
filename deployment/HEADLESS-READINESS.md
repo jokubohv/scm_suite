@@ -15,7 +15,7 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
 | Tests | 1302 passed, 1 skipped across the full suite; contract lint 0 errors/0 warnings; deployment state 16/16 feature sets verified. |
 | Auth | JWT access/refresh, RBAC 255 scopes, tenant isolation/RLS, Dex OIDC SSO + local fallback; deny-by-default route guards. |
 | Health | `/healthz` liveness; `/readyz` now checks DB (SELECT 1 + migration head) and Redis, returning **503** when either dependency is unavailable; `/internal/deps` is a catalogued scoped operation. |
-| Contracts | Runtime OpenAPI 3.1 **978 paths / 1254 operations**, unique operationIds, no TODO operations/unresolved component refs; committed artifact `deployment/runtime.openapi.json` with freshness test. Contract-first aggregate additionally carries 11 deliberate skeleton operations (see §5). |
+| Contracts | Runtime OpenAPI 3.1 **981 paths / 1257 operations**, unique operationIds, no TODO operations/unresolved component refs; committed artifact `deployment/runtime.openapi.json` with freshness test. Contract-first aggregate additionally carries 11 deliberate skeleton operations (see §5). |
 | Events | 159 canonical event schemas, all implementation-backed (`x-todo` = 0); outbox relay entrypoint; Redis streams. |
 | Feature flags | All deploy-dark by default; enable per tenant after deployment. Tenant provisioning seeds 201 rows (38 sequences, 136 settings, 26 flags, default count approval) and `app.seed.backfill` exists for existing tenants. |
 
@@ -35,6 +35,20 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
   `app/tests/contracts/test_runtime_openapi_spec.py` enforces freshness.
 - Docs/OpenAPI are currently public; restrict them at the gateway in production if the service is not
   intended for external developers.
+
+See `deployment/VPS-DEPLOYMENT.md` for the VPS Docker Compose + GitHub Actions deployment and the operator-only account bootstrap flow.
+
+### Account creation policy
+
+- There is **no public sign-up**. The public allowlist contains only login/SSO start/providers and
+  invitation acceptance; an invitation cannot be created without an authorised admin path.
+- Operator-only endpoints `POST /api/v1/bootstrap/tenants` and `POST /api/v1/bootstrap/users` require
+  `X-Super-Admin-Token: <SUPER_ADMIN_TOKEN>` (or Bearer). Missing/invalid token → 401; unset/short
+  configured token → 503 (`BOOTSTRAP_DISABLED`).
+- Set `ACCOUNT_CREATION_SUPER_ADMIN_ONLY=true` in production: tenant-admin user/invitation creation and
+  tenant provisioning then also require the operator token. Use the bootstrap endpoints for first-account
+  and additional-account creation, then log in normally.
+- Set `SSO_JIT_PROVISIONING_ENABLED=false` in production so SSO login cannot auto-create accounts.
 
 ## 3. Minimal headless run (dev/sandbox)
 

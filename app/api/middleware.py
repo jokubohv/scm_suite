@@ -27,6 +27,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         trace_id = match.group(1) if match else uuid.uuid4().hex
         token = set_request_context(RequestContext(correlation_id=correlation_id, trace_id=trace_id))
         started = time.perf_counter()
+        response: Response | None = None
         try:
             response = await call_next(request)
         except Exception:
@@ -34,8 +35,9 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
             raise
         finally:
             duration_ms = int((time.perf_counter() - started) * 1000)
-            response.headers["X-Request-ID"] = correlation_id
-            response.headers["X-Trace-ID"] = trace_id
+            if response is not None:
+                response.headers["X-Request-ID"] = correlation_id
+                response.headers["X-Trace-ID"] = trace_id
             log.info(
                 "request.completed",
                 extra={"correlation_id": correlation_id, "duration_ms": duration_ms, "event": "request.completed"},

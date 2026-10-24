@@ -28,7 +28,7 @@ from typing import Annotated, Any, Literal, NoReturn
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.api.deps import DbDep, Principal, PrincipalDep, require_scope
+from app.api.deps import DbDep, Principal, PrincipalDep, require_account_creation_authority, require_scope
 from app.core.repositories.platform_admin import (
     DEFAULT_LIST_LIMIT,
     PlatformAdminError,
@@ -147,7 +147,7 @@ async def list_tenants(
     return {"items": items, "next_cursor": next_cursor, "limit": limit}
 
 
-@router.post("/platform/tenants", status_code=201, dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))])
+@router.post("/platform/tenants", status_code=201, dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE)), Depends(require_account_creation_authority)])
 async def create_tenant(
     body: TenantCreateIn,
     repo: RepoDep,

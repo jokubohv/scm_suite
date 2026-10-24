@@ -349,6 +349,17 @@ def normalize_route(method: str, path: str) -> tuple[str, str]:
     return normalised_method, normalised_path
 
 
+#: Operator-only bootstrap operations. They carry no tenant capability scope (they run before any
+#: tenant admin exists) and are protected by the SUPER_ADMIN_TOKEN header at the API layer. They are
+#: classified as allowlisted so the deny-by-default route-scope gate can distinguish them from
+#: accidentally unscoped business routes.
+OPERATOR_BOOTSTRAP_ALLOWLIST: tuple[tuple[str, str], ...] = (
+    ("GET", "/api/v1/bootstrap/whoami"),
+    ("POST", "/api/v1/bootstrap/tenants"),
+    ("POST", "/api/v1/bootstrap/users"),
+)
+
+
 class ScopeRegistry:
     """Authorization evaluation over one catalogue snapshot (pure + deterministic)."""
 
@@ -558,6 +569,8 @@ class ScopeRegistry:
 
     def is_public_route(self, method: str, path: str) -> bool:
         normalised_method, normalised_path = normalize_route(method, path)
+        if (normalised_method, normalised_path) in OPERATOR_BOOTSTRAP_ALLOWLIST:
+            return True
         for entry in self.catalogue.public_allowlist:
             entry_method, entry_path = _split_allowlist_entry(entry)
             if entry_method is not None and entry_method != normalised_method:

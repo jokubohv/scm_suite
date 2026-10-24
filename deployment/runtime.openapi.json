@@ -441,6 +441,29 @@
         "title": "BootstrapAdminIn",
         "type": "object"
       },
+      "BootstrapWhoAmI": {
+        "properties": {
+          "account_creation_super_admin_only": {
+            "title": "Account Creation Super Admin Only",
+            "type": "boolean"
+          },
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "super_admin_token_min_length": {
+            "title": "Super Admin Token Min Length",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "enabled",
+          "account_creation_super_admin_only",
+          "super_admin_token_min_length"
+        ],
+        "title": "BootstrapWhoAmI",
+        "type": "object"
+      },
       "BuildCreate": {
         "additionalProperties": true,
         "properties": {
@@ -5457,6 +5480,108 @@
         "title": "SwitchTenantRequest",
         "type": "object"
       },
+      "TenantBootstrapIn": {
+        "additionalProperties": false,
+        "properties": {
+          "admin_display_name": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Admin Display Name"
+          },
+          "admin_email": {
+            "maxLength": 320,
+            "minLength": 3,
+            "title": "Admin Email",
+            "type": "string"
+          },
+          "admin_password": {
+            "maxLength": 128,
+            "minLength": 12,
+            "title": "Admin Password",
+            "type": "string"
+          },
+          "admin_role_codes": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "title": "Admin Role Codes",
+            "type": "array"
+          },
+          "base_currency_code": {
+            "anyOf": [
+              {
+                "maxLength": 3,
+                "minLength": 3,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Currency Code"
+          },
+          "code": {
+            "maxLength": 40,
+            "minLength": 2,
+            "title": "Code",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "negative_inventory_policy": {
+            "default": "BLOCK",
+            "enum": [
+              "BLOCK",
+              "WARN",
+              "ALLOW"
+            ],
+            "title": "Negative Inventory Policy",
+            "type": "string"
+          },
+          "retention_ledger_years": {
+            "default": 7,
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Retention Ledger Years",
+            "type": "integer"
+          },
+          "rounding_mode": {
+            "default": "PER_MOVEMENT",
+            "enum": [
+              "PER_MOVEMENT",
+              "PER_TRANSACTION",
+              "PER_DOCUMENT"
+            ],
+            "title": "Rounding Mode",
+            "type": "string"
+          },
+          "timezone": {
+            "default": "UTC",
+            "title": "Timezone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "admin_email",
+          "admin_password"
+        ],
+        "title": "TenantBootstrapIn",
+        "type": "object"
+      },
       "TenantChoice": {
         "properties": {
           "code": {
@@ -6006,6 +6131,55 @@
           "component_item_id"
         ],
         "title": "UnbuildLine",
+        "type": "object"
+      },
+      "UserBootstrapIn": {
+        "additionalProperties": false,
+        "properties": {
+          "display_name": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "email": {
+            "maxLength": 320,
+            "minLength": 3,
+            "title": "Email",
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 128,
+            "minLength": 12,
+            "title": "Password",
+            "type": "string"
+          },
+          "role_codes": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20,
+            "title": "Role Codes",
+            "type": "array"
+          },
+          "tenant_id": {
+            "format": "uuid",
+            "title": "Tenant Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "tenant_id",
+          "email",
+          "password"
+        ],
+        "title": "UserBootstrapIn",
         "type": "object"
       },
       "UserCreate": {
@@ -8355,6 +8529,22 @@
                 }
               ],
               "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Super-Admin-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Super-Admin-Token"
             }
           }
         ],
@@ -11385,6 +11575,22 @@
                 }
               ],
               "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Super-Admin-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Super-Admin-Token"
             }
           }
         ],
@@ -20070,6 +20276,225 @@
         "summary": "Post Boms Id Revisions Alias",
         "tags": [
           "manufacturing"
+        ]
+      }
+    },
+    "/api/v1/bootstrap/tenants": {
+      "post": {
+        "operationId": "bootstrap_tenant_api_v1_bootstrap_tenants_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Super-Admin-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Super-Admin-Token"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantBootstrapIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Bootstrap Tenant Api V1 Bootstrap Tenants Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Bootstrap Tenant",
+        "tags": [
+          "platform-bootstrap"
+        ]
+      }
+    },
+    "/api/v1/bootstrap/users": {
+      "post": {
+        "operationId": "bootstrap_user_api_v1_bootstrap_users_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Super-Admin-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Super-Admin-Token"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserBootstrapIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Bootstrap User Api V1 Bootstrap Users Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Bootstrap User",
+        "tags": [
+          "platform-bootstrap"
+        ]
+      }
+    },
+    "/api/v1/bootstrap/whoami": {
+      "get": {
+        "operationId": "whoami_api_v1_bootstrap_whoami_get",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Super-Admin-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Super-Admin-Token"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BootstrapWhoAmI"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Whoami",
+        "tags": [
+          "platform-bootstrap"
         ]
       }
     },
@@ -63260,6 +63685,22 @@
               ],
               "title": "Authorization"
             }
+          },
+          {
+            "in": "header",
+            "name": "X-Super-Admin-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Super-Admin-Token"
+            }
           }
         ],
         "requestBody": {
@@ -63490,6 +63931,22 @@
                 }
               ],
               "title": "Authorization"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Super-Admin-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Super-Admin-Token"
             }
           }
         ],

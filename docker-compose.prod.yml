@@ -1,0 +1,126 @@
+# Production-oriented Docker Compose for a single VPS (no Kubernetes).
+# The operator supplies .env.production on the VPS; GitHub Actions pulls the GHCR image and runs
+# migrations. TLS is handled by Caddy; Postgres/Redis are not published to the host.
+x-app-image: &app-image ${INVENTORY_IMAGE:?set INVENTORY_IMAGE to the GHCR image reference}
+x-app-service: &app-service
+  image: *app-image
+  env_file: [.env.production]
+  restart: unless-stopped
+  networks: [inventory]
+  logging:
+    options: {max-size: "20m", max-file: "5"}
+
+services:
+  migrate:
+    <<: *app-service
+    restart: "no"
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      DATABASE_URL: ${MIGRATIONS_DATABASE_URL:?set MIGRATIONS_DATABASE_URL in .env.production}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks: [inventory]
+    logging:
+      options: {max-size: "20m", max-file: "5"}
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?set REDIS_PASSWORD}"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$${REDIS_PASSWORD}\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD}
+    networks: [inventory]
+    logging:
+      options: {max-size: "10m", max-file: "3"}
+
+  api:
+    <<: *app-service
+    command: ["uvicorn", "app.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips=*"]
+    expose: ["8000"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=5).read()"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  worker:
+    <<: *app-service
+    command: ["python", "-m", "app.workers.worker"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import glob,sys; needle='app.workers.worker'; sys.exit(0 if any(needle in open(f,'rb').read().decode('utf-8','ignore') for f in glob.glob('/proc/[0-9]*/cmdline')) else 1)"]
+      interval: 20s
+      timeout: 5s
+      retries: 8
+
+  outbox-relay:
+    <<: *app-service
+    command: ["python", "-m", "app.core.outbox_relay"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import glob,sys; needle='app.core.outbox_relay'; sys.exit(0 if any(needle in open(f,'rb').read().decode('utf-8','ignore') for f in glob.glob('/proc/[0-9]*/cmdline')) else 1)"]
+      interval: 20s
+      timeout: 5s
+      retries: 8
+
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [inventory]
+
+networks:
+  inventory:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  caddy_data:
+  caddy_config:
