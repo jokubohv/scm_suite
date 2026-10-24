@@ -129,7 +129,7 @@ jobs:
           # Existing DBs at head 0030 still need the auth-service role grants; fresh DBs get them in 0030.
           docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres sh -c \
             'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "ALTER ROLE platform_auth BYPASSRLS; GRANT USAGE ON SCHEMA platform TO platform_auth; GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA platform TO platform_auth;"'
-          docker compose --env-file .env.production -f docker-compose.prod.yml up -d --remove-orphans api worker outbox-relay caddy
+          docker compose --env-file .env.production -f docker-compose.prod.yml up -d --remove-orphans --force-recreate api worker outbox-relay caddy
           docker compose --env-file .env.production -f docker-compose.prod.yml exec -T api \
             python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=10).read().decode())"
           REMOTE
