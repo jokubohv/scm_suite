@@ -65,6 +65,10 @@ def _create_refresh_function() -> None:
             IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '{APP_ROLE}') THEN
                 EXECUTE 'GRANT EXECUTE ON FUNCTION {SCHEMA}.refresh_materialized_views(boolean) TO {APP_ROLE}';
             END IF;
+            -- Readiness probe needs the applied migration head; grant read-only access.
+            IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '{APP_ROLE}') THEN
+                EXECUTE 'GRANT SELECT ON public.alembic_version TO {APP_ROLE}';
+            END IF;
         END $$;
         """
     )
