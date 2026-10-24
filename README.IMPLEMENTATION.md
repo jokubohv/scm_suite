@@ -27,6 +27,12 @@ ops/dex/         Dex dev config (S0-02)
 tools/           plan-package gates (read-only reference)
 ```
 
+## Headless deployment
+
+This repository ships a headless REST service (no UI). For deployment readiness, the authoritative
+runtime OpenAPI, health/readiness behavior, required production roles/secrets, scheduler/worker topology
+and the current production checklist, see `deployment/HEADLESS-READINESS.md`.
+
 ## Dev stack quickstart
 
 Requires Python 3.12, Docker/Compose. The repo is the full implementation; plan docs are unchanged

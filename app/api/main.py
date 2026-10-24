@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
+from sqlalchemy import text
 
 from app import __version__
 from app.api.errors import install_error_handlers
@@ -100,12 +100,38 @@ def create_app() -> FastAPI:
         return {"status": "ok", "version": __version__, "env": settings.env}
 
     @app.get("/readyz", tags=["platform"])
-    async def readyz() -> dict[str, object]:
-        checks = {
-            "database": "unknown" if not os.environ.get("DATABASE_URL") else "configured",
-            "redis": "unknown" if not os.environ.get("REDIS_URL") else "configured",
-        }
-        return {"status": "ok", "checks": checks}
+    async def readyz(response: Response) -> dict[str, object]:
+        """Readiness probe: real dependency checks (DB + migration head, Redis)."""
+
+        from redis.asyncio import from_url as redis_from_url
+
+        from app.db.session import get_engine
+
+        checks: dict[str, object] = {}
+        try:
+            async with get_engine().connect() as connection:
+                await connection.execute(text("SELECT 1"))
+                migration_head = await connection.scalar(
+                    text("SELECT version_num FROM public.alembic_version")
+                )
+            checks["database"] = "ok"
+            checks["migrations_head"] = migration_head
+        except Exception as exc:  # noqa: BLE001 - readiness must never raise
+            checks["database"] = "error"
+            checks["database_error"] = type(exc).__name__
+        redis_client = redis_from_url(
+            settings.redis_url, socket_connect_timeout=2, socket_timeout=2, decode_responses=True
+        )
+        try:
+            checks["redis"] = "ok" if await redis_client.ping() else "error"
+        except Exception as exc:  # noqa: BLE001
+            checks["redis"] = "error"
+            checks["redis_error"] = type(exc).__name__
+        finally:
+            await redis_client.aclose()
+        ready = checks.get("database") == "ok" and checks.get("redis") == "ok"
+        response.status_code = 200 if ready else 503
+        return {"status": "ok" if ready else "unavailable", "checks": checks}
 
     return app
 

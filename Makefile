@@ -1,7 +1,7 @@
 PYTHON ?= python3
 COMPOSE ?= docker compose
 
-.PHONY: help install lint format typecheck test test-unit gates plan-gates contracts up down migrate seed check-parallel
+.PHONY: help install lint format typecheck test test-unit gates plan-gates contracts contracts-runtime up down migrate seed check-parallel
 
 help:
 	@echo "targets: install lint format typecheck test gates plan-gates contracts up down migrate seed check-parallel"
@@ -30,6 +30,9 @@ plan-gates:
 	$(PYTHON) tools/feature_sets.py coverage
 	$(PYTHON) tools/render_plan_tables.py --check
 	$(PYTHON) tools/check_parallel_plan.py
+
+contracts-runtime:
+	$(PYTHON) tools/export_runtime_openapi.py
 
 check-parallel:
 	$(PYTHON) tools/check_parallel_plan.py --s0

@@ -83,6 +83,11 @@ def _as_uuid(value: Any) -> uuid.UUID:
     return value if isinstance(value, uuid.UUID) else uuid.UUID(str(value))
 
 
+def _today() -> date:
+    """UTC date: DB timestamps/dates are UTC, so local _today() can cross a calendar boundary."""
+    return datetime.now(UTC).date()
+
+
 def _date(value: Any) -> date | None:
     if value is None or value == "":
         return None
@@ -561,7 +566,7 @@ class ExtensionService:
         return {"id": str(registration_id), "status": "VOID"}
 
     async def coverage(self, *, item_id: str, serial_id: str | None = None, as_of: str | None = None) -> dict[str, Any]:
-        moment = _date(as_of) or date.today()
+        moment = _date(as_of) or _today()
         clauses = ["tenant_id = :tenant_id", "item_id = :item", "status = 'ACTIVE'"]
         params: dict[str, Any] = {"item": _as_uuid(item_id)}
         if serial_id:
@@ -648,7 +653,7 @@ class ExtensionService:
     async def _validate(
         self, claim: Mapping[str, Any], *, as_of: date | None = None, override_ref: str | None = None
     ) -> dict[str, Any]:
-        moment = as_of or (_date(claim["received_at"]) or date.today())
+        moment = as_of or (_date(claim["received_at"]) or _today())
         reasons: list[str] = []
         registration = None
         if claim.get("warranty_registration_id"):
@@ -1294,7 +1299,7 @@ class ExtensionService:
         row = await self._require_row("upc_registry", row_id, "UPC registry row")
         if row["status"] != "ASSIGNED":
             raise InvalidStateTransition(f"UPC registry row is {row['status']}, expected ASSIGNED")
-        retirement_date = _date(data.get("retirement_date")) or date.today()
+        retirement_date = _date(data.get("retirement_date")) or _today()
         await self._exec(
             "UPDATE extensions.upc_registry SET status = 'RETIRED', retirement_date = :retirement_date, retirement_reason = :reason, updated_at = now(), version = version + 1 WHERE tenant_id = :tenant_id AND id = :id",
             retirement_date=retirement_date,
