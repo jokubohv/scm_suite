@@ -19,7 +19,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from app.api.deps import DbDep, require_super_admin
 from app.core.config import get_settings
@@ -322,6 +322,7 @@ async def bootstrap_tenant(body: TenantBootstrapIn, db: DbDep) -> dict[str, Any]
 
 @router.post("/users", status_code=201, dependencies=[Depends(require_super_admin)])
 async def bootstrap_user(body: UserBootstrapIn, db: DbDep) -> dict[str, Any]:
+    await db.execute(text("SELECT set_config('app.tenant_id', :tenant_id, true)"), {"tenant_id": str(body.tenant_id)})
     tenant = (await db.execute(
         select(p.tenant.c.id, p.tenant.c.status).where(p.tenant.c.id == body.tenant_id)
     )).mappings().first()

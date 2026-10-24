@@ -6,6 +6,8 @@ x-app-service: &app-service
   image: *app-image
   env_file: [.env.production]
   restart: unless-stopped
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
   networks: [inventory]
   logging:
     options: {max-size: "20m", max-file: "5"}

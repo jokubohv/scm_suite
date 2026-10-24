@@ -33,7 +33,7 @@ from typing import Any
 from uuid import UUID, uuid4
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import and_, func, or_, select, update
+from sqlalchemy import and_, func, or_, select, text, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -606,6 +606,11 @@ class PlatformAdminRepository:
                 details={"field": "base_currency_code", "value": currency},
             )
         tenant_id = uuid4()
+        # Tenant creation is a SYSTEM/platform operation but RLS requires an explicit tenant context;
+        # use the new tenant id so the tenant row and all provisioning rows are visible/insertable.
+        await self.session.execute(
+            text("SELECT set_config('app.tenant_id', :tenant_id, true)"), {"tenant_id": str(tenant_id)}
+        )
         now = _now()
         values = {
             "id": tenant_id,

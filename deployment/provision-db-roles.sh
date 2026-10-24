@@ -18,6 +18,7 @@ WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'app_user')\gexec
 SELECT format('ALTER ROLE %I LOGIN PASSWORD %L', :'app_user', :'app_password')\gexec
 SELECT 'CREATE ROLE platform_app NOLOGIN' WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='platform_app')\gexec
 SELECT 'CREATE ROLE platform_auth NOLOGIN' WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='platform_auth')\gexec
+SELECT 'ALTER ROLE platform_auth BYPASSRLS'\gexec
 SELECT 'CREATE ROLE finance_adapter NOLOGIN' WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='finance_adapter')\gexec
 SELECT format('GRANT platform_app, platform_auth, finance_adapter TO %I', :'app_user')\gexec
 SQL

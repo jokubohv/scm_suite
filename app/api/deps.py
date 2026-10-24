@@ -12,7 +12,8 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import Annotated
 
-from fastapi import Depends, Header, HTTPException
+from fastapi import Depends, Header, HTTPException, Request
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import Settings, get_settings
@@ -67,6 +68,44 @@ def scope_registry() -> ScopeRegistry:
 
 async def get_db() -> AsyncIterator[AsyncSession]:
     async with session_scope() as session:
+        yield session
+
+
+async def get_request_db(request: Request) -> AsyncIterator[AsyncSession]:
+    """Request DB session with tenant RLS context / auth-role routing.
+
+    * Authenticated requests set ``app.tenant_id`` from the verified access-token claim in the same
+      transaction as the handler (``SET LOCAL``), so RLS policies apply to the app login.
+    * Public authentication endpoints run as the ``platform_auth`` service role (BYPASSRLS) because
+      login must discover identities/memberships before a tenant context exists. The role is optional
+      in dev (superuser test DB); in production provision-db-roles.sh creates it.
+    """
+    from app.core.security.errors import SecurityError
+
+    async with session_scope() as session:
+        path = request.url.path
+        auth_path = path.startswith("/api/v1/auth") or (
+            path.startswith("/api/v1/admin/invitations/") and path.endswith("/accept")
+        )
+        if auth_path:
+            exists = await session.scalar(
+                text("SELECT 1 FROM pg_roles WHERE rolname = 'platform_auth'")
+            )
+            if exists:
+                await session.execute(text("SET LOCAL ROLE platform_auth"))
+        else:
+            authorization = request.headers.get("authorization", "")
+            if authorization.lower().startswith("bearer "):
+                token = authorization.split(" ", 1)[1].strip()
+                try:
+                    claims = token_service().decode_access_token(token)
+                except SecurityError:
+                    pass
+                else:
+                    await session.execute(
+                        text("SELECT set_config('app.tenant_id', :tenant_id, true)"),
+                        {"tenant_id": claims.tid},
+                    )
         yield session
 
 
@@ -164,5 +203,5 @@ def require_scope(scope: str):
 
 
 SettingsDep = Annotated[Settings, Depends(_settings)]
-DbDep = Annotated[AsyncSession, Depends(get_db)]
+DbDep = Annotated[AsyncSession, Depends(get_request_db)]
 PrincipalDep = Annotated[Principal, Depends(get_current_principal)]
