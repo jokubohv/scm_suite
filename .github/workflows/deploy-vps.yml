@@ -117,10 +117,15 @@ jobs:
           ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && INVENTORY_IMAGE='$IMAGE' bash -s" <<'REMOTE'
           set -euo pipefail
           test -f .env.production || { echo "missing .env.production on VPS; see .env.production.example"; exit 1; }
+          if grep -q '^INVENTORY_IMAGE=' .env.production; then
+            sed -i "s#^INVENTORY_IMAGE=.*#INVENTORY_IMAGE=$INVENTORY_IMAGE#" .env.production
+          else
+            echo "INVENTORY_IMAGE=$INVENTORY_IMAGE" >> .env.production
+          fi
           docker compose --env-file .env.production -f docker-compose.prod.yml pull
           docker compose --env-file .env.production -f docker-compose.prod.yml up -d --wait postgres redis
           bash deployment/provision-db-roles.sh
-          docker compose --env-file .env.production -f docker-compose.prod.yml run --rm migrate
+          docker compose --env-file .env.production -f docker-compose.prod.yml run --rm --no-TTY migrate </dev/null
           docker compose --env-file .env.production -f docker-compose.prod.yml up -d --remove-orphans api worker outbox-relay caddy
           docker compose --env-file .env.production -f docker-compose.prod.yml exec -T api \
             python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=10).read().decode())"
