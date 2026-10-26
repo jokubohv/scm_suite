@@ -24,6 +24,17 @@ P7 manufacturing: assembly item → assembly extension → BOM → revision → 
 P8 reporting: catalogue + 12 report reads (stock ledger, valuation, snapshot, negative, lot expiry, workbenches, etc.).
 P9 isolation/sweep: cross-tenant 404s and GET 5xx sweep.
 
+## Full-surface smoke sweep (all mounted operations)
+
+`e2e/run_surface_sweep.py` invoked **1,257 / 1,257** runtime OpenAPI operations against the local E2E API using an authenticated tenant admin, placeholder path IDs and empty/minimal bodies. A response is accepted if it is 2xx/4xx; any 5xx or transport error fails the run.
+
+Latest result: **1,257 operations, 0 5xx**. Response distribution: 263 × 200, 498 × 422, 480 × 404, 8 × 403, 2 × 400, 6 × 204. This is crash-safety coverage, not full business validation for every write path.
+
+Additional defects found by that sweep and fixed:
+
+6. **Empty create payloads returned 500** — 50 operations reached service code with `{}` and raised `KeyError`/NOT NULL errors. Added an authenticated request-body guard: create-style POST/PUT/PATCH with `{}` now returns 422; documented action endpoints (`submit`, `post`, `approve`, `arrive`, etc.) still accept empty bodies.
+7. **Missing DELETE grants** — `platform_app` had no DELETE privilege on `item_master.item_related` / `item_master.kit_group_member`, producing 500s for valid delete routes. Grants added to migration 0030 and deployment backfill SQL.
+
 ## Defects found locally and fixed
 
 1. **Global currency hidden by RLS** — app role saw 0 of 10 `platform.currency` rows (tenant_id NULL), so vendor creation failed. Added `global_currency_read` policy; provisioned backfill for existing DBs.

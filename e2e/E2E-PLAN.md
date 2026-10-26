@@ -102,7 +102,8 @@ non-zero if any check fails.
 
 ## 6. Latest result
 
-`e2e/run_live_e2e.py` latest run: **170 checks, 0 failures**; 2 tenants, 3 warehouses;
-details in `verification/evidence/E2E/REPORT.md`. Production bugs found/fixed during this run:
+`e2e/run_live_e2e.py` latest run: **170 checks, 0 failures**; 2 tenants, 3 warehouses.
+`e2e/run_surface_sweep.py` invokes **all 1,257 mounted operations** and reports **0 5xx** locally.
+Details in `verification/evidence/E2E/REPORT.md`. Production bugs found/fixed during this run:
 global-currency RLS, traceability flag mismatch, procurement idempotency begins, bootstrap RLS
 context, and failed-login tenant-code event handling.

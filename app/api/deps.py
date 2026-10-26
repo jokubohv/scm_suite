@@ -7,6 +7,7 @@ services; this module stays DB-thin so routers compose it explicitly.
 from __future__ import annotations
 
 import hmac
+import json
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from functools import lru_cache
@@ -147,7 +148,7 @@ async def get_request_db(
         can_switch = await db.scalar(
             text(
                 "SELECT 1 FROM pg_roles r WHERE r.rolname = 'platform_auth' "
-                "AND has_table_privilege('platform_auth', 'platform.user_identity', 'SELECT')"
+                "AND has_table_privilege(r.oid, 'platform.user_identity', 'SELECT')"
             )
         )
         if can_switch:
@@ -208,5 +209,46 @@ def require_scope(scope: str):
 
 
 SettingsDep = Annotated[Settings, Depends(_settings)]
+_ACTION_BODY_OPTIONAL_TAILS = frozenset({
+    "submit", "post", "approve", "reject", "release", "start", "complete", "cancel", "void",
+    "reverse", "match", "assign", "activate", "inactivate", "close", "pause", "resume", "apply",
+    "rotate", "rotate-secret", "revoke", "resend", "accept", "deactivate", "reactivate", "issue",
+    "backflush", "unbuild", "build", "refresh", "archive", "clone", "merge", "suspend", "offboard",
+    "logout", "select-tenant", "test", "evaluate", "generate", "recalculate", "reset", "confirm",
+    "arrive", "depart", "receive", "dispatch", "deliver", "load", "unload", "pack", "ship", "pick",
+    "putaway", "manifest", "collect", "move", "recount", "count", "transfer",
+})
+
+
+async def reject_empty_create_body(request: Request) -> None:
+    """Return 422 for an authenticated create-style JSON request with an empty object body.
+
+    Many module routers intentionally accept a free-form ``dict`` payload and validate it in the
+    service layer. Empty objects reached those services and raised ``KeyError``/DB NOT NULL errors
+    (500). Action endpoints (submit/post/approve/...) legitimately accept an empty body; create
+    endpoints require the caller to supply the payload.
+    """
+    if request.method not in {"POST", "PUT", "PATCH"}:
+        return
+    if not request.headers.get("authorization") and not request.headers.get("x-super-admin-token"):
+        return
+    path = request.url.path.rstrip("/")
+    tail = path.rsplit("/", 1)[-1]
+    if tail in _ACTION_BODY_OPTIONAL_TAILS:
+        return
+    content_type = request.headers.get("content-type", "")
+    if "json" not in content_type:
+        return
+    raw = await request.body()
+    if not raw.strip():
+        return
+    try:
+        parsed = json.loads(raw)
+    except (TypeError, ValueError):
+        return
+    if parsed == {}:
+        raise HTTPException(status_code=422, detail="request body must contain the required fields")
+
+
 DbDep = Annotated[AsyncSession, Depends(get_request_db)]
 PrincipalDep = Annotated[Principal, Depends(get_current_principal)]

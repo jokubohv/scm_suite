@@ -75,6 +75,8 @@ def _create_refresh_function() -> None:
             -- Readiness probe needs the applied migration head; grant read-only access.
             IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '{APP_ROLE}') THEN
                 EXECUTE 'GRANT SELECT ON public.alembic_version TO {APP_ROLE}';
+                -- Item-master related/kit-member rows are editable; earlier grants omitted DELETE.
+                EXECUTE 'GRANT DELETE ON item_master.item_related, item_master.kit_group_member TO {APP_ROLE}';
             END IF;
         END $$;
         """

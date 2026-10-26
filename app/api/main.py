@@ -5,10 +5,11 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Response
+from fastapi import Depends, FastAPI, Response
 from sqlalchemy import text
 
 from app import __version__
+from app.api.deps import reject_empty_create_body
 from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
@@ -62,6 +63,7 @@ def create_app() -> FastAPI:
         openapi_url=f"{settings.api_prefix}/openapi.json",
         docs_url=f"{settings.api_prefix}/docs",
         redoc_url=None,
+        dependencies=[Depends(reject_empty_create_body)],
     )
     install_error_handlers(app)
     app.add_middleware(RequestContextMiddleware)
