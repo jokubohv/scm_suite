@@ -98,3 +98,17 @@ Live E2E now creates a tenant-scoped API key with `items.read`, then verifies:
 - revoked key on `GET /api/v1/items` → **401**
 
 Latest local run: **181 checks, 0 failures**; full suite **1,314 passed**; full-surface sweep **1,257 operations, 0 × 5xx**.
+
+
+## Production API-key verification
+
+After deploying `5b3e2b6` to production (`https://scm.k1hub.com`, tenant `intelranch_serebo`):
+
+- created a temporary tenant API key with scope `items.read`
+- `GET /api/v1/items` with `X-API-Key` → **200**
+- `GET /api/v1/admin/flags` with the same key → **403** (scope enforced)
+- revoked the key → `GET /api/v1/items` with the old key → **401**
+- the same tenant admin JWT still returns **200**
+- machine API keys are rejected on identity/session routes (`/api/v1/auth/*`, `/api/v1/me*`)
+
+No permanent integration key was left behind; create a named key with the scopes your integration needs.

@@ -229,6 +229,10 @@ async def get_request_auth(
         return None
     api_key = request.headers.get("x-api-key")
     if api_key:
+        # Machine credentials are for business integrations, never for identity/session
+        # self-service endpoints (login/refresh/switch-tenant/me). Those require a JWT.
+        if path.startswith("/api/v1/auth/") or path == "/api/v1/me" or path.startswith("/api/v1/me/"):
+            return None
         return await _authenticate_api_key(api_key)
     authorization = request.headers.get("authorization", "")
     if authorization.lower().startswith("bearer "):
