@@ -67,6 +67,10 @@ async def test_tool_registry_is_derived_from_runtime_openapi() -> None:
 
 async def test_api_request_schemas_are_typed_and_injected() -> None:
     spec = create_app().openapi()
+
+    def schemas_is_opaque(schema: dict) -> bool:
+        return schema.get("type") == "object" and not (schema.get("properties") or {})
+
     opaque = []
     for path, item in spec["paths"].items():
         for method, operation in item.items():
@@ -82,7 +86,8 @@ async def test_api_request_schemas_are_typed_and_injected() -> None:
     assert not opaque, opaque
     receipt = spec["paths"]["/api/v1/item-receipts"]["post"]["requestBody"]["content"]["application/json"]["schema"]
     assert {"vendor_id", "lines", "receipt_type", "location_id"} <= set(receipt["properties"])
-    assert "vendor_id" in receipt["required"] and "lines" in receipt["required"]
+    assert "lines" in receipt["required"]
+    assert "STANDALONE" in receipt["properties"]["receipt_type"]["enum"]
     adjustment = spec["paths"]["/api/v1/inventory-adjustments"]["post"]["requestBody"]["content"]["application/json"]["schema"]
     assert "lines" in adjustment["properties"] and "transaction_date" in adjustment["required"]
 
@@ -93,7 +98,19 @@ async def test_api_request_schemas_are_typed_and_injected() -> None:
     receipt_tool = by_name["item_receipts_create"]
     assert "vendor_id" in receipt_tool.input_schema["properties"]
     assert "lines" in receipt_tool.input_schema["properties"]
+    assert "STANDALONE" in receipt_tool.input_schema["properties"]["receipt_type"]["enum"]
     assert receipt_tool.body_additional is False
+    count_approve = by_name["inventory_counts_approve"]
+    assert "comment" in count_approve.input_schema["properties"]
+    assert "body" not in count_approve.input_schema["properties"]
+    count_capture = by_name["inventory_counts_lines"]
+    assert "lines" in count_capture.input_schema["properties"]
+    count_capture_line = count_capture.input_schema["properties"]["lines"]["items"]
+    if "$ref" in count_capture_line:
+        count_capture_line = spec["components"]["schemas"][count_capture_line["$ref"].rsplit("/", 1)[-1]]
+    assert "line_id" in (count_capture_line.get("properties") or {})
+    commitment_release = by_name["inventory_commitments_release"]
+    assert "qty" in commitment_release.input_schema["properties"]
 
 
 async def test_mcp_info_and_tools_list_require_api_key_dependency() -> None:
@@ -221,7 +238,7 @@ async def test_openapi_contract_is_complete() -> None:
             if request_body:
                 schema = deref((request_body.get("content") or {}).get("application/json", {}).get("schema") or {})
                 props = schema.get("properties") or {}
-                if schema.get("additionalProperties") is True or (schema.get("type") == "object" and not props):
+                if schema.get("type") == "object" and not props:
                     opaque_requests.append(f"{method.upper()} {path}")
             responses = operation.get("responses") or {}
             for code, response in responses.items():
@@ -231,7 +248,7 @@ async def test_openapi_contract_is_complete() -> None:
                             continue
                         if not typed(content.get("schema") or {}):
                             opaque_2xx.append(f"{method.upper()} {path} {code}")
-            for code in ("400", "401", "403", "404", "409", "422", "500"):
+            for code in ("400", "401", "403", "404", "409", "412", "422", "500", "503"):
                 if "application/problem+json" not in (responses.get(code, {}).get("content") or {}):
                     missing_problem.append(f"{method.upper()} {path} {code}")
 

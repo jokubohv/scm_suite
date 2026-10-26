@@ -46,6 +46,7 @@ CURATED_BASES: tuple[str, ...] = (
     "/api/v1/inventory-adjustments",
     "/api/v1/inventory-transfers",
     "/api/v1/inventory-counts",
+    "/api/v1/inventory/commitments",
     "/api/v1/count-plans",
     "/api/v1/vendors",
     "/api/v1/purchase-orders",
@@ -88,6 +89,7 @@ ACTION_TAILS: frozenset[str] = frozenset({
     "submit", "post", "approve", "reject", "release", "start", "complete", "capture", "cancel",
     "activate", "inactivate", "match", "arrive", "build", "issue", "close", "receive", "recount",
     "putaway", "pick", "pack", "ship", "confirm", "assign", "reverse", "void",
+    "lines", "recalculate-snapshot",
 })
 
 EXCLUDED_PREFIXES: tuple[str, ...] = (
@@ -242,6 +244,20 @@ def _schema_for_operation(spec: dict[str, Any], path: str, operation: dict[str, 
     if isinstance(request_body, dict):
         content = (request_body.get("content") or {}).get("application/json") or {}
         body_schema = _resolve_ref(spec, content.get("schema") or {})
+        # FastAPI emits optional Pydantic bodies as anyOf[Model, null] (count approve, work-order
+        # actions, etc.). For tooling, use the object branch's fields directly rather than wrapping
+        # them under a synthetic "body" property.
+        if isinstance(body_schema, dict) and (body_schema.get("anyOf") or body_schema.get("oneOf")):
+            branches = body_schema.get("anyOf") or body_schema.get("oneOf") or []
+            object_branches = []
+            for branch in branches:
+                resolved = _resolve_ref(spec, branch)
+                if isinstance(resolved, dict) and (
+                    resolved.get("properties") or resolved.get("type") == "object"
+                ):
+                    object_branches.append(resolved)
+            if object_branches:
+                body_schema = object_branches[0]
         if body_schema:
             has_body = True
             if body_schema.get("type") == "object" or "properties" in body_schema:

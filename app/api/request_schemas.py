@@ -43,6 +43,12 @@ def _arr(items: dict[str, Any]) -> dict[str, Any]:
 
 
 def _lines(item_schema: dict[str, Any], required: tuple[str, ...] = ()) -> dict[str, Any]:
+    # Accept either a line property map or an already-built object schema. The latter is the common
+    # case in this registry and must NOT be wrapped again (that produced lines[].type/properties).
+    if item_schema.get("type") == "object" and (
+        "properties" in item_schema or item_schema.get("additionalProperties") is True
+    ):
+        return _arr(item_schema)
     return _arr(_obj(item_schema, required=required))
 
 
@@ -228,10 +234,13 @@ RECEIPT_LINE = _obj({
 }, required=("item_id", "qty_received"))
 RECEIPT = _obj({
     "purchase_order_id": UUID, "vendor_id": UUID,
-    "receipt_type": {"type": "string", "enum": ["PO", "ASN", "MANUAL"]},
+    "receipt_type": {"type": "string", "enum": ["PO", "ASN", "MANUAL", "STANDALONE"]},
     "received_at": DATETIME, "location_id": UUID, "memo": TEXT,
     "lines": _lines(RECEIPT_LINE, ("item_id", "qty_received")),
-}, required=("vendor_id", "lines"), description="Create item receipt")
+}, required=("lines",), description="Create item receipt; vendor_id is required for standalone receipts")
+# Note: vendor_id is conditionally required by the service for standalone receipts; OpenAPI cannot
+# express the receipt_type-dependent requirement cleanly without allOf/if-then, so it is documented
+# as conditionally required rather than unconditionally required.
 RECEIPT_UPDATE = _obj({"memo": TEXT, "lines": _lines(RECEIPT_LINE)})
 BILL_LINE = _obj({"item_id": UUID, "qty": DECIMAL, "unit_price": MONEY, "description": TEXT,
                   "purchase_order_line_id": UUID, "item_receipt_line_id": UUID,
@@ -478,9 +487,42 @@ def apply_request_schemas(spec: dict[str, Any]) -> int:
             schema = schema_for_operation(method, path)
             if schema is None:
                 continue
+            # Never invent a request body for an operation the router itself declares as bodyless.
+            # This prevents generic ACTION bodies on submit/post/start/etc.
+            if "requestBody" not in operation:
+                continue
             request_body = operation.setdefault("requestBody", {})
-            request_body["required"] = bool(schema.get("required"))
             content = request_body.setdefault("content", {})
+            existing = (content.get(JSON_SCHEMA_KEY) or {}).get("schema") or {}
+
+            def _deref(value: Any) -> Any:
+                seen: set[str] = set()
+                while isinstance(value, dict) and "$ref" in value:
+                    ref = value["$ref"]
+                    if ref in seen or not ref.startswith("#/"):
+                        break
+                    seen.add(ref)
+                    node: Any = spec
+                    for part in ref[2:].split("/"):
+                        node = node.get(part, {}) if isinstance(node, dict) else {}
+                    value = node
+                return value
+
+            def _typed_body(value: Any) -> bool:
+                value = _deref(value)
+                if not isinstance(value, dict) or not value:
+                    return False
+                branches = value.get("anyOf") or value.get("oneOf") or value.get("allOf")
+                if branches:
+                    return any(_typed_body(branch) for branch in branches)
+                props = value.get("properties") or {}
+                return bool(props) or value.get("additionalProperties") is False
+
+            existing_typed = _typed_body(existing)
+            if existing_typed:
+                # Router-declared Pydantic/typed bodies are authoritative; never overwrite them.
+                continue
+            request_body["required"] = bool(schema.get("required"))
             content[JSON_SCHEMA_KEY] = {"schema": schema}
             operation["x-schema-source"] = "request_schemas"
             injected += 1
@@ -515,7 +557,8 @@ TRANSFER_ORDER = P2({"from_location_id": UUID, "to_location_id": UUID, "transact
                                                        "to_bin_id": UUID}))},
                     required=("from_location_id", "to_location_id", "lines"))
 COMMITMENT = P2({"item_id": UUID, "location_id": UUID, "inventory_status_id": UUID,
-                 "qty": DECIMAL, "source_type": TEXT, "source_ref": TEXT, "expires_at": DATETIME},
+                 "qty": DECIMAL, "source_type": TEXT, "source_ref": TEXT,
+                 "source_line_ref": TEXT, "expires_at": DATETIME},
                 required=("item_id", "location_id", "qty"))
 DISTRIBUTION = P2({"item_id": UUID, "from_location_id": UUID, "transaction_date": DATE,
                    "lines": _lines(P2({"to_location_id": UUID, "qty": DECIMAL, "bin_id": UUID}))},
@@ -908,6 +951,8 @@ EXPLICIT_SCHEMAS.update({
     ("POST", "/api/v1/cost-versions/{}/approve"): COST_VERSION_APPROVE,
     ("POST", "/api/v1/costs/reconcile"): COSTS_RECONCILE,
     ("POST", "/api/v1/inventory/commitments/reallocate"): COMMITMENT_REALLOCATE,
+    ("POST", "/api/v1/inventory/commitments/{}/release"): P2({"qty": DECIMAL, "reason": TEXT},
+                                                               required=("qty",)),
 })
 
 PHASE3_RULES: tuple[Rule, ...] = (

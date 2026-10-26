@@ -168,3 +168,14 @@ Request schemas added at the API layer (`app/api/request_schemas.py`) and inject
 - full suite: 1,321 passed
 - E2E: 204 checks, 0 failures
 - surface smoke: 1,259 operations, 0 × 5xx
+
+
+## R3 revalidation remediation
+
+- malformed request `lines[]` schemas: 0
+- router-typed request bodies overwritten: 0
+- P1/P2 count capture/recount/approve/commitment-release schemas corrected
+- MCP tools: 246; generic-body MCP tools: 0; count capture tool present
+- security misattributions: 0; problem+json missing: 0; 412/503 documented
+- remaining: 160 optional generic ACTION request bodies and synthesized resource response objects;
+  response fidelity remains incomplete pending actual response DTOs

@@ -17,6 +17,7 @@ from app.api.request_schemas import (
     RULES,
     _normalise_path,
 )
+from app.core.security.scopes import ScopeRegistry
 
 UUID = {"type": "string", "format": "uuid"}
 DATE = {"type": "string", "format": "date"}
@@ -138,8 +139,18 @@ REPORT_SCHEMA = _obj({
     "count": INT,
     "as_of": DATETIME,
     "generated_at": DATETIME,
+    "refreshed_at": DATETIME,
+    "freshness": {"type": "object", "properties": {
+        "as_of": DATETIME, "generated_at": DATETIME, "refreshed_at": DATETIME,
+        "is_stale": BOOL, "max_age_seconds": INT,
+    }, "additionalProperties": False},
     "next_cursor": {"type": ["string", "null"]},
 }, required=("items",))
+READ_ITEMS_SCHEMA = _obj({
+    "items": {"type": "array", "items": _obj({**_core_fields(), "name": TEXT, "code": TEXT})},
+    "count": INT, "next_cursor": {"type": ["string", "null"]},
+})
+READ_DETAIL_SCHEMA = _obj({**_core_fields(), "name": TEXT, "code": TEXT, "description": TEXT})
 
 # Explicit response schemas for endpoints with a known special shape.
 SPECIAL_RESPONSES: dict[tuple[str, str], dict[str, Any]] = {
@@ -178,6 +189,9 @@ def _is_action(path: str) -> bool:
     return bool(re.fullmatch(r".*/\{\}/[A-Za-z0-9_.-]+", normalized))
 
 
+SCOPE_REGISTRY = ScopeRegistry()
+
+
 def _response_schema(method: str, path: str, status: str) -> dict[str, Any] | None:
     key = (method.upper(), _normalise_path(path))
     special = SPECIAL_RESPONSES.get(key)
@@ -190,30 +204,44 @@ def _response_schema(method: str, path: str, status: str) -> dict[str, Any] | No
     if path.startswith("/api/v1/bootstrap/whoami") or path.startswith("/api/v1/auth") or path.startswith("/api/v1/me"):
         return ACTION_SCHEMA
     base = _base_for(path)
-    if base is None:
-        return ACTION_SCHEMA
-    resource = RESOURCE_BY_BASE[base]
     if method.upper() == "GET":
+        if base is None:
+            return READ_DETAIL_SCHEMA if _has_trailing_id(path) else READ_ITEMS_SCHEMA
+        resource = RESOURCE_BY_BASE[base]
         if _is_action(path):
-            return ACTION_SCHEMA
+            return resource
         if _has_trailing_id(path):
             return resource
         return _obj({"items": {"type": "array", "items": resource}, "count": INT,
                      "next_cursor": {"type": ["string", "null"]}}, required=("items",))
-    if _is_action(path):
+    if base is None:
         return ACTION_SCHEMA
+    resource = RESOURCE_BY_BASE[base]
+    if _is_action(path):
+        return _obj({**resource.get("properties", {}), **ACTION_SCHEMA.get("properties", {})})
     return resource
 
 
 def _security_for(method: str, path: str) -> list[dict[str, list[str]]] | None:
     if path == "/api/v1/openapi.json":
         return [{"ApiKeyAuth": []}]
-    if path in PUBLIC_PATHS or (path.startswith(PUBLIC_PREFIXES) and path.endswith("/accept")):
-        return []
     if path.startswith("/api/v1/bootstrap"):
         return [{"SuperAdminToken": []}]
+    if path == "/api/v1/openapi.json":
+        return [{"ApiKeyAuth": []}]
     if path.startswith("/api/v1/mcp"):
         return [{"ApiKeyAuth": []}]
+    if path in PUBLIC_PATHS or SCOPE_REGISTRY.is_public_route(method, path) or (
+        path.startswith(PUBLIC_PREFIXES) and path.endswith("/accept")
+    ):
+        return []
+    if (
+        SCOPE_REGISTRY.is_self_service_route(method, path)
+        or path.startswith("/api/v1/auth/")
+        or path.startswith("/api/v1/me")
+        or path.startswith("/api/v1/platform/")
+    ):
+        return [{"BearerAuth": []}]
     return None
 
 
@@ -230,7 +258,7 @@ def apply_contract_metadata(spec: dict[str, Any]) -> dict[str, int]:
     spec["security"] = [{"BearerAuth": []}, {"ApiKeyAuth": []}]
 
     stats = {"responses": 0, "errors": 0, "security": 0}
-    error_codes = ("400", "401", "403", "404", "409", "422", "500")
+    error_codes = ("400", "401", "403", "404", "409", "412", "422", "500", "503")
     for path, item in (spec.get("paths") or {}).items():
         for method, operation in item.items():
             if method not in {"get", "post", "put", "patch", "delete"}:
