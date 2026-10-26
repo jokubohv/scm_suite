@@ -156,6 +156,39 @@ def create_item(c: httpx.Client, result: Result, tenant: dict[str, Any], suffix:
     return r.json()
 
 
+def run_api_key_integration(c: httpx.Client, result: Result, tenant: dict[str, Any],
+                            item: dict[str, Any]) -> dict[str, Any]:
+    token = tenant["token"]
+    created = request(c, "POST", "/api/v1/admin/api-keys", token=token, expected=201,
+                      body={"name": f"e2e-integration-{RUN}", "scopes": ["items.read"]},
+                      result=result, name="api key create")
+    if created.status_code != 201:
+        return {}
+    payload = created.json()
+    secret = payload["secret"]
+    key_id = payload["id"]
+    result.check("api key secret returned once", bool(secret) and secret.startswith(payload["key_prefix"] + "."),
+                 created.status_code)
+    key_headers = {"X-API-Key": secret}
+    allowed = request(c, "GET", "/api/v1/items", headers=key_headers, expected=200,
+                      result=result, name="api key read items")
+    result.check("api key authenticates business GET", allowed.status_code == 200, allowed.status_code)
+    denied = request(c, "GET", "/api/v1/admin/flags", headers=key_headers, expected=403,
+                     result=result, name="api key scope denied")
+    result.check("api key cannot exceed scopes", denied.status_code == 403, denied.status_code)
+    write_denied = request(c, "POST", "/api/v1/items", headers=key_headers, expected=403,
+                           body={"item_number": f"{tenant['code']}-KEY-{RUN}", "display_name": "key test",
+                                 "item_type_code": "INVENTORY"},
+                           result=result, name="api key write scope denied")
+    result.check("api key cannot write without items.update", write_denied.status_code == 403, write_denied.status_code)
+    request(c, "DELETE", f"/api/v1/admin/api-keys/{key_id}", token=token, expected=204,
+            result=result, name="api key revoke")
+    revoked = request(c, "GET", "/api/v1/items", headers=key_headers, expected=401,
+                      result=result, name="api key revoked")
+    result.check("revoked api key rejected", revoked.status_code == 401, revoked.status_code)
+    return {"id": key_id, "prefix": payload["key_prefix"]}
+
+
 def run_procurement(c: httpx.Client, result: Result, tenant: dict[str, Any],
                     env: dict[str, Any], item: dict[str, Any]) -> dict[str, Any]:
     token = tenant["token"]
@@ -378,6 +411,10 @@ def main() -> int:
         item_a2 = create_item(c, result, a, "ITEM-B")
         item_b = create_item(c, result, b, "ITEM-A")
         result.data["items"] = {"A1": item_a, "A2": item_a2, "B1": item_b}
+        try:
+            result.data["api_key"] = run_api_key_integration(c, result, a, item_a)
+        except Exception as exc:
+            result.crash("api key integration phase", exc)
 
         # Opening adjustment in A1, then transfer A1 -> A2.
         adj = request(c, "POST", "/api/v1/inventory-adjustments", token=a["token"], expected=201, headers=idem(),

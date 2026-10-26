@@ -12,8 +12,8 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
 | Headless surface | REST-only FastAPI app (no UI); `/api/v1/docs` is disabled and `/api/v1/openapi.json` requires `X-API-Key: $OPENAPI_API_KEY` in production; workers/outbox-relay are separate entrypoints. |
 | Image/runtime | Multi-stage `Dockerfile`, non-root runtime user `10001:10001`, one image for API/worker/relay; `docker-compose.yml` + `docker-compose.dev.yml` for the dev stack. |
 | Database | 30 Alembic migrations, single linear chain, head `0030_rls_grants_verify`; RLS enabled (280 tables/569 policies in dev); `scripts/up.sh`/`deploy_set.sh` run migrations. |
-| Tests | 1302 passed, 1 skipped across the full suite; contract lint 0 errors/0 warnings; deployment state 16/16 feature sets verified. |
-| Auth | JWT access/refresh, RBAC 255 scopes, tenant isolation/RLS, Dex OIDC SSO + local fallback; deny-by-default route guards. |
+| Tests | 1,314 passed across the full suite; contract lint 0 errors/0 warnings; deployment state 16/16 feature sets verified. |
+| Auth | JWT access/refresh or tenant-scoped `X-API-Key`, RBAC 255 scopes, tenant isolation/RLS, Dex OIDC SSO + local fallback; deny-by-default route guards. |
 | Health | `/healthz` liveness; `/readyz` now checks DB (SELECT 1 + migration head) and Redis, returning **503** when either dependency is unavailable; `/internal/deps` is a catalogued scoped operation. |
 | Contracts | Runtime OpenAPI 3.1 **981 paths / 1257 operations**, unique operationIds, no TODO operations/unresolved component refs; committed artifact `deployment/runtime.openapi.json` with freshness test. Contract-first aggregate additionally carries 11 deliberate skeleton operations (see §5). |
 | Events | 159 canonical event schemas, all implementation-backed (`x-todo` = 0); outbox relay entrypoint; Redis streams. |
@@ -33,8 +33,8 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
 - Regenerate/verify: `make contracts` (contract lint/generation) and
   `python tools/export_runtime_openapi.py --check`; the test
   `app/tests/contracts/test_runtime_openapi_spec.py` enforces freshness.
-- Docs/OpenAPI are currently public; restrict them at the gateway in production if the service is not
-  intended for external developers.
+- `/api/v1/docs` is disabled. `/api/v1/openapi.json` requires `X-API-Key` in production; business
+  endpoints accept a tenant API key (`X-API-Key`) or bearer JWT.
 
 See `deployment/VPS-DEPLOYMENT.md` for the VPS Docker Compose + GitHub Actions deployment and the operator-only account bootstrap flow.
 

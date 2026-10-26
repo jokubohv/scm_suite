@@ -1,8 +1,8 @@
-# Live E2E — E2E102602310A61
+# Live E2E — E2E102614066138
 
 Base: `http://127.0.0.1:28080`
 
-Checks: **170**, failures: **0**
+Checks: **181**, failures: **0**
 
 - PASS — readiness (200)
 - PASS — readiness db ok (200)
@@ -92,6 +92,17 @@ Checks: **170**, failures: **0**
 - PASS — item ITEM-A (201)
 - PASS — item ITEM-B (201)
 - PASS — item ITEM-A (201)
+- PASS — api key create (201)
+- PASS — api key secret returned once (201)
+- PASS — api key read items (200)
+- PASS — api key authenticates business GET (200)
+- PASS — api key scope denied (403)
+- PASS — api key cannot exceed scopes (403)
+- PASS — api key write scope denied (403)
+- PASS — api key cannot write without items.update (403)
+- PASS — api key revoke (204)
+- PASS — api key revoked (401)
+- PASS — revoked api key rejected (401)
 - PASS — create adjustment (201)
 - PASS — submit adjustment (200)
 - PASS — post adjustment (200)

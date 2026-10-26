@@ -89,6 +89,7 @@ rotate it by updating `.env.production` and restarting the API.
 - **Rollback:** deploy a previous image tag with the same workflow/manual compose; Alembic downgrades are
   not automatic (migrations are additive; restore a backup for destructive changes).
 - **Docs/spec:** `/api/v1/docs` is disabled; `/api/v1/openapi.json` requires `X-API-Key: $OPENAPI_API_KEY` (set in `.env.production`; deploy fails if missing/weak).
+- **Integrations:** business endpoints accept tenant-scoped API keys created via `POST /api/v1/admin/api-keys`; send `X-API-Key: <tenant-key>`. This is separate from `OPENAPI_API_KEY`.
   if the API is private.
 
 ## Hardening checklist

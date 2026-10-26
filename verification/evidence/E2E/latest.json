@@ -1,6 +1,6 @@
 {
-  "run": "E2E102602310A61",
-  "checked": 170,
+  "run": "E2E102614066138",
+  "checked": 181,
   "failure_count": 0,
   "failures": [],
   "checks": [
@@ -533,6 +533,72 @@
       "detail": null
     },
     {
+      "name": "api key create",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "api key secret returned once",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "api key read items",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "api key authenticates business GET",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "api key scope denied",
+      "ok": true,
+      "status": 403,
+      "detail": null
+    },
+    {
+      "name": "api key cannot exceed scopes",
+      "ok": true,
+      "status": 403,
+      "detail": null
+    },
+    {
+      "name": "api key write scope denied",
+      "ok": true,
+      "status": 403,
+      "detail": null
+    },
+    {
+      "name": "api key cannot write without items.update",
+      "ok": true,
+      "status": 403,
+      "detail": null
+    },
+    {
+      "name": "api key revoke",
+      "ok": true,
+      "status": 204,
+      "detail": null
+    },
+    {
+      "name": "api key revoked",
+      "ok": true,
+      "status": 401,
+      "detail": null
+    },
+    {
+      "name": "revoked api key rejected",
+      "ok": true,
+      "status": 401,
+      "detail": null
+    },
+    {
       "name": "create adjustment",
       "ok": true,
       "status": 201,
@@ -1026,26 +1092,26 @@
     }
   ],
   "data": {
-    "run": "E2E102602310A61",
+    "run": "E2E102614066138",
     "base": "http://127.0.0.1:28080",
     "tenants": [
       {
-        "code": "E2E102602310A61_A",
-        "id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-        "email": "e2e-e2e102602310a61-a@example.com",
-        "password": "E2E-k-hYpqa9b8UoXlsnuF2KN63R",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbnZlbnRvcnktcGxhdGZvcm0iLCJhdWQiOiJpbnZlbnRvcnktcGxhdGZvcm0tYXBpIiwic3ViIjoiYzVjZWQxNDAtZGY1My00MmM1LTkzMjEtMGFmMjE4YjZiMjJiIiwidWlkIjoiOTAxODdiM2QtNTMwOC00NWQzLWExNWQtNmVkOTI4OTU5MGRhIiwidGlkIjoiNjBlZDlkMjYtNmU0Mi00NTg2LWFjYzktNTllNDcyNWMzZDVkIiwidHYiOjAsImp0aSI6ImZjMjk4MDQwODJlZTQyOWY5NzkwZmFmY2FmNjI0MmU5IiwiaWF0IjoxNzkyOTgxODczLCJleHAiOjE3OTI5ODI3NzMsInR5cCI6ImFjY2VzcyIsInNjb3BlcyI6WyJhdHAucmVidWlsZCIsImNvbnNpZ25lZC5hZG1pbiIsImNvbnNpZ25lZC5hZ3JlZW1lbnQubWFuYWdlIiwiY29uc2lnbmVkLmFncmVlbWVudC53cml0ZSIsImNvbnNpZ25lZC5vd25lcnNoaXAudHJhbnNmZXIiLCJjb25zaWduZWQucmVhZCIsImNvbnNpZ25lZC50cmFuc2Zlci53cml0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LmNyZWF0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LnBvc3QiLCJjb3N0aW5nLmNvc3QubWFuYWdlIiwiY29zdGluZy5jb3N0LnJlYWQiLCJjb3N0aW5nLmNvc3QudmlldyIsImNvc3RpbmcuZXN0aW1hdGVkX2xhbmRlZF9jb3N0Lm1hbmFnZSIsImNvc3RpbmcuZ3JvdXAubWFuYWdlIiwiY29zdGluZy5sYW5kZWRfY29zdC5jcmVhdGUiLCJjb3N0aW5nLmxhbmRlZF9jb3N0LnBvc3QiLCJjb3N0aW5nLmxhbmRlZGNvc3QubWFuYWdlIiwiY29zdGluZy5tZXRob2QubWFuYWdlIiwiY29zdGluZy5yZWFkIiwiY29zdGluZy5yZWNhbGMucnVuIiwiY29zdGluZy5yZXZhbHVhdGlvbi5hcHByb3ZlIiwiY29zdGluZy5yZXZhbHVhdGlvbi5jcmVhdGUiLCJjb3N0aW5nLnJldmFsdWF0aW9uLnBvc3QiLCJjb3N0aW5nLnN0YW5kYXJkLmFjdGl2YXRlIiwiY29zdGluZy5zdGFuZGFyZC5yb2xsdXAiLCJjb3N0aW5nLnZhcmlhbmNlLnZpZXciLCJjb3Vwb25zLnZhbGlkYXRlIiwiY3VzdG9tZXJwYXJ0Lm1hbmFnZSIsImRlbWFuZF9wbGFuLmNyZWF0ZSIsImRlbWFuZF9wbGFuX2xpbmUub3ZlcnJpZGUiLCJleHRlbnNpb25zLmNsYWltcy53cml0ZSIsImV4dGVuc2lvbnMuY3VzdG9tZXJwYXJ0LndyaXRlIiwiZXh0ZW5zaW9ucy5yZWFkIiwiZXh0ZW5zaW9ucy51cGMud3JpdGUiLCJleHRlbnNpb25zLndhcnJhbnR5LndyaXRlIiwiaW52ZW50b3J5LmFkanVzdG1lbnQuYXBwcm92ZSIsImludmVudG9yeS5hZGp1c3RtZW50LmNyZWF0ZSIsImludmVudG9yeS5hZGp1c3RtZW50LnBvc3QiLCJpbnZlbnRvcnkuYmFsYW5jZS5yZWFkIiwiaW52ZW50b3J5LmJpbi5tYW5hZ2UiLCJpbnZlbnRvcnkuYmluLnJlYWQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5jb21taXQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5tYW5hZ2UiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5yZWFsbG9jYXRlIiwiaW52ZW50b3J5LmNvbW1pdG1lbnQucmVsZWFzZSIsImludmVudG9yeS5jb3N0LnZpZXciLCJpbnZlbnRvcnkuY291bnQuYXBwcm92ZSIsImludmVudG9yeS5jb3VudC5jYXB0dXJlIiwiaW52ZW50b3J5LmNvdW50LmNyZWF0ZSIsImludmVudG9yeS5jb3VudC5wbGFuLm1hbmFnZSIsImludmVudG9yeS5jb3VudC5wb3N0IiwiaW52ZW50b3J5LmNvdW50LnJlYWQiLCJpbnZlbnRvcnkuY291bnQucmVjb3VudCIsImludmVudG9yeS5kaXN0cmlidXRpb24uY3JlYXRlIiwiaW52ZW50b3J5LmRpc3RyaWJ1dGlvbi5wb3N0IiwiaW52ZW50b3J5LmZ1bGZpbGxtZW50LnBvc3QiLCJpbnZlbnRvcnkuaW1wb3J0LmNyZWF0ZSIsImludmVudG9yeS5pbXBvcnQucG9zdCIsImludmVudG9yeS5sb2NhdGlvbi5tYW5hZ2UiLCJpbnZlbnRvcnkubG9jYXRpb24ucmVhZCIsImludmVudG9yeS5sb3QuaW5hY3RpdmF0ZSIsImludmVudG9yeS5sb3QucmVhZCIsImludmVudG9yeS5sb3Qud3JpdGUiLCJpbnZlbnRvcnkubnVtYmVyZWQucmVjb25jaWxlIiwiaW52ZW50b3J5Lm51bWJlcmVkLnZhbGlkYXRlIiwiaW52ZW50b3J5LnJlYXNvbi5tYW5hZ2UiLCJpbnZlbnRvcnkucmVjZWlwdC5wb3N0IiwiaW52ZW50b3J5LnJldHVybi5wb3N0IiwiaW52ZW50b3J5LnNlcmlhbC5yZWFkIiwiaW52ZW50b3J5LnNlcmlhbC5yZWdpc3RlciIsImludmVudG9yeS5zdGF0dXMubWFuYWdlIiwiaW52ZW50b3J5LnN0YXR1cy5yZWFkIiwiaW52ZW50b3J5LnRvLmFwcHJvdmUiLCJpbnZlbnRvcnkudG8uY2xvc2UiLCJpbnZlbnRvcnkudG8uY3JlYXRlIiwiaW52ZW50b3J5LnRvLmZ1bGZpbCIsImludmVudG9yeS50by5yZWNlaXZlIiwiaW52ZW50b3J5LnRyYW5zYWN0aW9uLnBvc3QiLCJpbnZlbnRvcnkudHJhbnNhY3Rpb24ucmVhZCIsImludmVudG9yeS50cmFuc2FjdGlvbi5yZXZlcnNlIiwiaW52ZW50b3J5LnRyYW5zZmVyLmNyZWF0ZSIsImludmVudG9yeS50cmFuc2Zlci5wb3N0IiwiaW52ZW50b3J5LndvcmtzaGVldC5hcHByb3ZlIiwiaW52ZW50b3J5LndvcmtzaGVldC5jcmVhdGUiLCJpbnZlbnRvcnkud29ya3NoZWV0LnBvc3QiLCJpdGVtcy5iYXJjb2RlLm1hbmFnZSIsIml0ZW1zLmNhdGVnb3J5Lm1hbmFnZSIsIml0ZW1zLmNyZWF0ZSIsIml0ZW1zLmluYWN0aXZhdGUiLCJpdGVtcy5sb2NhdGlvbi5tYW5hZ2UiLCJpdGVtcy5tYXRyaXgubWFuYWdlIiwiaXRlbXMucGxhbm5pbmcubWFuYWdlIiwiaXRlbXMucmVhZCIsIml0ZW1zLnVvbS5tYW5hZ2UiLCJpdGVtcy51cGRhdGUiLCJtYW51ZmFjdHVyaW5nLmFkbWluIiwibWFudWZhY3R1cmluZy5hcHByb3ZlIiwibWFudWZhY3R1cmluZy5ib20ubWFuYWdlIiwibWFudWZhY3R1cmluZy5idWlsZC5wb3N0IiwibWFudWZhY3R1cmluZy5jb21wYXQubWFuYWdlIiwibWFudWZhY3R1cmluZy5jb21wYXQub3ZlcnJpZGUiLCJtYW51ZmFjdHVyaW5nLmNvbXBhdC52YWxpZGF0ZSIsIm1hbnVmYWN0dXJpbmcuY29zdC52aWV3IiwibWFudWZhY3R1cmluZy5wb3N0IiwibWFudWZhY3R1cmluZy5yZWFkIiwibWFudWZhY3R1cmluZy5yZWxlYXNlIiwibWFudWZhY3R1cmluZy51bmJ1aWxkLmRpc3Bvc2UiLCJtYW51ZmFjdHVyaW5nLndpcC5wb3N0IiwibWFudWZhY3R1cmluZy53by5jcmVhdGUiLCJtYW51ZmFjdHVyaW5nLndvLnJlbGVhc2UiLCJtYW51ZmFjdHVyaW5nLndyaXRlIiwib3JkZXJfaXRlbXMucmVhZCIsInBsYW5uaW5nLmFsbG9jYXRpb24ucnVuIiwicGxhbm5pbmcuYXBwcm92ZSIsInBsYW5uaW5nLmF0cC5yZWFkIiwicGxhbm5pbmcucnVsZXMubWFuYWdlIiwicGxhbm5pbmcucnVuIiwicGxhbm5pbmcuc3VwcGx5LnJ1biIsInBsYXRmb3JtLmFkbWluIiwicGxhdGZvcm0uYXBwcm92YWwuYWN0IiwicGxhdGZvcm0uYXBwcm92YWwuZGVmaW5pdGlvbi5tYW5hZ2UiLCJwbGF0Zm9ybS5hdHRhY2htZW50Lm1hbmFnZSIsInBsYXRmb3JtLmF1ZGl0LnJlYWQiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5tYW5hZ2UiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5yZWFkIiwicGxhdGZvcm0uZGF0YV9zY29wZS5tYW5hZ2UiLCJwbGF0Zm9ybS5kb2N1bWVudGxpbmsucmVhZCIsInBsYXRmb3JtLmZpbmFuY2UucmVhZCIsInBsYXRmb3JtLmZpbmFuY2Uuc3luYyIsInBsYXRmb3JtLmZsYWcubWFuYWdlIiwicGxhdGZvcm0uaW52aXRhdGlvbnMubWFuYWdlIiwicGxhdGZvcm0uam9iLm1hbmFnZSIsInBsYXRmb3JtLnJlZmVyZW5jZS5yZWFkIiwicGxhdGZvcm0ucm9sZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXF1ZW5jZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXNzaW9ucy5yZXZva2UiLCJwbGF0Zm9ybS5zc28ubWFuYWdlIiwicGxhdGZvcm0uc3NvLnJlYWQiLCJwbGF0Zm9ybS51c2Vycy5tYW5hZ2UiLCJwcmljaW5nLmNvbGxlY3Rpb24ubWFuYWdlIiwicHJpY2luZy5jb3Vwb24ubWFuYWdlIiwicHJpY2luZy5sZXZlbC5tYW5hZ2UiLCJwcmljaW5nLm1hc3N1cGRhdGUiLCJwcmljaW5nLnByaWNlLm1hbmFnZSIsInByaWNpbmcucmVhZCIsInByaWNpbmcucmVzb2x2ZSIsInByaWNpbmcucnVsZS5tYW5hZ2UiLCJwcmljaW5nLnNjaGVkdWxlLm1hbmFnZSIsInByaWNpbmcudXBkYXRlLm1hbmFnZSIsInByb2N1cmVtZW50LmJpbGwuYXBwcm92ZSIsInByb2N1cmVtZW50LmJpbGwubWF0Y2giLCJwcm9jdXJlbWVudC5iaWxsLnBvc3QiLCJwcm9jdXJlbWVudC5iaWxsLnJlYWQiLCJwcm9jdXJlbWVudC5iaWxsLndyaXRlIiwicHJvY3VyZW1lbnQuY29udHJhY3QuYXBwcm92ZSIsInByb2N1cmVtZW50LmNvbnRyYWN0LnJlYWQiLCJwcm9jdXJlbWVudC5jb250cmFjdC53cml0ZSIsInByb2N1cmVtZW50LmNyZWRpdC5hcHBseSIsInByb2N1cmVtZW50LmNyZWRpdC5wb3N0IiwicHJvY3VyZW1lbnQuY3JlZGl0LnJlYWQiLCJwcm9jdXJlbWVudC5jcmVkaXQud3JpdGUiLCJwcm9jdXJlbWVudC5kcm9wc2hpcC53cml0ZSIsInByb2N1cmVtZW50Lm1hdGNoLm92ZXJyaWRlIiwicHJvY3VyZW1lbnQucG8uYXBwcm92ZSIsInByb2N1cmVtZW50LnBvLmNsb3NlIiwicHJvY3VyZW1lbnQucG8uY3JlYXRlIiwicHJvY3VyZW1lbnQucG8ucmVhZCIsInByb2N1cmVtZW50LnBvLndyaXRlIiwicHJvY3VyZW1lbnQucmVjZWlwdC5wb3N0IiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZWFkIiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZXZlcnNlIiwicHJvY3VyZW1lbnQucmVjZWlwdC53cml0ZSIsInByb2N1cmVtZW50LnJlcXVlc3QuYXBwcm92ZSIsInByb2N1cmVtZW50LnJlcXVlc3QucmVhZCIsInByb2N1cmVtZW50LnJlcXVlc3Qud3JpdGUiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5hcHByb3ZlIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ub3JkZXIiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5yZWFkIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ud3JpdGUiLCJwcm9jdXJlbWVudC5yZXR1cm4uYXBwcm92ZSIsInByb2N1cmVtZW50LnJldHVybi5jbG9zZSIsInByb2N1cmVtZW50LnJldHVybi5jcmVkaXQiLCJwcm9jdXJlbWVudC5yZXR1cm4ucG9zdCIsInByb2N1cmVtZW50LnJldHVybi5yZWFkIiwicHJvY3VyZW1lbnQucmV0dXJuLnNoaXAiLCJwcm9jdXJlbWVudC5yZXR1cm4ud3JpdGUiLCJwcm9jdXJlbWVudC5yZnEuYXdhcmQiLCJwcm9jdXJlbWVudC5yZnEucmVhZCIsInByb2N1cmVtZW50LnJmcS53cml0ZSIsInByb2N1cmVtZW50LnZlbmRvci5tYW5hZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IubWVyZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IucmVhZCIsInByb2N1cmVtZW50LnZlbmRvci53cml0ZSIsInF1YWxpdHkuYWRtaW4iLCJxdWFsaXR5LmNvYS5tYW5hZ2UiLCJxdWFsaXR5LmNvYS53cml0ZSIsInF1YWxpdHkuZGlzcG9zaXRpb24iLCJxdWFsaXR5LmhvbGQubWFuYWdlIiwicXVhbGl0eS5pbnNwZWN0IiwicXVhbGl0eS5pbnNwZWN0aW9uLmFwcHJvdmUiLCJxdWFsaXR5Lmluc3BlY3Rpb24ucmVjb3JkIiwicXVhbGl0eS5yZWFkIiwicXVhbGl0eS5zcGVjLm1hbmFnZSIsInF1YWxpdHkuc3BlYy53cml0ZSIsInJlb3JkZXJfcmVtaW5kZXJzLnJlYWQiLCJyZXBsZW5pc2htZW50LmFkbWluIiwicmVwbGVuaXNobWVudC5hcHByb3ZlIiwicmVwbGVuaXNobWVudC5jb252ZXJ0IiwicmVwbGVuaXNobWVudC5yZWFkIiwicmVwbGVuaXNobWVudC5ydW4iLCJyZXBsZW5pc2htZW50LndyaXRlIiwicmVwb3J0aW5nLmNvc3QudmlldyIsInJlcG9ydGluZy5leHBvcnQiLCJyZXBvcnRpbmcucmVhZCIsInNjaGVkdWxpbmdfcnVuLmNyZWF0ZSIsInNjaGVkdWxpbmdfcnVuLmV4ZWN1dGUiLCJ0cmFjZWFiaWxpdHkuYmluLm1hbmFnZSIsInRyYWNlYWJpbGl0eS5sb2NhdGlvbi5tYW5hZ2UiLCJ0cmFjZWFiaWxpdHkubnVtYmVyZWQubWFuYWdlIiwidHJhY2VhYmlsaXR5LnN0YXR1cy5tYW5hZ2UiLCJ1cGMuYmF0Y2hfYXNzaWduIiwidXBjLm1hbmFnZSIsIndhcnJhbnR5LmNsYWltLm1hbmFnZSIsIndhcnJhbnR5Lm1hbmFnZSIsIndtcy5hZG1pbiIsIndtcy5pbnZlbnRvcnkiLCJ3bXMucGFjayIsIndtcy5waWNrIiwid21zLnBpY2suY29uZmlybSIsIndtcy5wdXRhd2F5Iiwid21zLnJlYWQiLCJ3bXMucmVjZWlwdC5jb25maXJtIiwid21zLnJlY2VpdmUiLCJ3bXMucmVwbGVuaXNoIiwid21zLnNldHVwLndyaXRlIiwid21zLnNoaXAiLCJ3bXMuc3RyYXRlZ3kubWFuYWdlIiwid21zLnRhc2suYXNzaWduIiwid21zLnRhc2sucmVhZCIsIndtcy53YXJlaG91c2UubWFuYWdlIiwid21zLndhdmUiXX0.ld7dVQdIphGqcujXISVFmwWiD-pijibuRB7EWpby43Q",
+        "code": "E2E102614066138_A",
+        "id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+        "email": "e2e-e2e102614066138-a@example.com",
+        "password": "E2E-e3_im8vgM7gjVHi16eG9H1N6",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbnZlbnRvcnktcGxhdGZvcm0iLCJhdWQiOiJpbnZlbnRvcnktcGxhdGZvcm0tYXBpIiwic3ViIjoiMWYzN2ViODYtOWFhOC00YWZhLWIxNGYtNDEyZmIyY2QwZTMzIiwidWlkIjoiYWRhM2I2ZTgtZDM4My00YWM3LWI2NTEtMTdjODYyOGJkODE5IiwidGlkIjoiMmQ4NmIyN2MtZDg5Yy00YjM2LTlkNzYtOTAyNTgyMjNkMjBjIiwidHYiOjAsImp0aSI6ImFhZTkzMDE2YzRkODRmZGZhMWU0MDMxZWQ1MTVlOTYzIiwiaWF0IjoxNzkzMDIzNTc3LCJleHAiOjE3OTMwMjQ0NzcsInR5cCI6ImFjY2VzcyIsInNjb3BlcyI6WyJhdHAucmVidWlsZCIsImNvbnNpZ25lZC5hZG1pbiIsImNvbnNpZ25lZC5hZ3JlZW1lbnQubWFuYWdlIiwiY29uc2lnbmVkLmFncmVlbWVudC53cml0ZSIsImNvbnNpZ25lZC5vd25lcnNoaXAudHJhbnNmZXIiLCJjb25zaWduZWQucmVhZCIsImNvbnNpZ25lZC50cmFuc2Zlci53cml0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LmNyZWF0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LnBvc3QiLCJjb3N0aW5nLmNvc3QubWFuYWdlIiwiY29zdGluZy5jb3N0LnJlYWQiLCJjb3N0aW5nLmNvc3QudmlldyIsImNvc3RpbmcuZXN0aW1hdGVkX2xhbmRlZF9jb3N0Lm1hbmFnZSIsImNvc3RpbmcuZ3JvdXAubWFuYWdlIiwiY29zdGluZy5sYW5kZWRfY29zdC5jcmVhdGUiLCJjb3N0aW5nLmxhbmRlZF9jb3N0LnBvc3QiLCJjb3N0aW5nLmxhbmRlZGNvc3QubWFuYWdlIiwiY29zdGluZy5tZXRob2QubWFuYWdlIiwiY29zdGluZy5yZWFkIiwiY29zdGluZy5yZWNhbGMucnVuIiwiY29zdGluZy5yZXZhbHVhdGlvbi5hcHByb3ZlIiwiY29zdGluZy5yZXZhbHVhdGlvbi5jcmVhdGUiLCJjb3N0aW5nLnJldmFsdWF0aW9uLnBvc3QiLCJjb3N0aW5nLnN0YW5kYXJkLmFjdGl2YXRlIiwiY29zdGluZy5zdGFuZGFyZC5yb2xsdXAiLCJjb3N0aW5nLnZhcmlhbmNlLnZpZXciLCJjb3Vwb25zLnZhbGlkYXRlIiwiY3VzdG9tZXJwYXJ0Lm1hbmFnZSIsImRlbWFuZF9wbGFuLmNyZWF0ZSIsImRlbWFuZF9wbGFuX2xpbmUub3ZlcnJpZGUiLCJleHRlbnNpb25zLmNsYWltcy53cml0ZSIsImV4dGVuc2lvbnMuY3VzdG9tZXJwYXJ0LndyaXRlIiwiZXh0ZW5zaW9ucy5yZWFkIiwiZXh0ZW5zaW9ucy51cGMud3JpdGUiLCJleHRlbnNpb25zLndhcnJhbnR5LndyaXRlIiwiaW52ZW50b3J5LmFkanVzdG1lbnQuYXBwcm92ZSIsImludmVudG9yeS5hZGp1c3RtZW50LmNyZWF0ZSIsImludmVudG9yeS5hZGp1c3RtZW50LnBvc3QiLCJpbnZlbnRvcnkuYmFsYW5jZS5yZWFkIiwiaW52ZW50b3J5LmJpbi5tYW5hZ2UiLCJpbnZlbnRvcnkuYmluLnJlYWQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5jb21taXQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5tYW5hZ2UiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5yZWFsbG9jYXRlIiwiaW52ZW50b3J5LmNvbW1pdG1lbnQucmVsZWFzZSIsImludmVudG9yeS5jb3N0LnZpZXciLCJpbnZlbnRvcnkuY291bnQuYXBwcm92ZSIsImludmVudG9yeS5jb3VudC5jYXB0dXJlIiwiaW52ZW50b3J5LmNvdW50LmNyZWF0ZSIsImludmVudG9yeS5jb3VudC5wbGFuLm1hbmFnZSIsImludmVudG9yeS5jb3VudC5wb3N0IiwiaW52ZW50b3J5LmNvdW50LnJlYWQiLCJpbnZlbnRvcnkuY291bnQucmVjb3VudCIsImludmVudG9yeS5kaXN0cmlidXRpb24uY3JlYXRlIiwiaW52ZW50b3J5LmRpc3RyaWJ1dGlvbi5wb3N0IiwiaW52ZW50b3J5LmZ1bGZpbGxtZW50LnBvc3QiLCJpbnZlbnRvcnkuaW1wb3J0LmNyZWF0ZSIsImludmVudG9yeS5pbXBvcnQucG9zdCIsImludmVudG9yeS5sb2NhdGlvbi5tYW5hZ2UiLCJpbnZlbnRvcnkubG9jYXRpb24ucmVhZCIsImludmVudG9yeS5sb3QuaW5hY3RpdmF0ZSIsImludmVudG9yeS5sb3QucmVhZCIsImludmVudG9yeS5sb3Qud3JpdGUiLCJpbnZlbnRvcnkubnVtYmVyZWQucmVjb25jaWxlIiwiaW52ZW50b3J5Lm51bWJlcmVkLnZhbGlkYXRlIiwiaW52ZW50b3J5LnJlYXNvbi5tYW5hZ2UiLCJpbnZlbnRvcnkucmVjZWlwdC5wb3N0IiwiaW52ZW50b3J5LnJldHVybi5wb3N0IiwiaW52ZW50b3J5LnNlcmlhbC5yZWFkIiwiaW52ZW50b3J5LnNlcmlhbC5yZWdpc3RlciIsImludmVudG9yeS5zdGF0dXMubWFuYWdlIiwiaW52ZW50b3J5LnN0YXR1cy5yZWFkIiwiaW52ZW50b3J5LnRvLmFwcHJvdmUiLCJpbnZlbnRvcnkudG8uY2xvc2UiLCJpbnZlbnRvcnkudG8uY3JlYXRlIiwiaW52ZW50b3J5LnRvLmZ1bGZpbCIsImludmVudG9yeS50by5yZWNlaXZlIiwiaW52ZW50b3J5LnRyYW5zYWN0aW9uLnBvc3QiLCJpbnZlbnRvcnkudHJhbnNhY3Rpb24ucmVhZCIsImludmVudG9yeS50cmFuc2FjdGlvbi5yZXZlcnNlIiwiaW52ZW50b3J5LnRyYW5zZmVyLmNyZWF0ZSIsImludmVudG9yeS50cmFuc2Zlci5wb3N0IiwiaW52ZW50b3J5LndvcmtzaGVldC5hcHByb3ZlIiwiaW52ZW50b3J5LndvcmtzaGVldC5jcmVhdGUiLCJpbnZlbnRvcnkud29ya3NoZWV0LnBvc3QiLCJpdGVtcy5iYXJjb2RlLm1hbmFnZSIsIml0ZW1zLmNhdGVnb3J5Lm1hbmFnZSIsIml0ZW1zLmNyZWF0ZSIsIml0ZW1zLmluYWN0aXZhdGUiLCJpdGVtcy5sb2NhdGlvbi5tYW5hZ2UiLCJpdGVtcy5tYXRyaXgubWFuYWdlIiwiaXRlbXMucGxhbm5pbmcubWFuYWdlIiwiaXRlbXMucmVhZCIsIml0ZW1zLnVvbS5tYW5hZ2UiLCJpdGVtcy51cGRhdGUiLCJtYW51ZmFjdHVyaW5nLmFkbWluIiwibWFudWZhY3R1cmluZy5hcHByb3ZlIiwibWFudWZhY3R1cmluZy5ib20ubWFuYWdlIiwibWFudWZhY3R1cmluZy5idWlsZC5wb3N0IiwibWFudWZhY3R1cmluZy5jb21wYXQubWFuYWdlIiwibWFudWZhY3R1cmluZy5jb21wYXQub3ZlcnJpZGUiLCJtYW51ZmFjdHVyaW5nLmNvbXBhdC52YWxpZGF0ZSIsIm1hbnVmYWN0dXJpbmcuY29zdC52aWV3IiwibWFudWZhY3R1cmluZy5wb3N0IiwibWFudWZhY3R1cmluZy5yZWFkIiwibWFudWZhY3R1cmluZy5yZWxlYXNlIiwibWFudWZhY3R1cmluZy51bmJ1aWxkLmRpc3Bvc2UiLCJtYW51ZmFjdHVyaW5nLndpcC5wb3N0IiwibWFudWZhY3R1cmluZy53by5jcmVhdGUiLCJtYW51ZmFjdHVyaW5nLndvLnJlbGVhc2UiLCJtYW51ZmFjdHVyaW5nLndyaXRlIiwib3JkZXJfaXRlbXMucmVhZCIsInBsYW5uaW5nLmFsbG9jYXRpb24ucnVuIiwicGxhbm5pbmcuYXBwcm92ZSIsInBsYW5uaW5nLmF0cC5yZWFkIiwicGxhbm5pbmcucnVsZXMubWFuYWdlIiwicGxhbm5pbmcucnVuIiwicGxhbm5pbmcuc3VwcGx5LnJ1biIsInBsYXRmb3JtLmFkbWluIiwicGxhdGZvcm0uYXBwcm92YWwuYWN0IiwicGxhdGZvcm0uYXBwcm92YWwuZGVmaW5pdGlvbi5tYW5hZ2UiLCJwbGF0Zm9ybS5hdHRhY2htZW50Lm1hbmFnZSIsInBsYXRmb3JtLmF1ZGl0LnJlYWQiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5tYW5hZ2UiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5yZWFkIiwicGxhdGZvcm0uZGF0YV9zY29wZS5tYW5hZ2UiLCJwbGF0Zm9ybS5kb2N1bWVudGxpbmsucmVhZCIsInBsYXRmb3JtLmZpbmFuY2UucmVhZCIsInBsYXRmb3JtLmZpbmFuY2Uuc3luYyIsInBsYXRmb3JtLmZsYWcubWFuYWdlIiwicGxhdGZvcm0uaW52aXRhdGlvbnMubWFuYWdlIiwicGxhdGZvcm0uam9iLm1hbmFnZSIsInBsYXRmb3JtLnJlZmVyZW5jZS5yZWFkIiwicGxhdGZvcm0ucm9sZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXF1ZW5jZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXNzaW9ucy5yZXZva2UiLCJwbGF0Zm9ybS5zc28ubWFuYWdlIiwicGxhdGZvcm0uc3NvLnJlYWQiLCJwbGF0Zm9ybS51c2Vycy5tYW5hZ2UiLCJwcmljaW5nLmNvbGxlY3Rpb24ubWFuYWdlIiwicHJpY2luZy5jb3Vwb24ubWFuYWdlIiwicHJpY2luZy5sZXZlbC5tYW5hZ2UiLCJwcmljaW5nLm1hc3N1cGRhdGUiLCJwcmljaW5nLnByaWNlLm1hbmFnZSIsInByaWNpbmcucmVhZCIsInByaWNpbmcucmVzb2x2ZSIsInByaWNpbmcucnVsZS5tYW5hZ2UiLCJwcmljaW5nLnNjaGVkdWxlLm1hbmFnZSIsInByaWNpbmcudXBkYXRlLm1hbmFnZSIsInByb2N1cmVtZW50LmJpbGwuYXBwcm92ZSIsInByb2N1cmVtZW50LmJpbGwubWF0Y2giLCJwcm9jdXJlbWVudC5iaWxsLnBvc3QiLCJwcm9jdXJlbWVudC5iaWxsLnJlYWQiLCJwcm9jdXJlbWVudC5iaWxsLndyaXRlIiwicHJvY3VyZW1lbnQuY29udHJhY3QuYXBwcm92ZSIsInByb2N1cmVtZW50LmNvbnRyYWN0LnJlYWQiLCJwcm9jdXJlbWVudC5jb250cmFjdC53cml0ZSIsInByb2N1cmVtZW50LmNyZWRpdC5hcHBseSIsInByb2N1cmVtZW50LmNyZWRpdC5wb3N0IiwicHJvY3VyZW1lbnQuY3JlZGl0LnJlYWQiLCJwcm9jdXJlbWVudC5jcmVkaXQud3JpdGUiLCJwcm9jdXJlbWVudC5kcm9wc2hpcC53cml0ZSIsInByb2N1cmVtZW50Lm1hdGNoLm92ZXJyaWRlIiwicHJvY3VyZW1lbnQucG8uYXBwcm92ZSIsInByb2N1cmVtZW50LnBvLmNsb3NlIiwicHJvY3VyZW1lbnQucG8uY3JlYXRlIiwicHJvY3VyZW1lbnQucG8ucmVhZCIsInByb2N1cmVtZW50LnBvLndyaXRlIiwicHJvY3VyZW1lbnQucmVjZWlwdC5wb3N0IiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZWFkIiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZXZlcnNlIiwicHJvY3VyZW1lbnQucmVjZWlwdC53cml0ZSIsInByb2N1cmVtZW50LnJlcXVlc3QuYXBwcm92ZSIsInByb2N1cmVtZW50LnJlcXVlc3QucmVhZCIsInByb2N1cmVtZW50LnJlcXVlc3Qud3JpdGUiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5hcHByb3ZlIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ub3JkZXIiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5yZWFkIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ud3JpdGUiLCJwcm9jdXJlbWVudC5yZXR1cm4uYXBwcm92ZSIsInByb2N1cmVtZW50LnJldHVybi5jbG9zZSIsInByb2N1cmVtZW50LnJldHVybi5jcmVkaXQiLCJwcm9jdXJlbWVudC5yZXR1cm4ucG9zdCIsInByb2N1cmVtZW50LnJldHVybi5yZWFkIiwicHJvY3VyZW1lbnQucmV0dXJuLnNoaXAiLCJwcm9jdXJlbWVudC5yZXR1cm4ud3JpdGUiLCJwcm9jdXJlbWVudC5yZnEuYXdhcmQiLCJwcm9jdXJlbWVudC5yZnEucmVhZCIsInByb2N1cmVtZW50LnJmcS53cml0ZSIsInByb2N1cmVtZW50LnZlbmRvci5tYW5hZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IubWVyZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IucmVhZCIsInByb2N1cmVtZW50LnZlbmRvci53cml0ZSIsInF1YWxpdHkuYWRtaW4iLCJxdWFsaXR5LmNvYS5tYW5hZ2UiLCJxdWFsaXR5LmNvYS53cml0ZSIsInF1YWxpdHkuZGlzcG9zaXRpb24iLCJxdWFsaXR5LmhvbGQubWFuYWdlIiwicXVhbGl0eS5pbnNwZWN0IiwicXVhbGl0eS5pbnNwZWN0aW9uLmFwcHJvdmUiLCJxdWFsaXR5Lmluc3BlY3Rpb24ucmVjb3JkIiwicXVhbGl0eS5yZWFkIiwicXVhbGl0eS5zcGVjLm1hbmFnZSIsInF1YWxpdHkuc3BlYy53cml0ZSIsInJlb3JkZXJfcmVtaW5kZXJzLnJlYWQiLCJyZXBsZW5pc2htZW50LmFkbWluIiwicmVwbGVuaXNobWVudC5hcHByb3ZlIiwicmVwbGVuaXNobWVudC5jb252ZXJ0IiwicmVwbGVuaXNobWVudC5yZWFkIiwicmVwbGVuaXNobWVudC5ydW4iLCJyZXBsZW5pc2htZW50LndyaXRlIiwicmVwb3J0aW5nLmNvc3QudmlldyIsInJlcG9ydGluZy5leHBvcnQiLCJyZXBvcnRpbmcucmVhZCIsInNjaGVkdWxpbmdfcnVuLmNyZWF0ZSIsInNjaGVkdWxpbmdfcnVuLmV4ZWN1dGUiLCJ0cmFjZWFiaWxpdHkuYmluLm1hbmFnZSIsInRyYWNlYWJpbGl0eS5sb2NhdGlvbi5tYW5hZ2UiLCJ0cmFjZWFiaWxpdHkubnVtYmVyZWQubWFuYWdlIiwidHJhY2VhYmlsaXR5LnN0YXR1cy5tYW5hZ2UiLCJ1cGMuYmF0Y2hfYXNzaWduIiwidXBjLm1hbmFnZSIsIndhcnJhbnR5LmNsYWltLm1hbmFnZSIsIndhcnJhbnR5Lm1hbmFnZSIsIndtcy5hZG1pbiIsIndtcy5pbnZlbnRvcnkiLCJ3bXMucGFjayIsIndtcy5waWNrIiwid21zLnBpY2suY29uZmlybSIsIndtcy5wdXRhd2F5Iiwid21zLnJlYWQiLCJ3bXMucmVjZWlwdC5jb25maXJtIiwid21zLnJlY2VpdmUiLCJ3bXMucmVwbGVuaXNoIiwid21zLnNldHVwLndyaXRlIiwid21zLnNoaXAiLCJ3bXMuc3RyYXRlZ3kubWFuYWdlIiwid21zLnRhc2suYXNzaWduIiwid21zLnRhc2sucmVhZCIsIndtcy53YXJlaG91c2UubWFuYWdlIiwid21zLndhdmUiXX0.4BEz1r5NyAG6KJbm2Jgpy6UCULDeOF-XbsqTlIMRk-0",
         "admin": {
-          "app_user_id": "90187b3d-5308-45d3-a15d-6ed9289590da",
-          "identity_id": "c5ced140-df53-42c5-9321-0af218b6b22b",
-          "email": "e2e-e2e102602310a61-a@example.com",
+          "app_user_id": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
+          "identity_id": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+          "email": "e2e-e2e102614066138-a@example.com",
           "role_codes": [
             "admin"
           ]
         },
         "flags": [
           {
-            "id": "72b6a220-8666-493b-a43f-47ed1140cc7b",
+            "id": "d0cfc735-28d5-463e-a41f-bf61e3b097f2",
             "flag_key": "consigned.assembly_incompatible_guard",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1053,11 +1119,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "fd875719-7049-483a-ae09-6941e81a53cb",
+            "id": "2e6b7228-7495-4b5a-b4f6-435851adc4bf",
             "flag_key": "consigned.inventory.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1065,11 +1131,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "9685a4f4-8a07-4660-8c3f-38f2ffbc6663",
+            "id": "fc2fdaf3-c257-4062-a9e1-0dc10ef8c194",
             "flag_key": "costing.engine.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1077,11 +1143,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "c9c6304f-d5e4-47da-90db-259008e4b485",
+            "id": "441224d2-9fcc-4308-8109-ec9f0bf8fa25",
             "flag_key": "extensions.registry.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1089,11 +1155,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "782a65f9-de91-4b38-8da4-c9437a0c0654",
+            "id": "8dc39f1f-9d76-42e8-805d-45d6bce64fb6",
             "flag_key": "extensions.upc.auto_assign",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1101,11 +1167,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "50bf749c-b8cd-42d9-807b-e40a624c11d4",
+            "id": "617caab7-bd7c-41b2-887d-59ba440390a7",
             "flag_key": "inventory.counts.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1113,11 +1179,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "fb71d288-43f0-4159-aaa4-2d791657af64",
+            "id": "5a50c6ec-818a-46f8-8cb9-a14051e7fab4",
             "flag_key": "inventory.item_master.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1125,11 +1191,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "cd3a9d85-ff3b-477b-8180-288499fa4a5a",
+            "id": "8ca37f2d-6f27-48a8-92f0-04dd9d1091e0",
             "flag_key": "inventory.ledger.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1137,11 +1203,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "730ec09c-67d1-4fa1-9c48-75198a383ebf",
+            "id": "a9646627-0439-4494-bc34-e1edaec83f2c",
             "flag_key": "inventory.numbered.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1149,11 +1215,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "2695de22-8da3-4cfe-a298-0c1fc9db39d1",
+            "id": "a5487397-2335-4117-a9c2-69eee19e5c63",
             "flag_key": "manufacturing.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1161,11 +1227,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "8cba3e50-5279-4d37-947e-67fd254c1898",
+            "id": "77991eaf-254c-410d-9265-354e60ce50b1",
             "flag_key": "manufacturing.wip.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1173,11 +1239,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "76047b39-2710-4be3-aa4e-311daeac4200",
+            "id": "d518f91b-9d4f-43d5-84e7-42df6d83e6e9",
             "flag_key": "platform.core.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1185,11 +1251,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "55f42b3e-3c66-4dc3-b3c8-5968035d1c6a",
+            "id": "91acc02b-12f8-42c7-ad01-3fd0fb9ce8cd",
             "flag_key": "pricing.engine.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1197,11 +1263,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "09ce3359-9fa2-47b2-93d6-8a3d9eba894b",
+            "id": "e966aa91-f5c7-429f-8e6b-709885bb5db7",
             "flag_key": "procurement.blanket_orders_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1209,11 +1275,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "43fc452b-a11c-40fe-a319-0984871e2493",
+            "id": "b210b3e5-0862-49c5-8378-de9f0acef946",
             "flag_key": "procurement.drop_ship_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1221,11 +1287,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "2e95f78d-4710-4cc5-bbbb-d445c92c79bf",
+            "id": "f644fbb0-76d3-4c10-88d8-0e618431d4fc",
             "flag_key": "procurement.multiple_vendors_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1233,11 +1299,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "e1c33bb5-7b1e-4379-8f75-17a65a85ab6b",
+            "id": "a5f0964a-403d-497c-a4a6-6ac5635ae706",
             "flag_key": "procurement.p2p.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1245,11 +1311,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "3d955866-72b0-4380-b8c2-87f3b4c4bf32",
+            "id": "115caf8c-4519-48b2-93fa-ef1284d90e09",
             "flag_key": "procurement.purchase_contracts_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1257,11 +1323,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "776f0a9f-e3a7-4e79-8a45-ba8da4114a68",
+            "id": "d488cf75-ce52-4b20-ba71-23b31d472883",
             "flag_key": "procurement.purchase_requests_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1269,11 +1335,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "a682169d-e2fe-4aab-a069-10f6d572a60d",
+            "id": "d12b7c62-d8a9-4400-b368-0e80339e2b2b",
             "flag_key": "procurement.requisitions_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1281,11 +1347,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "601e17f4-ec7e-4953-a318-642f98829e33",
+            "id": "af92bedd-6a1a-4b07-adc3-63addd7ca297",
             "flag_key": "procurement.rfq_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1293,11 +1359,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "9c772aac-2f64-4855-a04e-5a4eeea00466",
+            "id": "786e8294-e620-4f6f-bd38-400040bc0e3b",
             "flag_key": "quality.management.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1305,11 +1371,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "9928738e-ad34-461f-940c-5133a62799aa",
+            "id": "d2c1d5c2-cec9-4ad4-990b-4f455783f0b3",
             "flag_key": "replenishment.planning.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1317,11 +1383,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "28c37c61-ef6d-4bc6-a83f-8d78fd945a54",
+            "id": "2068c292-c816-4186-b66e-74e22838a777",
             "flag_key": "reporting.readmodels.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1329,11 +1395,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "5be101cd-53b0-4ddf-9e37-c4f61845bc41",
+            "id": "6032b354-8a43-4b5e-b8b1-1f4f994f4df4",
             "flag_key": "traceability.registry.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1341,11 +1407,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           },
           {
-            "id": "cb66b01c-5b9a-469f-824c-fe5453e931c3",
+            "id": "bc61f75c-2f9f-4862-b93c-d96107ed74ac",
             "flag_key": "wms.execution.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1353,28 +1419,28 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:12.859697+00:00",
-            "updated_at": "2026-10-26T02:31:12.859697+00:00"
+            "created_at": "2026-10-26T14:06:17.034667+00:00",
+            "updated_at": "2026-10-26T14:06:17.034667+00:00"
           }
         ]
       },
       {
-        "code": "E2E102602310A61_B",
-        "id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-        "email": "e2e-e2e102602310a61-b@example.com",
-        "password": "E2E-51uBiV5335ZCpYjRzEmETNke",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbnZlbnRvcnktcGxhdGZvcm0iLCJhdWQiOiJpbnZlbnRvcnktcGxhdGZvcm0tYXBpIiwic3ViIjoiNWZlZjU5YzItZmM3OC00NGE5LWI1N2YtN2NkN2EyNmI2NmEzIiwidWlkIjoiYTQ5MGQwOTUtY2UwNC00Y2JjLTkwZDctMTcxYzk2MmZmZDc1IiwidGlkIjoiY2NhOGQyZTEtZTI3MS00MTNhLWFiNTMtMDI3ZDBiYmFiYmFjIiwidHYiOjAsImp0aSI6IjM4YzU1YTVjOWEwMjRiMDE5YTJkODIxZTRkN2ZlYzRhIiwiaWF0IjoxNzkyOTgxODc0LCJleHAiOjE3OTI5ODI3NzQsInR5cCI6ImFjY2VzcyIsInNjb3BlcyI6WyJhdHAucmVidWlsZCIsImNvbnNpZ25lZC5hZG1pbiIsImNvbnNpZ25lZC5hZ3JlZW1lbnQubWFuYWdlIiwiY29uc2lnbmVkLmFncmVlbWVudC53cml0ZSIsImNvbnNpZ25lZC5vd25lcnNoaXAudHJhbnNmZXIiLCJjb25zaWduZWQucmVhZCIsImNvbnNpZ25lZC50cmFuc2Zlci53cml0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LmNyZWF0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LnBvc3QiLCJjb3N0aW5nLmNvc3QubWFuYWdlIiwiY29zdGluZy5jb3N0LnJlYWQiLCJjb3N0aW5nLmNvc3QudmlldyIsImNvc3RpbmcuZXN0aW1hdGVkX2xhbmRlZF9jb3N0Lm1hbmFnZSIsImNvc3RpbmcuZ3JvdXAubWFuYWdlIiwiY29zdGluZy5sYW5kZWRfY29zdC5jcmVhdGUiLCJjb3N0aW5nLmxhbmRlZF9jb3N0LnBvc3QiLCJjb3N0aW5nLmxhbmRlZGNvc3QubWFuYWdlIiwiY29zdGluZy5tZXRob2QubWFuYWdlIiwiY29zdGluZy5yZWFkIiwiY29zdGluZy5yZWNhbGMucnVuIiwiY29zdGluZy5yZXZhbHVhdGlvbi5hcHByb3ZlIiwiY29zdGluZy5yZXZhbHVhdGlvbi5jcmVhdGUiLCJjb3N0aW5nLnJldmFsdWF0aW9uLnBvc3QiLCJjb3N0aW5nLnN0YW5kYXJkLmFjdGl2YXRlIiwiY29zdGluZy5zdGFuZGFyZC5yb2xsdXAiLCJjb3N0aW5nLnZhcmlhbmNlLnZpZXciLCJjb3Vwb25zLnZhbGlkYXRlIiwiY3VzdG9tZXJwYXJ0Lm1hbmFnZSIsImRlbWFuZF9wbGFuLmNyZWF0ZSIsImRlbWFuZF9wbGFuX2xpbmUub3ZlcnJpZGUiLCJleHRlbnNpb25zLmNsYWltcy53cml0ZSIsImV4dGVuc2lvbnMuY3VzdG9tZXJwYXJ0LndyaXRlIiwiZXh0ZW5zaW9ucy5yZWFkIiwiZXh0ZW5zaW9ucy51cGMud3JpdGUiLCJleHRlbnNpb25zLndhcnJhbnR5LndyaXRlIiwiaW52ZW50b3J5LmFkanVzdG1lbnQuYXBwcm92ZSIsImludmVudG9yeS5hZGp1c3RtZW50LmNyZWF0ZSIsImludmVudG9yeS5hZGp1c3RtZW50LnBvc3QiLCJpbnZlbnRvcnkuYmFsYW5jZS5yZWFkIiwiaW52ZW50b3J5LmJpbi5tYW5hZ2UiLCJpbnZlbnRvcnkuYmluLnJlYWQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5jb21taXQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5tYW5hZ2UiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5yZWFsbG9jYXRlIiwiaW52ZW50b3J5LmNvbW1pdG1lbnQucmVsZWFzZSIsImludmVudG9yeS5jb3N0LnZpZXciLCJpbnZlbnRvcnkuY291bnQuYXBwcm92ZSIsImludmVudG9yeS5jb3VudC5jYXB0dXJlIiwiaW52ZW50b3J5LmNvdW50LmNyZWF0ZSIsImludmVudG9yeS5jb3VudC5wbGFuLm1hbmFnZSIsImludmVudG9yeS5jb3VudC5wb3N0IiwiaW52ZW50b3J5LmNvdW50LnJlYWQiLCJpbnZlbnRvcnkuY291bnQucmVjb3VudCIsImludmVudG9yeS5kaXN0cmlidXRpb24uY3JlYXRlIiwiaW52ZW50b3J5LmRpc3RyaWJ1dGlvbi5wb3N0IiwiaW52ZW50b3J5LmZ1bGZpbGxtZW50LnBvc3QiLCJpbnZlbnRvcnkuaW1wb3J0LmNyZWF0ZSIsImludmVudG9yeS5pbXBvcnQucG9zdCIsImludmVudG9yeS5sb2NhdGlvbi5tYW5hZ2UiLCJpbnZlbnRvcnkubG9jYXRpb24ucmVhZCIsImludmVudG9yeS5sb3QuaW5hY3RpdmF0ZSIsImludmVudG9yeS5sb3QucmVhZCIsImludmVudG9yeS5sb3Qud3JpdGUiLCJpbnZlbnRvcnkubnVtYmVyZWQucmVjb25jaWxlIiwiaW52ZW50b3J5Lm51bWJlcmVkLnZhbGlkYXRlIiwiaW52ZW50b3J5LnJlYXNvbi5tYW5hZ2UiLCJpbnZlbnRvcnkucmVjZWlwdC5wb3N0IiwiaW52ZW50b3J5LnJldHVybi5wb3N0IiwiaW52ZW50b3J5LnNlcmlhbC5yZWFkIiwiaW52ZW50b3J5LnNlcmlhbC5yZWdpc3RlciIsImludmVudG9yeS5zdGF0dXMubWFuYWdlIiwiaW52ZW50b3J5LnN0YXR1cy5yZWFkIiwiaW52ZW50b3J5LnRvLmFwcHJvdmUiLCJpbnZlbnRvcnkudG8uY2xvc2UiLCJpbnZlbnRvcnkudG8uY3JlYXRlIiwiaW52ZW50b3J5LnRvLmZ1bGZpbCIsImludmVudG9yeS50by5yZWNlaXZlIiwiaW52ZW50b3J5LnRyYW5zYWN0aW9uLnBvc3QiLCJpbnZlbnRvcnkudHJhbnNhY3Rpb24ucmVhZCIsImludmVudG9yeS50cmFuc2FjdGlvbi5yZXZlcnNlIiwiaW52ZW50b3J5LnRyYW5zZmVyLmNyZWF0ZSIsImludmVudG9yeS50cmFuc2Zlci5wb3N0IiwiaW52ZW50b3J5LndvcmtzaGVldC5hcHByb3ZlIiwiaW52ZW50b3J5LndvcmtzaGVldC5jcmVhdGUiLCJpbnZlbnRvcnkud29ya3NoZWV0LnBvc3QiLCJpdGVtcy5iYXJjb2RlLm1hbmFnZSIsIml0ZW1zLmNhdGVnb3J5Lm1hbmFnZSIsIml0ZW1zLmNyZWF0ZSIsIml0ZW1zLmluYWN0aXZhdGUiLCJpdGVtcy5sb2NhdGlvbi5tYW5hZ2UiLCJpdGVtcy5tYXRyaXgubWFuYWdlIiwiaXRlbXMucGxhbm5pbmcubWFuYWdlIiwiaXRlbXMucmVhZCIsIml0ZW1zLnVvbS5tYW5hZ2UiLCJpdGVtcy51cGRhdGUiLCJtYW51ZmFjdHVyaW5nLmFkbWluIiwibWFudWZhY3R1cmluZy5hcHByb3ZlIiwibWFudWZhY3R1cmluZy5ib20ubWFuYWdlIiwibWFudWZhY3R1cmluZy5idWlsZC5wb3N0IiwibWFudWZhY3R1cmluZy5jb21wYXQubWFuYWdlIiwibWFudWZhY3R1cmluZy5jb21wYXQub3ZlcnJpZGUiLCJtYW51ZmFjdHVyaW5nLmNvbXBhdC52YWxpZGF0ZSIsIm1hbnVmYWN0dXJpbmcuY29zdC52aWV3IiwibWFudWZhY3R1cmluZy5wb3N0IiwibWFudWZhY3R1cmluZy5yZWFkIiwibWFudWZhY3R1cmluZy5yZWxlYXNlIiwibWFudWZhY3R1cmluZy51bmJ1aWxkLmRpc3Bvc2UiLCJtYW51ZmFjdHVyaW5nLndpcC5wb3N0IiwibWFudWZhY3R1cmluZy53by5jcmVhdGUiLCJtYW51ZmFjdHVyaW5nLndvLnJlbGVhc2UiLCJtYW51ZmFjdHVyaW5nLndyaXRlIiwib3JkZXJfaXRlbXMucmVhZCIsInBsYW5uaW5nLmFsbG9jYXRpb24ucnVuIiwicGxhbm5pbmcuYXBwcm92ZSIsInBsYW5uaW5nLmF0cC5yZWFkIiwicGxhbm5pbmcucnVsZXMubWFuYWdlIiwicGxhbm5pbmcucnVuIiwicGxhbm5pbmcuc3VwcGx5LnJ1biIsInBsYXRmb3JtLmFkbWluIiwicGxhdGZvcm0uYXBwcm92YWwuYWN0IiwicGxhdGZvcm0uYXBwcm92YWwuZGVmaW5pdGlvbi5tYW5hZ2UiLCJwbGF0Zm9ybS5hdHRhY2htZW50Lm1hbmFnZSIsInBsYXRmb3JtLmF1ZGl0LnJlYWQiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5tYW5hZ2UiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5yZWFkIiwicGxhdGZvcm0uZGF0YV9zY29wZS5tYW5hZ2UiLCJwbGF0Zm9ybS5kb2N1bWVudGxpbmsucmVhZCIsInBsYXRmb3JtLmZpbmFuY2UucmVhZCIsInBsYXRmb3JtLmZpbmFuY2Uuc3luYyIsInBsYXRmb3JtLmZsYWcubWFuYWdlIiwicGxhdGZvcm0uaW52aXRhdGlvbnMubWFuYWdlIiwicGxhdGZvcm0uam9iLm1hbmFnZSIsInBsYXRmb3JtLnJlZmVyZW5jZS5yZWFkIiwicGxhdGZvcm0ucm9sZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXF1ZW5jZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXNzaW9ucy5yZXZva2UiLCJwbGF0Zm9ybS5zc28ubWFuYWdlIiwicGxhdGZvcm0uc3NvLnJlYWQiLCJwbGF0Zm9ybS51c2Vycy5tYW5hZ2UiLCJwcmljaW5nLmNvbGxlY3Rpb24ubWFuYWdlIiwicHJpY2luZy5jb3Vwb24ubWFuYWdlIiwicHJpY2luZy5sZXZlbC5tYW5hZ2UiLCJwcmljaW5nLm1hc3N1cGRhdGUiLCJwcmljaW5nLnByaWNlLm1hbmFnZSIsInByaWNpbmcucmVhZCIsInByaWNpbmcucmVzb2x2ZSIsInByaWNpbmcucnVsZS5tYW5hZ2UiLCJwcmljaW5nLnNjaGVkdWxlLm1hbmFnZSIsInByaWNpbmcudXBkYXRlLm1hbmFnZSIsInByb2N1cmVtZW50LmJpbGwuYXBwcm92ZSIsInByb2N1cmVtZW50LmJpbGwubWF0Y2giLCJwcm9jdXJlbWVudC5iaWxsLnBvc3QiLCJwcm9jdXJlbWVudC5iaWxsLnJlYWQiLCJwcm9jdXJlbWVudC5iaWxsLndyaXRlIiwicHJvY3VyZW1lbnQuY29udHJhY3QuYXBwcm92ZSIsInByb2N1cmVtZW50LmNvbnRyYWN0LnJlYWQiLCJwcm9jdXJlbWVudC5jb250cmFjdC53cml0ZSIsInByb2N1cmVtZW50LmNyZWRpdC5hcHBseSIsInByb2N1cmVtZW50LmNyZWRpdC5wb3N0IiwicHJvY3VyZW1lbnQuY3JlZGl0LnJlYWQiLCJwcm9jdXJlbWVudC5jcmVkaXQud3JpdGUiLCJwcm9jdXJlbWVudC5kcm9wc2hpcC53cml0ZSIsInByb2N1cmVtZW50Lm1hdGNoLm92ZXJyaWRlIiwicHJvY3VyZW1lbnQucG8uYXBwcm92ZSIsInByb2N1cmVtZW50LnBvLmNsb3NlIiwicHJvY3VyZW1lbnQucG8uY3JlYXRlIiwicHJvY3VyZW1lbnQucG8ucmVhZCIsInByb2N1cmVtZW50LnBvLndyaXRlIiwicHJvY3VyZW1lbnQucmVjZWlwdC5wb3N0IiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZWFkIiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZXZlcnNlIiwicHJvY3VyZW1lbnQucmVjZWlwdC53cml0ZSIsInByb2N1cmVtZW50LnJlcXVlc3QuYXBwcm92ZSIsInByb2N1cmVtZW50LnJlcXVlc3QucmVhZCIsInByb2N1cmVtZW50LnJlcXVlc3Qud3JpdGUiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5hcHByb3ZlIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ub3JkZXIiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5yZWFkIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ud3JpdGUiLCJwcm9jdXJlbWVudC5yZXR1cm4uYXBwcm92ZSIsInByb2N1cmVtZW50LnJldHVybi5jbG9zZSIsInByb2N1cmVtZW50LnJldHVybi5jcmVkaXQiLCJwcm9jdXJlbWVudC5yZXR1cm4ucG9zdCIsInByb2N1cmVtZW50LnJldHVybi5yZWFkIiwicHJvY3VyZW1lbnQucmV0dXJuLnNoaXAiLCJwcm9jdXJlbWVudC5yZXR1cm4ud3JpdGUiLCJwcm9jdXJlbWVudC5yZnEuYXdhcmQiLCJwcm9jdXJlbWVudC5yZnEucmVhZCIsInByb2N1cmVtZW50LnJmcS53cml0ZSIsInByb2N1cmVtZW50LnZlbmRvci5tYW5hZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IubWVyZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IucmVhZCIsInByb2N1cmVtZW50LnZlbmRvci53cml0ZSIsInF1YWxpdHkuYWRtaW4iLCJxdWFsaXR5LmNvYS5tYW5hZ2UiLCJxdWFsaXR5LmNvYS53cml0ZSIsInF1YWxpdHkuZGlzcG9zaXRpb24iLCJxdWFsaXR5LmhvbGQubWFuYWdlIiwicXVhbGl0eS5pbnNwZWN0IiwicXVhbGl0eS5pbnNwZWN0aW9uLmFwcHJvdmUiLCJxdWFsaXR5Lmluc3BlY3Rpb24ucmVjb3JkIiwicXVhbGl0eS5yZWFkIiwicXVhbGl0eS5zcGVjLm1hbmFnZSIsInF1YWxpdHkuc3BlYy53cml0ZSIsInJlb3JkZXJfcmVtaW5kZXJzLnJlYWQiLCJyZXBsZW5pc2htZW50LmFkbWluIiwicmVwbGVuaXNobWVudC5hcHByb3ZlIiwicmVwbGVuaXNobWVudC5jb252ZXJ0IiwicmVwbGVuaXNobWVudC5yZWFkIiwicmVwbGVuaXNobWVudC5ydW4iLCJyZXBsZW5pc2htZW50LndyaXRlIiwicmVwb3J0aW5nLmNvc3QudmlldyIsInJlcG9ydGluZy5leHBvcnQiLCJyZXBvcnRpbmcucmVhZCIsInNjaGVkdWxpbmdfcnVuLmNyZWF0ZSIsInNjaGVkdWxpbmdfcnVuLmV4ZWN1dGUiLCJ0cmFjZWFiaWxpdHkuYmluLm1hbmFnZSIsInRyYWNlYWJpbGl0eS5sb2NhdGlvbi5tYW5hZ2UiLCJ0cmFjZWFiaWxpdHkubnVtYmVyZWQubWFuYWdlIiwidHJhY2VhYmlsaXR5LnN0YXR1cy5tYW5hZ2UiLCJ1cGMuYmF0Y2hfYXNzaWduIiwidXBjLm1hbmFnZSIsIndhcnJhbnR5LmNsYWltLm1hbmFnZSIsIndhcnJhbnR5Lm1hbmFnZSIsIndtcy5hZG1pbiIsIndtcy5pbnZlbnRvcnkiLCJ3bXMucGFjayIsIndtcy5waWNrIiwid21zLnBpY2suY29uZmlybSIsIndtcy5wdXRhd2F5Iiwid21zLnJlYWQiLCJ3bXMucmVjZWlwdC5jb25maXJtIiwid21zLnJlY2VpdmUiLCJ3bXMucmVwbGVuaXNoIiwid21zLnNldHVwLndyaXRlIiwid21zLnNoaXAiLCJ3bXMuc3RyYXRlZ3kubWFuYWdlIiwid21zLnRhc2suYXNzaWduIiwid21zLnRhc2sucmVhZCIsIndtcy53YXJlaG91c2UubWFuYWdlIiwid21zLndhdmUiXX0.egBZYs3gpQwZFkcDagJtheVIZK2Nv2p4ZFrGu6zcTlA",
+        "code": "E2E102614066138_B",
+        "id": "dd601c1b-abab-4aac-acf8-624df6276845",
+        "email": "e2e-e2e102614066138-b@example.com",
+        "password": "E2E-SWJUOklj0okQFv0KAkjSdGLO",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbnZlbnRvcnktcGxhdGZvcm0iLCJhdWQiOiJpbnZlbnRvcnktcGxhdGZvcm0tYXBpIiwic3ViIjoiYmYzNDI2NDktNjI0Yi00OGJhLTgyYzktNDBlMGNjNWUwNDkxIiwidWlkIjoiMTI0MDc3NjUtOWM2ZS00ZjQ1LThjZWUtMGYyZDc0NmZhMTIzIiwidGlkIjoiZGQ2MDFjMWItYWJhYi00YWFjLWFjZjgtNjI0ZGY2Mjc2ODQ1IiwidHYiOjAsImp0aSI6IjUzMTU3OGVmODcyZTRmMDY5ODI0MWZhYTE3ZDJlZDNmIiwiaWF0IjoxNzkzMDIzNTc4LCJleHAiOjE3OTMwMjQ0NzgsInR5cCI6ImFjY2VzcyIsInNjb3BlcyI6WyJhdHAucmVidWlsZCIsImNvbnNpZ25lZC5hZG1pbiIsImNvbnNpZ25lZC5hZ3JlZW1lbnQubWFuYWdlIiwiY29uc2lnbmVkLmFncmVlbWVudC53cml0ZSIsImNvbnNpZ25lZC5vd25lcnNoaXAudHJhbnNmZXIiLCJjb25zaWduZWQucmVhZCIsImNvbnNpZ25lZC50cmFuc2Zlci53cml0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LmNyZWF0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LnBvc3QiLCJjb3N0aW5nLmNvc3QubWFuYWdlIiwiY29zdGluZy5jb3N0LnJlYWQiLCJjb3N0aW5nLmNvc3QudmlldyIsImNvc3RpbmcuZXN0aW1hdGVkX2xhbmRlZF9jb3N0Lm1hbmFnZSIsImNvc3RpbmcuZ3JvdXAubWFuYWdlIiwiY29zdGluZy5sYW5kZWRfY29zdC5jcmVhdGUiLCJjb3N0aW5nLmxhbmRlZF9jb3N0LnBvc3QiLCJjb3N0aW5nLmxhbmRlZGNvc3QubWFuYWdlIiwiY29zdGluZy5tZXRob2QubWFuYWdlIiwiY29zdGluZy5yZWFkIiwiY29zdGluZy5yZWNhbGMucnVuIiwiY29zdGluZy5yZXZhbHVhdGlvbi5hcHByb3ZlIiwiY29zdGluZy5yZXZhbHVhdGlvbi5jcmVhdGUiLCJjb3N0aW5nLnJldmFsdWF0aW9uLnBvc3QiLCJjb3N0aW5nLnN0YW5kYXJkLmFjdGl2YXRlIiwiY29zdGluZy5zdGFuZGFyZC5yb2xsdXAiLCJjb3N0aW5nLnZhcmlhbmNlLnZpZXciLCJjb3Vwb25zLnZhbGlkYXRlIiwiY3VzdG9tZXJwYXJ0Lm1hbmFnZSIsImRlbWFuZF9wbGFuLmNyZWF0ZSIsImRlbWFuZF9wbGFuX2xpbmUub3ZlcnJpZGUiLCJleHRlbnNpb25zLmNsYWltcy53cml0ZSIsImV4dGVuc2lvbnMuY3VzdG9tZXJwYXJ0LndyaXRlIiwiZXh0ZW5zaW9ucy5yZWFkIiwiZXh0ZW5zaW9ucy51cGMud3JpdGUiLCJleHRlbnNpb25zLndhcnJhbnR5LndyaXRlIiwiaW52ZW50b3J5LmFkanVzdG1lbnQuYXBwcm92ZSIsImludmVudG9yeS5hZGp1c3RtZW50LmNyZWF0ZSIsImludmVudG9yeS5hZGp1c3RtZW50LnBvc3QiLCJpbnZlbnRvcnkuYmFsYW5jZS5yZWFkIiwiaW52ZW50b3J5LmJpbi5tYW5hZ2UiLCJpbnZlbnRvcnkuYmluLnJlYWQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5jb21taXQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5tYW5hZ2UiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5yZWFsbG9jYXRlIiwiaW52ZW50b3J5LmNvbW1pdG1lbnQucmVsZWFzZSIsImludmVudG9yeS5jb3N0LnZpZXciLCJpbnZlbnRvcnkuY291bnQuYXBwcm92ZSIsImludmVudG9yeS5jb3VudC5jYXB0dXJlIiwiaW52ZW50b3J5LmNvdW50LmNyZWF0ZSIsImludmVudG9yeS5jb3VudC5wbGFuLm1hbmFnZSIsImludmVudG9yeS5jb3VudC5wb3N0IiwiaW52ZW50b3J5LmNvdW50LnJlYWQiLCJpbnZlbnRvcnkuY291bnQucmVjb3VudCIsImludmVudG9yeS5kaXN0cmlidXRpb24uY3JlYXRlIiwiaW52ZW50b3J5LmRpc3RyaWJ1dGlvbi5wb3N0IiwiaW52ZW50b3J5LmZ1bGZpbGxtZW50LnBvc3QiLCJpbnZlbnRvcnkuaW1wb3J0LmNyZWF0ZSIsImludmVudG9yeS5pbXBvcnQucG9zdCIsImludmVudG9yeS5sb2NhdGlvbi5tYW5hZ2UiLCJpbnZlbnRvcnkubG9jYXRpb24ucmVhZCIsImludmVudG9yeS5sb3QuaW5hY3RpdmF0ZSIsImludmVudG9yeS5sb3QucmVhZCIsImludmVudG9yeS5sb3Qud3JpdGUiLCJpbnZlbnRvcnkubnVtYmVyZWQucmVjb25jaWxlIiwiaW52ZW50b3J5Lm51bWJlcmVkLnZhbGlkYXRlIiwiaW52ZW50b3J5LnJlYXNvbi5tYW5hZ2UiLCJpbnZlbnRvcnkucmVjZWlwdC5wb3N0IiwiaW52ZW50b3J5LnJldHVybi5wb3N0IiwiaW52ZW50b3J5LnNlcmlhbC5yZWFkIiwiaW52ZW50b3J5LnNlcmlhbC5yZWdpc3RlciIsImludmVudG9yeS5zdGF0dXMubWFuYWdlIiwiaW52ZW50b3J5LnN0YXR1cy5yZWFkIiwiaW52ZW50b3J5LnRvLmFwcHJvdmUiLCJpbnZlbnRvcnkudG8uY2xvc2UiLCJpbnZlbnRvcnkudG8uY3JlYXRlIiwiaW52ZW50b3J5LnRvLmZ1bGZpbCIsImludmVudG9yeS50by5yZWNlaXZlIiwiaW52ZW50b3J5LnRyYW5zYWN0aW9uLnBvc3QiLCJpbnZlbnRvcnkudHJhbnNhY3Rpb24ucmVhZCIsImludmVudG9yeS50cmFuc2FjdGlvbi5yZXZlcnNlIiwiaW52ZW50b3J5LnRyYW5zZmVyLmNyZWF0ZSIsImludmVudG9yeS50cmFuc2Zlci5wb3N0IiwiaW52ZW50b3J5LndvcmtzaGVldC5hcHByb3ZlIiwiaW52ZW50b3J5LndvcmtzaGVldC5jcmVhdGUiLCJpbnZlbnRvcnkud29ya3NoZWV0LnBvc3QiLCJpdGVtcy5iYXJjb2RlLm1hbmFnZSIsIml0ZW1zLmNhdGVnb3J5Lm1hbmFnZSIsIml0ZW1zLmNyZWF0ZSIsIml0ZW1zLmluYWN0aXZhdGUiLCJpdGVtcy5sb2NhdGlvbi5tYW5hZ2UiLCJpdGVtcy5tYXRyaXgubWFuYWdlIiwiaXRlbXMucGxhbm5pbmcubWFuYWdlIiwiaXRlbXMucmVhZCIsIml0ZW1zLnVvbS5tYW5hZ2UiLCJpdGVtcy51cGRhdGUiLCJtYW51ZmFjdHVyaW5nLmFkbWluIiwibWFudWZhY3R1cmluZy5hcHByb3ZlIiwibWFudWZhY3R1cmluZy5ib20ubWFuYWdlIiwibWFudWZhY3R1cmluZy5idWlsZC5wb3N0IiwibWFudWZhY3R1cmluZy5jb21wYXQubWFuYWdlIiwibWFudWZhY3R1cmluZy5jb21wYXQub3ZlcnJpZGUiLCJtYW51ZmFjdHVyaW5nLmNvbXBhdC52YWxpZGF0ZSIsIm1hbnVmYWN0dXJpbmcuY29zdC52aWV3IiwibWFudWZhY3R1cmluZy5wb3N0IiwibWFudWZhY3R1cmluZy5yZWFkIiwibWFudWZhY3R1cmluZy5yZWxlYXNlIiwibWFudWZhY3R1cmluZy51bmJ1aWxkLmRpc3Bvc2UiLCJtYW51ZmFjdHVyaW5nLndpcC5wb3N0IiwibWFudWZhY3R1cmluZy53by5jcmVhdGUiLCJtYW51ZmFjdHVyaW5nLndvLnJlbGVhc2UiLCJtYW51ZmFjdHVyaW5nLndyaXRlIiwib3JkZXJfaXRlbXMucmVhZCIsInBsYW5uaW5nLmFsbG9jYXRpb24ucnVuIiwicGxhbm5pbmcuYXBwcm92ZSIsInBsYW5uaW5nLmF0cC5yZWFkIiwicGxhbm5pbmcucnVsZXMubWFuYWdlIiwicGxhbm5pbmcucnVuIiwicGxhbm5pbmcuc3VwcGx5LnJ1biIsInBsYXRmb3JtLmFkbWluIiwicGxhdGZvcm0uYXBwcm92YWwuYWN0IiwicGxhdGZvcm0uYXBwcm92YWwuZGVmaW5pdGlvbi5tYW5hZ2UiLCJwbGF0Zm9ybS5hdHRhY2htZW50Lm1hbmFnZSIsInBsYXRmb3JtLmF1ZGl0LnJlYWQiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5tYW5hZ2UiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5yZWFkIiwicGxhdGZvcm0uZGF0YV9zY29wZS5tYW5hZ2UiLCJwbGF0Zm9ybS5kb2N1bWVudGxpbmsucmVhZCIsInBsYXRmb3JtLmZpbmFuY2UucmVhZCIsInBsYXRmb3JtLmZpbmFuY2Uuc3luYyIsInBsYXRmb3JtLmZsYWcubWFuYWdlIiwicGxhdGZvcm0uaW52aXRhdGlvbnMubWFuYWdlIiwicGxhdGZvcm0uam9iLm1hbmFnZSIsInBsYXRmb3JtLnJlZmVyZW5jZS5yZWFkIiwicGxhdGZvcm0ucm9sZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXF1ZW5jZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXNzaW9ucy5yZXZva2UiLCJwbGF0Zm9ybS5zc28ubWFuYWdlIiwicGxhdGZvcm0uc3NvLnJlYWQiLCJwbGF0Zm9ybS51c2Vycy5tYW5hZ2UiLCJwcmljaW5nLmNvbGxlY3Rpb24ubWFuYWdlIiwicHJpY2luZy5jb3Vwb24ubWFuYWdlIiwicHJpY2luZy5sZXZlbC5tYW5hZ2UiLCJwcmljaW5nLm1hc3N1cGRhdGUiLCJwcmljaW5nLnByaWNlLm1hbmFnZSIsInByaWNpbmcucmVhZCIsInByaWNpbmcucmVzb2x2ZSIsInByaWNpbmcucnVsZS5tYW5hZ2UiLCJwcmljaW5nLnNjaGVkdWxlLm1hbmFnZSIsInByaWNpbmcudXBkYXRlLm1hbmFnZSIsInByb2N1cmVtZW50LmJpbGwuYXBwcm92ZSIsInByb2N1cmVtZW50LmJpbGwubWF0Y2giLCJwcm9jdXJlbWVudC5iaWxsLnBvc3QiLCJwcm9jdXJlbWVudC5iaWxsLnJlYWQiLCJwcm9jdXJlbWVudC5iaWxsLndyaXRlIiwicHJvY3VyZW1lbnQuY29udHJhY3QuYXBwcm92ZSIsInByb2N1cmVtZW50LmNvbnRyYWN0LnJlYWQiLCJwcm9jdXJlbWVudC5jb250cmFjdC53cml0ZSIsInByb2N1cmVtZW50LmNyZWRpdC5hcHBseSIsInByb2N1cmVtZW50LmNyZWRpdC5wb3N0IiwicHJvY3VyZW1lbnQuY3JlZGl0LnJlYWQiLCJwcm9jdXJlbWVudC5jcmVkaXQud3JpdGUiLCJwcm9jdXJlbWVudC5kcm9wc2hpcC53cml0ZSIsInByb2N1cmVtZW50Lm1hdGNoLm92ZXJyaWRlIiwicHJvY3VyZW1lbnQucG8uYXBwcm92ZSIsInByb2N1cmVtZW50LnBvLmNsb3NlIiwicHJvY3VyZW1lbnQucG8uY3JlYXRlIiwicHJvY3VyZW1lbnQucG8ucmVhZCIsInByb2N1cmVtZW50LnBvLndyaXRlIiwicHJvY3VyZW1lbnQucmVjZWlwdC5wb3N0IiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZWFkIiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZXZlcnNlIiwicHJvY3VyZW1lbnQucmVjZWlwdC53cml0ZSIsInByb2N1cmVtZW50LnJlcXVlc3QuYXBwcm92ZSIsInByb2N1cmVtZW50LnJlcXVlc3QucmVhZCIsInByb2N1cmVtZW50LnJlcXVlc3Qud3JpdGUiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5hcHByb3ZlIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ub3JkZXIiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5yZWFkIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ud3JpdGUiLCJwcm9jdXJlbWVudC5yZXR1cm4uYXBwcm92ZSIsInByb2N1cmVtZW50LnJldHVybi5jbG9zZSIsInByb2N1cmVtZW50LnJldHVybi5jcmVkaXQiLCJwcm9jdXJlbWVudC5yZXR1cm4ucG9zdCIsInByb2N1cmVtZW50LnJldHVybi5yZWFkIiwicHJvY3VyZW1lbnQucmV0dXJuLnNoaXAiLCJwcm9jdXJlbWVudC5yZXR1cm4ud3JpdGUiLCJwcm9jdXJlbWVudC5yZnEuYXdhcmQiLCJwcm9jdXJlbWVudC5yZnEucmVhZCIsInByb2N1cmVtZW50LnJmcS53cml0ZSIsInByb2N1cmVtZW50LnZlbmRvci5tYW5hZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IubWVyZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IucmVhZCIsInByb2N1cmVtZW50LnZlbmRvci53cml0ZSIsInF1YWxpdHkuYWRtaW4iLCJxdWFsaXR5LmNvYS5tYW5hZ2UiLCJxdWFsaXR5LmNvYS53cml0ZSIsInF1YWxpdHkuZGlzcG9zaXRpb24iLCJxdWFsaXR5LmhvbGQubWFuYWdlIiwicXVhbGl0eS5pbnNwZWN0IiwicXVhbGl0eS5pbnNwZWN0aW9uLmFwcHJvdmUiLCJxdWFsaXR5Lmluc3BlY3Rpb24ucmVjb3JkIiwicXVhbGl0eS5yZWFkIiwicXVhbGl0eS5zcGVjLm1hbmFnZSIsInF1YWxpdHkuc3BlYy53cml0ZSIsInJlb3JkZXJfcmVtaW5kZXJzLnJlYWQiLCJyZXBsZW5pc2htZW50LmFkbWluIiwicmVwbGVuaXNobWVudC5hcHByb3ZlIiwicmVwbGVuaXNobWVudC5jb252ZXJ0IiwicmVwbGVuaXNobWVudC5yZWFkIiwicmVwbGVuaXNobWVudC5ydW4iLCJyZXBsZW5pc2htZW50LndyaXRlIiwicmVwb3J0aW5nLmNvc3QudmlldyIsInJlcG9ydGluZy5leHBvcnQiLCJyZXBvcnRpbmcucmVhZCIsInNjaGVkdWxpbmdfcnVuLmNyZWF0ZSIsInNjaGVkdWxpbmdfcnVuLmV4ZWN1dGUiLCJ0cmFjZWFiaWxpdHkuYmluLm1hbmFnZSIsInRyYWNlYWJpbGl0eS5sb2NhdGlvbi5tYW5hZ2UiLCJ0cmFjZWFiaWxpdHkubnVtYmVyZWQubWFuYWdlIiwidHJhY2VhYmlsaXR5LnN0YXR1cy5tYW5hZ2UiLCJ1cGMuYmF0Y2hfYXNzaWduIiwidXBjLm1hbmFnZSIsIndhcnJhbnR5LmNsYWltLm1hbmFnZSIsIndhcnJhbnR5Lm1hbmFnZSIsIndtcy5hZG1pbiIsIndtcy5pbnZlbnRvcnkiLCJ3bXMucGFjayIsIndtcy5waWNrIiwid21zLnBpY2suY29uZmlybSIsIndtcy5wdXRhd2F5Iiwid21zLnJlYWQiLCJ3bXMucmVjZWlwdC5jb25maXJtIiwid21zLnJlY2VpdmUiLCJ3bXMucmVwbGVuaXNoIiwid21zLnNldHVwLndyaXRlIiwid21zLnNoaXAiLCJ3bXMuc3RyYXRlZ3kubWFuYWdlIiwid21zLnRhc2suYXNzaWduIiwid21zLnRhc2sucmVhZCIsIndtcy53YXJlaG91c2UubWFuYWdlIiwid21zLndhdmUiXX0.w3PTigTVaVp-NHtnTx3LRCPTQgcXrHDJIeCJUUGs9Pc",
         "admin": {
-          "app_user_id": "a490d095-ce04-4cbc-90d7-171c962ffd75",
-          "identity_id": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
-          "email": "e2e-e2e102602310a61-b@example.com",
+          "app_user_id": "12407765-9c6e-4f45-8cee-0f2d746fa123",
+          "identity_id": "bf342649-624b-48ba-82c9-40e0cc5e0491",
+          "email": "e2e-e2e102614066138-b@example.com",
           "role_codes": [
             "admin"
           ]
         },
         "flags": [
           {
-            "id": "cb2ae291-b886-492e-8c09-a796e536f263",
+            "id": "a490b508-9748-4aa5-80d1-a61dc9eb66e8",
             "flag_key": "consigned.assembly_incompatible_guard",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1382,11 +1448,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "457fed8d-470b-473d-be38-a21b2d9f5e9a",
+            "id": "819a8ab8-384d-4b5e-9563-e673d3938161",
             "flag_key": "consigned.inventory.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1394,11 +1460,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "866ce7f4-f9ae-41c6-9ccf-8d00809c815b",
+            "id": "600aaabb-d8c0-4a83-a5a4-d95faa36e944",
             "flag_key": "costing.engine.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1406,11 +1472,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "81a2d402-aa5d-45ef-98a3-b03056ec6f2f",
+            "id": "6949a2e8-760e-4c1b-b601-2e763929dd16",
             "flag_key": "extensions.registry.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1418,11 +1484,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "7d5d127b-348e-4af1-9b83-6f19d51952f5",
+            "id": "9da81088-8913-4c0b-abc0-561943abafff",
             "flag_key": "extensions.upc.auto_assign",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1430,11 +1496,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "331da66c-795e-4fd0-8962-50185065e5ae",
+            "id": "83ec3891-a636-4b4e-969a-3707a6f1bbcb",
             "flag_key": "inventory.counts.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1442,11 +1508,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "8fcfd4a1-45bb-4788-96ba-3ec88ab9f236",
+            "id": "1de40885-5dfc-4839-9f8f-db266d347736",
             "flag_key": "inventory.item_master.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1454,11 +1520,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "bb8ca1a4-9286-49a5-bc17-7128e96ce29a",
+            "id": "5a8ee52e-4b3b-4155-be86-d7ff67053ea4",
             "flag_key": "inventory.ledger.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1466,11 +1532,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "098c8152-8ee1-4d8c-a9ca-af6fbdb25d37",
+            "id": "03844c90-211a-4a48-9704-6ecf04baa310",
             "flag_key": "inventory.numbered.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1478,11 +1544,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "e4d0d2c0-2675-4923-963e-7cfa38f1f793",
+            "id": "4162c5a4-fb31-4898-84d1-abebe495df9f",
             "flag_key": "manufacturing.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1490,11 +1556,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "f34858e5-996f-4be7-b0f6-cdad2e77c0c3",
+            "id": "ac384d7a-f3c7-477a-aa67-75302914cce3",
             "flag_key": "manufacturing.wip.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1502,11 +1568,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "10fa5caa-716b-4c9f-a3f8-187849705df0",
+            "id": "835800ea-cbba-408c-9820-7e758b8f0ff3",
             "flag_key": "platform.core.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1514,11 +1580,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "e1ddc4a0-a2f8-4662-931b-9a2540f49cfd",
+            "id": "d26d5924-38d5-4787-b5d4-9723d155650d",
             "flag_key": "pricing.engine.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1526,11 +1592,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "8d2cae31-71d0-450e-b95a-9e4388e4a1fa",
+            "id": "dd5e644b-ce64-44ee-b43e-860625c692b1",
             "flag_key": "procurement.blanket_orders_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1538,11 +1604,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "545526b4-6ff0-4dde-9a26-4d1371ce8400",
+            "id": "64570a53-cc0a-42af-942e-cc1756511a7e",
             "flag_key": "procurement.drop_ship_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1550,11 +1616,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "1052ca14-016e-47eb-a062-c5f283de71a5",
+            "id": "68d776e6-a489-45ea-abb5-402c3e265e3e",
             "flag_key": "procurement.multiple_vendors_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1562,11 +1628,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "57931b7e-0e17-4ffd-854f-f3ada626f152",
+            "id": "676530d2-4f0c-4e52-bc2b-7082abac856c",
             "flag_key": "procurement.p2p.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1574,11 +1640,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "8fd7cfcb-3217-4d7d-9984-00a7028ba64d",
+            "id": "ca8d6f58-d6ba-4031-a0e4-a8c2a3e4b52f",
             "flag_key": "procurement.purchase_contracts_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1586,11 +1652,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "1fc2c802-8083-4dba-9dd7-bbbb2a0885c9",
+            "id": "0189ccd7-a926-4086-8e97-39478aa94177",
             "flag_key": "procurement.purchase_requests_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1598,11 +1664,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "e73b337e-65d1-443f-ac00-fcdc6cd2ea6b",
+            "id": "f213a6ab-955b-4595-956f-654b0c068a64",
             "flag_key": "procurement.requisitions_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1610,11 +1676,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "b34d963a-53b7-47e6-88d5-d0a22b1738cf",
+            "id": "f9df5c60-078e-43fb-85f3-8a72c0a37771",
             "flag_key": "procurement.rfq_enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1622,11 +1688,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "f80f46ec-e1ae-4585-8ee5-2a4b551f82fa",
+            "id": "147a0c1a-17e1-4bfd-bb6f-ff3b669ee10b",
             "flag_key": "quality.management.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1634,11 +1700,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "3c2f718e-cd84-455d-8535-fef01c715d0e",
+            "id": "e967bdbd-0d47-43b8-999c-e6315732e748",
             "flag_key": "replenishment.planning.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1646,11 +1712,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "06b1a8b2-5008-4dfd-b8f3-3468041ae333",
+            "id": "3a19f0a4-c31d-4bc7-8e0f-ec83cfcde1e3",
             "flag_key": "reporting.readmodels.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1658,11 +1724,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "5a642407-011d-4c25-8696-0b6f84ced1ea",
+            "id": "b65ff0f0-ad1a-4167-a796-941294ee1670",
             "flag_key": "traceability.registry.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1670,11 +1736,11 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           },
           {
-            "id": "c22b32bc-61c3-4210-8e78-7535134a792f",
+            "id": "b2fbae61-af57-4485-9011-df12868aa260",
             "flag_key": "wms.execution.enabled",
             "is_enabled": false,
             "source": "DEFAULT",
@@ -1682,8 +1748,8 @@
             "changed_at": null,
             "notes": null,
             "version": 1,
-            "created_at": "2026-10-26T02:31:13.571982+00:00",
-            "updated_at": "2026-10-26T02:31:13.571982+00:00"
+            "created_at": "2026-10-26T14:06:17.944361+00:00",
+            "updated_at": "2026-10-26T14:06:17.944361+00:00"
           }
         ]
       }
@@ -1691,9 +1757,9 @@
     "warehouses": {
       "A1": {
         "location": {
-          "id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
-          "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-          "code": "E2E102602310A61_A-WH-A1",
+          "id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
+          "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+          "code": "E2E102614066138_A-WH-A1",
           "name": "Warehouse A1",
           "parent_id": null,
           "location_type": "WAREHOUSE",
@@ -1708,17 +1774,17 @@
           "is_inactive": false,
           "inactive_at": null,
           "inactive_reason": null,
-          "created_at": "2026-10-26T02:31:14.268095+00:00",
-          "updated_at": "2026-10-26T02:31:14.268095+00:00",
-          "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-          "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+          "created_at": "2026-10-26T14:06:18.759051+00:00",
+          "updated_at": "2026-10-26T14:06:18.759051+00:00",
+          "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+          "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
           "version": 1
         },
         "bins": {
           "RCV": {
-            "id": "c22aab72-4774-4421-b689-d5f1d690e837",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "location_id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
+            "id": "8fa63f03-1874-4425-b7f7-f09cbf985a62",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "location_id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
             "zone_id": null,
             "code": "RCV-A1",
             "name": "RCV",
@@ -1728,16 +1794,16 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.277795+00:00",
-            "updated_at": "2026-10-26T02:31:14.277795+00:00",
-            "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-            "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+            "created_at": "2026-10-26T14:06:18.774833+00:00",
+            "updated_at": "2026-10-26T14:06:18.774833+00:00",
+            "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+            "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
             "version": 1
           },
           "STG": {
-            "id": "bbc5591a-5233-4ca9-b359-325e0491aef2",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "location_id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
+            "id": "322fcd67-6ed9-40a6-bf80-3e983f455052",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "location_id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
             "zone_id": null,
             "code": "STG-A1",
             "name": "STG",
@@ -1747,16 +1813,16 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.286951+00:00",
-            "updated_at": "2026-10-26T02:31:14.286951+00:00",
-            "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-            "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+            "created_at": "2026-10-26T14:06:18.788401+00:00",
+            "updated_at": "2026-10-26T14:06:18.788401+00:00",
+            "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+            "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
             "version": 1
           },
           "PICK": {
-            "id": "15f0a700-5978-4c88-ba88-c86297721d07",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "location_id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
+            "id": "d5861819-209e-499c-b1f7-c999e9ab99e3",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "location_id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
             "zone_id": null,
             "code": "PICK-A1",
             "name": "PICK",
@@ -1766,37 +1832,37 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.295259+00:00",
-            "updated_at": "2026-10-26T02:31:14.295259+00:00",
-            "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-            "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+            "created_at": "2026-10-26T14:06:18.799517+00:00",
+            "updated_at": "2026-10-26T14:06:18.799517+00:00",
+            "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+            "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
             "version": 1
           }
         },
         "warehouse": {
-          "id": "f28bd86d-fd20-4b91-83a7-6ed7fc73cf5d",
-          "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-          "location_id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
+          "id": "a464b790-5b73-4573-afb7-f1673ebc8814",
+          "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+          "location_id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
           "code": "WH-A1",
           "name": "Warehouse A1",
           "is_wms_enabled": true,
-          "receiving_bin_id": "c22aab72-4774-4421-b689-d5f1d690e837",
-          "staging_bin_id": "bbc5591a-5233-4ca9-b359-325e0491aef2",
-          "shipping_bin_id": "15f0a700-5978-4c88-ba88-c86297721d07",
+          "receiving_bin_id": "8fa63f03-1874-4425-b7f7-f09cbf985a62",
+          "staging_bin_id": "322fcd67-6ed9-40a6-bf80-3e983f455052",
+          "shipping_bin_id": "d5861819-209e-499c-b1f7-c999e9ab99e3",
           "default_order_type_id": null,
           "timezone": "UTC",
           "is_active": true,
-          "created_at": "2026-10-26T02:31:14.300030Z",
-          "updated_at": "2026-10-26T02:31:14.300030Z",
-          "created_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
-          "updated_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
+          "created_at": "2026-10-26T14:06:18.806666Z",
+          "updated_at": "2026-10-26T14:06:18.806666Z",
+          "created_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
+          "updated_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
           "version": 1,
-          "location_code": "E2E102602310A61_A-WH-A1",
+          "location_code": "E2E102614066138_A-WH-A1",
           "location_name": "Warehouse A1",
           "rules": [
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "STAGING_AT_RECEIVING",
               "name": "Staging at receiving",
               "description": "Receiving puts stock into the staging bin before putaway",
@@ -1809,7 +1875,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "DEFERRED_RECEIPT_POSTING",
               "name": "Deferred item receipt posting",
               "description": "Receiving completes into PENDING_POSTING",
@@ -1822,7 +1888,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "AUTO_FIRM_COMMIT_WAVE",
               "name": "Firm commitments when wave releases",
               "description": "Commit order lines when the wave releases",
@@ -1835,7 +1901,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "ALLOW_OVER_PICK_WO",
               "name": "Allow over-picking work orders",
               "description": "Permit qty_picked > qty_requested for work-order picks",
@@ -1848,7 +1914,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "PICK_EXPIRED_GUARD",
               "name": "Reject expired lots at pick",
               "description": "Expired lots are excluded and raise an exception",
@@ -1861,7 +1927,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "CART_REQUIRED_PUTAWAY",
               "name": "Cart required for putaway",
               "description": "Putaway tasks require a cart container",
@@ -1874,7 +1940,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "WAVE_AUTO_RELEASE",
               "name": "Auto-release scheduled waves",
               "description": "Wave release schedules release created waves immediately",
@@ -1887,7 +1953,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "PUTAWAY_REQUIRE_SCAN_CONFIRM",
               "name": "Require scan confirmation on putaway",
               "description": "Directed putaway requires an actual-bin confirmation",
@@ -1902,8 +1968,8 @@
         },
         "statuses": {
           "AVAILABLE": {
-            "id": "d89d8759-1a03-4577-9369-fcd499c47b75",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "5918817a-bdc7-41d8-b9db-5c1620275dbd",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "AVAILABLE",
             "name": "Available",
             "is_available_for_allocation": true,
@@ -1913,15 +1979,15 @@
             "is_default": true,
             "is_system": true,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "CONSIGNED_GOOD": {
-            "id": "34539859-58ea-4c59-9fdb-b493363bb32c",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "b3385b85-0dfd-44e5-9d4d-a4698bd67f29",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "CONSIGNED_GOOD",
             "name": "Consigned Good",
             "is_available_for_allocation": true,
@@ -1931,15 +1997,15 @@
             "is_default": false,
             "is_system": true,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "DAMAGED": {
-            "id": "06023cc3-5ccf-49a6-aec8-dcc6a6cd54a9",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "0429dc66-6b16-41d3-82f0-9753a2bf14cd",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "DAMAGED",
             "name": "Damaged",
             "is_available_for_allocation": false,
@@ -1949,15 +2015,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "HOLD": {
-            "id": "8a152594-f684-486b-99a8-76836366e00a",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "05a7d521-a442-4438-a420-73a493590d63",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "HOLD",
             "name": "Hold",
             "is_available_for_allocation": false,
@@ -1967,15 +2033,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "REFURB": {
-            "id": "47715a80-d155-4c0c-9e6a-a7cc24b848e2",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "574aa335-2aa8-4d1e-b0a6-5ef53a32e79c",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "REFURB",
             "name": "Refurbished",
             "is_available_for_allocation": true,
@@ -1985,15 +2051,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "RETURNED": {
-            "id": "4c4fd16b-9e4d-480a-ae4c-9854ff826c2a",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "851f66a9-6cde-4ba9-96b9-c204bbe77b2b",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "RETURNED",
             "name": "Returned",
             "is_available_for_allocation": false,
@@ -2003,15 +2069,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "USED": {
-            "id": "b61042fe-05a6-4cf6-a928-c3de605f2e8a",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "989fb8f3-ce4e-44a3-b3e8-2efc54190633",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "USED",
             "name": "Used",
             "is_available_for_allocation": true,
@@ -2021,8 +2087,8 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
@@ -2031,9 +2097,9 @@
       },
       "A2": {
         "location": {
-          "id": "dadea27d-f200-41b5-b2b4-91a134cba113",
-          "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-          "code": "E2E102602310A61_A-WH-A2",
+          "id": "dd43ea65-50e0-4bd4-81ee-56d75516f605",
+          "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+          "code": "E2E102614066138_A-WH-A2",
           "name": "Warehouse A2",
           "parent_id": null,
           "location_type": "WAREHOUSE",
@@ -2048,17 +2114,17 @@
           "is_inactive": false,
           "inactive_at": null,
           "inactive_reason": null,
-          "created_at": "2026-10-26T02:31:14.319460+00:00",
-          "updated_at": "2026-10-26T02:31:14.319460+00:00",
-          "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-          "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+          "created_at": "2026-10-26T14:06:18.834377+00:00",
+          "updated_at": "2026-10-26T14:06:18.834377+00:00",
+          "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+          "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
           "version": 1
         },
         "bins": {
           "RCV": {
-            "id": "972b55e2-ffb1-444d-bb4f-4a4d12878acf",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "location_id": "dadea27d-f200-41b5-b2b4-91a134cba113",
+            "id": "dcc6a68d-371f-41db-bd5e-2bc6489479e4",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "location_id": "dd43ea65-50e0-4bd4-81ee-56d75516f605",
             "zone_id": null,
             "code": "RCV-A2",
             "name": "RCV",
@@ -2068,16 +2134,16 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.327766+00:00",
-            "updated_at": "2026-10-26T02:31:14.327766+00:00",
-            "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-            "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+            "created_at": "2026-10-26T14:06:18.844343+00:00",
+            "updated_at": "2026-10-26T14:06:18.844343+00:00",
+            "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+            "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
             "version": 1
           },
           "STG": {
-            "id": "2df411b1-a867-41e8-836d-7ed16b739254",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "location_id": "dadea27d-f200-41b5-b2b4-91a134cba113",
+            "id": "60d0e4db-d380-47dd-947c-4e0ddff4cf52",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "location_id": "dd43ea65-50e0-4bd4-81ee-56d75516f605",
             "zone_id": null,
             "code": "STG-A2",
             "name": "STG",
@@ -2087,16 +2153,16 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.335639+00:00",
-            "updated_at": "2026-10-26T02:31:14.335639+00:00",
-            "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-            "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+            "created_at": "2026-10-26T14:06:18.854477+00:00",
+            "updated_at": "2026-10-26T14:06:18.854477+00:00",
+            "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+            "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
             "version": 1
           },
           "PICK": {
-            "id": "4d39c876-7cef-4510-9de6-d460a3e56904",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "location_id": "dadea27d-f200-41b5-b2b4-91a134cba113",
+            "id": "f90fae3c-4448-4be0-a9a2-8837ab9860c3",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "location_id": "dd43ea65-50e0-4bd4-81ee-56d75516f605",
             "zone_id": null,
             "code": "PICK-A2",
             "name": "PICK",
@@ -2106,37 +2172,37 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.343574+00:00",
-            "updated_at": "2026-10-26T02:31:14.343574+00:00",
-            "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-            "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+            "created_at": "2026-10-26T14:06:18.863891+00:00",
+            "updated_at": "2026-10-26T14:06:18.863891+00:00",
+            "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+            "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
             "version": 1
           }
         },
         "warehouse": {
-          "id": "9bcda114-7f26-49e2-8267-e793003c1cfd",
-          "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-          "location_id": "dadea27d-f200-41b5-b2b4-91a134cba113",
+          "id": "cc1f305c-c94f-471f-ab63-d77e5941ea35",
+          "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+          "location_id": "dd43ea65-50e0-4bd4-81ee-56d75516f605",
           "code": "WH-A2",
           "name": "Warehouse A2",
           "is_wms_enabled": true,
-          "receiving_bin_id": "972b55e2-ffb1-444d-bb4f-4a4d12878acf",
-          "staging_bin_id": "2df411b1-a867-41e8-836d-7ed16b739254",
-          "shipping_bin_id": "4d39c876-7cef-4510-9de6-d460a3e56904",
+          "receiving_bin_id": "dcc6a68d-371f-41db-bd5e-2bc6489479e4",
+          "staging_bin_id": "60d0e4db-d380-47dd-947c-4e0ddff4cf52",
+          "shipping_bin_id": "f90fae3c-4448-4be0-a9a2-8837ab9860c3",
           "default_order_type_id": null,
           "timezone": "UTC",
           "is_active": true,
-          "created_at": "2026-10-26T02:31:14.348980Z",
-          "updated_at": "2026-10-26T02:31:14.348980Z",
-          "created_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
-          "updated_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
+          "created_at": "2026-10-26T14:06:18.870258Z",
+          "updated_at": "2026-10-26T14:06:18.870258Z",
+          "created_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
+          "updated_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
           "version": 1,
-          "location_code": "E2E102602310A61_A-WH-A2",
+          "location_code": "E2E102614066138_A-WH-A2",
           "location_name": "Warehouse A2",
           "rules": [
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "STAGING_AT_RECEIVING",
               "name": "Staging at receiving",
               "description": "Receiving puts stock into the staging bin before putaway",
@@ -2149,7 +2215,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "DEFERRED_RECEIPT_POSTING",
               "name": "Deferred item receipt posting",
               "description": "Receiving completes into PENDING_POSTING",
@@ -2162,7 +2228,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "AUTO_FIRM_COMMIT_WAVE",
               "name": "Firm commitments when wave releases",
               "description": "Commit order lines when the wave releases",
@@ -2175,7 +2241,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "ALLOW_OVER_PICK_WO",
               "name": "Allow over-picking work orders",
               "description": "Permit qty_picked > qty_requested for work-order picks",
@@ -2188,7 +2254,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "PICK_EXPIRED_GUARD",
               "name": "Reject expired lots at pick",
               "description": "Expired lots are excluded and raise an exception",
@@ -2201,7 +2267,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "CART_REQUIRED_PUTAWAY",
               "name": "Cart required for putaway",
               "description": "Putaway tasks require a cart container",
@@ -2214,7 +2280,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "WAVE_AUTO_RELEASE",
               "name": "Auto-release scheduled waves",
               "description": "Wave release schedules release created waves immediately",
@@ -2227,7 +2293,7 @@
             },
             {
               "id": null,
-              "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+              "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
               "code": "PUTAWAY_REQUIRE_SCAN_CONFIRM",
               "name": "Require scan confirmation on putaway",
               "description": "Directed putaway requires an actual-bin confirmation",
@@ -2242,8 +2308,8 @@
         },
         "statuses": {
           "AVAILABLE": {
-            "id": "d89d8759-1a03-4577-9369-fcd499c47b75",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "5918817a-bdc7-41d8-b9db-5c1620275dbd",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "AVAILABLE",
             "name": "Available",
             "is_available_for_allocation": true,
@@ -2253,15 +2319,15 @@
             "is_default": true,
             "is_system": true,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "CONSIGNED_GOOD": {
-            "id": "34539859-58ea-4c59-9fdb-b493363bb32c",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "b3385b85-0dfd-44e5-9d4d-a4698bd67f29",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "CONSIGNED_GOOD",
             "name": "Consigned Good",
             "is_available_for_allocation": true,
@@ -2271,15 +2337,15 @@
             "is_default": false,
             "is_system": true,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "DAMAGED": {
-            "id": "06023cc3-5ccf-49a6-aec8-dcc6a6cd54a9",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "0429dc66-6b16-41d3-82f0-9753a2bf14cd",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "DAMAGED",
             "name": "Damaged",
             "is_available_for_allocation": false,
@@ -2289,15 +2355,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "HOLD": {
-            "id": "8a152594-f684-486b-99a8-76836366e00a",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "05a7d521-a442-4438-a420-73a493590d63",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "HOLD",
             "name": "Hold",
             "is_available_for_allocation": false,
@@ -2307,15 +2373,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "REFURB": {
-            "id": "47715a80-d155-4c0c-9e6a-a7cc24b848e2",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "574aa335-2aa8-4d1e-b0a6-5ef53a32e79c",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "REFURB",
             "name": "Refurbished",
             "is_available_for_allocation": true,
@@ -2325,15 +2391,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "RETURNED": {
-            "id": "4c4fd16b-9e4d-480a-ae4c-9854ff826c2a",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "851f66a9-6cde-4ba9-96b9-c204bbe77b2b",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "RETURNED",
             "name": "Returned",
             "is_available_for_allocation": false,
@@ -2343,15 +2409,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "USED": {
-            "id": "b61042fe-05a6-4cf6-a928-c3de605f2e8a",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+            "id": "989fb8f3-ce4e-44a3-b3e8-2efc54190633",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
             "code": "USED",
             "name": "Used",
             "is_available_for_allocation": true,
@@ -2361,8 +2427,8 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.257465+00:00",
-            "updated_at": "2026-10-26T02:31:14.257465+00:00",
+            "created_at": "2026-10-26T14:06:18.741010+00:00",
+            "updated_at": "2026-10-26T14:06:18.741010+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
@@ -2371,9 +2437,9 @@
       },
       "B1": {
         "location": {
-          "id": "7d5e2f9c-31d5-449c-8187-6664ef9834be",
-          "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-          "code": "E2E102602310A61_B-WH-B1",
+          "id": "1437fe6e-018a-420a-890b-8e601ba209ff",
+          "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
+          "code": "E2E102614066138_B-WH-B1",
           "name": "Warehouse B1",
           "parent_id": null,
           "location_type": "WAREHOUSE",
@@ -2388,17 +2454,17 @@
           "is_inactive": false,
           "inactive_at": null,
           "inactive_reason": null,
-          "created_at": "2026-10-26T02:31:14.368904+00:00",
-          "updated_at": "2026-10-26T02:31:14.368904+00:00",
-          "created_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
-          "updated_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
+          "created_at": "2026-10-26T14:06:18.892440+00:00",
+          "updated_at": "2026-10-26T14:06:18.892440+00:00",
+          "created_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
+          "updated_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
           "version": 1
         },
         "bins": {
           "RCV": {
-            "id": "9af4e333-54a8-4ac9-b9cb-9706fd04d168",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-            "location_id": "7d5e2f9c-31d5-449c-8187-6664ef9834be",
+            "id": "5ba87692-12fd-4b72-9b53-da3724708e75",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
+            "location_id": "1437fe6e-018a-420a-890b-8e601ba209ff",
             "zone_id": null,
             "code": "RCV-B1",
             "name": "RCV",
@@ -2408,16 +2474,16 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.377419+00:00",
-            "updated_at": "2026-10-26T02:31:14.377419+00:00",
-            "created_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
-            "updated_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
+            "created_at": "2026-10-26T14:06:18.911211+00:00",
+            "updated_at": "2026-10-26T14:06:18.911211+00:00",
+            "created_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
+            "updated_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
             "version": 1
           },
           "STG": {
-            "id": "81675393-583f-4dcf-b541-31dbc27b686e",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-            "location_id": "7d5e2f9c-31d5-449c-8187-6664ef9834be",
+            "id": "e6824d59-734d-47f1-82b6-c34eb02bc630",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
+            "location_id": "1437fe6e-018a-420a-890b-8e601ba209ff",
             "zone_id": null,
             "code": "STG-B1",
             "name": "STG",
@@ -2427,16 +2493,16 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.386046+00:00",
-            "updated_at": "2026-10-26T02:31:14.386046+00:00",
-            "created_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
-            "updated_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
+            "created_at": "2026-10-26T14:06:18.925673+00:00",
+            "updated_at": "2026-10-26T14:06:18.925673+00:00",
+            "created_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
+            "updated_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
             "version": 1
           },
           "PICK": {
-            "id": "65e47e61-a82f-4089-9132-4397b2324c42",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-            "location_id": "7d5e2f9c-31d5-449c-8187-6664ef9834be",
+            "id": "df312275-2b6b-4322-835a-874794eeda15",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
+            "location_id": "1437fe6e-018a-420a-890b-8e601ba209ff",
             "zone_id": null,
             "code": "PICK-B1",
             "name": "PICK",
@@ -2446,37 +2512,37 @@
             "capacity_qty": null,
             "capacity_uom_id": null,
             "coordinates": null,
-            "created_at": "2026-10-26T02:31:14.394064+00:00",
-            "updated_at": "2026-10-26T02:31:14.394064+00:00",
-            "created_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
-            "updated_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
+            "created_at": "2026-10-26T14:06:18.935620+00:00",
+            "updated_at": "2026-10-26T14:06:18.935620+00:00",
+            "created_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
+            "updated_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
             "version": 1
           }
         },
         "warehouse": {
-          "id": "76a7a250-c682-4a41-a46b-bf5176b90500",
-          "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-          "location_id": "7d5e2f9c-31d5-449c-8187-6664ef9834be",
+          "id": "9f1170d3-645e-4a37-a37c-cda60c93081c",
+          "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
+          "location_id": "1437fe6e-018a-420a-890b-8e601ba209ff",
           "code": "WH-B1",
           "name": "Warehouse B1",
           "is_wms_enabled": true,
-          "receiving_bin_id": "9af4e333-54a8-4ac9-b9cb-9706fd04d168",
-          "staging_bin_id": "81675393-583f-4dcf-b541-31dbc27b686e",
-          "shipping_bin_id": "65e47e61-a82f-4089-9132-4397b2324c42",
+          "receiving_bin_id": "5ba87692-12fd-4b72-9b53-da3724708e75",
+          "staging_bin_id": "e6824d59-734d-47f1-82b6-c34eb02bc630",
+          "shipping_bin_id": "df312275-2b6b-4322-835a-874794eeda15",
           "default_order_type_id": null,
           "timezone": "UTC",
           "is_active": true,
-          "created_at": "2026-10-26T02:31:14.399017Z",
-          "updated_at": "2026-10-26T02:31:14.399017Z",
-          "created_by": "a490d095-ce04-4cbc-90d7-171c962ffd75",
-          "updated_by": "a490d095-ce04-4cbc-90d7-171c962ffd75",
+          "created_at": "2026-10-26T14:06:18.941939Z",
+          "updated_at": "2026-10-26T14:06:18.941939Z",
+          "created_by": "12407765-9c6e-4f45-8cee-0f2d746fa123",
+          "updated_by": "12407765-9c6e-4f45-8cee-0f2d746fa123",
           "version": 1,
-          "location_code": "E2E102602310A61_B-WH-B1",
+          "location_code": "E2E102614066138_B-WH-B1",
           "location_name": "Warehouse B1",
           "rules": [
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "STAGING_AT_RECEIVING",
               "name": "Staging at receiving",
               "description": "Receiving puts stock into the staging bin before putaway",
@@ -2489,7 +2555,7 @@
             },
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "DEFERRED_RECEIPT_POSTING",
               "name": "Deferred item receipt posting",
               "description": "Receiving completes into PENDING_POSTING",
@@ -2502,7 +2568,7 @@
             },
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "AUTO_FIRM_COMMIT_WAVE",
               "name": "Firm commitments when wave releases",
               "description": "Commit order lines when the wave releases",
@@ -2515,7 +2581,7 @@
             },
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "ALLOW_OVER_PICK_WO",
               "name": "Allow over-picking work orders",
               "description": "Permit qty_picked > qty_requested for work-order picks",
@@ -2528,7 +2594,7 @@
             },
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "PICK_EXPIRED_GUARD",
               "name": "Reject expired lots at pick",
               "description": "Expired lots are excluded and raise an exception",
@@ -2541,7 +2607,7 @@
             },
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "CART_REQUIRED_PUTAWAY",
               "name": "Cart required for putaway",
               "description": "Putaway tasks require a cart container",
@@ -2554,7 +2620,7 @@
             },
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "WAVE_AUTO_RELEASE",
               "name": "Auto-release scheduled waves",
               "description": "Wave release schedules release created waves immediately",
@@ -2567,7 +2633,7 @@
             },
             {
               "id": null,
-              "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+              "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
               "code": "PUTAWAY_REQUIRE_SCAN_CONFIRM",
               "name": "Require scan confirmation on putaway",
               "description": "Directed putaway requires an actual-bin confirmation",
@@ -2582,8 +2648,8 @@
         },
         "statuses": {
           "AVAILABLE": {
-            "id": "3026085a-9089-463b-9cc8-820cd98b57d7",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+            "id": "3c4d67b9-029e-4960-9a2c-d935572e6197",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
             "code": "AVAILABLE",
             "name": "Available",
             "is_available_for_allocation": true,
@@ -2593,15 +2659,15 @@
             "is_default": true,
             "is_system": true,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.360514+00:00",
-            "updated_at": "2026-10-26T02:31:14.360514+00:00",
+            "created_at": "2026-10-26T14:06:18.883700+00:00",
+            "updated_at": "2026-10-26T14:06:18.883700+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "CONSIGNED_GOOD": {
-            "id": "26bcb464-f5a9-4687-9402-6a6712c4f1be",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+            "id": "1d6b1fb0-78a6-44cb-8718-afc974efa2f3",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
             "code": "CONSIGNED_GOOD",
             "name": "Consigned Good",
             "is_available_for_allocation": true,
@@ -2611,15 +2677,15 @@
             "is_default": false,
             "is_system": true,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.360514+00:00",
-            "updated_at": "2026-10-26T02:31:14.360514+00:00",
+            "created_at": "2026-10-26T14:06:18.883700+00:00",
+            "updated_at": "2026-10-26T14:06:18.883700+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "DAMAGED": {
-            "id": "01b93533-3d9d-448e-88fa-717c454c04a3",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+            "id": "c761d401-911d-4391-91f2-b55a40dff69a",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
             "code": "DAMAGED",
             "name": "Damaged",
             "is_available_for_allocation": false,
@@ -2629,15 +2695,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.360514+00:00",
-            "updated_at": "2026-10-26T02:31:14.360514+00:00",
+            "created_at": "2026-10-26T14:06:18.883700+00:00",
+            "updated_at": "2026-10-26T14:06:18.883700+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "HOLD": {
-            "id": "2772329f-1730-4a29-9b3d-ee728129e85a",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+            "id": "31af9722-c4ce-40bb-bf74-666b9370135f",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
             "code": "HOLD",
             "name": "Hold",
             "is_available_for_allocation": false,
@@ -2647,15 +2713,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.360514+00:00",
-            "updated_at": "2026-10-26T02:31:14.360514+00:00",
+            "created_at": "2026-10-26T14:06:18.883700+00:00",
+            "updated_at": "2026-10-26T14:06:18.883700+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "REFURB": {
-            "id": "de026df5-3a1c-44ee-a41c-a25a0db107d8",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+            "id": "0f48449b-1c4d-4c2d-9ce7-5684c03c561d",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
             "code": "REFURB",
             "name": "Refurbished",
             "is_available_for_allocation": true,
@@ -2665,15 +2731,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.360514+00:00",
-            "updated_at": "2026-10-26T02:31:14.360514+00:00",
+            "created_at": "2026-10-26T14:06:18.883700+00:00",
+            "updated_at": "2026-10-26T14:06:18.883700+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "RETURNED": {
-            "id": "1048f7b8-034d-47cc-8355-b2a2afca8ecf",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+            "id": "85257d6a-b74f-469e-85fc-88456246b9d8",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
             "code": "RETURNED",
             "name": "Returned",
             "is_available_for_allocation": false,
@@ -2683,15 +2749,15 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.360514+00:00",
-            "updated_at": "2026-10-26T02:31:14.360514+00:00",
+            "created_at": "2026-10-26T14:06:18.883700+00:00",
+            "updated_at": "2026-10-26T14:06:18.883700+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           },
           "USED": {
-            "id": "cd4308ef-f874-441c-91f7-32a01ae9a050",
-            "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
+            "id": "9f8b7f4c-d449-4345-a96a-55eaed4f81a5",
+            "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
             "code": "USED",
             "name": "Used",
             "is_available_for_allocation": true,
@@ -2701,8 +2767,8 @@
             "is_default": false,
             "is_system": false,
             "is_active": true,
-            "created_at": "2026-10-26T02:31:14.360514+00:00",
-            "updated_at": "2026-10-26T02:31:14.360514+00:00",
+            "created_at": "2026-10-26T14:06:18.883700+00:00",
+            "updated_at": "2026-10-26T14:06:18.883700+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
@@ -2712,32 +2778,32 @@
     },
     "items": {
       "A1": {
-        "id": "52bf6276-65ad-490e-809f-282b3404dc04",
-        "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-        "item_number": "E2E102602310A61_A-ITEM-A",
-        "display_name": "E2E102602310A61_A-ITEM-A",
+        "id": "510d69c3-1dee-4bdb-ad2a-1f13a1d05698",
+        "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+        "item_number": "E2E102614066138_A-ITEM-A",
+        "display_name": "E2E102614066138_A-ITEM-A",
         "description": null,
-        "item_type_id": "eabf7636-bd04-49e3-b490-082be6e7af94",
+        "item_type_id": "e2c27ca7-d71a-48e6-8967-7e87520ad24b",
         "is_active": true,
         "inactive_at": null,
         "matrix_parent_id": null,
-        "base_uom_id": "680ff1a6-7693-433d-8b71-448e0969b521",
-        "units_type_id": "9d7d7960-98f2-4c73-9c50-fce065faf605",
+        "base_uom_id": "4edda0e1-d640-4477-a255-edee87601ce5",
+        "units_type_id": "933e5f6e-b180-49d0-afaf-179621cbbab6",
         "item_category_id": null,
         "upc_code": null,
         "external_ref": null,
         "created_from": "MANUAL",
-        "created_at": "2026-10-26T02:31:14.409882+00:00",
-        "updated_at": "2026-10-26T02:31:14.409882+00:00",
-        "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-        "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+        "created_at": "2026-10-26T14:06:18.955923+00:00",
+        "updated_at": "2026-10-26T14:06:18.955923+00:00",
+        "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+        "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
         "version": 1,
         "item_type_code": "INVENTORY",
         "category_code": null,
         "category_name": null,
         "inventory": {
-          "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-          "item_id": "52bf6276-65ad-490e-809f-282b3404dc04",
+          "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+          "item_id": "510d69c3-1dee-4bdb-ad2a-1f13a1d05698",
           "costing_method": "AVERAGE",
           "costing_method_locked": true,
           "initial_cost": "10",
@@ -2762,10 +2828,10 @@
           "backflush_default": false,
           "yield_percent": "100",
           "round_up_component_qty": false,
-          "stock_uom_id": "680ff1a6-7693-433d-8b71-448e0969b521",
+          "stock_uom_id": "4edda0e1-d640-4477-a255-edee87601ce5",
           "must_be_whole_base_unit": false,
-          "created_at": "2026-10-26T02:31:14.409882+00:00",
-          "updated_at": "2026-10-26T02:31:14.409882+00:00",
+          "created_at": "2026-10-26T14:06:18.955923+00:00",
+          "updated_at": "2026-10-26T14:06:18.955923+00:00",
           "created_by": null,
           "updated_by": null,
           "version": 1
@@ -2775,45 +2841,45 @@
         "accounting": null,
         "uoms": [
           {
-            "uom_id": "680ff1a6-7693-433d-8b71-448e0969b521",
+            "uom_id": "4edda0e1-d640-4477-a255-edee87601ce5",
             "role": "STOCK",
             "conversion_override": null,
             "is_default_for_role": true,
             "uom_code": "EA",
             "conversion_factor": "1",
             "is_base": true,
-            "uom_type_id": "9d7d7960-98f2-4c73-9c50-fce065faf605"
+            "uom_type_id": "933e5f6e-b180-49d0-afaf-179621cbbab6"
           }
         ],
         "custom_fields": []
       },
       "A2": {
-        "id": "c357ef4e-1d0e-4b0d-965a-bb4318c161e7",
-        "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-        "item_number": "E2E102602310A61_A-ITEM-B",
-        "display_name": "E2E102602310A61_A-ITEM-B",
+        "id": "902b666b-c641-4137-ac4e-14e5095c5901",
+        "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+        "item_number": "E2E102614066138_A-ITEM-B",
+        "display_name": "E2E102614066138_A-ITEM-B",
         "description": null,
-        "item_type_id": "eabf7636-bd04-49e3-b490-082be6e7af94",
+        "item_type_id": "e2c27ca7-d71a-48e6-8967-7e87520ad24b",
         "is_active": true,
         "inactive_at": null,
         "matrix_parent_id": null,
-        "base_uom_id": "680ff1a6-7693-433d-8b71-448e0969b521",
-        "units_type_id": "9d7d7960-98f2-4c73-9c50-fce065faf605",
+        "base_uom_id": "4edda0e1-d640-4477-a255-edee87601ce5",
+        "units_type_id": "933e5f6e-b180-49d0-afaf-179621cbbab6",
         "item_category_id": null,
         "upc_code": null,
         "external_ref": null,
         "created_from": "MANUAL",
-        "created_at": "2026-10-26T02:31:14.446953+00:00",
-        "updated_at": "2026-10-26T02:31:14.446953+00:00",
-        "created_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
-        "updated_by": "c5ced140-df53-42c5-9321-0af218b6b22b",
+        "created_at": "2026-10-26T14:06:18.994580+00:00",
+        "updated_at": "2026-10-26T14:06:18.994580+00:00",
+        "created_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
+        "updated_by": "1f37eb86-9aa8-4afa-b14f-412fb2cd0e33",
         "version": 1,
         "item_type_code": "INVENTORY",
         "category_code": null,
         "category_name": null,
         "inventory": {
-          "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-          "item_id": "c357ef4e-1d0e-4b0d-965a-bb4318c161e7",
+          "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+          "item_id": "902b666b-c641-4137-ac4e-14e5095c5901",
           "costing_method": "AVERAGE",
           "costing_method_locked": true,
           "initial_cost": "10",
@@ -2838,10 +2904,10 @@
           "backflush_default": false,
           "yield_percent": "100",
           "round_up_component_qty": false,
-          "stock_uom_id": "680ff1a6-7693-433d-8b71-448e0969b521",
+          "stock_uom_id": "4edda0e1-d640-4477-a255-edee87601ce5",
           "must_be_whole_base_unit": false,
-          "created_at": "2026-10-26T02:31:14.446953+00:00",
-          "updated_at": "2026-10-26T02:31:14.446953+00:00",
+          "created_at": "2026-10-26T14:06:18.994580+00:00",
+          "updated_at": "2026-10-26T14:06:18.994580+00:00",
           "created_by": null,
           "updated_by": null,
           "version": 1
@@ -2851,45 +2917,45 @@
         "accounting": null,
         "uoms": [
           {
-            "uom_id": "680ff1a6-7693-433d-8b71-448e0969b521",
+            "uom_id": "4edda0e1-d640-4477-a255-edee87601ce5",
             "role": "STOCK",
             "conversion_override": null,
             "is_default_for_role": true,
             "uom_code": "EA",
             "conversion_factor": "1",
             "is_base": true,
-            "uom_type_id": "9d7d7960-98f2-4c73-9c50-fce065faf605"
+            "uom_type_id": "933e5f6e-b180-49d0-afaf-179621cbbab6"
           }
         ],
         "custom_fields": []
       },
       "B1": {
-        "id": "5b22bced-825b-438b-9413-81ea04b7864f",
-        "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-        "item_number": "E2E102602310A61_B-ITEM-A",
-        "display_name": "E2E102602310A61_B-ITEM-A",
+        "id": "453e3e8d-aecd-4728-b687-dc8435c6208d",
+        "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
+        "item_number": "E2E102614066138_B-ITEM-A",
+        "display_name": "E2E102614066138_B-ITEM-A",
         "description": null,
-        "item_type_id": "4c9558e2-a5f7-4d91-9031-0ef30ff58b24",
+        "item_type_id": "1140076f-e2f1-43c2-b678-83006071d21e",
         "is_active": true,
         "inactive_at": null,
         "matrix_parent_id": null,
-        "base_uom_id": "1b02d8e0-83b5-4541-9e10-8e5c4a03ad9d",
-        "units_type_id": "d5fa98f4-d322-4c70-8e4b-a21c9ee10044",
+        "base_uom_id": "bff3cd03-9f16-4282-b22c-7fce52ab5382",
+        "units_type_id": "e74fb198-d15a-4b27-9009-c7c4816e351f",
         "item_category_id": null,
         "upc_code": null,
         "external_ref": null,
         "created_from": "MANUAL",
-        "created_at": "2026-10-26T02:31:14.480533+00:00",
-        "updated_at": "2026-10-26T02:31:14.480533+00:00",
-        "created_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
-        "updated_by": "5fef59c2-fc78-44a9-b57f-7cd7a26b66a3",
+        "created_at": "2026-10-26T14:06:19.025739+00:00",
+        "updated_at": "2026-10-26T14:06:19.025739+00:00",
+        "created_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
+        "updated_by": "bf342649-624b-48ba-82c9-40e0cc5e0491",
         "version": 1,
         "item_type_code": "INVENTORY",
         "category_code": null,
         "category_name": null,
         "inventory": {
-          "tenant_id": "cca8d2e1-e271-413a-ab53-027d0bbabbac",
-          "item_id": "5b22bced-825b-438b-9413-81ea04b7864f",
+          "tenant_id": "dd601c1b-abab-4aac-acf8-624df6276845",
+          "item_id": "453e3e8d-aecd-4728-b687-dc8435c6208d",
           "costing_method": "AVERAGE",
           "costing_method_locked": true,
           "initial_cost": "10",
@@ -2914,10 +2980,10 @@
           "backflush_default": false,
           "yield_percent": "100",
           "round_up_component_qty": false,
-          "stock_uom_id": "1b02d8e0-83b5-4541-9e10-8e5c4a03ad9d",
+          "stock_uom_id": "bff3cd03-9f16-4282-b22c-7fce52ab5382",
           "must_be_whole_base_unit": false,
-          "created_at": "2026-10-26T02:31:14.480533+00:00",
-          "updated_at": "2026-10-26T02:31:14.480533+00:00",
+          "created_at": "2026-10-26T14:06:19.025739+00:00",
+          "updated_at": "2026-10-26T14:06:19.025739+00:00",
           "created_by": null,
           "updated_by": null,
           "version": 1
@@ -2927,29 +2993,33 @@
         "accounting": null,
         "uoms": [
           {
-            "uom_id": "1b02d8e0-83b5-4541-9e10-8e5c4a03ad9d",
+            "uom_id": "bff3cd03-9f16-4282-b22c-7fce52ab5382",
             "role": "STOCK",
             "conversion_override": null,
             "is_default_for_role": true,
             "uom_code": "EA",
             "conversion_factor": "1",
             "is_base": true,
-            "uom_type_id": "d5fa98f4-d322-4c70-8e4b-a21c9ee10044"
+            "uom_type_id": "e74fb198-d15a-4b27-9009-c7c4816e351f"
           }
         ],
         "custom_fields": []
       }
     },
+    "api_key": {
+      "id": "4b247c65-4db3-4237-95d9-7b77c31e1356",
+      "prefix": "ipk_4bba9ac9"
+    },
     "count": {
-      "id": "893eec80-f551-4fa1-ba35-a6be6e77d33f",
+      "id": "7a6a22aa-a878-4ff9-b9b7-5dd8c1073b3f",
       "lines": 2
     },
     "procurement": {
       "vendor": {
-        "id": "7e64fb6d-2386-4578-82c0-6dafb13832f6",
-        "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-        "vendor_number": "V-E2E102602310A61",
-        "name": "Vendor E2E102602310A61",
+        "id": "7b39f68e-9b92-4897-947f-772492165c04",
+        "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+        "vendor_number": "V-E2E102614066138",
+        "name": "Vendor E2E102614066138",
         "vendor_category_id": null,
         "currency_code": "USD",
         "payment_terms": null,
@@ -2962,22 +3032,22 @@
         "primary_contact": {},
         "is_inactive": false,
         "inactive_at": null,
-        "created_at": "2026-10-26T02:31:14.800562+00:00",
-        "updated_at": "2026-10-26T02:31:14.800562+00:00",
-        "created_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
-        "updated_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
+        "created_at": "2026-10-26T14:06:19.461256+00:00",
+        "updated_at": "2026-10-26T14:06:19.461256+00:00",
+        "created_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
+        "updated_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
         "version": 1,
         "item_count": 0
       },
       "po": {
-        "id": "b42a265f-cfcc-46bf-9273-99166787451c",
-        "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+        "id": "9df58830-9caa-4ed3-a225-be635aaa35c8",
+        "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
         "document_number": "PO000001",
         "transaction_date": "2026-10-26",
-        "vendor_id": "7e64fb6d-2386-4578-82c0-6dafb13832f6",
+        "vendor_id": "7b39f68e-9b92-4897-947f-772492165c04",
         "po_type": "STANDARD",
         "status": "DRAFT",
-        "ship_to_location_id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
+        "ship_to_location_id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
         "bill_to": {},
         "vendor_contract_id": null,
         "currency_code": "USD",
@@ -2987,18 +3057,18 @@
         "expected_receipt_date": null,
         "approval_request_id": null,
         "memo": null,
-        "created_at": "2026-10-26T02:31:14.817604+00:00",
-        "updated_at": "2026-10-26T02:31:14.817604+00:00",
-        "created_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
-        "updated_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
+        "created_at": "2026-10-26T14:06:19.483288+00:00",
+        "updated_at": "2026-10-26T14:06:19.483288+00:00",
+        "created_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
+        "updated_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
         "version": 1,
         "lines": [
           {
-            "id": "226dc70b-bec9-485f-a752-abbb02fd1b57",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "purchase_order_id": "b42a265f-cfcc-46bf-9273-99166787451c",
+            "id": "a3e193de-fb0f-4799-8c05-c0a4546e2f20",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "purchase_order_id": "9df58830-9caa-4ed3-a225-be635aaa35c8",
             "line_number": 1,
-            "item_id": "52bf6276-65ad-490e-809f-282b3404dc04",
+            "item_id": "510d69c3-1dee-4bdb-ad2a-1f13a1d05698",
             "expense_account_ref": null,
             "description": null,
             "qty_ordered": "8",
@@ -3016,8 +3086,8 @@
             "external_sales_ref": null,
             "vendor_contract_item_id": null,
             "is_closed": false,
-            "created_at": "2026-10-26T02:31:14.817604+00:00",
-            "updated_at": "2026-10-26T02:31:14.817604+00:00",
+            "created_at": "2026-10-26T14:06:19.483288+00:00",
+            "updated_at": "2026-10-26T14:06:19.483288+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1,
@@ -3029,34 +3099,34 @@
         "bills": []
       },
       "receipt": {
-        "id": "5b84229a-5391-4781-b04a-68645dc583b9",
-        "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+        "id": "f995554a-6f95-4c0d-b91f-bb73adac6951",
+        "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
         "document_number": "IR000001",
-        "purchase_order_id": "b42a265f-cfcc-46bf-9273-99166787451c",
-        "vendor_id": "7e64fb6d-2386-4578-82c0-6dafb13832f6",
+        "purchase_order_id": "9df58830-9caa-4ed3-a225-be635aaa35c8",
+        "vendor_id": "7b39f68e-9b92-4897-947f-772492165c04",
         "receipt_type": "PO",
         "status": "DRAFT",
         "received_at": "2026-10-25T10:00:00+00:00",
-        "location_id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
+        "location_id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
         "currency_code": "USD",
         "exchange_rate": "1",
         "deferred_posting": false,
         "posted_transaction_id": null,
         "reversal_transaction_id": null,
         "memo": null,
-        "created_at": "2026-10-26T02:31:14.843401+00:00",
-        "updated_at": "2026-10-26T02:31:14.843401+00:00",
-        "created_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
-        "updated_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
+        "created_at": "2026-10-26T14:06:19.521004+00:00",
+        "updated_at": "2026-10-26T14:06:19.521004+00:00",
+        "created_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
+        "updated_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
         "version": 1,
         "lines": [
           {
-            "id": "e8bcd340-c573-4408-bc87-85617b686373",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "item_receipt_id": "5b84229a-5391-4781-b04a-68645dc583b9",
+            "id": "7fa6c8a7-a543-4a82-8e66-17f2d7261c5a",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "item_receipt_id": "f995554a-6f95-4c0d-b91f-bb73adac6951",
             "line_number": 1,
-            "purchase_order_line_id": "226dc70b-bec9-485f-a752-abbb02fd1b57",
-            "item_id": "52bf6276-65ad-490e-809f-282b3404dc04",
+            "purchase_order_line_id": "a3e193de-fb0f-4799-8c05-c0a4546e2f20",
+            "item_id": "510d69c3-1dee-4bdb-ad2a-1f13a1d05698",
             "description": null,
             "qty_expected": "0",
             "qty_received": "8",
@@ -3064,28 +3134,28 @@
             "unit_cost": "10",
             "currency_code": "USD",
             "exchange_rate": "1",
-            "location_id": "f18312c3-9c38-4253-8cbf-0bc6d0413e49",
-            "inventory_status_id": "d89d8759-1a03-4577-9369-fcd499c47b75",
+            "location_id": "a24e5e64-a41e-401f-849b-5e7804d8d40b",
+            "inventory_status_id": "5918817a-bdc7-41d8-b9db-5c1620275dbd",
             "is_landed_cost_estimated": false,
             "expense_account_ref": null,
-            "created_at": "2026-10-26T02:31:14.843401+00:00",
-            "updated_at": "2026-10-26T02:31:14.843401+00:00",
+            "created_at": "2026-10-26T14:06:19.521004+00:00",
+            "updated_at": "2026-10-26T14:06:19.521004+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1,
             "details": [
               {
-                "id": "73146652-c4ec-4b48-8870-3429ea2a9947",
-                "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-                "item_receipt_line_id": "e8bcd340-c573-4408-bc87-85617b686373",
+                "id": "7bafc6f7-9364-4803-b9bb-8f63a523f7c6",
+                "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+                "item_receipt_line_id": "7fa6c8a7-a543-4a82-8e66-17f2d7261c5a",
                 "bin_id": null,
                 "lot_id": null,
                 "serial_id": null,
-                "inventory_status_id": "d89d8759-1a03-4577-9369-fcd499c47b75",
+                "inventory_status_id": "5918817a-bdc7-41d8-b9db-5c1620275dbd",
                 "ownership": "OWNED",
                 "qty_received": "8",
-                "created_at": "2026-10-26T02:31:14.843401+00:00",
-                "updated_at": "2026-10-26T02:31:14.843401+00:00",
+                "created_at": "2026-10-26T14:06:19.521004+00:00",
+                "updated_at": "2026-10-26T14:06:19.521004+00:00",
                 "created_by": null,
                 "updated_by": null,
                 "version": 1
@@ -3095,13 +3165,13 @@
         ]
       },
       "bill": {
-        "id": "fcd6b69b-2e20-4ef0-865c-faf036ad57b8",
-        "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
+        "id": "09476950-54b1-4ddc-bd03-b40e149ccbdb",
+        "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
         "document_number": "VB000001",
-        "vendor_id": "7e64fb6d-2386-4578-82c0-6dafb13832f6",
-        "vendor_bill_number": "BILL-E2E102602310A61",
-        "purchase_order_id": "b42a265f-cfcc-46bf-9273-99166787451c",
-        "item_receipt_id": "5b84229a-5391-4781-b04a-68645dc583b9",
+        "vendor_id": "7b39f68e-9b92-4897-947f-772492165c04",
+        "vendor_bill_number": "BILL-E2E102614066138",
+        "purchase_order_id": "9df58830-9caa-4ed3-a225-be635aaa35c8",
+        "item_receipt_id": "f995554a-6f95-4c0d-b91f-bb73adac6951",
         "status": "DRAFT",
         "transaction_date": "2026-10-26",
         "currency_code": "USD",
@@ -3114,41 +3184,41 @@
         "payment_terms": null,
         "posted_transaction_id": null,
         "memo": null,
-        "created_at": "2026-10-26T02:31:14.900510+00:00",
-        "updated_at": "2026-10-26T02:31:14.900510+00:00",
-        "created_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
-        "updated_by": "90187b3d-5308-45d3-a15d-6ed9289590da",
+        "created_at": "2026-10-26T14:06:19.592960+00:00",
+        "updated_at": "2026-10-26T14:06:19.592960+00:00",
+        "created_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
+        "updated_by": "ada3b6e8-d383-4ac7-b651-17c8628bd819",
         "version": 1,
         "lines": [
           {
-            "id": "1338be62-e0e9-40c7-b4e6-3ea689186a54",
-            "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-            "vendor_bill_id": "fcd6b69b-2e20-4ef0-865c-faf036ad57b8",
+            "id": "5aa22810-cd65-4491-9cd8-787f384a175d",
+            "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+            "vendor_bill_id": "09476950-54b1-4ddc-bd03-b40e149ccbdb",
             "line_number": 1,
-            "item_id": "52bf6276-65ad-490e-809f-282b3404dc04",
+            "item_id": "510d69c3-1dee-4bdb-ad2a-1f13a1d05698",
             "expense_account_ref": null,
             "description": null,
             "qty": "8",
             "uom_id": null,
             "unit_price": "10",
             "amount": "80",
-            "purchase_order_line_id": "226dc70b-bec9-485f-a752-abbb02fd1b57",
-            "item_receipt_line_id": "e8bcd340-c573-4408-bc87-85617b686373",
+            "purchase_order_line_id": "a3e193de-fb0f-4799-8c05-c0a4546e2f20",
+            "item_receipt_line_id": "7fa6c8a7-a543-4a82-8e66-17f2d7261c5a",
             "is_landed_cost": false,
             "landed_cost_category_id": null,
             "variance_amount": "0",
-            "created_at": "2026-10-26T02:31:14.900510+00:00",
-            "updated_at": "2026-10-26T02:31:14.900510+00:00",
+            "created_at": "2026-10-26T14:06:19.592960+00:00",
+            "updated_at": "2026-10-26T14:06:19.592960+00:00",
             "created_by": null,
             "updated_by": null,
             "version": 1
           }
         ],
         "match": {
-          "id": "c7c115ec-028c-46b6-931f-876c045e50dd",
-          "tenant_id": "60ed9d26-6e42-4586-acc9-59e4725c3d5d",
-          "vendor_bill_id": "fcd6b69b-2e20-4ef0-865c-faf036ad57b8",
-          "purchase_order_id": "b42a265f-cfcc-46bf-9273-99166787451c",
+          "id": "05b9f170-3093-408b-a673-732465bca5f8",
+          "tenant_id": "2d86b27c-d89c-4b36-9d76-90258223d20c",
+          "vendor_bill_id": "09476950-54b1-4ddc-bd03-b40e149ccbdb",
+          "purchase_order_id": "9df58830-9caa-4ed3-a225-be635aaa35c8",
           "match_status": "PENDING",
           "tolerance_amount": "0.01",
           "tolerance_percent": "1",
@@ -3156,8 +3226,8 @@
           "overridden_by": null,
           "overridden_at": null,
           "notes": null,
-          "created_at": "2026-10-26T02:31:14.900510+00:00",
-          "updated_at": "2026-10-26T02:31:14.900510+00:00",
+          "created_at": "2026-10-26T14:06:19.592960+00:00",
+          "updated_at": "2026-10-26T14:06:19.592960+00:00",
           "created_by": null,
           "updated_by": null,
           "version": 1

@@ -66,6 +66,26 @@ Deployment is wave-ordered (`0A→…→2`); `deployment-state.dev.json` records
 Final verification evidence: `verification/evidence/FINAL-AUDIT/REPORT.md`; implementation report:
 `verification/evidence/FINAL-IMPLEMENTATION-REPORT.md`.
 
+## Tenant API keys for integrations
+
+Business API requests accept either a JWT bearer token or a tenant-scoped **API key**:
+
+```bash
+# 1) create a key as a tenant admin (the secret is returned exactly once)
+curl -s https://scm.k1hub.com/api/v1/admin/api-keys \
+  -H "Authorization: Bearer $TENANT_ADMIN_JWT" \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"erp-integration","scopes":["items.read","inventory.ledger.read"]}'
+
+# 2) call the API with the key
+curl -s https://scm.k1hub.com/api/v1/items \
+  -H "X-API-Key: $TENANT_API_KEY"
+```
+
+API keys are tenant-scoped, honour their scope list, expire/rotate/revoke through
+`/api/v1/admin/api-keys`, and are audited like other machine credentials. The separate
+`OPENAPI_API_KEY` only gates the runtime OpenAPI document.
+
 ## Commands
 
 ```bash
