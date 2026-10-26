@@ -58,3 +58,17 @@ Evidence: `verification/evidence/E2E/latest.md` / `latest.json`.
 - Exhaustive write matrix for every POST/PATCH route (pricing, consigned, extensions, planning lifecycle beyond reads)
 - Load/performance and browser/UI (headless service only)
 - Production Cloudflare edge E2E (this run is local by design)
+
+
+## Production read-only smoke
+
+After a successful production deployment (run `40254816539`), a read-only GET sweep ran against `https://scm.k1hub.com` using the MAIN tenant admin:
+
+- `/readyz` 200; runtime OpenAPI loaded
+- 229 no-path-parameter GET operations: 169×200, 27×409, 14×422, 16×503 controlled feature-disabled responses, 3×403; **0 unexpected 5xx**
+- canonical `traceability.registry.enabled` flag present for both tenants
+- global currency reference now visible: 10 currencies
+- item-master DELETE grants verified (2/2)
+- no writes performed on production
+
+Evidence: `verification/evidence/E2E/prod-read-smoke.json`.

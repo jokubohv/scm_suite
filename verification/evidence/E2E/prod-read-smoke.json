@@ -1,0 +1,18 @@
+{
+  "base": "https://scm.k1hub.com",
+  "checked_at": "2026-10-26T01:44:06.163034+00:00",
+  "get_paths": 229,
+  "status_counts": {
+    "200": 169,
+    "403": 3,
+    "409": 27,
+    "422": 14,
+    "503": 16
+  },
+  "failures": [],
+  "canonical_flag_present": true,
+  "currencies_status": null,
+  "controlled_feature_disabled_503": 16,
+  "unexpected_5xx": 0,
+  "notes": "Read-only GET sweep against production with MAIN tenant admin. 503s were controlled feature-disabled responses; no 500s."
+}
