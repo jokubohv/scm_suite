@@ -447,7 +447,8 @@ def _normalise_path(path: str) -> str:
     return re.sub(r"\{[^}]+\}", "{}", path)
 
 
-def schema_for_operation(method: str, path: str) -> dict[str, Any] | None:
+def _schema_for_operation_phase1(
+method: str, path: str) -> dict[str, Any] | None:
     method = method.upper()
     normalized = _normalise_path(path)
     for rule in RULES:
@@ -487,3 +488,319 @@ def apply_request_schemas(spec: dict[str, Any]) -> int:
 
 
 __all__ = ["RULES", "apply_request_schemas", "schema_for_operation"]
+
+# =============================================================================================
+# Phase 2 schemas — remaining opaque API operations.
+# =============================================================================================
+
+P2 = _obj
+
+UOM_TYPE = P2({"code": TEXT, "name": TEXT,
+               "base_uom": P2({"code": TEXT, "name": TEXT, "conversion_factor": DECIMAL}),
+               "units": _arr(P2({"code": TEXT, "name": TEXT, "conversion_factor": DECIMAL,
+                                 "is_base": BOOL}))}, required=("code",))
+UOM_TYPE_UPDATE = P2({"name": TEXT, "units": _arr({"type": "object", "additionalProperties": True})})
+INVENTORY_TX_LINE = P2({"item_id": UUID, "location_id": UUID, "inventory_status_id": UUID,
+                        "qty_delta": DECIMAL, "unit_cost": MONEY, "bin_id": UUID, "lot_id": UUID,
+                        "serial_ids": _arr(UUID)})
+INVENTORY_TX = P2({"transaction_type": TEXT, "transaction_date": DATE, "memo": TEXT,
+                   "reference": TEXT, "lines": _lines(INVENTORY_TX_LINE)},
+                  required=("transaction_type", "lines"))
+WORKSHEET = P2({"transaction_date": DATE, "location_id": UUID, "memo": TEXT,
+                "lines": _lines(P2({"item_id": UUID, "counted_qty": DECIMAL, "bin_id": UUID,
+                                    "inventory_status_id": UUID, "lot_id": UUID}))})
+TRANSFER_ORDER = P2({"from_location_id": UUID, "to_location_id": UUID, "transaction_date": DATE,
+                     "memo": TEXT, "lines": _lines(P2({"item_id": UUID, "qty": DECIMAL,
+                                                       "uom_id": UUID, "from_bin_id": UUID,
+                                                       "to_bin_id": UUID}))},
+                    required=("from_location_id", "to_location_id", "lines"))
+COMMITMENT = P2({"item_id": UUID, "location_id": UUID, "inventory_status_id": UUID,
+                 "qty": DECIMAL, "source_type": TEXT, "source_ref": TEXT, "expires_at": DATETIME},
+                required=("item_id", "location_id", "qty"))
+DISTRIBUTION = P2({"item_id": UUID, "from_location_id": UUID, "transaction_date": DATE,
+                   "lines": _lines(P2({"to_location_id": UUID, "qty": DECIMAL, "bin_id": UUID}))},
+                  required=("item_id", "from_location_id", "lines"))
+REASON_CODE = P2({"code": TEXT, "name": TEXT, "reason_type": TEXT, "is_active": BOOL},
+                 required=("code", "name"))
+IMPORT_BATCH = P2({"import_type": TEXT, "file_name": TEXT,
+                   "rows": _arr({"type": "object", "additionalProperties": True}), "memo": TEXT},
+                  required=("import_type", "rows"))
+FULFILLMENT = P2({"source_type": TEXT, "source_ref": TEXT, "location_id": UUID,
+                  "lines": _lines(P2({"item_id": UUID, "qty": DECIMAL, "lot_id": UUID,
+                                      "serial_ids": _arr(UUID)}))}, required=("lines",))
+RETURN_DOC = P2({"return_type": TEXT, "location_id": UUID, "transaction_date": DATE, "memo": TEXT,
+                 "lines": _lines(P2({"item_id": UUID, "qty": DECIMAL, "unit_cost": MONEY,
+                                     "inventory_status_id": UUID}))}, required=("lines",))
+COST_TEMPLATE = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_active": BOOL}, required=("code",))
+COST_RECALC = P2({"method": TEXT, "item_ids": _arr(UUID), "location_ids": _arr(UUID),
+                  "effective_date": DATE, "memo": TEXT})
+LANDED_COST = P2({"vendor_id": UUID, "purchase_order_id": UUID, "transaction_date": DATE,
+                  "currency_code": TEXT, "memo": TEXT,
+                  "lines": _lines(P2({"item_id": UUID, "qty": DECIMAL, "amount": MONEY,
+                                      "allocation_method": TEXT}))}, required=("vendor_id", "lines"))
+LOCATION_GROUP = P2({"code": TEXT, "name": TEXT, "members": _arr(P2({"location_id": UUID,
+                                                                    "weight": DECIMAL}))},
+                    required=("code", "name"))
+CUSTOMER_PART = P2({"customer_ref": TEXT, "customer_part_number": TEXT, "item_id": UUID,
+                    "description": TEXT, "is_active": BOOL},
+                   required=("customer_ref", "customer_part_number", "item_id"))
+WARRANTY_CLAIM = P2({"warranty_registration_id": UUID, "claim_date": DATE, "description": TEXT,
+                     "issue_type": TEXT, "lines": _lines(P2({"item_id": UUID, "serial_id": UUID,
+                                                             "qty": DECIMAL}))},
+                    required=("warranty_registration_id", "description"))
+WARRANTY_REPAIR = P2({"warranty_claim_id": UUID, "item_id": UUID, "serial_id": UUID,
+                      "description": TEXT, "scheduled_at": DATETIME}, required=("item_id", "description"))
+QUALITY_QUEUE = P2({"code": TEXT, "name": TEXT, "inspection_type": TEXT, "is_active": BOOL},
+                   required=("code", "name"))
+QUALITY_TRIGGER = P2({"code": TEXT, "name": TEXT, "inspection_plan_id": UUID, "trigger_type": TEXT,
+                      "condition": {"type": "object", "additionalProperties": True}, "is_active": BOOL},
+                     required=("code", "inspection_plan_id"))
+QUALITY_COA = P2({"inspection_id": UUID, "item_id": UUID, "lot_id": UUID, "serial_id": UUID,
+                  "issued_to": TEXT, "notes": TEXT}, required=("inspection_id",))
+QUALITY_SETTINGS = P2({"auto_hold_on_failure": BOOL, "default_sample_size": INT,
+                       "default_disposition": TEXT})
+PRICE_GROUP = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_active": BOOL},
+                 required=("code", "name"))
+PRICE_SCHEDULE = P2({"code": TEXT, "name": TEXT, "item_id": UUID, "currency_code": TEXT,
+                     "calculation_mode": TEXT, "effective_from": DATE, "effective_to": DATE,
+                     "breaks": _arr(P2({"qty_min": DECIMAL, "qty_max": DECIMAL, "unit_price": MONEY,
+                                        "marginal_rate": DECIMAL}))}, required=("code", "item_id"))
+PRICE_RULE = P2({"code": TEXT, "name": TEXT, "priority": INT, "is_active": BOOL,
+                 "criteria": _arr({"type": "object", "additionalProperties": True}),
+                 "actions": _arr({"type": "object", "additionalProperties": True})},
+                required=("code", "name"))
+PRICE_UPDATE = P2({"update_type": TEXT, "target_ref": TEXT, "price_level_id": UUID,
+                   "currency_code": TEXT, "effective_start": DATE, "effective_end": DATE,
+                   "overlap_policy": TEXT}, required=("update_type", "effective_start"))
+ITEM_COLLECTION = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_dynamic": BOOL,
+                      "criteria": {"type": "object", "additionalProperties": True}},
+                     required=("code", "name"))
+COUPON = P2({"code": TEXT, "name": TEXT, "discount_type": TEXT, "discount_value": DECIMAL,
+             "currency_code": TEXT, "valid_from": DATE, "valid_to": DATE, "is_active": BOOL},
+            required=("code", "discount_type", "discount_value"))
+VENDOR_CATEGORY = P2({"code": TEXT, "name": TEXT}, required=("code", "name"))
+ITEM_VENDOR = P2({"item_id": UUID, "vendor_id": UUID, "vendor_item_code": TEXT, "is_preferred": BOOL,
+                  "lead_time_days": INT, "min_order_qty": DECIMAL, "purchase_uom_id": UUID,
+                  "currency_code": TEXT}, required=("item_id", "vendor_id"))
+ITEM_VENDOR_PRICE = P2({"unit_price": MONEY, "currency_code": TEXT, "effective_from": DATE,
+                        "effective_to": DATE, "min_qty": DECIMAL})
+SPECIAL_ORDER = P2({"purchase_order_line_id": UUID, "external_sales_ref": TEXT, "memo": TEXT},
+                   required=("purchase_order_line_id",))
+WMS_SETUP = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_active": BOOL,
+                "rules": _arr({"type": "object", "additionalProperties": True})},
+               required=("code", "name"))
+WMS_STRATEGY = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_active": BOOL,
+                   "rules": _arr(P2({"sequence": INT, "field": TEXT, "direction": TEXT}))},
+                  required=("code", "name"))
+WMS_BIN_BLOCK = P2({"bin_id": UUID, "reason": TEXT, "start_at": DATETIME, "end_at": DATETIME,
+                    "block_type": TEXT}, required=("bin_id", "reason"))
+WMS_WAVE_SCHEDULE = P2({"location_id": UUID, "name": TEXT, "cron": TEXT,
+                        "order_cutoff_time": TEXT, "is_active": BOOL},
+                       required=("location_id", "cron"))
+SHIP_MANIFEST = P2({"shipment_ids": _arr(UUID), "carrier_code": TEXT, "manifest_date": DATE,
+                    "memo": TEXT}, required=("shipment_ids",))
+REPLENISHMENT_PLAN = P2({"location_id": UUID, "item_ids": _arr(UUID), "strategy": TEXT,
+                         "target_stock_level": DECIMAL, "memo": TEXT},
+                        required=("location_id", "item_ids"))
+STATUS_CHANGE_TASK = P2({"item_id": UUID, "location_id": UUID, "bin_id": UUID, "from_status_id": UUID,
+                         "to_status_id": UUID, "qty": DECIMAL},
+                        required=("item_id", "location_id", "qty"))
+ZONE = P2({"location_id": UUID, "code": TEXT, "name": TEXT, "zone_type": TEXT, "is_active": BOOL},
+          required=("location_id", "code", "name"))
+PLANNING_RULE = P2({"code": TEXT, "name": TEXT, "rule_type": TEXT,
+                    "parameters": {"type": "object", "additionalProperties": True}, "is_active": BOOL},
+                   required=("code", "name"))
+TIME_FENCE = P2({"code": TEXT, "days": INT, "fence_type": TEXT, "is_active": BOOL},
+                required=("code", "days"))
+DRP_NETWORK = P2({"code": TEXT, "name": TEXT,
+                  "nodes": _arr(P2({"location_id": UUID, "role": TEXT, "lead_time_days": INT})),
+                  "is_active": BOOL}, required=("code", "name"))
+ITEM_LOCATION = P2({"location_id": UUID, "is_stocked": BOOL, "reorder_point": DECIMAL,
+                    "preferred_stock_level": DECIMAL, "lead_time_days": INT, "planning_method": TEXT})
+ITEM_LOCATION_UPDATE = P2({"is_stocked": BOOL, "reorder_point": DECIMAL,
+                           "preferred_stock_level": DECIMAL, "lead_time_days": INT,
+                           "planning_method": TEXT})
+JSONRPC = P2({"jsonrpc": {"type": "string", "const": "2.0"},
+              "id": {"oneOf": [TEXT, INT, {"type": "null"}]}, "method": TEXT,
+              "params": {"type": "object", "additionalProperties": True}},
+             required=("jsonrpc", "method"))
+
+EXPLICIT_SCHEMAS: dict[tuple[str, str], dict[str, Any]] = {
+    ("PATCH", "/api/v1/consignment/settings"): P2({"default_vendor_id": UUID, "allow_negative_consigned": BOOL}),
+    ("PATCH", "/api/v1/extensions/settings"): P2({"warranty_default_days": INT, "upc_auto_assign": BOOL}),
+    ("PATCH", "/api/v1/quality/settings"): QUALITY_SETTINGS,
+    ("POST", "/api/v1/consignment-consumption"): P2({"item_id": UUID, "location_id": UUID, "qty": DECIMAL,
+                                                     "agreement_id": UUID, "transaction_date": DATE},
+                                                    required=("item_id", "qty")),
+    ("PATCH", "/api/v1/consignment-agreements/{}/items/{}"): P2({"unit_cost": MONEY, "is_active": BOOL}),
+    ("POST", "/api/v1/landed-costs/{}/estimated-costs"): P2({"amount": MONEY, "allocation_method": TEXT}),
+    ("POST", "/api/v1/location-costing-groups/{}/members"): P2({"location_id": UUID, "weight": DECIMAL},
+                                                                required=("location_id",)),
+    ("POST", "/api/v1/costs/recalculations"): COST_RECALC,
+    ("POST", "/api/v1/customer-parts/import"): P2({"rows": _arr({"type": "object", "additionalProperties": True})},
+                                                   required=("rows",)),
+    ("POST", "/api/v1/warranty/registrations/import"): P2({"rows": _arr({"type": "object",
+                                                                          "additionalProperties": True})},
+                                                           required=("rows",)),
+    ("POST", "/api/v1/upc-registry/assign-batch"): P2({"item_ids": _arr(UUID), "dry_run": BOOL},
+                                                      required=("item_ids",)),
+    ("POST", "/api/v1/item-prices/swap-levels"): P2({"from_price_level_id": UUID, "to_price_level_id": UUID,
+                                                     "item_ids": _arr(UUID)},
+                                                    required=("from_price_level_id", "to_price_level_id")),
+    ("POST", "/api/v1/item-prices/purchase-price-updates"): P2({"vendor_id": UUID, "percent": DECIMAL,
+                                                                "effective_date": DATE}),
+    ("POST", "/api/v1/price-lists/generate"): P2({"price_level_id": UUID, "currency_code": TEXT,
+                                                   "item_ids": _arr(UUID)}),
+    ("POST", "/api/v1/uom-conversions/resolve"): P2({"uom_type_id": UUID, "from_uom_id": UUID,
+                                                     "to_uom_id": UUID, "qty": DECIMAL},
+                                                    required=("from_uom_id", "to_uom_id")),
+    ("POST", "/api/v1/putaway-tasks/generate"): P2({"warehouse_id": UUID, "item_ids": _arr(UUID)}),
+    ("POST", "/api/v1/bin-blocks/{}/release"): REASON,
+    ("POST", "/api/v1/inventory/distributions/{}/reverse"): REASON,
+    ("POST", "/api/v1/inventory-transactions/{}/reverse"): REASON,
+    ("POST", "/api/v1/inventory-worksheets/{}/reverse"): REASON,
+    ("POST", "/api/v1/inventory-worksheets/{}/void"): REASON,
+    ("POST", "/api/v1/transfer-orders/{}/fulfil"): ACTION,
+    ("POST", "/api/v1/transfer-orders/{}/receive"): ACTION,
+    ("POST", "/api/v1/warranty/claims/{}/actions"): P2({"action_type": TEXT, "notes": TEXT, "cost": MONEY},
+                                                        required=("action_type",)),
+    ("PUT", "/api/v1/items/{}/warranty"): P2({"warranty_term_id": UUID, "start_date": DATE, "end_date": DATE}),
+    ("PUT", "/api/v1/items/{}/custom-fields"): P2({"values": {"type": "object", "additionalProperties": True}}),
+    ("PUT", "/api/v1/items/{}/inventory"): P2({"costing_method": TEXT, "initial_cost": MONEY, "stock_uom_id": UUID}),
+    ("PUT", "/api/v1/items/{}/purchasing"): P2({"purchase_uom_id": UUID, "cost": MONEY, "default_vendor_id": UUID}),
+    ("PUT", "/api/v1/items/{}/sales"): P2({"sales_uom_id": UUID, "price_level_id": UUID}),
+    ("PUT", "/api/v1/items/{}/accounting"): P2({"income_account_ref": TEXT, "expense_account_ref": TEXT}),
+    ("PUT", "/api/v1/items/{}/uoms"): P2({"uoms": _arr(P2({"uom_id": UUID, "role": TEXT, "is_base": BOOL,
+                                                           "conversion_factor": DECIMAL}))}),
+    ("PUT", "/api/v1/items/{}/locations"): ITEM_LOCATION,
+    ("PATCH", "/api/v1/items/{}/locations/{}"): ITEM_LOCATION_UPDATE,
+    ("POST", "/api/v1/items/{}/locations/{}/planning-values"): P2({"reorder_point": DECIMAL,
+                                                                   "preferred_stock_level": DECIMAL,
+                                                                   "lead_time_days": INT,
+                                                                   "planning_method": TEXT}),
+    ("PATCH", "/api/v1/items/{}/barcodes/{}"): P2({"barcode": TEXT, "uom_id": UUID, "is_primary": BOOL}),
+    ("PUT", "/api/v1/items/{}/matrix-options/{}/values"): P2({"values": _arr(P2({"value": TEXT,
+                                                                                 "sort_order": INT}))},
+                                                              required=("values",)),
+    ("POST", "/api/v1/items/{}/matrix-children/generate"): P2({"combinations": _arr({"type": "object",
+                                                                                     "additionalProperties": True})},
+                                                              required=("combinations",)),
+    ("POST", "/api/v1/items/{}/matrix-children/link"): P2({"child_item_ids": _arr(UUID)},
+                                                          required=("child_item_ids",)),
+    ("PATCH", "/api/v1/items/{}/kit-members/{}"): P2({"qty": DECIMAL, "uom_id": UUID}),
+    ("PUT", "/api/v1/warehouses/{}/system-rules/{}"): P2({"value": {"type": "object",
+                                                                     "additionalProperties": True}}),
+    ("PUT", "/api/v1/warehouses/{}/item-bin-assignments"): P2({"item_id": UUID, "bin_ids": _arr(UUID)},
+                                                               required=("item_id", "bin_ids")),
+    ("PUT", "/api/v1/price-schedules/{}/breaks"): P2({"breaks": _arr(P2({"qty_min": DECIMAL,
+                                                                        "qty_max": DECIMAL,
+                                                                        "unit_price": MONEY,
+                                                                        "marginal_rate": DECIMAL}))},
+                                                      required=("breaks",)),
+    ("PUT", "/api/v1/price-rules/{}/criteria"): P2({"criteria": _arr({"type": "object",
+                                                                      "additionalProperties": True})},
+                                                    required=("criteria",)),
+    ("PUT", "/api/v1/price-rules/{}/actions"): P2({"actions": _arr({"type": "object",
+                                                                    "additionalProperties": True})},
+                                                   required=("actions",)),
+    ("PUT", "/api/v1/planning-rules/{}/scopes"): P2({"scopes": _arr(P2({"scope_type": TEXT,
+                                                                         "scope_value": TEXT}))},
+                                                     required=("scopes",)),
+    ("POST", "/api/v1/mcp"): JSONRPC,
+}
+
+PHASE2_RULES: tuple[Rule, ...] = (
+    Rule("/api/v1/uom-types", create=UOM_TYPE, update=UOM_TYPE_UPDATE),
+    Rule("/api/v1/inventory-transactions", create=INVENTORY_TX, actions={"reverse": REASON}),
+    Rule("/api/v1/inventory-worksheets", create=WORKSHEET, update=WORKSHEET,
+         actions={"reverse": REASON, "void": REASON}),
+    Rule("/api/v1/transfer-orders", create=TRANSFER_ORDER, update=TRANSFER_ORDER,
+         actions={"fulfil": ACTION, "receive": ACTION}),
+    Rule("/api/v1/inventory/commitments", create=COMMITMENT),
+    Rule("/api/v1/inventory/distributions", create=DISTRIBUTION, actions={"reverse": REASON}),
+    Rule("/api/v1/inventory-reason-codes", create=REASON_CODE, update=REASON_CODE),
+    Rule("/api/v1/imports", create=IMPORT_BATCH),
+    Rule("/api/v1/fulfillments", create=FULFILLMENT),
+    Rule("/api/v1/returns", create=RETURN_DOC),
+    Rule("/api/v1/cost-templates", update=COST_TEMPLATE),
+    Rule("/api/v1/cost-recalculations", create=COST_RECALC),
+    Rule("/api/v1/costs", actions={"recalculations": COST_RECALC}),
+    Rule("/api/v1/landed-costs", create=LANDED_COST),
+    Rule("/api/v1/location-costing-groups", create=LOCATION_GROUP),
+    Rule("/api/v1/estimated-landed-cost-templates", update=LANDED_COST),
+    Rule("/api/v1/customer-parts", create=CUSTOMER_PART, update=CUSTOMER_PART),
+    Rule("/api/v1/warranty/claims", create=WARRANTY_CLAIM),
+    Rule("/api/v1/warranty/repair-orders", create=WARRANTY_REPAIR, update=WARRANTY_REPAIR),
+    Rule("/api/v1/quality/inspection-queues", create=QUALITY_QUEUE, update=QUALITY_QUEUE),
+    Rule("/api/v1/quality/inspection-triggers", create=QUALITY_TRIGGER, update=QUALITY_TRIGGER,
+         actions={"reset-counter": P2({"counter": INT}),
+                  "evaluate": P2({"event": {"type": "object", "additionalProperties": True}})}),
+    Rule("/api/v1/quality/coas", create=QUALITY_COA, actions={"issue": ACTION, "revoke": REASON}),
+    Rule("/api/v1/price-rules", create=PRICE_RULE, update=PRICE_RULE),
+    Rule("/api/v1/price-schedules", create=PRICE_SCHEDULE, update=PRICE_SCHEDULE),
+    Rule("/api/v1/price-updates", create=PRICE_UPDATE, update=PRICE_UPDATE, actions={"apply": ACTION}),
+    Rule("/api/v1/pricing-groups", create=PRICE_GROUP, update=PRICE_GROUP),
+    Rule("/api/v1/item-groups", create=PRICE_GROUP, update=PRICE_GROUP,
+         actions={"members": P2({"item_ids": _arr(UUID)})}),
+    Rule("/api/v1/customer-groups", create=PRICE_GROUP, update=PRICE_GROUP,
+         actions={"members": P2({"customer_ids": _arr(UUID)})}),
+    Rule("/api/v1/item-collections", create=ITEM_COLLECTION, update=ITEM_COLLECTION,
+         actions={"members": P2({"item_ids": _arr(UUID)}), "recompute": ACTION}),
+    Rule("/api/v1/coupons", create=COUPON, update=COUPON),
+    Rule("/api/v1/vendor-categories", create=VENDOR_CATEGORY, update=VENDOR_CATEGORY),
+    Rule("/api/v1/item-vendors", create=ITEM_VENDOR, update=ITEM_VENDOR,
+         actions={"prices": ITEM_VENDOR_PRICE}),
+    Rule("/api/v1/special-order-links", create=SPECIAL_ORDER, actions={"fulfil": ACTION}),
+    Rule("/api/v1/item-process-families", create=WMS_SETUP),
+    Rule("/api/v1/item-process-groups", create=WMS_SETUP),
+    Rule("/api/v1/item-process-assignments", create=WMS_SETUP),
+    Rule("/api/v1/item-stock-locations", create=WMS_SETUP, update=WMS_SETUP),
+    Rule("/api/v1/order-types", create=WMS_SETUP),
+    Rule("/api/v1/ucc-code-formats", create=WMS_SETUP),
+    Rule("/api/v1/carrier-service-levels", create=WMS_SETUP),
+    Rule("/api/v1/pick-strategies", create=WMS_STRATEGY, update=WMS_STRATEGY),
+    Rule("/api/v1/putaway-strategies", create=WMS_STRATEGY, update=WMS_STRATEGY),
+    Rule("/api/v1/bin-blocks", create=WMS_BIN_BLOCK, actions={"release": REASON}),
+    Rule("/api/v1/wave-release-schedules", create=WMS_WAVE_SCHEDULE, update=WMS_WAVE_SCHEDULE,
+         actions={"run-now": ACTION}),
+    Rule("/api/v1/ship-manifests", create=SHIP_MANIFEST, actions={"send": ACTION}),
+    Rule("/api/v1/replenishment-plans", create=REPLENISHMENT_PLAN, actions={"approve": ACTION}),
+    Rule("/api/v1/replenishment-tasks", actions={"complete": ACTION}),
+    Rule("/api/v1/status-change-tasks", create=STATUS_CHANGE_TASK, actions={"complete": ACTION}),
+    Rule("/api/v1/wms/carts", create=WMS_SETUP, update=WMS_SETUP),
+    Rule("/api/v1/wms/device-sessions", create=WMS_SETUP, actions={"end": ACTION}),
+    Rule("/api/v1/zones", create=ZONE, update=ZONE),
+    Rule("/api/v1/planning-rules", create=PLANNING_RULE, update=PLANNING_RULE),
+    Rule("/api/v1/time-fences", create=TIME_FENCE, update=TIME_FENCE),
+    Rule("/api/v1/drp/networks", update=DRP_NETWORK),
+    Rule("/api/v1/consignment-consumption", create=P2({"item_id": UUID, "location_id": UUID, "qty": DECIMAL},
+                                                      required=("item_id", "qty"))),
+    Rule("/api/v1/upc-registry", actions={"assign-batch": P2({"item_ids": _arr(UUID)})}),
+    Rule("/api/v1/consignment-agreements", actions={"items": P2({"unit_cost": MONEY})}),
+    Rule("/api/v1/mcp", create=JSONRPC),
+)
+
+
+def schema_for_operation(method: str, path: str) -> dict[str, Any] | None:  # type: ignore[no-redef]
+    method = method.upper()
+    normalized = _normalise_path(path)
+    explicit = EXPLICIT_SCHEMAS.get((method, normalized))
+    if explicit is not None:
+        return explicit
+    for rule in RULES + PHASE2_RULES:
+        base = rule.base
+        if normalized == base:
+            if method == "POST":
+                return rule.create
+            if method in {"PATCH", "PUT"}:
+                return rule.update
+            return None
+        if re.fullmatch(re.escape(base) + r"/\{\}", normalized):
+            if method in {"PATCH", "PUT"}:
+                return rule.update
+            return None
+        match = re.fullmatch(re.escape(base) + r"/\{\}/([A-Za-z0-9_.-]+)", normalized)
+        if match and method == "POST":
+            action = match.group(1)
+            return rule.actions.get(action, rule.default_action)
+    return None

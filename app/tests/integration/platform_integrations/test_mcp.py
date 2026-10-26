@@ -67,6 +67,19 @@ async def test_tool_registry_is_derived_from_runtime_openapi() -> None:
 
 async def test_api_request_schemas_are_typed_and_injected() -> None:
     spec = create_app().openapi()
+    opaque = []
+    for path, item in spec["paths"].items():
+        for method, operation in item.items():
+            if method not in {"post", "put", "patch"}:
+                continue
+            request_body = operation.get("requestBody")
+            if not request_body:
+                continue
+            schema = (request_body.get("content") or {}).get("application/json", {}).get("schema") or {}
+            properties = schema.get("properties") or {}
+            if schema.get("additionalProperties") is True or (schema.get("type") == "object" and not properties):
+                opaque.append(f"{method.upper()} {path}")
+    assert not opaque, opaque
     receipt = spec["paths"]["/api/v1/item-receipts"]["post"]["requestBody"]["content"]["application/json"]["schema"]
     assert {"vendor_id", "lines", "receipt_type", "location_id"} <= set(receipt["properties"])
     assert "vendor_id" in receipt["required"] and "lines" in receipt["required"]

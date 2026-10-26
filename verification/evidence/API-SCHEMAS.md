@@ -1,53 +1,69 @@
 # API request-schema coverage
 
+## Final status: 0 opaque request bodies
+
+The runtime API uses a central request-schema registry (`app/api/request_schemas.py`) injected into
+`app.openapi()` during app construction. MCP tool input schemas are generated from that same document,
+so they inherit the typed request bodies automatically.
+
 ## Before
 
-- Runtime operations: 1,259
-- Operations with a request body: 647
-- Opaque request bodies (`additionalProperties: true`, no fields): **360**
-- Curated MCP tools: 240
-- MCP tools with a body: 134
-- **Opaque MCP body tools: 113**
+| Measure | Count |
+|---|---:|
+| Runtime operations | 1,259 |
+| Operations with a request body | 647 |
+| **Opaque request bodies** (`additionalProperties: true`, no fields) | **360** |
+| Curated MCP tools | 240 |
+| MCP body tools | 134 |
+| **Opaque MCP body tools** | **113** |
 
-## Phase 1 (implemented)
+## After
 
-Central registry: `app/api/request_schemas.py`, injected into `app.openapi()` during app construction.
+| Measure | Count |
+|---|---:|
+| Runtime operations | 1,259 |
+| Operations with a request body | 700 |
+| **Opaque request bodies** | **0** |
+| MCP tools | 240 |
+| MCP body tools | 151 |
+| **Opaque MCP body tools** | **0** |
 
-Covered:
-- items and master data: items, locations, bins, statuses, categories, UOMs, UOM conversions
-- pricing: price levels, item prices
-- inventory: adjustments, transfers, counts, count-plan updates
-- procurement: vendors, POs, requests, requisitions, RFQs, contracts, receipts, bills, credits, returns
-- WMS: warehouses, inbound shipments, receiving orders, putaway tasks, waves, pick tasks, pack tasks, shipments
+The extra 53 body operations are action endpoints that previously had no documented request body;
+they now document their optional action fields.
+
+## Covered domains
+
+- items and item sub-resources: type extensions, custom fields, UOM roles, location planning,
+  barcodes, matrix generation/linking, kit members, warranty
+- items/master data: items, locations, bins, statuses, categories, UOMs, UOM types, conversions
+- pricing: levels, item prices, schedules, breaks, rules/criteria/actions, groups, collections,
+  coupons, mass price updates, level swaps, purchase-price updates, price lists
+- inventory: balances, adjustments, transfers, transfer orders, counts, count plans, worksheets,
+  commitments, distributions, imports, reason codes, fulfillments, returns
+- procurement: vendors, vendor categories, item vendors/prices, POs, requests, requisitions, RFQs,
+  contracts, receipts, bills, credits, returns, special-order links
+- costing: cost templates, recalculation, COGS adjustments, landed costs, estimated templates,
+  location costing groups
+- WMS: warehouses, inbound, receiving, putaway, waves, pick/pack, shipments, manifests, zones,
+  bin blocks, strategies, wave schedules, replenishment, carts, device sessions, status tasks
 - manufacturing: assemblies, BOMs, routings, work centers, work orders
-- quality: specs, inspection plans, inspections
-- consignment, warranty registrations, UPC registry, allocation runs
+- quality: specs, plans, inspections, queues, triggers, COAs, settings
+- consignment: agreements, transfers, consumption, settings
+- extensions: warranty registrations/claims/repair orders, customer parts, UPC registry
+- planning: allocation runs, planning rules, time fences, DRP networks
+- platform/integration: MCP JSON-RPC envelope
 
-## After Phase 1
+## Verification
 
-- Runtime operations with a request body: 682 (action schemas now documented too)
-- Opaque request bodies: **171**
-- **Opaque MCP body tools: 0 / 151**
-- MCP write tools now expose real fields, required flags, enums and nested line schemas.
+- Test gate: no POST/PUT/PATCH request body anywhere in `app.openapi()` may have an opaque schema
+- MCP gate: no body-bearing MCP tool may have an empty/opaque `inputSchema`
+- Representative schema assertions for receipts, adjustments, items and POs
+- Full suite: **1,320 passed**
+- Local E2E: **204 checks, 0 failures**
+- Surface smoke: **1,259 operations, 0 × 5xx**
 
-Example `item_receipts_create` input schema now includes:
+## Runtime validation
 
-`purchase_order_id`, `vendor_id`, `receipt_type`, `received_at`, `location_id`, `memo`,
-`lines[]` with `purchase_order_line_id`, `item_id`, `qty_received`, `unit_cost`, `location_id`,
-`inventory_status_id`, `bin_id`, `lot_id`, `serial_ids`, `ownership`, `details[]`.
-
-## Remaining Phase 2 work
-
-171 opaque operations remain outside the current MCP catalogue. They are concentrated in:
-
-- pricing schedules/rules/collections/coupons/price updates
-- item sub-resources (custom fields, purchasing/sales/accounting, barcodes, matrix, kit)
-- transfer orders, worksheets, distributions, commitments, imports, reason codes
-- costing templates, landed costs, location costing groups, recalculations
-- WMS setup resources, strategies, bin blocks, wave schedules, ship manifests, replenishment
-- quality queues/triggers/COAs
-- planning rules, time fences, DRP networks
-- warranty claims/repair orders, customer parts, consignment sub-resources
-- the MCP JSON-RPC endpoint itself (intentionally free-form JSON-RPC)
-
-The registry is the single place to add Phase 2 schemas; MCP will inherit them automatically.
+The registry fixes the documented API/MCP contract. Service-layer validation remains the
+authoritative runtime validator as before; boundary-level enforcement of these schemas is a separate
+follow-up (recommended next).
