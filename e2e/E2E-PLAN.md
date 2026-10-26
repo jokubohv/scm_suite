@@ -98,3 +98,11 @@ non-zero if any check fails.
 - `e2e/setup_local_e2e.sh`: creates the local DB/roles, runs migrations, starts the API with the
   app role, and prints the environment needed by the driver.
 - No plan-doc changes; this is verification tooling.
+
+
+## 6. Latest result
+
+`e2e/run_live_e2e.py` latest run: **170 checks, 0 failures**; 2 tenants, 3 warehouses;
+details in `verification/evidence/E2E/REPORT.md`. Production bugs found/fixed during this run:
+global-currency RLS, traceability flag mismatch, procurement idempotency begins, bootstrap RLS
+context, and failed-login tenant-code event handling.

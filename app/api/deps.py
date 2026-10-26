@@ -141,8 +141,16 @@ async def get_request_db(
             {"tenant_id": "00000000-0000-0000-0000-000000000000"},
         )
     elif auth_path:
-        exists = await db.scalar(text("SELECT 1 FROM pg_roles WHERE rolname = 'platform_auth'"))
-        if exists:
+        # Switch to the auth service role only where it is actually provisioned/granted (production
+        # DB). The role is cluster-wide, while the dev/test database intentionally runs as superuser
+        # without platform_auth grants; switching there would break tests and is unnecessary.
+        can_switch = await db.scalar(
+            text(
+                "SELECT 1 FROM pg_roles r WHERE r.rolname = 'platform_auth' "
+                "AND has_table_privilege('platform_auth', 'platform.user_identity', 'SELECT')"
+            )
+        )
+        if can_switch:
             await db.execute(text("SET LOCAL ROLE platform_auth"))
     else:
         authorization = request.headers.get("authorization", "")

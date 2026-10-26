@@ -156,6 +156,190 @@ def create_item(c: httpx.Client, result: Result, tenant: dict[str, Any], suffix:
     return r.json()
 
 
+def run_procurement(c: httpx.Client, result: Result, tenant: dict[str, Any],
+                    env: dict[str, Any], item: dict[str, Any]) -> dict[str, Any]:
+    token = tenant["token"]
+    vendor = request(c, "POST", "/api/v1/vendors", token=token, expected=201, headers=idem(),
+                     body={"vendor_number": f"V-{RUN}", "name": f"Vendor {RUN}", "currency_code": "USD",
+                           "credit_limit": "50000"}, result=result, name="procurement vendor").json()
+    request(c, "POST", "/api/v1/item-vendors", token=token, expected=201, headers=idem(),
+            body={"item_id": item["id"], "vendor_id": vendor["id"], "is_preferred": True,
+                  "lead_time_days": 2, "min_order_qty": "1"}, result=result, name="procurement item-vendor")
+    po = request(c, "POST", "/api/v1/purchase-orders", token=token, expected=201, headers=idem(),
+                 body={"vendor_id": vendor["id"], "po_type": "STANDARD", "currency_code": "USD",
+                       "transaction_date": TODAY, "ship_to_location_id": env["location"]["id"],
+                       "lines": [{"item_id": item["id"], "qty_ordered": 8, "unit_price": "10",
+                                  "expected_receipt_date": "2026-11-01"}]},
+                 result=result, name="procurement PO").json()
+    po_id = po["id"]
+    submitted = request(c, "POST", f"/api/v1/purchase-orders/{po_id}/submit", token=token,
+                        expected=200, headers=idem(), body={}, result=result, name="procurement PO submit")
+    if submitted.status_code == 200 and submitted.json().get("status") != "APPROVED":
+        request(c, "POST", f"/api/v1/purchase-orders/{po_id}/approve", token=token, expected=200,
+                headers=idem(), body={}, result=result, name="procurement PO approve")
+    detail = request(c, "GET", f"/api/v1/purchase-orders/{po_id}", token=token, result=result,
+                     name="procurement PO detail").json()
+    line = detail["lines"][0]
+    receipt = request(c, "POST", "/api/v1/item-receipts", token=token, expected=201, headers=idem(),
+                      body={"purchase_order_id": po_id, "vendor_id": vendor["id"], "receipt_type": "PO",
+                            "received_at": "2026-10-25T10:00:00Z", "location_id": env["location"]["id"],
+                            "lines": [{"purchase_order_line_id": line["id"], "item_id": item["id"],
+                                       "qty_received": 8, "unit_cost": line["unit_price"],
+                                       "location_id": env["location"]["id"],
+                                       "inventory_status_id": env["statuses"]["AVAILABLE"]["id"],
+                                       "details": [{"qty_received": 8,
+                                                    "inventory_status_id": env["statuses"]["AVAILABLE"]["id"],
+                                                    "ownership": "OWNED"}]}]},
+                      result=result, name="procurement receipt").json()
+    request(c, "POST", f"/api/v1/item-receipts/{receipt['id']}/post", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="procurement receipt post")
+    bill = request(c, "POST", "/api/v1/vendor-bills", token=token, expected=201, headers=idem(),
+                   body={"vendor_id": vendor["id"], "vendor_bill_number": f"BILL-{RUN}",
+                         "purchase_order_id": po_id, "item_receipt_id": receipt["id"],
+                         "currency_code": "USD", "transaction_date": TODAY,
+                         "lines": [{"item_id": item["id"], "qty": 8, "unit_price": "10",
+                                    "purchase_order_line_id": line["id"],
+                                    "item_receipt_line_id": receipt["lines"][0]["id"]}]},
+                   result=result, name="procurement bill").json()
+    bid = bill["id"]
+    request(c, "POST", f"/api/v1/vendor-bills/{bid}/match", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="procurement bill match")
+    bill_submit = request(c, "POST", f"/api/v1/vendor-bills/{bid}/submit", token=token, expected=200,
+                          headers=idem(), body={}, result=result, name="procurement bill submit")
+    if bill_submit.status_code == 200 and bill_submit.json().get("status") != "APPROVED":
+        request(c, "POST", f"/api/v1/vendor-bills/{bid}/approve", token=token, expected=200,
+                headers=idem(), body={}, result=result, name="procurement bill approve")
+    request(c, "POST", f"/api/v1/vendor-bills/{bid}/post", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="procurement bill post")
+    return {"vendor": vendor, "po": po, "receipt": receipt, "bill": bill}
+
+
+def run_quality(c: httpx.Client, result: Result, tenant: dict[str, Any], env: dict[str, Any],
+                item: dict[str, Any]) -> None:
+    token = tenant["token"]
+    spec = request(c, "POST", "/api/v1/quality/specs", token=token, expected=201, headers=idem(),
+                   body={"code": f"SPEC-{RUN}", "name": f"Spec {RUN}", "item_id": item["id"],
+                         "lines": [{"characteristic": "length", "result_type": "NUMERIC",
+                                    "min_value": "9", "max_value": "11"},
+                                   {"characteristic": "visual", "result_type": "PASS_FAIL"}]},
+                   result=result, name="quality spec").json()
+    spec_id = spec["spec"]["id"]
+    request(c, "POST", f"/api/v1/quality/specs/{spec_id}/activate", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="quality spec activate")
+    plan = request(c, "POST", "/api/v1/quality/inspection-plans", token=token, expected=201, headers=idem(),
+                   body={"code": f"PLAN-{RUN}", "name": f"Plan {RUN}", "item_id": item["id"],
+                         "quality_spec_id": spec_id, "inspection_type": "INCOMING",
+                         "sampling_method": "FULL", "sample_size": 1},
+                   result=result, name="quality plan").json()
+    inspection = request(c, "POST", "/api/v1/quality/inspections", token=token, expected=201, headers=idem(),
+                         body={"inspection_plan_id": plan["plan"]["id"], "item_id": item["id"],
+                               "location_id": env["location"]["id"], "source_entity_type": "ITEM_RECEIPT",
+                               "source_entity_id": str(uuid4())},
+                         result=result, name="quality inspection").json()
+    iid = inspection["inspection"]["id"]
+    request(c, "POST", f"/api/v1/quality/inspections/{iid}/start", token=token, expected=200,
+            body={}, result=result, name="quality start")
+    request(c, "POST", f"/api/v1/quality/inspections/{iid}/results", token=token, expected=200,
+            body={"results": [{"sequence": 1, "characteristic": "length", "result_type": "NUMERIC",
+                               "measured_value_number": "10"},
+                              {"sequence": 2, "characteristic": "visual", "result_type": "PASS_FAIL",
+                               "measured_value_text": "PASS"}]},
+            result=result, name="quality results")
+    request(c, "POST", f"/api/v1/quality/inspections/{iid}/complete", token=token, expected=200,
+            headers=idem(), body={"notes": "e2e"}, result=result, name="quality complete")
+
+
+def run_wms(c: httpx.Client, result: Result, tenant: dict[str, Any], env: dict[str, Any],
+            item: dict[str, Any], vendor: dict[str, Any]) -> None:
+    token = tenant["token"]; warehouse = env["warehouse"]; location = env["location"]
+    asn = request(c, "POST", "/api/v1/inbound-shipments", token=token, expected=201, headers=idem(),
+                  body={"location_id": location["id"], "vendor_id": vendor["id"], "carrier_code": "UPS",
+                        "expected_arrival_date": TODAY,
+                        "lines": [{"item_id": item["id"], "qty_expected": "4", "unit_cost": "5"}]},
+                  result=result, name="wms inbound shipment").json()
+    request(c, "POST", f"/api/v1/inbound-shipments/{asn['id']}/arrive", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="wms inbound arrive")
+    order = request(c, "POST", "/api/v1/receiving-orders", token=token, expected=201, headers=idem(),
+                    body={"inbound_shipment_id": asn["id"]}, result=result, name="wms receiving order").json()
+    oid = order["id"]
+    request(c, "POST", f"/api/v1/receiving-orders/{oid}/start", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="wms receiving start")
+    request(c, "POST", f"/api/v1/receiving-orders/{oid}/complete", token=token, expected=200, headers=idem(),
+            body={"lines": [{"line_number": 1, "qty_received": "4"}]},
+            result=result, name="wms receiving complete")
+    tasks = request(c, "GET", "/api/v1/putaway-tasks?status=PENDING", token=token, result=result,
+                    name="wms putaway list").json().get("items", [])
+    if tasks:
+        tid = tasks[0]["id"]
+        request(c, "POST", f"/api/v1/putaway-tasks/{tid}/assign", token=token, expected=200, headers=idem(),
+                body={"assigned_user_id": tenant["admin"]["app_user_id"]},
+                result=result, name="wms putaway assign")
+        request(c, "POST", f"/api/v1/putaway-tasks/{tid}/start", token=token, expected=200,
+                headers=idem(), body={}, result=result, name="wms putaway start")
+        request(c, "POST", f"/api/v1/putaway-tasks/{tid}/complete", token=token, expected=200,
+                headers=idem(), body={}, result=result, name="wms putaway complete")
+    bins = request(c, "GET", f"/api/v1/locations/{location['id']}/bins", token=token,
+                   result=result, name="wms bins").json()["items"]
+    pick = next((b for b in bins if b["code"].startswith("PICK")), None)
+    if pick:
+        request(c, "POST", f"/api/v1/warehouses/{warehouse['id']}/inventory", token=token, expected=201,
+                headers=idem(), body={"item_id": item["id"], "bin_id": pick["id"], "qty": "10",
+                                      "inventory_status_id": env["statuses"]["AVAILABLE"]["id"]},
+                result=result, name="wms warehouse inventory")
+        wave = request(c, "POST", "/api/v1/waves", token=token, expected=201, headers=idem(),
+                       body={"location_id": warehouse["location_id"],
+                             "lines": [{"source_type": "SALES_ORDER", "source_ref": f"SO-{RUN}",
+                                        "source_line_ref": "1", "item_id": item["id"], "qty": "3"}]},
+                       result=result, name="wms wave").json()
+        released = request(c, "POST", f"/api/v1/waves/{wave['id']}/release", token=token, expected=200,
+                           headers=idem(), body={}, result=result, name="wms wave release")
+        if released.status_code == 200:
+            tids = released.json().get("pick_task_ids", [])
+            if tids:
+                tid = tids[0]
+                request(c, "POST", f"/api/v1/pick-tasks/{tid}/assign", token=token, expected=200,
+                        headers=idem(), body={"assigned_user_id": tenant["admin"]["app_user_id"]},
+                        result=result, name="wms pick assign")
+                request(c, "POST", f"/api/v1/pick-tasks/{tid}/start", token=token, expected=200,
+                        headers=idem(), body={}, result=result, name="wms pick start")
+                request(c, "POST", f"/api/v1/pick-tasks/{tid}/complete", token=token, expected=200,
+                        headers=idem(), body={"lines": [{"line_number": 1, "qty_picked": "3",
+                                                         "actual_bin_id": pick["id"]}]},
+                        result=result, name="wms pick complete")
+
+
+def run_manufacturing(c: httpx.Client, result: Result, tenant: dict[str, Any],
+                      item: dict[str, Any], component: dict[str, Any]) -> None:
+    token = tenant["token"]
+    assembly_item = request(c, "POST", "/api/v1/items", token=token, expected=201, headers=idem(),
+                            body={"item_number": f"{tenant['code']}-ASM-{RUN}", "display_name": "E2E Assembly",
+                                  "item_type_code": "ASSEMBLY",
+                                  "inventory": {"costing_method": "AVERAGE", "initial_cost": "5"}},
+                            result=result, name="manufacturing assembly item").json()
+    assembly = request(c, "POST", "/api/v1/assemblies", token=token, expected=201, headers=idem(),
+                       body={"item_id": assembly_item["id"], "assembly_type": "STANDARD"},
+                       result=result, name="manufacturing assembly").json()
+    aid = assembly["id"]
+    bom = request(c, "POST", "/api/v1/boms", token=token, expected=201, headers=idem(),
+                  body={"assembly_item_id": aid, "bom_code": f"BOM-{RUN}", "name": f"BOM {RUN}"},
+                  result=result, name="manufacturing BOM").json()["bom"]
+    request(c, "POST", f"/api/v1/boms/{bom['id']}/activate", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="manufacturing BOM activate")
+    revision = request(c, "POST", f"/api/v1/boms/{bom['id']}/revisions", token=token, expected=201,
+                       headers=idem(), body={"revision_code": "R1", "effective_from": "2020-01-01"},
+                       result=result, name="manufacturing BOM revision").json()["revision"]
+    request(c, "POST", f"/api/v1/bom-revisions/{revision['id']}/components", token=token, expected=201,
+            headers=idem(), body={"line_number": 1, "component_item_id": component["id"],
+                                  "qty_per": "2", "uom_id": assembly_item["base_uom_id"]},
+            result=result, name="manufacturing BOM component")
+    wo = request(c, "POST", "/api/v1/work-orders", token=token, expected=201, headers=idem(),
+                 body={"assembly_item_id": aid, "qty_ordered": "2", "start_date": TODAY,
+                       "end_date": TODAY, "uom_id": assembly_item["base_uom_id"]},
+                 result=result, name="manufacturing work order").json()["work_order"]
+    request(c, "POST", f"/api/v1/work-orders/{wo['id']}/release", token=token, expected=200,
+            headers=idem(), body={}, result=result, name="manufacturing WO release")
+
+
 def main() -> int:
     result = Result()
     if not SUPER:
@@ -268,6 +452,28 @@ def main() -> int:
                         request(c, "POST", f"/api/v1/inventory-counts/{cid}/approve", token=approver_token,
                                 expected=200, headers=idem(), body={}, result=result, name="approve count")
                 result.data["count"] = {"id": cid, "lines": len(line_rows)}
+
+        # Procurement / quality / WMS / manufacturing phases.
+        try:
+            procurement = run_procurement(c, result, a, env_a1, item_a)
+            result.data["procurement"] = procurement
+            vendor = procurement["vendor"]
+        except Exception as exc:
+            result.crash("procurement phase", exc)
+            vendor = None
+        try:
+            run_quality(c, result, a, env_a1, item_a)
+        except Exception as exc:
+            result.crash("quality phase", exc)
+        try:
+            if vendor:
+                run_wms(c, result, a, env_a1, item_a, vendor)
+        except Exception as exc:
+            result.crash("wms phase", exc)
+        try:
+            run_manufacturing(c, result, a, item_a, item_a2)
+        except Exception as exc:
+            result.crash("manufacturing phase", exc)
 
         # Cross-tenant isolation.
         for path, resource in ((f"/api/v1/items/{item_a['id']}", "item"), (f"/api/v1/locations/{env_a1['location']['id']}", "location"),

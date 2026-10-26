@@ -496,21 +496,22 @@ async def login(
         passwords.verify(payload.password, None)
         await emit_platform_event(
             repository.session, "auth.login.failed",
-            tenant_id=str(payload.tenant or SYSTEM_TENANT_ID), aggregate_type="user_identity",
+            tenant_id=str(SYSTEM_TENANT_ID), aggregate_type="user_identity",
             aggregate_id=str(identity.id) if identity is not None else SYSTEM_TENANT_ID,
             payload={"identity_id": str(identity.id) if identity is not None else "unknown",
-                     "tenant_id": str(payload.tenant or SYSTEM_TENANT_ID), "reason_code": "INVALID_CREDENTIALS",
-                     "occurred_at": utc_now().isoformat()},
+                     "tenant_id": str(SYSTEM_TENANT_ID), "tenant_selector": payload.tenant,
+                     "reason_code": "INVALID_CREDENTIALS", "occurred_at": utc_now().isoformat()},
         )
         raise InvalidCredentials("invalid email or password")
     verification = passwords.verify_and_update(payload.password, identity.password_hash)
     if not verification.valid:
         await emit_platform_event(
             repository.session, "auth.login.failed",
-            tenant_id=str(payload.tenant or SYSTEM_TENANT_ID), aggregate_type="user_identity",
+            tenant_id=str(SYSTEM_TENANT_ID), aggregate_type="user_identity",
             aggregate_id=str(identity.id),
-            payload={"identity_id": str(identity.id), "tenant_id": str(payload.tenant or SYSTEM_TENANT_ID),
-                     "reason_code": "INVALID_CREDENTIALS", "occurred_at": utc_now().isoformat()},
+            payload={"identity_id": str(identity.id), "tenant_id": str(SYSTEM_TENANT_ID),
+                     "tenant_selector": payload.tenant, "reason_code": "INVALID_CREDENTIALS",
+                     "occurred_at": utc_now().isoformat()},
         )
         raise InvalidCredentials("invalid email or password")
     if verification.new_hash:
