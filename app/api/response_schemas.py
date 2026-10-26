@@ -170,7 +170,7 @@ def _base_for(path: str) -> str | None:
 
 
 def _has_trailing_id(path: str) -> bool:
-    return bool(re.search(r"/\{[^}]+\}$", _normalise_path(path)))
+    return _normalise_path(path).endswith("/{}")
 
 
 def _is_action(path: str) -> bool:

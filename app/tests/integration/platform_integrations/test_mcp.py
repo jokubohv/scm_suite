@@ -238,6 +238,10 @@ async def test_openapi_contract_is_complete() -> None:
     assert not opaque_requests, opaque_requests[:10]
     assert not opaque_2xx, opaque_2xx[:10]
     assert not missing_problem, missing_problem[:10]
+    detail = spec["paths"]["/api/v1/items/{item_id}"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]
+    assert "item_number" in detail["properties"] and "items" not in detail["properties"]
+    listing = spec["paths"]["/api/v1/items"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]
+    assert "items" in listing["properties"]
     assert {"BearerAuth", "ApiKeyAuth", "SuperAdminToken"} <= set(
         spec["components"]["securitySchemes"]
     )
