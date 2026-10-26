@@ -19,7 +19,27 @@ from fastapi import APIRouter, Body, Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
-from app.api.schemas.procurement import ReceiptActionOut, ReceiptCreate, ReceiptOut, ReceiptPage, ReceiptUpdate
+from app.api.schemas import procurement as procurement_dto
+from app.api.schemas.common import ActionResult
+from app.api.schemas.procurement import (
+    PurchaseOrderCreate,
+    PurchaseOrderOut,
+    PurchaseOrderPage,
+    PurchaseOrderUpdate,
+    ReceiptActionOut,
+    ReceiptCreate,
+    ReceiptOut,
+    ReceiptPage,
+    ReceiptUpdate,
+    VendorBillCreate,
+    VendorBillOut,
+    VendorBillPage,
+    VendorBillUpdate,
+    VendorCreate,
+    VendorOut,
+    VendorPage,
+    VendorUpdate,
+)
 from app.core.security.errors import ForbiddenScope
 from app.modules.procurement.errors import ProcurementError
 from app.modules.procurement.service import ProcurementService
@@ -185,7 +205,7 @@ class WriteScope:
 
 
 # ------------------------------------------------------------------------------- vendors -----
-@router.get("/vendors", dependencies=[Depends(require_scope(VENDOR_READ))])
+@router.get("/vendors", response_model=VendorPage, dependencies=[Depends(require_scope(VENDOR_READ))])
 async def list_vendors(
     db: DbDep,
     principal: PrincipalDep,
@@ -200,19 +220,19 @@ async def list_vendors(
     )
 
 
-@router.post("/vendors", status_code=201, dependencies=[Depends(require_scope(VENDOR_WRITE))])
+@router.post("/vendors", status_code=201, response_model=VendorOut, dependencies=[Depends(require_scope(VENDOR_WRITE))])
 async def create_vendor(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep, principal: PrincipalDep, body: VendorCreate = Body(...), idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
     try:
         return await _service(db, principal).create_vendor(
-            payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
+            body.model_dump(exclude_unset=True), actor_id=principal.app_user_id, idempotency_key=idempotency_key
         )
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
 
 
-@router.get("/vendors/{vendor_id}", dependencies=[Depends(require_scope(VENDOR_READ))])
+@router.get("/vendors/{vendor_id}", response_model=VendorOut, dependencies=[Depends(require_scope(VENDOR_READ))])
 async def get_vendor(vendor_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_vendor(vendor_id)
@@ -220,26 +240,34 @@ async def get_vendor(vendor_id: str, db: DbDep, principal: PrincipalDep) -> dict
         _raise(exc)
 
 
-@router.patch("/vendors/{vendor_id}", dependencies=[Depends(require_scope(VENDOR_WRITE))])
+@router.patch("/vendors/{vendor_id}", response_model=VendorOut, dependencies=[Depends(require_scope(VENDOR_WRITE))])
 async def patch_vendor(
-    vendor_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    vendor_id: str, db: DbDep, principal: PrincipalDep, body: VendorUpdate = Body(...)
 ) -> dict[str, Any]:
     try:
         return await _service(db, principal).update_vendor(
-            vendor_id, payload, actor_id=principal.app_user_id, expected_version=payload.get("version")
+            vendor_id,
+            body.model_dump(exclude_unset=True),
+            actor_id=principal.app_user_id,
+            expected_version=body.version,
         )
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
 
 
-@router.post("/vendors/{vendor_id}/inactivate", dependencies=[Depends(require_scope(VENDOR_WRITE))])
+@router.post(
+    "/vendors/{vendor_id}/inactivate",
+    dependencies=[Depends(require_scope(VENDOR_WRITE))],
+    response_model=procurement_dto.VendorOut,
+)
 async def inactivate_vendor(
     vendor_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementInactivateVendorIn = procurement_dto.ProcurementInactivateVendorIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).inactivate_vendor(
             vendor_id, str(payload.get("reason") or ""), actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -248,14 +276,19 @@ async def inactivate_vendor(
         _raise(exc)
 
 
-@router.post("/vendors/{vendor_id}/merge", dependencies=[Depends(require_scope(VENDOR_MERGE))])
+@router.post(
+    "/vendors/{vendor_id}/merge",
+    dependencies=[Depends(require_scope(VENDOR_MERGE))],
+    response_model=procurement_dto.VendorOut,
+)
 async def merge_vendors(
     vendor_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementMergeVendorsIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).merge_vendors(
             vendor_id,
@@ -267,7 +300,11 @@ async def merge_vendors(
         _raise(exc)
 
 
-@router.get("/vendors/{vendor_id}/purchase-history", dependencies=[Depends(require_scope(VENDOR_READ))])
+@router.get(
+    "/vendors/{vendor_id}/purchase-history",
+    dependencies=[Depends(require_scope(VENDOR_READ))],
+    response_model=procurement_dto.VendorPurchaseHistoryPage,
+)
 async def vendor_purchase_history(
     vendor_id: str,
     db: DbDep,
@@ -285,15 +322,28 @@ async def vendor_purchase_history(
         _raise(exc)
 
 
-@router.get("/vendor-categories", dependencies=[Depends(require_scope(VENDOR_READ))])
+@router.get(
+    "/vendor-categories",
+    dependencies=[Depends(require_scope(VENDOR_READ))],
+    response_model=procurement_dto.VendorCategoryPage,
+)
 async def list_vendor_categories(db: DbDep, principal: PrincipalDep, is_inactive: bool | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_vendor_categories(is_inactive=is_inactive)
 
 
-@router.post("/vendor-categories", status_code=201, dependencies=[Depends(require_scope(VENDOR_WRITE))])
+@router.post(
+    "/vendor-categories",
+    status_code=201,
+    dependencies=[Depends(require_scope(VENDOR_WRITE))],
+    response_model=procurement_dto.VendorCategoryOut,
+)
 async def create_vendor_category(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreateVendorCategoryIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_vendor_category(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -302,10 +352,15 @@ async def create_vendor_category(
         _raise(exc)
 
 
-@router.patch("/vendor-categories/{category_id}", dependencies=[Depends(require_scope(VENDOR_WRITE))])
+@router.patch(
+    "/vendor-categories/{category_id}",
+    dependencies=[Depends(require_scope(VENDOR_WRITE))],
+    response_model=procurement_dto.VendorCategoryOut,
+)
 async def patch_vendor_category(
-    category_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    category_id: str, db: DbDep, principal: PrincipalDep, payload: procurement_dto.ProcurementPatchVendorCategoryIn
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).update_vendor_category(
             category_id, payload, actor_id=principal.app_user_id
@@ -314,7 +369,9 @@ async def patch_vendor_category(
         _raise(exc)
 
 
-@router.get("/item-vendors", dependencies=[Depends(require_scope(VENDOR_READ))])
+@router.get(
+    "/item-vendors", dependencies=[Depends(require_scope(VENDOR_READ))], response_model=procurement_dto.ItemVendorPage
+)
 async def list_item_vendors(
     db: DbDep,
     principal: PrincipalDep,
@@ -327,10 +384,19 @@ async def list_item_vendors(
     )
 
 
-@router.post("/item-vendors", status_code=201, dependencies=[Depends(require_scope(VENDOR_WRITE))])
+@router.post(
+    "/item-vendors",
+    status_code=201,
+    dependencies=[Depends(require_scope(VENDOR_WRITE))],
+    response_model=procurement_dto.ItemVendorOut,
+)
 async def associate_item_vendor(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementAssociateItemVendorIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).associate_item_vendor(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -339,17 +405,26 @@ async def associate_item_vendor(
         _raise(exc)
 
 
-@router.patch("/item-vendors/{item_vendor_id}", dependencies=[Depends(require_scope(VENDOR_WRITE))])
+@router.patch(
+    "/item-vendors/{item_vendor_id}",
+    dependencies=[Depends(require_scope(VENDOR_WRITE))],
+    response_model=procurement_dto.ItemVendorOut,
+)
 async def patch_item_vendor(
-    item_vendor_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    item_vendor_id: str, db: DbDep, principal: PrincipalDep, payload: procurement_dto.ProcurementPatchItemVendorIn
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).update_item_vendor(item_vendor_id, payload, actor_id=principal.app_user_id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
 
 
-@router.get("/item-vendors/{item_vendor_id}/prices", dependencies=[Depends(require_scope(VENDOR_READ))])
+@router.get(
+    "/item-vendors/{item_vendor_id}/prices",
+    dependencies=[Depends(require_scope(VENDOR_READ))],
+    response_model=procurement_dto.ItemVendorPricePage,
+)
 async def list_item_vendor_prices(
     item_vendor_id: str, db: DbDep, principal: PrincipalDep, currency: str | None = None, as_of: str | None = None
 ) -> dict[str, Any]:
@@ -357,15 +432,19 @@ async def list_item_vendor_prices(
 
 
 @router.post(
-    "/item-vendors/{item_vendor_id}/prices", status_code=201, dependencies=[Depends(require_scope(VENDOR_WRITE))]
+    "/item-vendors/{item_vendor_id}/prices",
+    status_code=201,
+    dependencies=[Depends(require_scope(VENDOR_WRITE))],
+    response_model=procurement_dto.ItemVendorPriceOut,
 )
 async def add_item_vendor_price(
     item_vendor_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementAddItemVendorPriceIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).add_item_vendor_price(
             item_vendor_id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -375,7 +454,11 @@ async def add_item_vendor_price(
 
 
 # ----------------------------------------------------------------------------- contracts -----
-@router.get("/vendor-contracts", dependencies=[Depends(require_scope(CONTRACT_READ))])
+@router.get(
+    "/vendor-contracts",
+    dependencies=[Depends(require_scope(CONTRACT_READ))],
+    response_model=procurement_dto.VendorContractPage,
+)
 async def list_contracts(
     db: DbDep,
     principal: PrincipalDep,
@@ -389,30 +472,52 @@ async def list_contracts(
     )
 
 
-@router.post("/vendor-contracts", status_code=201, dependencies=[Depends(require_scope(CONTRACT_WRITE))])
+@router.post(
+    "/vendor-contracts",
+    status_code=201,
+    dependencies=[Depends(require_scope(CONTRACT_WRITE))],
+    response_model=procurement_dto.VendorContractOut,
+)
 async def create_contract(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreateContractIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_contract(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/vendor-contracts/{contract_id}", dependencies=[Depends(require_scope(CONTRACT_READ))])
+@router.get(
+    "/vendor-contracts/{contract_id}",
+    dependencies=[Depends(require_scope(CONTRACT_READ))],
+    response_model=procurement_dto.VendorContractOut,
+)
 async def get_contract(contract_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_contract(contract_id)
 
 
-@router.patch("/vendor-contracts/{contract_id}", dependencies=[Depends(require_scope(CONTRACT_WRITE))])
+@router.patch(
+    "/vendor-contracts/{contract_id}",
+    dependencies=[Depends(require_scope(CONTRACT_WRITE))],
+    response_model=procurement_dto.VendorContractOut,
+)
 async def patch_contract(
-    contract_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    contract_id: str, db: DbDep, principal: PrincipalDep, payload: procurement_dto.ProcurementPatchContractIn
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).update_contract(
         contract_id, payload, actor_id=principal.app_user_id, expected_version=payload.get("version")
     )
 
 
-@router.post("/vendor-contracts/{contract_id}/submit", dependencies=[Depends(require_scope(CONTRACT_WRITE))])
+@router.post(
+    "/vendor-contracts/{contract_id}/submit",
+    dependencies=[Depends(require_scope(CONTRACT_WRITE))],
+    response_model=procurement_dto.VendorContractOut,
+)
 async def submit_contract(
     contract_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
@@ -421,41 +526,59 @@ async def submit_contract(
     )
 
 
-@router.post("/vendor-contracts/{contract_id}/approve", dependencies=[Depends(require_scope(CONTRACT_APPROVE))])
+@router.post(
+    "/vendor-contracts/{contract_id}/approve",
+    dependencies=[Depends(require_scope(CONTRACT_APPROVE))],
+    response_model=procurement_dto.VendorContractOut,
+)
 async def approve_contract(
     contract_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementApproveContractIn = procurement_dto.ProcurementApproveContractIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal)._contract_transition(
         contract_id, "APPROVED", actor_id=principal.app_user_id, reason=payload.get("comment")
     )
 
 
-@router.post("/vendor-contracts/{contract_id}/activate", dependencies=[Depends(require_scope(CONTRACT_APPROVE))])
+@router.post(
+    "/vendor-contracts/{contract_id}/activate",
+    dependencies=[Depends(require_scope(CONTRACT_APPROVE))],
+    response_model=procurement_dto.VendorContractOut,
+)
 async def activate_contract(
     contract_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
     return await _service(db, principal)._contract_transition(contract_id, "ACTIVE", actor_id=principal.app_user_id)
 
 
-@router.post("/vendor-contracts/{contract_id}/close", dependencies=[Depends(require_scope(CONTRACT_WRITE))])
+@router.post(
+    "/vendor-contracts/{contract_id}/close",
+    dependencies=[Depends(require_scope(CONTRACT_WRITE))],
+    response_model=procurement_dto.VendorContractOut,
+)
 async def close_contract(
     contract_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementCloseContractIn = procurement_dto.ProcurementCloseContractIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal)._contract_transition(
         contract_id, "CLOSED", actor_id=principal.app_user_id, reason=payload.get("reason")
     )
 
 
 # -------------------------------------------------------------------------- requisitions -----
-@router.get("/purchase-requisitions", dependencies=[Depends(require_scope(REQ_READ))])
+@router.get(
+    "/purchase-requisitions",
+    dependencies=[Depends(require_scope(REQ_READ))],
+    response_model=procurement_dto.PurchaseRequisitionPage,
+)
 async def list_requisitions(
     db: DbDep,
     principal: PrincipalDep,
@@ -470,10 +593,19 @@ async def list_requisitions(
     )
 
 
-@router.post("/purchase-requisitions", status_code=201, dependencies=[Depends(require_scope(REQ_WRITE))])
+@router.post(
+    "/purchase-requisitions",
+    status_code=201,
+    dependencies=[Depends(require_scope(REQ_WRITE))],
+    response_model=procurement_dto.PurchaseRequisitionOut,
+)
 async def create_requisition(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreateRequisitionIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_requisition(
         {**payload, "requested_by": payload.get("requested_by") or principal.app_user_id},
         actor_id=principal.app_user_id,
@@ -481,19 +613,32 @@ async def create_requisition(
     )
 
 
-@router.get("/purchase-requisitions/{requisition_id}", dependencies=[Depends(require_scope(REQ_READ))])
+@router.get(
+    "/purchase-requisitions/{requisition_id}",
+    dependencies=[Depends(require_scope(REQ_READ))],
+    response_model=procurement_dto.PurchaseRequisitionOut,
+)
 async def get_requisition(requisition_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_requisition(requisition_id)
 
 
-@router.patch("/purchase-requisitions/{requisition_id}", dependencies=[Depends(require_scope(REQ_WRITE))])
+@router.patch(
+    "/purchase-requisitions/{requisition_id}",
+    dependencies=[Depends(require_scope(REQ_WRITE))],
+    response_model=procurement_dto.PurchaseRequisitionOut,
+)
 async def patch_requisition(
-    requisition_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    requisition_id: str, db: DbDep, principal: PrincipalDep, payload: procurement_dto.ProcurementPatchRequisitionIn
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).update_requisition(requisition_id, payload, actor_id=principal.app_user_id)
 
 
-@router.post("/purchase-requisitions/{requisition_id}/submit", dependencies=[Depends(require_scope(REQ_WRITE))])
+@router.post(
+    "/purchase-requisitions/{requisition_id}/submit",
+    dependencies=[Depends(require_scope(REQ_WRITE))],
+    response_model=procurement_dto.PurchaseRequisitionOut,
+)
 async def submit_requisition(
     requisition_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
@@ -502,14 +647,19 @@ async def submit_requisition(
     )
 
 
-@router.post("/purchase-requisitions/{requisition_id}/approve", dependencies=[Depends(require_scope(REQ_APPROVE))])
+@router.post(
+    "/purchase-requisitions/{requisition_id}/approve",
+    dependencies=[Depends(require_scope(REQ_APPROVE))],
+    response_model=procurement_dto.PurchaseRequisitionOut,
+)
 async def decide_requisition(
     requisition_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementDecideRequisitionIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).decide_requisition(
         requisition_id,
         str(payload.get("decision") or "APPROVE"),
@@ -519,31 +669,49 @@ async def decide_requisition(
     )
 
 
-@router.post("/purchase-requisitions/{requisition_id}/order", dependencies=[Depends(require_scope(REQ_ORDER))])
+@router.post(
+    "/purchase-requisitions/{requisition_id}/order",
+    dependencies=[Depends(require_scope(REQ_ORDER))],
+    response_model=procurement_dto.PurchaseOrderOut,
+)
 async def order_requisition(
     requisition_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementOrderRequisitionIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).order_requisition(
         requisition_id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
 # ------------------------------------------------------------------------ purchase requests ---
-@router.get("/purchase-requests", dependencies=[Depends(require_scope(REQUEST_READ))])
+@router.get(
+    "/purchase-requests",
+    dependencies=[Depends(require_scope(REQUEST_READ))],
+    response_model=procurement_dto.PurchaseRequestPage,
+)
 async def list_purchase_requests(
     db: DbDep, principal: PrincipalDep, status: str | None = None, limit: int = 50
 ) -> dict[str, Any]:
     return await _service(db, principal).list_purchase_requests(status=status, limit=_limit(limit))
 
 
-@router.post("/purchase-requests", status_code=201, dependencies=[Depends(require_scope(REQUEST_WRITE))])
+@router.post(
+    "/purchase-requests",
+    status_code=201,
+    dependencies=[Depends(require_scope(REQUEST_WRITE))],
+    response_model=procurement_dto.PurchaseRequestOut,
+)
 async def create_purchase_request(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreatePurchaseRequestIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_purchase_request(
         {**payload, "requested_by": payload.get("requested_by") or principal.app_user_id},
         actor_id=principal.app_user_id,
@@ -551,37 +719,51 @@ async def create_purchase_request(
     )
 
 
-@router.get("/purchase-requests/{request_id}", dependencies=[Depends(require_scope(REQUEST_READ))])
+@router.get(
+    "/purchase-requests/{request_id}",
+    dependencies=[Depends(require_scope(REQUEST_READ))],
+    response_model=procurement_dto.PurchaseRequestOut,
+)
 async def get_purchase_request(request_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_purchase_request(request_id)
 
 
-@router.post("/purchase-requests/{request_id}/approve", dependencies=[Depends(require_scope(REQUEST_APPROVE))])
+@router.post(
+    "/purchase-requests/{request_id}/approve",
+    dependencies=[Depends(require_scope(REQUEST_APPROVE))],
+    response_model=procurement_dto.PurchaseRequestOut,
+)
 async def decide_purchase_request(
     request_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementDecidePurchaseRequestIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).decide_purchase_request(
         request_id, str(payload.get("decision") or "APPROVE"), payload.get("comment"), actor_id=principal.app_user_id
     )
 
 
-@router.post("/purchase-requests/{request_id}/convert-to-po", dependencies=[Depends(require_scope(REQUEST_WRITE))])
+@router.post(
+    "/purchase-requests/{request_id}/convert-to-po",
+    dependencies=[Depends(require_scope(REQUEST_WRITE))],
+    response_model=procurement_dto.PurchaseOrderOut,
+)
 async def convert_purchase_request(
     request_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementConvertPurchaseRequestIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).convert_purchase_request(request_id, payload, actor_id=principal.app_user_id)
 
 
 # ------------------------------------------------------------------------------------- RFQ ----
-@router.get("/rfqs", dependencies=[Depends(require_scope(RFQ_READ))])
+@router.get("/rfqs", dependencies=[Depends(require_scope(RFQ_READ))], response_model=procurement_dto.RfqPage)
 async def list_rfqs(
     db: DbDep, principal: PrincipalDep, status: str | None = None, bid_close_before: str | None = None, limit: int = 50
 ) -> dict[str, Any]:
@@ -590,55 +772,78 @@ async def list_rfqs(
     )
 
 
-@router.post("/rfqs", status_code=201, dependencies=[Depends(require_scope(RFQ_WRITE))])
+@router.post(
+    "/rfqs", status_code=201, dependencies=[Depends(require_scope(RFQ_WRITE))], response_model=procurement_dto.RfqOut
+)
 async def create_rfq(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreateRfqIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_rfq(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/rfqs/{rfq_id}", dependencies=[Depends(require_scope(RFQ_READ))])
+@router.get("/rfqs/{rfq_id}", dependencies=[Depends(require_scope(RFQ_READ))], response_model=procurement_dto.RfqOut)
 async def get_rfq(rfq_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_rfq(rfq_id)
 
 
-@router.post("/rfqs/{rfq_id}/open", dependencies=[Depends(require_scope(RFQ_WRITE))])
+@router.post(
+    "/rfqs/{rfq_id}/open", dependencies=[Depends(require_scope(RFQ_WRITE))], response_model=procurement_dto.RfqOut
+)
 async def open_rfq(
     rfq_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
     return await _service(db, principal).open_rfq(rfq_id, actor_id=principal.app_user_id)
 
 
-@router.post("/rfqs/{rfq_id}/responses", status_code=201, dependencies=[Depends(require_scope(RFQ_WRITE))])
+@router.post(
+    "/rfqs/{rfq_id}/responses",
+    status_code=201,
+    dependencies=[Depends(require_scope(RFQ_WRITE))],
+    response_model=procurement_dto.RfqResponseOut,
+)
 async def register_rfq_response(
     rfq_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementRegisterRfqResponseIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).register_rfq_response(rfq_id, payload, actor_id=principal.app_user_id)
 
 
-@router.get("/rfqs/{rfq_id}/responses", dependencies=[Depends(require_scope(RFQ_READ))])
+@router.get(
+    "/rfqs/{rfq_id}/responses",
+    dependencies=[Depends(require_scope(RFQ_READ))],
+    response_model=procurement_dto.RfqResponsePage,
+)
 async def list_rfq_responses(rfq_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).list_rfq_responses(rfq_id)
 
 
-@router.post("/rfqs/{rfq_id}/award", dependencies=[Depends(require_scope(RFQ_AWARD))])
+@router.post(
+    "/rfqs/{rfq_id}/award", dependencies=[Depends(require_scope(RFQ_AWARD))], response_model=procurement_dto.RfqOut
+)
 async def award_rfq(
     rfq_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementAwardRfqIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).award_rfq(rfq_id, payload, actor_id=principal.app_user_id)
 
 
-@router.post("/rfqs/{rfq_id}/close", dependencies=[Depends(require_scope(RFQ_WRITE))])
+@router.post(
+    "/rfqs/{rfq_id}/close", dependencies=[Depends(require_scope(RFQ_WRITE))], response_model=procurement_dto.RfqOut
+)
 async def close_rfq(
     rfq_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
@@ -646,7 +851,7 @@ async def close_rfq(
 
 
 # --------------------------------------------------------------------------- purchase orders ---
-@router.get("/purchase-orders", dependencies=[Depends(require_scope(PO_READ))])
+@router.get("/purchase-orders", response_model=PurchaseOrderPage, dependencies=[Depends(require_scope(PO_READ))])
 async def list_purchase_orders(
     db: DbDep,
     principal: PrincipalDep,
@@ -667,30 +872,39 @@ async def list_purchase_orders(
     )
 
 
-@router.post("/purchase-orders", status_code=201, dependencies=[Depends(require_scope(PO_WRITE))])
+@router.post(
+    "/purchase-orders",
+    status_code=201,
+    response_model=PurchaseOrderOut,
+    dependencies=[Depends(require_scope(PO_WRITE))],
+)
 async def create_purchase_order(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep, principal: PrincipalDep, body: PurchaseOrderCreate = Body(...), idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
     return await _service(db, principal).create_purchase_order(
-        payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
+        body.model_dump(exclude_unset=True), actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/purchase-orders/{po_id}", dependencies=[Depends(require_scope(PO_READ))])
+@router.get("/purchase-orders/{po_id}", response_model=PurchaseOrderOut, dependencies=[Depends(require_scope(PO_READ))])
 async def get_purchase_order(po_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_purchase_order(po_id)
 
 
-@router.patch("/purchase-orders/{po_id}", dependencies=[Depends(require_scope(PO_WRITE))])
+@router.patch(
+    "/purchase-orders/{po_id}", response_model=PurchaseOrderOut, dependencies=[Depends(require_scope(PO_WRITE))]
+)
 async def patch_purchase_order(
-    po_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    po_id: str, db: DbDep, principal: PrincipalDep, body: PurchaseOrderUpdate = Body(...)
 ) -> dict[str, Any]:
     return await _service(db, principal).update_purchase_order(
-        po_id, payload, actor_id=principal.app_user_id, expected_version=payload.get("version")
+        po_id, body.model_dump(exclude_unset=True), actor_id=principal.app_user_id, expected_version=body.version
     )
 
 
-@router.post("/purchase-orders/{po_id}/submit", dependencies=[Depends(require_scope(PO_WRITE))])
+@router.post(
+    "/purchase-orders/{po_id}/submit", response_model=ActionResult, dependencies=[Depends(require_scope(PO_WRITE))]
+)
 async def submit_purchase_order(
     po_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
@@ -699,53 +913,65 @@ async def submit_purchase_order(
     )
 
 
-@router.post("/purchase-orders/{po_id}/approve", dependencies=[Depends(require_scope(PO_APPROVE))])
+@router.post(
+    "/purchase-orders/{po_id}/approve", response_model=ActionResult, dependencies=[Depends(require_scope(PO_APPROVE))]
+)
 async def approve_purchase_order(
     po_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementApprovePurchaseOrderIn = procurement_dto.ProcurementApprovePurchaseOrderIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).approve_purchase_order(
         po_id, actor_id=principal.app_user_id, comment=payload.get("comment"), idempotency_key=idempotency_key
     )
 
 
-@router.post("/purchase-orders/{po_id}/reject", dependencies=[Depends(require_scope(PO_APPROVE))])
+@router.post(
+    "/purchase-orders/{po_id}/reject", response_model=ActionResult, dependencies=[Depends(require_scope(PO_APPROVE))]
+)
 async def reject_purchase_order(
     po_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementRejectPurchaseOrderIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).reject_purchase_order(
         po_id, str(payload.get("reason") or "rejected"), actor_id=principal.app_user_id
     )
 
 
-@router.post("/purchase-orders/{po_id}/cancel", dependencies=[Depends(require_scope(PO_WRITE))])
+@router.post(
+    "/purchase-orders/{po_id}/cancel", response_model=ActionResult, dependencies=[Depends(require_scope(PO_WRITE))]
+)
 async def cancel_purchase_order(
     po_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementCancelPurchaseOrderIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).cancel_purchase_order(
         po_id, str(payload.get("reason") or "cancelled"), actor_id=principal.app_user_id
     )
 
 
-@router.post("/purchase-orders/{po_id}/close", dependencies=[Depends(require_scope(PO_CLOSE))])
+@router.post(
+    "/purchase-orders/{po_id}/close", response_model=ActionResult, dependencies=[Depends(require_scope(PO_CLOSE))]
+)
 async def close_purchase_order(
     po_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementClosePurchaseOrderIn = procurement_dto.ProcurementClosePurchaseOrderIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).close_purchase_order(
         po_id,
         line_ids=payload.get("line_ids"),
@@ -755,30 +981,48 @@ async def close_purchase_order(
     )
 
 
-@router.get("/purchase-orders/{po_id}/status", dependencies=[Depends(require_scope(PO_READ))])
+@router.get(
+    "/purchase-orders/{po_id}/status",
+    dependencies=[Depends(require_scope(PO_READ))],
+    response_model=procurement_dto.PurchaseOrderStatusOut,
+)
 async def purchase_order_status(po_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).po_status(po_id)
 
 
-@router.get("/purchase-orders/{po_id}/history", dependencies=[Depends(require_scope(PO_READ))])
+@router.get(
+    "/purchase-orders/{po_id}/history",
+    dependencies=[Depends(require_scope(PO_READ))],
+    response_model=procurement_dto.PurchaseOrderHistoryPage,
+)
 async def purchase_order_history(po_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).po_history(po_id)
 
 
-@router.post("/purchase-orders/{po_id}/releases", status_code=201, dependencies=[Depends(require_scope(PO_WRITE))])
+@router.post(
+    "/purchase-orders/{po_id}/releases",
+    status_code=201,
+    dependencies=[Depends(require_scope(PO_WRITE))],
+    response_model=procurement_dto.PurchaseOrderReleaseOut,
+)
 async def create_po_release(
     po_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementCreatePoReleaseIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_po_release(
         po_id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/purchase-orders/{po_id}/releases", dependencies=[Depends(require_scope(PO_READ))])
+@router.get(
+    "/purchase-orders/{po_id}/releases",
+    dependencies=[Depends(require_scope(PO_READ))],
+    response_model=procurement_dto.PurchaseOrderReleasePage,
+)
 async def list_po_releases(po_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).list_po_releases(po_id)
 
@@ -803,8 +1047,9 @@ async def list_receipts(
     )
 
 
-@router.post("/item-receipts", status_code=201, response_model=ReceiptOut,
-             dependencies=[Depends(require_scope(RECEIPT_WRITE))])
+@router.post(
+    "/item-receipts", status_code=201, response_model=ReceiptOut, dependencies=[Depends(require_scope(RECEIPT_WRITE))]
+)
 async def create_receipt(
     db: DbDep, principal: PrincipalDep, body: ReceiptCreate = Body(...), idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
@@ -813,7 +1058,11 @@ async def create_receipt(
     )
 
 
-@router.get("/item-receipts/unbilled", dependencies=[Depends(require_scope(RECEIPT_READ))])
+@router.get(
+    "/item-receipts/unbilled",
+    dependencies=[Depends(require_scope(RECEIPT_READ))],
+    response_model=procurement_dto.ReceivedNotBilledPage,
+)
 async def received_not_billed(
     db: DbDep,
     principal: PrincipalDep,
@@ -832,14 +1081,16 @@ async def received_not_billed(
     )
 
 
-@router.get("/item-receipts/{receipt_id}", response_model=ReceiptOut,
-            dependencies=[Depends(require_scope(RECEIPT_READ))])
+@router.get(
+    "/item-receipts/{receipt_id}", response_model=ReceiptOut, dependencies=[Depends(require_scope(RECEIPT_READ))]
+)
 async def get_receipt(receipt_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_receipt(receipt_id)
 
 
-@router.patch("/item-receipts/{receipt_id}", response_model=ReceiptOut,
-             dependencies=[Depends(require_scope(RECEIPT_WRITE))])
+@router.patch(
+    "/item-receipts/{receipt_id}", response_model=ReceiptOut, dependencies=[Depends(require_scope(RECEIPT_WRITE))]
+)
 async def patch_receipt(
     receipt_id: str, db: DbDep, principal: PrincipalDep, body: ReceiptUpdate = Body(...)
 ) -> dict[str, Any]:
@@ -848,29 +1099,37 @@ async def patch_receipt(
     )
 
 
-@router.post("/item-receipts/{receipt_id}/post", response_model=ReceiptActionOut,
-             dependencies=[Depends(require_scope(RECEIPT_POST))])
+@router.post(
+    "/item-receipts/{receipt_id}/post",
+    response_model=ReceiptActionOut,
+    dependencies=[Depends(require_scope(RECEIPT_POST))],
+)
 async def post_receipt(
     receipt_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementPostReceiptIn = procurement_dto.ProcurementPostReceiptIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).post_receipt(
         receipt_id, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.post("/item-receipts/{receipt_id}/reverse", response_model=ReceiptActionOut,
-             dependencies=[Depends(require_scope(RECEIPT_REVERSE))])
+@router.post(
+    "/item-receipts/{receipt_id}/reverse",
+    response_model=ReceiptActionOut,
+    dependencies=[Depends(require_scope(RECEIPT_REVERSE))],
+)
 async def reverse_receipt(
     receipt_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementReverseReceiptIn = procurement_dto.ProcurementReverseReceiptIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).reverse_receipt(
         receipt_id,
         str(payload.get("reason") or "reversal"),
@@ -880,7 +1139,7 @@ async def reverse_receipt(
 
 
 # ---------------------------------------------------------------------------------- bills -----
-@router.get("/vendor-bills", dependencies=[Depends(require_scope(BILL_READ))])
+@router.get("/vendor-bills", response_model=VendorBillPage, dependencies=[Depends(require_scope(BILL_READ))])
 async def list_bills(
     db: DbDep,
     principal: PrincipalDep,
@@ -894,35 +1153,46 @@ async def list_bills(
     )
 
 
-@router.post("/vendor-bills", status_code=201, dependencies=[Depends(require_scope(BILL_WRITE))])
+@router.post(
+    "/vendor-bills", status_code=201, response_model=VendorBillOut, dependencies=[Depends(require_scope(BILL_WRITE))]
+)
 async def create_bill(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep, principal: PrincipalDep, body: VendorBillCreate = Body(...), idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
     return await _service(db, principal).create_bill(
-        payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
+        body.model_dump(exclude_unset=True), actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/vendor-bills/{bill_id}", dependencies=[Depends(require_scope(BILL_READ))])
+@router.get("/vendor-bills/{bill_id}", response_model=VendorBillOut, dependencies=[Depends(require_scope(BILL_READ))])
 async def get_bill(bill_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_bill(bill_id)
 
 
-@router.patch("/vendor-bills/{bill_id}", dependencies=[Depends(require_scope(BILL_WRITE))])
+@router.patch(
+    "/vendor-bills/{bill_id}", response_model=VendorBillOut, dependencies=[Depends(require_scope(BILL_WRITE))]
+)
 async def patch_bill(
-    bill_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    bill_id: str, db: DbDep, principal: PrincipalDep, body: VendorBillUpdate = Body(...)
 ) -> dict[str, Any]:
-    return await _service(db, principal).update_bill(bill_id, payload, actor_id=principal.app_user_id)
+    return await _service(db, principal).update_bill(
+        bill_id, body.model_dump(exclude_unset=True), actor_id=principal.app_user_id
+    )
 
 
-@router.post("/vendor-bills/{bill_id}/match", dependencies=[Depends(require_scope(BILL_MATCH))])
+@router.post(
+    "/vendor-bills/{bill_id}/match",
+    response_model=procurement_dto.BillMatchOut,
+    dependencies=[Depends(require_scope(BILL_MATCH))],
+)
 async def match_bill(
     bill_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementMatchBillIn = procurement_dto.ProcurementMatchBillIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     override = bool(payload.get("override"))
     if override and MATCH_OVERRIDE not in principal.scopes:
         raise ForbiddenScope(
@@ -938,7 +1208,9 @@ async def match_bill(
     )
 
 
-@router.post("/vendor-bills/{bill_id}/submit", dependencies=[Depends(require_scope(BILL_WRITE))])
+@router.post(
+    "/vendor-bills/{bill_id}/submit", response_model=ActionResult, dependencies=[Depends(require_scope(BILL_WRITE))]
+)
 async def submit_bill(
     bill_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
@@ -947,166 +1219,246 @@ async def submit_bill(
     )
 
 
-@router.post("/vendor-bills/{bill_id}/approve", dependencies=[Depends(require_scope(BILL_APPROVE))])
+@router.post(
+    "/vendor-bills/{bill_id}/approve", response_model=ActionResult, dependencies=[Depends(require_scope(BILL_APPROVE))]
+)
 async def approve_bill(
     bill_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementApproveBillIn = procurement_dto.ProcurementApproveBillIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).approve_bill(
         bill_id, actor_id=principal.app_user_id, comment=payload.get("comment"), idempotency_key=idempotency_key
     )
 
 
-@router.post("/vendor-bills/{bill_id}/post", dependencies=[Depends(require_scope(BILL_POST))])
+@router.post(
+    "/vendor-bills/{bill_id}/post", response_model=ActionResult, dependencies=[Depends(require_scope(BILL_POST))]
+)
 async def post_bill(
     bill_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementPostBillIn = procurement_dto.ProcurementPostBillIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).post_bill(
         bill_id, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.post("/vendor-bills/{bill_id}/cancel", dependencies=[Depends(require_scope(BILL_WRITE))])
+@router.post(
+    "/vendor-bills/{bill_id}/cancel", response_model=ActionResult, dependencies=[Depends(require_scope(BILL_WRITE))]
+)
 async def cancel_bill(
     bill_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementCancelBillIn = procurement_dto.ProcurementCancelBillIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).cancel_bill(
         bill_id, str(payload.get("reason") or "cancelled"), actor_id=principal.app_user_id
     )
 
 
-@router.get("/vendor-bills/{bill_id}/variances", dependencies=[Depends(require_scope(BILL_READ))])
+@router.get(
+    "/vendor-bills/{bill_id}/variances",
+    dependencies=[Depends(require_scope(BILL_READ))],
+    response_model=procurement_dto.VendorBillVariancePage,
+)
 async def bill_variances(bill_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).bill_variances(bill_id)
 
 
 # -------------------------------------------------------------------------------- credits -----
-@router.get("/vendor-credits", dependencies=[Depends(require_scope(CREDIT_READ))])
+@router.get(
+    "/vendor-credits",
+    dependencies=[Depends(require_scope(CREDIT_READ))],
+    response_model=procurement_dto.VendorCreditPage,
+)
 async def list_credits(
     db: DbDep, principal: PrincipalDep, vendor_id: str | None = None, status: str | None = None, limit: int = 50
 ) -> dict[str, Any]:
     return await _service(db, principal).list_credits(vendor_id=vendor_id, status=status, limit=_limit(limit))
 
 
-@router.post("/vendor-credits", status_code=201, dependencies=[Depends(require_scope(CREDIT_WRITE))])
+@router.post(
+    "/vendor-credits",
+    status_code=201,
+    dependencies=[Depends(require_scope(CREDIT_WRITE))],
+    response_model=procurement_dto.VendorCreditOut,
+)
 async def create_credit(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreateCreditIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_credit(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/vendor-credits/{credit_id}", dependencies=[Depends(require_scope(CREDIT_READ))])
+@router.get(
+    "/vendor-credits/{credit_id}",
+    dependencies=[Depends(require_scope(CREDIT_READ))],
+    response_model=procurement_dto.VendorCreditOut,
+)
 async def get_credit(credit_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_credit(credit_id)
 
 
-@router.post("/vendor-credits/{credit_id}/apply", dependencies=[Depends(require_scope(CREDIT_APPLY))])
+@router.post(
+    "/vendor-credits/{credit_id}/apply",
+    dependencies=[Depends(require_scope(CREDIT_APPLY))],
+    response_model=procurement_dto.VendorCreditOut,
+)
 async def apply_credit(
     credit_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementApplyCreditIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).apply_credit(
         credit_id, payload.get("applications") or [], actor_id=principal.app_user_id
     )
 
 
-@router.post("/vendor-credits/{credit_id}/post", dependencies=[Depends(require_scope(CREDIT_POST))])
+@router.post(
+    "/vendor-credits/{credit_id}/post",
+    dependencies=[Depends(require_scope(CREDIT_POST))],
+    response_model=procurement_dto.VendorCreditOut,
+)
 async def post_credit(
     credit_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementPostCreditIn = procurement_dto.ProcurementPostCreditIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).post_credit(
         credit_id, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
 # -------------------------------------------------------------------------------- returns -----
-@router.get("/vendor-returns", dependencies=[Depends(require_scope(RETURN_READ))])
+@router.get(
+    "/vendor-returns",
+    dependencies=[Depends(require_scope(RETURN_READ))],
+    response_model=procurement_dto.VendorReturnPage,
+)
 async def list_returns(
     db: DbDep, principal: PrincipalDep, vendor_id: str | None = None, status: str | None = None, limit: int = 50
 ) -> dict[str, Any]:
     return await _service(db, principal).list_returns(vendor_id=vendor_id, status=status, limit=_limit(limit))
 
 
-@router.post("/vendor-returns", status_code=201, dependencies=[Depends(require_scope(RETURN_WRITE))])
+@router.post(
+    "/vendor-returns",
+    status_code=201,
+    dependencies=[Depends(require_scope(RETURN_WRITE))],
+    response_model=procurement_dto.VendorReturnAuthorizationOut,
+)
 async def create_return(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreateReturnIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_return(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/vendor-returns/{return_id}", dependencies=[Depends(require_scope(RETURN_READ))])
+@router.get(
+    "/vendor-returns/{return_id}",
+    dependencies=[Depends(require_scope(RETURN_READ))],
+    response_model=procurement_dto.VendorReturnAuthorizationOut,
+)
 async def get_return(return_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_return(return_id)
 
 
-@router.post("/vendor-returns/{return_id}/approve", dependencies=[Depends(require_scope(RETURN_APPROVE))])
+@router.post(
+    "/vendor-returns/{return_id}/approve",
+    dependencies=[Depends(require_scope(RETURN_APPROVE))],
+    response_model=procurement_dto.VendorReturnAuthorizationOut,
+)
 async def approve_return(
     return_id: str, db: DbDep, principal: PrincipalDep, idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
     return await _service(db, principal).approve_return(return_id, actor_id=principal.app_user_id)
 
 
-@router.post("/vendor-returns/{return_id}/ship", dependencies=[Depends(require_scope(RETURN_SHIP))])
+@router.post(
+    "/vendor-returns/{return_id}/ship",
+    dependencies=[Depends(require_scope(RETURN_SHIP))],
+    response_model=procurement_dto.VendorReturnAuthorizationOut,
+)
 async def ship_return(
     return_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementShipReturnIn = procurement_dto.ProcurementShipReturnIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).ship_return(
         return_id, payload.get("lines") or [], actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.post("/vendor-returns/{return_id}/credit", dependencies=[Depends(require_scope(RETURN_CREDIT))])
+@router.post(
+    "/vendor-returns/{return_id}/credit",
+    dependencies=[Depends(require_scope(RETURN_CREDIT))],
+    response_model=procurement_dto.VendorReturnAuthorizationOut,
+)
 async def credit_return(
     return_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(...),
+    payload: procurement_dto.ProcurementCreditReturnIn,
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).credit_return(return_id, payload, actor_id=principal.app_user_id)
 
 
-@router.post("/vendor-returns/{return_id}/close", dependencies=[Depends(require_scope(RETURN_CLOSE))])
+@router.post(
+    "/vendor-returns/{return_id}/close",
+    dependencies=[Depends(require_scope(RETURN_CLOSE))],
+    response_model=procurement_dto.VendorReturnAuthorizationOut,
+)
 async def close_return(
     return_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementCloseReturnIn = procurement_dto.ProcurementCloseReturnIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).close_return(
         return_id, line_ids=payload.get("line_ids"), actor_id=principal.app_user_id
     )
 
 
 # ---------------------------------------------------------------------------- drop-ship -------
-@router.get("/special-order-links", dependencies=[Depends(require_scope(PO_READ))])
+@router.get(
+    "/special-order-links",
+    dependencies=[Depends(require_scope(PO_READ))],
+    response_model=procurement_dto.SpecialOrderLinkPage,
+)
 async def list_special_order_links(
     db: DbDep,
     principal: PrincipalDep,
@@ -1120,28 +1472,46 @@ async def list_special_order_links(
     )
 
 
-@router.post("/special-order-links", status_code=201, dependencies=[Depends(require_scope(DROPSHIP_WRITE))])
+@router.post(
+    "/special-order-links",
+    status_code=201,
+    dependencies=[Depends(require_scope(DROPSHIP_WRITE))],
+    response_model=procurement_dto.SpecialOrderLinkOut,
+)
 async def create_special_order_link(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: procurement_dto.ProcurementCreateSpecialOrderLinkIn,
+    idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).create_special_order_link(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/special-order-links/{link_id}", dependencies=[Depends(require_scope(PO_READ))])
+@router.get(
+    "/special-order-links/{link_id}",
+    dependencies=[Depends(require_scope(PO_READ))],
+    response_model=procurement_dto.SpecialOrderLinkOut,
+)
 async def get_special_order_link(link_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_special_order_link(link_id)
 
 
-@router.post("/special-order-links/{link_id}/fulfil", dependencies=[Depends(require_scope(DROPSHIP_WRITE))])
+@router.post(
+    "/special-order-links/{link_id}/fulfil",
+    dependencies=[Depends(require_scope(DROPSHIP_WRITE))],
+    response_model=procurement_dto.SpecialOrderLinkOut,
+)
 async def fulfil_dropship(
     link_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: procurement_dto.ProcurementFulfilDropshipIn = procurement_dto.ProcurementFulfilDropshipIn(),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _service(db, principal).fulfil_dropship(
         link_id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
@@ -1184,12 +1554,32 @@ _CANONICAL_ALIASES: tuple[tuple[str, str, str, str], ...] = (
     ("POST", "/api/v1/purchase-orders/{po_id}/releases", "/purchase-orders/{id}/releases", "po_id"),
     ("GET", "/api/v1/purchase-requests/{request_id}", "/purchase-requests/{id}", "request_id"),
     ("POST", "/api/v1/purchase-requests/{request_id}/approve", "/purchase-requests/{id}/approve", "request_id"),
-    ("POST", "/api/v1/purchase-requests/{request_id}/convert-to-po", "/purchase-requests/{id}/convert-to-po", "request_id"),
+    (
+        "POST",
+        "/api/v1/purchase-requests/{request_id}/convert-to-po",
+        "/purchase-requests/{id}/convert-to-po",
+        "request_id",
+    ),
     ("GET", "/api/v1/purchase-requisitions/{requisition_id}", "/purchase-requisitions/{id}", "requisition_id"),
     ("PATCH", "/api/v1/purchase-requisitions/{requisition_id}", "/purchase-requisitions/{id}", "requisition_id"),
-    ("POST", "/api/v1/purchase-requisitions/{requisition_id}/submit", "/purchase-requisitions/{id}/submit", "requisition_id"),
-    ("POST", "/api/v1/purchase-requisitions/{requisition_id}/approve", "/purchase-requisitions/{id}/approve", "requisition_id"),
-    ("POST", "/api/v1/purchase-requisitions/{requisition_id}/order", "/purchase-requisitions/{id}/order", "requisition_id"),
+    (
+        "POST",
+        "/api/v1/purchase-requisitions/{requisition_id}/submit",
+        "/purchase-requisitions/{id}/submit",
+        "requisition_id",
+    ),
+    (
+        "POST",
+        "/api/v1/purchase-requisitions/{requisition_id}/approve",
+        "/purchase-requisitions/{id}/approve",
+        "requisition_id",
+    ),
+    (
+        "POST",
+        "/api/v1/purchase-requisitions/{requisition_id}/order",
+        "/purchase-requisitions/{id}/order",
+        "requisition_id",
+    ),
     ("GET", "/api/v1/rfqs/{rfq_id}", "/rfqs/{id}", "rfq_id"),
     ("POST", "/api/v1/rfqs/{rfq_id}/open", "/rfqs/{id}/open", "rfq_id"),
     ("POST", "/api/v1/rfqs/{rfq_id}/close", "/rfqs/{id}/close", "rfq_id"),
@@ -1257,6 +1647,7 @@ def _register_canonical_aliases() -> None:
             methods=[method],
             status_code=int(getattr(alias_route, "status_code", None) or 200),
             dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, declared_path)]))],
+            response_model=getattr(alias_route, "response_model", None),
         )
         ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, declared_path)]
 

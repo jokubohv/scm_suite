@@ -22,6 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select, text
 
 from app.api.deps import DbDep, require_super_admin
+from app.api.schemas.platform import PlatformObject
 from app.core.config import get_settings
 from app.core.models import platform as p
 from app.core.platform_events import emit_platform_event
@@ -278,7 +279,7 @@ async def whoami() -> BootstrapWhoAmI:
     )
 
 
-@router.post("/tenants", status_code=201, dependencies=[Depends(require_super_admin)])
+@router.post("/tenants", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_super_admin)])
 async def bootstrap_tenant(body: TenantBootstrapIn, db: DbDep) -> dict[str, Any]:
     repo = PlatformAdminRepository(db)
     payload = {
@@ -320,7 +321,7 @@ async def bootstrap_tenant(body: TenantBootstrapIn, db: DbDep) -> dict[str, Any]
     }
 
 
-@router.post("/users", status_code=201, dependencies=[Depends(require_super_admin)])
+@router.post("/users", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_super_admin)])
 async def bootstrap_user(body: UserBootstrapIn, db: DbDep) -> dict[str, Any]:
     await db.execute(text("SELECT set_config('app.tenant_id', :tenant_id, true)"), {"tenant_id": str(body.tenant_id)})
     tenant = (await db.execute(

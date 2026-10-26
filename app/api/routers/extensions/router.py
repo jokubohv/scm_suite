@@ -5,9 +5,10 @@ from __future__ import annotations
 
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Body, Depends, Header
+from fastapi import APIRouter, Depends, Header
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas import extensions as extensions_dto
 from app.modules.extensions.service import ExtensionService
 
 router = APIRouter(prefix="/api/v1", tags=["extensions"])
@@ -65,14 +66,26 @@ def _svc(db: DbDep, principal: PrincipalDep) -> ExtensionService:
     return ExtensionService(db, principal.tenant_id)
 
 
-@router.post("/customer-parts/import", dependencies=[Depends(require_scope(CUSTOMER_PART))])
+@router.post(
+    "/customer-parts/import",
+    dependencies=[Depends(require_scope(CUSTOMER_PART))],
+    response_model=extensions_dto.ImportResultOut,
+)
 async def import_customer_parts(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsImportCustomerPartsIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).import_customer_parts(payload.get("rows") or [], actor_id=principal.app_user_id)
 
 
-@router.get("/customer-parts/resolve", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/customer-parts/resolve",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.CustomerPartResolveOut,
+)
 async def resolve_customer_part(
     db: DbDep, principal: PrincipalDep, external_customer_ref: str, part_number: str
 ) -> dict[str, Any]:
@@ -81,43 +94,73 @@ async def resolve_customer_part(
     )
 
 
-@router.post("/upc-registry/assign-batch", dependencies=[Depends(require_scope(UPC))])
+@router.post(
+    "/upc-registry/assign-batch",
+    dependencies=[Depends(require_scope(UPC))],
+    response_model=extensions_dto.UpcBatchResultOut,
+)
 async def assign_batch(
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: extensions_dto.ExtensionsAssignBatchIn = extensions_dto.ExtensionsAssignBatchIn(),
     idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).assign_batch(
         limit=int(payload.get("limit") or 100), actor_id=principal.app_user_id
     )
 
 
-@router.get("/upc-registry/validate", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/upc-registry/validate",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.UpcValidationOut,
+)
 async def validate_upc(db: DbDep, principal: PrincipalDep, upc_code: str) -> dict[str, Any]:
     return await _svc(db, principal).validate_upc(upc_code)
 
 
-@router.get("/upc-registry/monitoring", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/upc-registry/monitoring",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.UpcMonitoringOut,
+)
 async def monitoring(db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).monitoring()
 
 
-@router.get("/items/{item_id}/warranty", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/items/{item_id}/warranty",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.WarrantyForItemOut,
+)
 async def get_item_warranty(item_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).get_item_warranty(item_id)
 
 
-@router.put("/items/{item_id}/warranty", dependencies=[Depends(require_scope(WARRANTY))])
+@router.put(
+    "/items/{item_id}/warranty",
+    dependencies=[Depends(require_scope(WARRANTY))],
+    response_model=extensions_dto.WarrantyForItemOut,
+)
 async def put_item_warranty(
-    item_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    item_id: str,
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsPutItemWarrantyIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).put_item_warranty(
         item_id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/warranty/registrations", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/warranty/registrations",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.WarrantyRegistrationPage,
+)
 async def list_registrations(
     db: DbDep,
     principal: PrincipalDep,
@@ -132,48 +175,78 @@ async def list_registrations(
     )
 
 
-@router.post("/warranty/registrations", status_code=201, dependencies=[Depends(require_scope(WARRANTY))])
+@router.post(
+    "/warranty/registrations",
+    status_code=201,
+    dependencies=[Depends(require_scope(WARRANTY))],
+    response_model=extensions_dto.WarrantyRegistrationOut,
+)
 async def create_registration(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsCreateRegistrationIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).create_registration(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/warranty/registrations/{registration_id}", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/warranty/registrations/{registration_id}",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.WarrantyRegistrationOut,
+)
 async def get_registration(registration_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).get_registration(registration_id)
 
 
-@router.post("/warranty/registrations/{registration_id}/void", dependencies=[Depends(require_scope(WARRANTY))])
+@router.post(
+    "/warranty/registrations/{registration_id}/void",
+    dependencies=[Depends(require_scope(WARRANTY))],
+    response_model=extensions_dto.ExtensionActionOut,
+)
 async def void_registration(
     registration_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: extensions_dto.ExtensionsVoidRegistrationIn = extensions_dto.ExtensionsVoidRegistrationIn(),
     idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).void_registration(
         registration_id, str(payload.get("reason") or "voided"), actor_id=principal.app_user_id
     )
 
 
-@router.post("/warranty/registrations/import", dependencies=[Depends(require_scope(WARRANTY))])
+@router.post(
+    "/warranty/registrations/import",
+    dependencies=[Depends(require_scope(WARRANTY))],
+    response_model=extensions_dto.ImportResultOut,
+)
 async def import_registrations(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsImportRegistrationsIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).import_registrations(payload.get("rows") or [], actor_id=principal.app_user_id)
 
 
-@router.get("/warranty/coverage", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/warranty/coverage", dependencies=[Depends(require_scope(READ))], response_model=extensions_dto.CoverageOut
+)
 async def warranty_coverage(
     db: DbDep, principal: PrincipalDep, item_id: str, serial_id: str | None = None, as_of: str | None = None
 ) -> dict[str, Any]:
     return await _svc(db, principal).coverage(item_id=item_id, serial_id=serial_id, as_of=as_of)
 
 
-@router.get("/warranty/claims", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/warranty/claims", dependencies=[Depends(require_scope(READ))], response_model=extensions_dto.WarrantyClaimPage
+)
 async def list_claims(
     db: DbDep,
     principal: PrincipalDep,
@@ -185,41 +258,61 @@ async def list_claims(
     return await _svc(db, principal).list_claims(status=status, item_id=item_id, serial_id=serial_id, limit=limit)
 
 
-@router.post("/warranty/claims", status_code=201, dependencies=[Depends(require_scope(CLAIMS))])
+@router.post(
+    "/warranty/claims",
+    status_code=201,
+    dependencies=[Depends(require_scope(CLAIMS))],
+    response_model=extensions_dto.WarrantyClaimOut,
+)
 async def create_claim(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep, principal: PrincipalDep, payload: extensions_dto.ExtensionsCreateClaimIn, idempotency_key: Idem = None
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).create_claim(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/warranty/claims/{claim_id}", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/warranty/claims/{claim_id}",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.WarrantyClaimOut,
+)
 async def get_claim(claim_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).get_claim(claim_id)
 
 
-@router.post("/warranty/claims/{claim_id}/validate", dependencies=[Depends(require_scope(CLAIMS))])
+@router.post(
+    "/warranty/claims/{claim_id}/validate",
+    dependencies=[Depends(require_scope(CLAIMS))],
+    response_model=extensions_dto.WarrantyClaimOut,
+)
 async def validate_claim(
     claim_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: extensions_dto.ExtensionsValidateClaimIn = extensions_dto.ExtensionsValidateClaimIn(),
     idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).validate_claim(
         claim_id, as_of=payload.get("as_of"), override_ref=payload.get("override_ref"), actor_id=principal.app_user_id
     )
 
 
-@router.post("/warranty/claims/{claim_id}/approve", dependencies=[Depends(require_scope(CLAIMS))])
+@router.post(
+    "/warranty/claims/{claim_id}/approve",
+    dependencies=[Depends(require_scope(CLAIMS))],
+    response_model=extensions_dto.WarrantyClaimOut,
+)
 async def approve_claim(
     claim_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: extensions_dto.ExtensionsApproveClaimIn = extensions_dto.ExtensionsApproveClaimIn(),
     idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).approve_claim(
         claim_id,
         approval_ref=payload.get("approval_ref"),
@@ -229,10 +322,19 @@ async def approve_claim(
     )
 
 
-@router.post("/warranty/claims/{claim_id}/reject", dependencies=[Depends(require_scope(CLAIMS))])
+@router.post(
+    "/warranty/claims/{claim_id}/reject",
+    dependencies=[Depends(require_scope(CLAIMS))],
+    response_model=extensions_dto.WarrantyClaimOut,
+)
 async def reject_claim(
-    claim_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    claim_id: str,
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsRejectClaimIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).reject_claim(
         claim_id,
         str(payload.get("reason") or "rejected"),
@@ -241,40 +343,63 @@ async def reject_claim(
     )
 
 
-@router.post("/warranty/claims/{claim_id}/actions", dependencies=[Depends(require_scope(CLAIMS))])
+@router.post(
+    "/warranty/claims/{claim_id}/actions",
+    dependencies=[Depends(require_scope(CLAIMS))],
+    response_model=extensions_dto.WarrantyClaimActionOut,
+)
 async def add_claim_action(
-    claim_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    claim_id: str,
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsAddClaimActionIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).add_claim_action(
         claim_id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.post("/warranty/claims/{claim_id}/complete", dependencies=[Depends(require_scope(CLAIMS))])
+@router.post(
+    "/warranty/claims/{claim_id}/complete",
+    dependencies=[Depends(require_scope(CLAIMS))],
+    response_model=extensions_dto.WarrantyClaimOut,
+)
 async def complete_claim(
     claim_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: extensions_dto.ExtensionsCompleteClaimIn = extensions_dto.ExtensionsCompleteClaimIn(),
     idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).complete_claim(claim_id, payload.get("notes"), actor_id=principal.app_user_id)
 
 
-@router.post("/warranty/claims/{claim_id}/cancel", dependencies=[Depends(require_scope(CLAIMS))])
+@router.post(
+    "/warranty/claims/{claim_id}/cancel",
+    dependencies=[Depends(require_scope(CLAIMS))],
+    response_model=extensions_dto.WarrantyClaimOut,
+)
 async def cancel_claim(
     claim_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: extensions_dto.ExtensionsCancelClaimIn = extensions_dto.ExtensionsCancelClaimIn(),
     idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).cancel_claim(
         claim_id, str(payload.get("reason") or "cancelled"), actor_id=principal.app_user_id
     )
 
 
-@router.get("/warranty/repair-orders", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/warranty/repair-orders",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.WarrantyRepairOrderPage,
+)
 async def list_repair_orders(
     db: DbDep,
     principal: PrincipalDep,
@@ -286,23 +411,39 @@ async def list_repair_orders(
     return await _svc(db, principal).list_repair_orders(status=status, claim_id=claim_id, item_id=item_id, limit=limit)
 
 
-@router.post("/warranty/repair-orders", status_code=201, dependencies=[Depends(require_scope(WARRANTY))])
+@router.post(
+    "/warranty/repair-orders",
+    status_code=201,
+    dependencies=[Depends(require_scope(WARRANTY))],
+    response_model=extensions_dto.WarrantyRepairOrderOut,
+)
 async def create_repair_order(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsCreateRepairOrderIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).create_repair_order(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.patch("/warranty/repair-orders/{repair_id}", dependencies=[Depends(require_scope(WARRANTY))])
+@router.patch(
+    "/warranty/repair-orders/{repair_id}",
+    dependencies=[Depends(require_scope(WARRANTY))],
+    response_model=extensions_dto.WarrantyRepairOrderOut,
+)
 async def patch_repair_order(
-    repair_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    repair_id: str, db: DbDep, principal: PrincipalDep, payload: extensions_dto.ExtensionsPatchRepairOrderIn
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).update_repair_order(repair_id, payload, actor_id=principal.app_user_id)
 
 
-@router.get("/customer-parts", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/customer-parts", dependencies=[Depends(require_scope(READ))], response_model=extensions_dto.CustomerPartPage
+)
 async def list_customer_parts(
     db: DbDep,
     principal: PrincipalDep,
@@ -316,83 +457,134 @@ async def list_customer_parts(
     )
 
 
-@router.post("/customer-parts", status_code=201, dependencies=[Depends(require_scope(CUSTOMER_PART))])
+@router.post(
+    "/customer-parts",
+    status_code=201,
+    dependencies=[Depends(require_scope(CUSTOMER_PART))],
+    response_model=extensions_dto.CustomerPartOut,
+)
 async def create_customer_part(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep,
+    principal: PrincipalDep,
+    payload: extensions_dto.ExtensionsCreateCustomerPartIn,
+    idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).create_customer_part(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/customer-parts/{mapping_id}", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/customer-parts/{mapping_id}",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.CustomerPartOut,
+)
 async def get_customer_part(mapping_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).get_customer_part(mapping_id)
 
 
-@router.patch("/customer-parts/{mapping_id}", dependencies=[Depends(require_scope(CUSTOMER_PART))])
+@router.patch(
+    "/customer-parts/{mapping_id}",
+    dependencies=[Depends(require_scope(CUSTOMER_PART))],
+    response_model=extensions_dto.CustomerPartOut,
+)
 async def patch_customer_part(
-    mapping_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    mapping_id: str, db: DbDep, principal: PrincipalDep, payload: extensions_dto.ExtensionsPatchCustomerPartIn
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).update_customer_part(mapping_id, payload, actor_id=principal.app_user_id)
 
 
-@router.get("/items/{item_id}/customer-parts", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/items/{item_id}/customer-parts",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.CustomerPartPage,
+)
 async def list_item_customer_parts(item_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).list_item_customer_parts(item_id)
 
 
-@router.get("/upc-registry", dependencies=[Depends(require_scope(READ))])
+@router.get("/upc-registry", dependencies=[Depends(require_scope(READ))], response_model=extensions_dto.UpcRegistryPage)
 async def list_upc(
     db: DbDep, principal: PrincipalDep, status: str | None = None, item_id: str | None = None, limit: int = 100
 ) -> dict[str, Any]:
     return await _svc(db, principal).list_upc(status=status, item_id=item_id, limit=limit)
 
 
-@router.post("/upc-registry", status_code=201, dependencies=[Depends(require_scope(UPC))])
+@router.post(
+    "/upc-registry",
+    status_code=201,
+    dependencies=[Depends(require_scope(UPC))],
+    response_model=extensions_dto.UpcRegistryOut,
+)
 async def assign_upc(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep, principal: PrincipalDep, payload: extensions_dto.ExtensionsAssignUpcIn, idempotency_key: Idem = None
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).assign_upc(
         payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
-@router.get("/upc-registry/{registry_id}", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/upc-registry/{registry_id}",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.UpcRegistryOut,
+)
 async def get_upc(registry_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).get_upc(registry_id)
 
 
-@router.post("/upc-registry/{registry_id}/retire", dependencies=[Depends(require_scope(UPC))])
+@router.post(
+    "/upc-registry/{registry_id}/retire",
+    dependencies=[Depends(require_scope(UPC))],
+    response_model=extensions_dto.UpcRegistryOut,
+)
 async def retire_upc(
     registry_id: str,
     db: DbDep,
     principal: PrincipalDep,
-    payload: dict[str, Any] = Body(default_factory=dict),
+    payload: extensions_dto.ExtensionsRetireUpcIn = extensions_dto.ExtensionsRetireUpcIn(),
     idempotency_key: Idem = None,
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).retire_upc(registry_id, payload, actor_id=principal.app_user_id)
 
 
-@router.get("/extensions/settings", dependencies=[Depends(require_scope(READ))])
+@router.get(
+    "/extensions/settings",
+    dependencies=[Depends(require_scope(READ))],
+    response_model=extensions_dto.ExtensionSettingsOut,
+)
 async def get_settings(db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _svc(db, principal).get_settings()
 
 
-@router.patch("/extensions/settings", dependencies=[Depends(require_scope(SETTINGS))])
+@router.patch(
+    "/extensions/settings",
+    dependencies=[Depends(require_scope(SETTINGS))],
+    response_model=extensions_dto.ExtensionSettingsOut,
+)
 async def patch_settings(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: Idem = None
+    db: DbDep, principal: PrincipalDep, payload: extensions_dto.ExtensionsPatchSettingsIn, idempotency_key: Idem = None
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     return await _svc(db, principal).patch_settings(payload, actor_id=principal.app_user_id)
 
 
 # ===================================================== collection-level repair-order update =====
 # The frozen FS-14 contract declares ``PATCH /warranty/repair-orders`` with the repair id in the body;
 # this delegates to the same service method as the by-id PATCH handler.
-@router.patch("/warranty/repair-orders", dependencies=[Depends(require_scope(WARRANTY))])
+@router.patch(
+    "/warranty/repair-orders",
+    dependencies=[Depends(require_scope(WARRANTY))],
+    response_model=extensions_dto.WarrantyRepairOrderOut,
+)
 async def patch_repair_order_collection(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    db: DbDep, principal: PrincipalDep, payload: extensions_dto.ExtensionsPatchRepairOrderCollectionIn
 ) -> dict[str, Any]:
+    payload = payload.model_dump(exclude_unset=True)
     repair_id = payload.get("id") or payload.get("repair_id")
     if not repair_id:
         from fastapi import HTTPException
@@ -401,9 +593,7 @@ async def patch_repair_order_collection(
             status_code=422,
             detail={"code": "VALIDATION_FAILED", "message": "id or repair_id is required", "details": []},
         )
-    return await _svc(db, principal).update_repair_order(
-        str(repair_id), payload, actor_id=principal.app_user_id
-    )
+    return await _svc(db, principal).update_repair_order(str(repair_id), payload, actor_id=principal.app_user_id)
 
 
 # ------------------------------------------------------------------ canonical {id} aliases ----
@@ -428,7 +618,12 @@ _EXTENSIONS_CANONICAL_ALIASES: tuple[tuple[str, str, str, str], ...] = (
     ("POST", "/api/v1/warranty/claims/{claim_id}/complete", "/warranty/claims/{id}/complete", "claim_id"),
     ("POST", "/api/v1/warranty/claims/{claim_id}/cancel", "/warranty/claims/{id}/cancel", "claim_id"),
     ("GET", "/api/v1/warranty/registrations/{registration_id}", "/warranty/registrations/{id}", "registration_id"),
-    ("POST", "/api/v1/warranty/registrations/{registration_id}/void", "/warranty/registrations/{id}/void", "registration_id"),
+    (
+        "POST",
+        "/api/v1/warranty/registrations/{registration_id}/void",
+        "/warranty/registrations/{id}/void",
+        "registration_id",
+    ),
 )
 
 
@@ -464,6 +659,7 @@ def _register_canonical_aliases() -> None:
             methods=[method],
             status_code=int(getattr(alias_route, "status_code", None) or 200),
             dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, declared_path)]))],
+            response_model=getattr(alias_route, "response_model", None),
         )
         ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, declared_path)]
 

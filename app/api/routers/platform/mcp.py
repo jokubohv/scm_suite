@@ -17,14 +17,15 @@ import json
 import re
 import secrets
 from dataclasses import dataclass, field
-from typing import Annotated, Any
+from typing import Any
 
 import httpx
-from fastapi import APIRouter, Body, Depends, Request, Response
+from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import JSONResponse
 
 from app import __version__
 from app.api.deps import require_api_key_auth
+from app.api.schemas.platform import JSONRPCRequest, PlatformObject
 
 router = APIRouter(prefix="/api/v1/mcp", tags=["mcp"])
 
@@ -563,6 +564,7 @@ def _resources(request: Request) -> list[dict[str, Any]]:
 
 @router.get(
     "",
+    response_model=PlatformObject,
     dependencies=[Depends(require_api_key_auth)],
     summary="MCP server information",
     description=(
@@ -593,6 +595,7 @@ async def mcp_info(request: Request) -> dict[str, Any]:
 
 @router.post(
     "",
+    response_model=PlatformObject,
     dependencies=[Depends(require_api_key_auth)],
     summary="MCP Streamable HTTP JSON-RPC endpoint",
     description=(
@@ -602,8 +605,9 @@ async def mcp_info(request: Request) -> dict[str, Any]:
         "JWT bearer tokens are rejected."
     ),
 )
-async def mcp_endpoint(request: Request, payload: Annotated[dict[str, Any], Body(...)]) -> Response:
-    request_id = payload.get("id") if isinstance(payload, dict) else None
+async def mcp_endpoint(request: Request, body: JSONRPCRequest) -> Response:
+    payload = body.model_dump()
+    request_id = payload.get("id")
     parsed, method, params = _jsonrpc_payload(payload, request_id)
     if parsed is None:
         return JSONResponse(_mcp_error(request_id, -32600, str(params)), status_code=400)

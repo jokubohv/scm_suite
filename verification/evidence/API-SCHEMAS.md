@@ -105,3 +105,14 @@ security scheme, or report-route count regresses.
 The response object is typed, but nested report rows and some variable-shape extension payloads are
 intentionally open objects because their columns depend on the report/consumer configuration. All
 first-level API success and error shapes are constrained.
+
+
+## Native boundary DTO migration (final)
+
+The request/response schema-injection fallback has been removed. Every mounted route now uses
+FastAPI-native Pydantic boundary models.
+
+- 646/646 JSON request bodies are named component schemas
+- 1,244/1,244 JSON 2xx responses are typed (0 opaque)
+- 0 operations use `x-schema-source` injection
+- 1,328 tests passing; 204/204 E2E checks; 1,259 operations with 0 × 5xx

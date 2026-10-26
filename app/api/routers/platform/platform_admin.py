@@ -29,6 +29,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, Principal, PrincipalDep, require_account_creation_authority, require_scope
+from app.api.schemas.platform import PlatformObject
 from app.core.repositories.platform_admin import (
     DEFAULT_LIST_LIMIT,
     PlatformAdminError,
@@ -131,7 +132,7 @@ class ReasonIn(BaseModel):
 
 
 # --------------------------------------------------------------------------- routes -----------
-@router.get("/platform/tenants", dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))])
+@router.get("/platform/tenants", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))])
 async def list_tenants(
     repo: RepoDep,
     _: PlatformAdminDep,
@@ -147,7 +148,7 @@ async def list_tenants(
     return {"items": items, "next_cursor": next_cursor, "limit": limit}
 
 
-@router.post("/platform/tenants", status_code=201, dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE)), Depends(require_account_creation_authority)])
+@router.post("/platform/tenants", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE)), Depends(require_account_creation_authority)])
 async def create_tenant(
     body: TenantCreateIn,
     repo: RepoDep,
@@ -220,7 +221,7 @@ async def create_tenant(
 
 
 @router.get(
-    "/platform/tenants/{tenant_id}",
+    "/platform/tenants/{tenant_id}", response_model=PlatformObject,
     dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))],
 )
 async def get_tenant(tenant_id: str, repo: RepoDep, _: PlatformAdminDep) -> dict[str, Any]:
@@ -235,7 +236,7 @@ async def get_tenant(tenant_id: str, repo: RepoDep, _: PlatformAdminDep) -> dict
 
 
 @router.patch(
-    "/platform/tenants/{tenant_id}",
+    "/platform/tenants/{tenant_id}", response_model=PlatformObject,
     dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))],
 )
 async def patch_tenant(
@@ -313,7 +314,7 @@ async def _transition(
 
 
 @router.post(
-    "/platform/tenants/{tenant_id}/suspend",
+    "/platform/tenants/{tenant_id}/suspend", response_model=PlatformObject,
     dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))],
 )
 async def suspend_tenant(
@@ -337,7 +338,7 @@ async def suspend_tenant(
 
 
 @router.post(
-    "/platform/tenants/{tenant_id}/reactivate",
+    "/platform/tenants/{tenant_id}/reactivate", response_model=PlatformObject,
     dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))],
 )
 async def reactivate_tenant(
@@ -361,7 +362,7 @@ async def reactivate_tenant(
 
 
 @router.get(
-    "/platform/tenants/{tenant_id}/memberships",
+    "/platform/tenants/{tenant_id}/memberships", response_model=PlatformObject,
     dependencies=[Depends(require_scope(PLATFORM_TENANT_ADMIN_SCOPE))],
 )
 async def list_tenant_memberships(

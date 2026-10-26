@@ -23,6 +23,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import insert, select
 
 from app.api.deps import DbDep, PrincipalDep, require_account_creation_authority, require_scope, scope_registry
+from app.api.schemas.platform import PlatformObject
 from app.core.models import platform as p
 from app.core.platform_events import emit_platform_event, sod_blocked
 from app.core.repositories.rbac import ALLOWED_SETTING_NAMESPACES, RbacRepository
@@ -240,7 +241,7 @@ def _ensure_role_mutable(registry: ScopeRegistry, role: Mapping[str, Any]) -> No
 
 
 # --------------------------------------------------------------------------- catalogue --------
-@router.get("/admin/permissions", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.get("/admin/permissions", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def list_permissions(
     registry: RegistryDep,
     domain: str | None = None,
@@ -290,7 +291,7 @@ async def list_permissions(
 
 
 # ------------------------------------------------------------------------------- roles --------
-@router.get("/admin/roles", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.get("/admin/roles", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def list_roles(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -316,7 +317,7 @@ async def list_roles(
     }
 
 
-@router.post("/admin/roles", status_code=201, dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.post("/admin/roles", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def create_role(
     body: RoleCreate,
     repo: RepoDep,
@@ -362,7 +363,7 @@ def _role_payload(role: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-@router.get("/admin/roles/{role_id}", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.get("/admin/roles/{role_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def get_role(
     role_id: str,
     repo: RepoDep,
@@ -372,7 +373,7 @@ async def get_role(
     return {"role": _role_payload(role), "scopes": role["scopes"], "data_scopes": role["data_scopes"], "assignment_count": role["assignment_count"]}
 
 
-@router.patch("/admin/roles/{role_id}", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.patch("/admin/roles/{role_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def patch_role(
     role_id: str,
     body: RoleUpdate,
@@ -411,7 +412,7 @@ async def _bulk_reassign(repo: RbacRepository, tenant_id: str, from_role: str, t
         await repo.end_role_assignment(tenant_id, row["user_id"], from_role, actor_id=actor_id)
 
 
-@router.delete("/admin/roles/{role_id}", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.delete("/admin/roles/{role_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def delete_role(
     role_id: str,
     repo: RepoDep,
@@ -442,7 +443,7 @@ async def delete_role(
     return {"id": role_id, "status": "INACTIVE"}
 
 
-@router.post("/admin/roles/{role_id}/clone", status_code=201, dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.post("/admin/roles/{role_id}/clone", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def clone_role(
     role_id: str,
     body: RoleClone,
@@ -476,7 +477,7 @@ async def clone_role(
     return _role_payload(role)
 
 
-@router.put("/admin/roles/{role_id}/permissions", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.put("/admin/roles/{role_id}/permissions", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def replace_role_permissions(
     role_id: str,
     body: RolePermissionsUpdate,
@@ -495,7 +496,7 @@ async def replace_role_permissions(
     return {"scopes": final, "diff": diff}
 
 
-@router.put("/admin/roles/{role_id}/data-scopes", dependencies=[Depends(require_scope(DATA_SCOPE_ADMIN))])
+@router.put("/admin/roles/{role_id}/data-scopes", response_model=PlatformObject, dependencies=[Depends(require_scope(DATA_SCOPE_ADMIN))])
 async def replace_role_data_scopes(
     role_id: str,
     body: RoleDataScopesUpdate,
@@ -513,7 +514,7 @@ async def replace_role_data_scopes(
 
 
 # ------------------------------------------------------------------------------- SoD ----------
-@router.get("/admin/sod-policy", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.get("/admin/sod-policy", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def get_sod_policy(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -530,7 +531,7 @@ async def get_sod_policy(
     }
 
 
-@router.put("/admin/sod-policy", dependencies=[Depends(require_scope(ROLE_ADMIN))])
+@router.put("/admin/sod-policy", response_model=PlatformObject, dependencies=[Depends(require_scope(ROLE_ADMIN))])
 async def update_sod_policy(
     body: SodPolicyIn,
     repo: RepoDep,
@@ -568,7 +569,7 @@ def _user_payload(user: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-@router.get("/admin/users", dependencies=[Depends(require_scope(USER_ADMIN))])
+@router.get("/admin/users", response_model=PlatformObject, dependencies=[Depends(require_scope(USER_ADMIN))])
 async def list_users(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -598,7 +599,7 @@ async def list_users(
     }
 
 
-@router.post("/admin/users", status_code=201, dependencies=[Depends(require_scope(USER_ADMIN)), Depends(require_account_creation_authority)])
+@router.post("/admin/users", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_scope(USER_ADMIN)), Depends(require_account_creation_authority)])
 async def create_user(body: UserCreate, repo: RepoDep, principal: PrincipalDep) -> dict[str, Any]:
     """Create an INVITED membership for an existing identity (or invitation email) and issue the invitation."""
     if not body.email and not body.identity_id:
@@ -652,7 +653,7 @@ async def create_user(body: UserCreate, repo: RepoDep, principal: PrincipalDep) 
             "invitation_id": str(invitation["id"]), "expires_at": invitation["expires_at"]}
 
 
-@router.get("/admin/users/{user_id}", dependencies=[Depends(require_scope(USER_ADMIN))])
+@router.get("/admin/users/{user_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(USER_ADMIN))])
 async def get_user(
     user_id: str,
     repo: RepoDep,
@@ -662,7 +663,7 @@ async def get_user(
     return _user_payload(user)
 
 
-@router.patch("/admin/users/{user_id}", dependencies=[Depends(require_scope(USER_ADMIN))])
+@router.patch("/admin/users/{user_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(USER_ADMIN))])
 async def patch_user(
     user_id: str,
     body: UserUpdate,
@@ -714,7 +715,7 @@ async def patch_user(
     return _user_payload(updated)
 
 
-@router.post("/admin/users/{user_id}/roles", dependencies=[Depends(require_scope(USER_ADMIN))])
+@router.post("/admin/users/{user_id}/roles", response_model=PlatformObject, dependencies=[Depends(require_scope(USER_ADMIN))])
 async def assign_role(
     user_id: str,
     body: RoleAssignment,
@@ -743,7 +744,7 @@ async def assign_role(
     return {"app_user_id": user_id, "roles": updated["roles"]}
 
 
-@router.delete("/admin/users/{user_id}/roles/{role_id}", status_code=204, dependencies=[Depends(require_scope(USER_ADMIN))])
+@router.delete("/admin/users/{user_id}/roles/{role_id}", status_code=204, response_model=None, dependencies=[Depends(require_scope(USER_ADMIN))])
 async def unassign_role(
     user_id: str,
     role_id: str,
@@ -760,7 +761,7 @@ async def unassign_role(
     return None
 
 
-@router.get("/admin/users/{user_id}/effective-permissions", dependencies=[Depends(require_scope(USER_ADMIN))])
+@router.get("/admin/users/{user_id}/effective-permissions", response_model=PlatformObject, dependencies=[Depends(require_scope(USER_ADMIN))])
 async def user_effective_permissions(
     user_id: str,
     repo: RepoDep,
@@ -779,7 +780,7 @@ async def user_effective_permissions(
     }
 
 
-@router.post("/admin/users/{user_id}/revoke-sessions", dependencies=[Depends(require_scope(SESSION_ADMIN))])
+@router.post("/admin/users/{user_id}/revoke-sessions", response_model=PlatformObject, dependencies=[Depends(require_scope(SESSION_ADMIN))])
 async def revoke_user_sessions(
     user_id: str,
     body: ReasonIn,
@@ -795,7 +796,7 @@ async def revoke_user_sessions(
 
 
 # ------------------------------------------------------------------------- invitations --------
-@router.post("/admin/invitations", status_code=201, dependencies=[Depends(require_scope(INVITATION_ADMIN)), Depends(require_account_creation_authority)])
+@router.post("/admin/invitations", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_scope(INVITATION_ADMIN)), Depends(require_account_creation_authority)])
 async def create_invitation(
     body: InvitationCreate,
     repo: RepoDep,
@@ -831,7 +832,7 @@ async def _roles_by_ids(repo: RbacRepository, tenant_id: str, role_ids: Sequence
     return roles
 
 
-@router.get("/admin/invitations", dependencies=[Depends(require_scope(INVITATION_ADMIN))])
+@router.get("/admin/invitations", response_model=PlatformObject, dependencies=[Depends(require_scope(INVITATION_ADMIN))])
 async def list_invitations(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -841,7 +842,7 @@ async def list_invitations(
     return {"items": await repo.list_invitations(principal.tenant_id, status=status, email=email), "next_cursor": None}
 
 
-@router.post("/admin/invitations/{invitation_id}/resend", dependencies=[Depends(require_scope(INVITATION_ADMIN))])
+@router.post("/admin/invitations/{invitation_id}/resend", response_model=PlatformObject, dependencies=[Depends(require_scope(INVITATION_ADMIN))])
 async def resend_invitation(
     invitation_id: str,
     repo: RepoDep,
@@ -853,7 +854,7 @@ async def resend_invitation(
     return {"invitation_id": result["id"], "status": "PENDING", "token": result["token"], "expires_at": result["expires_at"]}
 
 
-@router.post("/admin/invitations/{invitation_id}/revoke", dependencies=[Depends(require_scope(INVITATION_ADMIN))])
+@router.post("/admin/invitations/{invitation_id}/revoke", response_model=PlatformObject, dependencies=[Depends(require_scope(INVITATION_ADMIN))])
 async def revoke_invitation(
     invitation_id: str,
     body: ReasonIn,
@@ -868,7 +869,7 @@ async def revoke_invitation(
     return result
 
 
-@router.post("/admin/invitations/{id}/revoke", dependencies=[Depends(require_scope(INVITATION_ADMIN))])
+@router.post("/admin/invitations/{id}/revoke", response_model=PlatformObject, dependencies=[Depends(require_scope(INVITATION_ADMIN))])
 async def revoke_invitation_canonical(
     id: str,
     body: ReasonIn,
@@ -880,7 +881,7 @@ async def revoke_invitation_canonical(
 
 
 # ---------------------------------------------------------------------- tenant settings ----
-@router.get("/admin/tenant-settings", dependencies=[Depends(require_scope(TENANT_ADMIN))])
+@router.get("/admin/tenant-settings", response_model=PlatformObject, dependencies=[Depends(require_scope(TENANT_ADMIN))])
 async def list_tenant_settings(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -904,8 +905,8 @@ def _validate_setting(namespace: str, key: str, value: Any, value_type: str) -> 
         raise _unprocessable("INVALID_VALUE_TYPE", "invalid setting value_type", value_type=value_type)
 
 
-@router.put("/admin/tenant-settings/{namespace}/{key}", dependencies=[Depends(require_scope(TENANT_ADMIN))])
-@router.patch("/admin/tenant-settings/{namespace}/{key}", dependencies=[Depends(require_scope(TENANT_ADMIN))])
+@router.put("/admin/tenant-settings/{namespace}/{key}", response_model=PlatformObject, dependencies=[Depends(require_scope(TENANT_ADMIN))])
+@router.patch("/admin/tenant-settings/{namespace}/{key}", response_model=PlatformObject, dependencies=[Depends(require_scope(TENANT_ADMIN))])
 async def put_tenant_setting(
     namespace: str,
     key: str,
@@ -926,7 +927,7 @@ async def put_tenant_setting(
     return setting
 
 
-@router.patch("/admin/tenant-settings", dependencies=[Depends(require_scope(TENANT_ADMIN))])
+@router.patch("/admin/tenant-settings", response_model=PlatformObject, dependencies=[Depends(require_scope(TENANT_ADMIN))])
 async def patch_tenant_settings(
     body: TenantSettingsPatch,
     repo: RepoDep,

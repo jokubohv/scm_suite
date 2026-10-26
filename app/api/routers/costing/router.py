@@ -19,6 +19,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas import costing as costing_dto
 from app.contracts.costing import schemas as contracts
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
@@ -138,7 +139,15 @@ def _service(db: AsyncSession, principal: PrincipalDep) -> CostingService:
 
 
 async def _idempotent(
-    *, db: DbDep, principal: PrincipalDep, endpoint_id: str, key: str, method: str, path: str, body: Any, response: Response
+    *,
+    db: DbDep,
+    principal: PrincipalDep,
+    endpoint_id: str,
+    key: str,
+    method: str,
+    path: str,
+    body: Any,
+    response: Response,
 ) -> tuple[IdempotencyStore, dict[str, Any] | None]:
     store = IdempotencyStore(db)
     fingerprint = build_fingerprint(
@@ -159,7 +168,14 @@ async def _idempotent(
 
 
 async def _finish(
-    store: IdempotencyStore, *, principal: PrincipalDep, endpoint_id: str, key: str, status: int, body: dict[str, Any], resource_id: Any = None
+    store: IdempotencyStore,
+    *,
+    principal: PrincipalDep,
+    endpoint_id: str,
+    key: str,
+    status: int,
+    body: dict[str, Any],
+    resource_id: Any = None,
 ) -> dict[str, Any]:
     await store.complete(
         tenant_id=principal.tenant_id,
@@ -207,7 +223,9 @@ RecalcRunner = Annotated[object, Depends(require_scope(RECALC_RUN))]
 
 
 # ------------------------------------------------------------------------- read endpoints -----
-@router.get("/costs/item-costs", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/costs/item-costs", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.ItemCostPage
+)
 async def list_item_costs(
     db: DbDep,
     principal: PrincipalDep,
@@ -232,7 +250,11 @@ async def list_item_costs(
     )
 
 
-@router.get("/costs/item-costs/{item_cost_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/costs/item-costs/{item_cost_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.ItemCostOut,
+)
 async def get_item_cost(item_cost_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_item_cost(item_cost_id)
@@ -240,7 +262,11 @@ async def get_item_cost(item_cost_id: str, db: DbDep, principal: PrincipalDep, _
         _raise(exc)
 
 
-@router.get("/costs/item-costs/{item_cost_id}/layers", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/costs/item-costs/{item_cost_id}/layers",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostLayerPage,
+)
 async def get_item_cost_layers(
     item_cost_id: str, db: DbDep, principal: PrincipalDep, _: Read, status: str | None = None, as_of: date | None = None
 ) -> dict[str, Any]:
@@ -251,7 +277,11 @@ async def get_item_cost_layers(
         _raise(exc)
 
 
-@router.get("/costs/item-costs/{item_cost_id}/consumption", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/costs/item-costs/{item_cost_id}/consumption",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostLayerConsumptionPage,
+)
 async def get_consumption(item_cost_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         return await _service(db, principal).consumption(item_cost_id)
@@ -259,34 +289,48 @@ async def get_consumption(item_cost_id: str, db: DbDep, principal: PrincipalDep,
         _raise(exc)
 
 
-@router.get("/costs/valuation", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/costs/valuation", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.CostingValuationOut
+)
 async def valuation(
     db: DbDep, principal: PrincipalDep, item_id: str | None = None, location_id: str | None = None
 ) -> dict[str, Any]:
     return await _service(db, principal).valuation(item_id=item_id, location_id=location_id)
 
 
-@router.get("/costs/valuation/by-layer", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/costs/valuation/by-layer",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostingLayerValuationOut,
+)
 async def valuation_by_layer(
     db: DbDep, principal: PrincipalDep, item_id: str | None = None, location_id: str | None = None
 ) -> dict[str, Any]:
     return await _service(db, principal).valuation_by_layer(item_id=item_id, location_id=location_id)
 
 
-@router.get("/costs/pending-recalculations", dependencies=[Depends(require_scope(COST_READ))])
-async def pending_recalculations(
-    db: DbDep, principal: PrincipalDep, item_id: str | None = None
-) -> dict[str, Any]:
+@router.get(
+    "/costs/pending-recalculations",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostingPendingRecalculationOut,
+)
+async def pending_recalculations(db: DbDep, principal: PrincipalDep, item_id: str | None = None) -> dict[str, Any]:
     return await _service(db, principal).pending_recalculations(item_id=item_id)
 
 
 # ------------------------------------------------------------------------- categories ---------
-@router.get("/cost-categories", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-categories", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.CostCategoryPage
+)
 async def list_categories(db: DbDep, principal: PrincipalDep, active: bool | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_categories(active=active)
 
 
-@router.get("/cost-categories/{category_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-categories/{category_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostCategoryOut,
+)
 async def get_category(category_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_category(category_id)
@@ -294,47 +338,101 @@ async def get_category(category_id: str, db: DbDep, principal: PrincipalDep) -> 
         _raise(exc)
 
 
-@router.post("/cost-categories", status_code=201, dependencies=[Depends(require_scope(COST_MANAGE))])
+@router.post(
+    "/cost-categories",
+    status_code=201,
+    dependencies=[Depends(require_scope(COST_MANAGE))],
+    response_model=costing_dto.CostCategoryOut,
+)
 async def create_category(
-    body: contracts.CostCategoryCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.CostCategoryCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:cost-categories:create"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/cost-categories", body=body.model_dump(), response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/cost-categories",
+        body=body.model_dump(),
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_category(body.model_dump())
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.patch("/cost-categories/{category_id}", dependencies=[Depends(require_scope(COST_MANAGE))])
+@router.patch(
+    "/cost-categories/{category_id}",
+    dependencies=[Depends(require_scope(COST_MANAGE))],
+    response_model=costing_dto.CostCategoryOut,
+)
 async def update_category(
-    category_id: str, body: contracts.CostCategoryUpdate, db: DbDep, principal: PrincipalDep,
-    response: Response, idempotency_key: IdempotencyKey,
+    category_id: str,
+    body: contracts.CostCategoryUpdate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
+    idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:cost-categories:update"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="PATCH", path=f"/api/v1/cost-categories/{category_id}", body=body.model_dump(), response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="PATCH",
+        path=f"/api/v1/cost-categories/{category_id}",
+        body=body.model_dump(),
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).update_category(category_id, body.model_dump(exclude_unset=True))
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=category_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=category_id,
+    )
 
 
 # ------------------------------------------------------------------------- templates ----------
-@router.get("/cost-templates", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-templates", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.CostTemplatePage
+)
 async def list_templates(db: DbDep, principal: PrincipalDep, inactive: bool | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_templates(inactive=inactive)
 
 
-@router.get("/cost-templates/{template_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-templates/{template_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostTemplateOut,
+)
 async def get_template(template_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_template(template_id)
@@ -342,48 +440,103 @@ async def get_template(template_id: str, db: DbDep, principal: PrincipalDep) -> 
         _raise(exc)
 
 
-@router.post("/cost-templates", status_code=201, dependencies=[Depends(require_scope(COST_MANAGE))])
+@router.post(
+    "/cost-templates",
+    status_code=201,
+    dependencies=[Depends(require_scope(COST_MANAGE))],
+    response_model=costing_dto.CostTemplateOut,
+)
 async def create_template(
-    body: contracts.CostTemplateCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.CostTemplateCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:cost-templates:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/cost-templates", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/cost-templates",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_template(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.patch("/cost-templates/{template_id}", dependencies=[Depends(require_scope(COST_MANAGE))])
+@router.patch(
+    "/cost-templates/{template_id}",
+    dependencies=[Depends(require_scope(COST_MANAGE))],
+    response_model=costing_dto.CostTemplateOut,
+)
 async def update_template(
-    template_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, response: Response,
+    template_id: str,
+    body: costing_dto.CostingUpdateTemplateIn,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "costing:cost-templates:update"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="PATCH", path=f"/api/v1/cost-templates/{template_id}", body=body, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="PATCH",
+        path=f"/api/v1/cost-templates/{template_id}",
+        body=body,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).update_template(template_id, body)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=template_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=template_id,
+    )
 
 
 # ------------------------------------------------------------------------- versions ----------
-@router.get("/cost-versions", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-versions", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.CostVersionPage
+)
 async def list_versions(db: DbDep, principal: PrincipalDep, status: str | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_versions(status=status)
 
 
-@router.get("/cost-versions/{version_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-versions/{version_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostVersionOut,
+)
 async def get_version(version_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_version(version_id)
@@ -391,25 +544,53 @@ async def get_version(version_id: str, db: DbDep, principal: PrincipalDep) -> di
         _raise(exc)
 
 
-@router.post("/cost-versions", status_code=201, dependencies=[Depends(require_scope(STANDARD_ACTIVATE))])
+@router.post(
+    "/cost-versions",
+    status_code=201,
+    dependencies=[Depends(require_scope(STANDARD_ACTIVATE))],
+    response_model=costing_dto.CostVersionOut,
+)
 async def create_version(
-    body: contracts.CostVersionCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.CostVersionCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:cost-versions:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/cost-versions", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/cost-versions",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_version(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.get("/cost-versions/{version_id}/planned-standards", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-versions/{version_id}/planned-standards",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.PlannedStandardCostPage,
+)
 async def list_planned_standards(
     version_id: str, db: DbDep, principal: PrincipalDep, item_id: str | None = None
 ) -> dict[str, Any]:
@@ -419,115 +600,240 @@ async def list_planned_standards(
         _raise(exc)
 
 
-@router.post("/cost-versions/{version_id}/planned-standards", dependencies=[Depends(require_scope(STANDARD_ACTIVATE))])
+@router.post(
+    "/cost-versions/{version_id}/planned-standards",
+    dependencies=[Depends(require_scope(STANDARD_ACTIVATE))],
+    response_model=costing_dto.PlannedStandardUpsertOut,
+)
 async def upsert_planned_standards(
-    version_id: str, body: contracts.PlannedStandardUpsert, db: DbDep, principal: PrincipalDep,
-    response: Response, idempotency_key: IdempotencyKey,
+    version_id: str,
+    body: contracts.PlannedStandardUpsert,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
+    idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:planned-standards:upsert"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path=f"/api/v1/cost-versions/{version_id}/planned-standards",
-                                     body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path=f"/api/v1/cost-versions/{version_id}/planned-standards",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).upsert_planned_standards(version_id, body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=version_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=version_id,
+    )
 
 
-@router.post("/cost-versions/{version_id}/approve", dependencies=[Depends(require_scope(STANDARD_ACTIVATE))])
+@router.post(
+    "/cost-versions/{version_id}/approve",
+    dependencies=[Depends(require_scope(STANDARD_ACTIVATE))],
+    response_model=costing_dto.CostVersionOut,
+)
 async def approve_version(
-    version_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey,
-    body: dict[str, Any] | None = None,
+    version_id: str,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
+    idempotency_key: IdempotencyKey,
+    body: costing_dto.CostingApproveVersionIn | None = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True) if body is not None else None
     endpoint = "costing:cost-versions:approve"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path=f"/api/v1/cost-versions/{version_id}/approve",
-                                     body=body or {}, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path=f"/api/v1/cost-versions/{version_id}/approve",
+        body=body or {},
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).approve_version(version_id, body or {})
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=version_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=version_id,
+    )
 
 
-@router.post("/cost-versions/{version_id}/activate", dependencies=[Depends(require_scope(STANDARD_ACTIVATE))])
+@router.post(
+    "/cost-versions/{version_id}/activate",
+    dependencies=[Depends(require_scope(STANDARD_ACTIVATE))],
+    response_model=costing_dto.CostVersionOut,
+)
 async def activate_version(
     version_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:
     endpoint = "costing:cost-versions:activate"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path=f"/api/v1/cost-versions/{version_id}/activate",
-                                     body={}, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path=f"/api/v1/cost-versions/{version_id}/activate",
+        body={},
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).activate_version(version_id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=version_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=version_id,
+    )
 
 
-@router.get("/standard-costs", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/standard-costs", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.StandardCostPage
+)
 async def list_standard_costs(
-    db: DbDep, principal: PrincipalDep, item_id: str | None = None,
-    cost_category_id: str | None = None, as_of: date | None = None,
+    db: DbDep,
+    principal: PrincipalDep,
+    item_id: str | None = None,
+    cost_category_id: str | None = None,
+    as_of: date | None = None,
 ) -> dict[str, Any]:
     return await _service(db, principal).list_standard_costs(
         item_id=item_id, cost_category_id=cost_category_id, as_of=as_of.isoformat() if as_of else None
     )
 
 
-@router.post("/standard-costs", status_code=201, dependencies=[Depends(require_scope(STANDARD_ACTIVATE))])
+@router.post(
+    "/standard-costs",
+    status_code=201,
+    dependencies=[Depends(require_scope(STANDARD_ACTIVATE))],
+    response_model=costing_dto.StandardCostOut,
+)
 async def create_standard_cost(
-    body: contracts.StandardCostIn, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.StandardCostIn,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:standard-costs:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/standard-costs", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/standard-costs",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_standard_cost(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
 # ------------------------------------------------------------------------- rollups -----------
-@router.post("/cost-rollups", status_code=201, dependencies=[Depends(require_scope(STANDARD_ROLLUP))])
+@router.post(
+    "/cost-rollups",
+    status_code=201,
+    dependencies=[Depends(require_scope(STANDARD_ROLLUP))],
+    response_model=costing_dto.RollupResultOut,
+)
 async def create_rollup(
-    body: contracts.RollupRequest, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.RollupRequest,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:cost-rollups:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/cost-rollups", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/cost-rollups",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_rollup(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["run_id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["run_id"],
+    )
 
 
-@router.get("/cost-rollups", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-rollups", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.CostRollupPage
+)
 async def list_rollups(
     db: DbDep, principal: PrincipalDep, status: str | None = None, cost_version_id: str | None = None
 ) -> dict[str, Any]:
     return await _service(db, principal).list_rollups(status=status, cost_version_id=cost_version_id)
 
 
-@router.get("/cost-rollups/{run_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-rollups/{run_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostRollupRunOut,
+)
 async def get_rollup(run_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_rollup(run_id)
@@ -535,10 +841,18 @@ async def get_rollup(run_id: str, db: DbDep, principal: PrincipalDep) -> dict[st
         _raise(exc)
 
 
-@router.get("/cost-rollups/{run_id}/lines", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-rollups/{run_id}/lines",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostRollupLinePage,
+)
 async def get_rollup_lines(
-    run_id: str, db: DbDep, principal: PrincipalDep, item_id: str | None = None,
-    cost_category_id: str | None = None, bom_level: int | None = None,
+    run_id: str,
+    db: DbDep,
+    principal: PrincipalDep,
+    item_id: str | None = None,
+    cost_category_id: str | None = None,
+    bom_level: int | None = None,
 ) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_rollup_lines(
@@ -549,30 +863,62 @@ async def get_rollup_lines(
 
 
 # ------------------------------------------------------------------------- revaluations ------
-@router.post("/cost-revaluations", status_code=201, dependencies=[Depends(require_scope(REVALUATION_CREATE))])
+@router.post(
+    "/cost-revaluations",
+    status_code=201,
+    dependencies=[Depends(require_scope(REVALUATION_CREATE))],
+    response_model=costing_dto.CostRevaluationOut,
+)
 async def create_revaluation(
-    body: contracts.RevaluationCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.RevaluationCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:cost-revaluations:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/cost-revaluations", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/cost-revaluations",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_revaluation(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.get("/cost-revaluations", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-revaluations",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostRevaluationPage,
+)
 async def list_revaluations(db: DbDep, principal: PrincipalDep, status: str | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_revaluations(status=status)
 
 
-@router.get("/cost-revaluations/{revaluation_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cost-revaluations/{revaluation_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CostRevaluationOut,
+)
 async def get_revaluation(revaluation_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_revaluation(revaluation_id)
@@ -585,67 +931,130 @@ def _revaluation_transition(target: str) -> Any:
         revaluation_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
     ) -> dict[str, Any]:
         endpoint = f"costing:cost-revaluations:{target}"
-        store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                         method="POST", path=f"/api/v1/cost-revaluations/{{id}}/{target}",
-                                         body={}, response=response)
+        store, replay = await _idempotent(
+            db=db,
+            principal=principal,
+            endpoint_id=endpoint,
+            key=idempotency_key,
+            method="POST",
+            path=f"/api/v1/cost-revaluations/{{id}}/{target}",
+            body={},
+            response=response,
+        )
         if replay is not None:
             return replay
         try:
             row = await _service(db, principal).transition_revaluation(revaluation_id, target)
         except Exception as exc:  # noqa: BLE001
             _raise(exc)
-        return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=revaluation_id)
+        return await _finish(
+            store,
+            principal=principal,
+            endpoint_id=endpoint,
+            key=idempotency_key,
+            status=200,
+            body=row,
+            resource_id=revaluation_id,
+        )
+
     return handler
 
 
-for _target, _scope in (("submit", REVALUATION_CREATE), ("approve", REVALUATION_APPROVE), ("post", REVALUATION_POST), ("reverse", REVALUATION_POST)):
+for _target, _scope in (
+    ("submit", REVALUATION_CREATE),
+    ("approve", REVALUATION_APPROVE),
+    ("post", REVALUATION_POST),
+    ("reverse", REVALUATION_POST),
+):
     router.add_api_route(
         f"/cost-revaluations/{{revaluation_id}}/{_target}",
         _revaluation_transition(_target),
         methods=["POST"],
         status_code=200,
         dependencies=[Depends(require_scope(_scope))],
+        response_model=costing_dto.CostRevaluationOut,
     )
 
 
 # ------------------------------------------------------------------------- variances ---------
-@router.get("/cost-variances", dependencies=[Depends(require_scope(VARIANCE_VIEW))])
+@router.get(
+    "/cost-variances", dependencies=[Depends(require_scope(VARIANCE_VIEW))], response_model=costing_dto.CostVariancePage
+)
 async def list_variances(
-    db: DbDep, principal: PrincipalDep, variance_type: str | None = None, item_id: str | None = None,
-    fiscal_period_id: str | None = None, work_order_id: str | None = None, status: str | None = None,
+    db: DbDep,
+    principal: PrincipalDep,
+    variance_type: str | None = None,
+    item_id: str | None = None,
+    fiscal_period_id: str | None = None,
+    work_order_id: str | None = None,
+    status: str | None = None,
     limit: int = 100,
 ) -> dict[str, Any]:
     return await _service(db, principal).list_variances(
-        variance_type=variance_type, item_id=item_id, fiscal_period_id=fiscal_period_id,
-        work_order_id=work_order_id, status=status, limit=_limit(limit),
+        variance_type=variance_type,
+        item_id=item_id,
+        fiscal_period_id=fiscal_period_id,
+        work_order_id=work_order_id,
+        status=status,
+        limit=_limit(limit),
     )
 
 
 # ------------------------------------------------------------------------- landed cost -------
-@router.post("/landed-costs", status_code=201, dependencies=[Depends(require_scope(LANDED_CREATE))])
+@router.post(
+    "/landed-costs",
+    status_code=201,
+    dependencies=[Depends(require_scope(LANDED_CREATE))],
+    response_model=costing_dto.LandedCostOut,
+)
 async def create_landed_cost(
-    body: contracts.LandedCostCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.LandedCostCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:landed-costs:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/landed-costs", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/landed-costs",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_landed_cost(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.get("/landed-costs", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/landed-costs", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.LandedCostPage
+)
 async def list_landed_costs(db: DbDep, principal: PrincipalDep, status: str | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_landed_costs(status=status)
 
 
-@router.get("/landed-costs/{landed_cost_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/landed-costs/{landed_cost_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.LandedCostOut,
+)
 async def get_landed_cost(landed_cost_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_landed_cost(landed_cost_id)
@@ -658,29 +1067,57 @@ def _landed_transition(target: str) -> Any:
         landed_cost_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
     ) -> dict[str, Any]:
         endpoint = f"costing:landed-costs:{target}"
-        store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                         method="POST", path=f"/api/v1/landed-costs/{{id}}/{target}", body={}, response=response)
+        store, replay = await _idempotent(
+            db=db,
+            principal=principal,
+            endpoint_id=endpoint,
+            key=idempotency_key,
+            method="POST",
+            path=f"/api/v1/landed-costs/{{id}}/{target}",
+            body={},
+            response=response,
+        )
         if replay is not None:
             return replay
         try:
             row = await _service(db, principal).transition_landed_cost(landed_cost_id, target)
         except Exception as exc:  # noqa: BLE001
             _raise(exc)
-        return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=landed_cost_id)
+        return await _finish(
+            store,
+            principal=principal,
+            endpoint_id=endpoint,
+            key=idempotency_key,
+            status=200,
+            body=row,
+            resource_id=landed_cost_id,
+        )
+
     return handler
 
 
-for _target, _scope in (("submit", LANDED_CREATE), ("approve", LANDED_POST), ("post", LANDED_POST), ("reverse", LANDED_POST), ("void", LANDED_CREATE)):
+for _target, _scope in (
+    ("submit", LANDED_CREATE),
+    ("approve", LANDED_POST),
+    ("post", LANDED_POST),
+    ("reverse", LANDED_POST),
+    ("void", LANDED_CREATE),
+):
     router.add_api_route(
         f"/landed-costs/{{landed_cost_id}}/{_target}",
         _landed_transition(_target),
         methods=["POST"],
         status_code=200,
         dependencies=[Depends(require_scope(_scope))],
+        response_model=costing_dto.LandedCostOut,
     )
 
 
-@router.get("/landed-costs/{landed_cost_id}/allocations", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/landed-costs/{landed_cost_id}/allocations",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.LandedCostAllocationPage,
+)
 async def get_landed_allocations(
     landed_cost_id: str, db: DbDep, principal: PrincipalDep, line_id: str | None = None
 ) -> dict[str, Any]:
@@ -690,31 +1127,63 @@ async def get_landed_allocations(
         _raise(exc)
 
 
-@router.post("/landed-costs/{landed_cost_id}/estimated-costs", dependencies=[Depends(require_scope(ELC_MANAGE))])
+@router.post(
+    "/landed-costs/{landed_cost_id}/estimated-costs",
+    dependencies=[Depends(require_scope(ELC_MANAGE))],
+    response_model=costing_dto.EstimatedLandedCostOut,
+)
 async def create_estimated_landed_cost(
-    landed_cost_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, response: Response,
+    landed_cost_id: str,
+    body: costing_dto.CostingCreateEstimatedLandedCostIn,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "costing:landed-costs:estimated"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path=f"/api/v1/landed-costs/{landed_cost_id}/estimated-costs",
-                                     body=body, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path=f"/api/v1/landed-costs/{landed_cost_id}/estimated-costs",
+        body=body,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_estimated_landed_cost(landed_cost_id, body)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=landed_cost_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=landed_cost_id,
+    )
 
 
 # ---------------------------------------------------------------- ELC templates -------------
-@router.get("/estimated-landed-cost-templates", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/estimated-landed-cost-templates",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.EstimatedLandedCostTemplatePage,
+)
 async def list_elc_templates(db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).list_elc_templates()
 
 
-@router.get("/estimated-landed-cost-templates/{template_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/estimated-landed-cost-templates/{template_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.EstimatedLandedCostTemplateOut,
+)
 async def get_elc_template(template_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_elc_template(template_id)
@@ -722,67 +1191,145 @@ async def get_elc_template(template_id: str, db: DbDep, principal: PrincipalDep)
         _raise(exc)
 
 
-@router.post("/estimated-landed-cost-templates", status_code=201, dependencies=[Depends(require_scope(ELC_MANAGE))])
+@router.post(
+    "/estimated-landed-cost-templates",
+    status_code=201,
+    dependencies=[Depends(require_scope(ELC_MANAGE))],
+    response_model=costing_dto.EstimatedLandedCostTemplateOut,
+)
 async def create_elc_template(
-    body: contracts.EstimatedLandedCostTemplateCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.EstimatedLandedCostTemplateCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:elc-templates:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/estimated-landed-cost-templates", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/estimated-landed-cost-templates",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_elc_template(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.patch("/estimated-landed-cost-templates/{template_id}", dependencies=[Depends(require_scope(ELC_MANAGE))])
+@router.patch(
+    "/estimated-landed-cost-templates/{template_id}",
+    dependencies=[Depends(require_scope(ELC_MANAGE))],
+    response_model=costing_dto.EstimatedLandedCostTemplateOut,
+)
 async def update_elc_template(
-    template_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, response: Response,
+    template_id: str,
+    body: costing_dto.CostingUpdateElcTemplateIn,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "costing:elc-templates:update"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="PATCH", path=f"/api/v1/estimated-landed-cost-templates/{template_id}",
-                                     body=body, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="PATCH",
+        path=f"/api/v1/estimated-landed-cost-templates/{template_id}",
+        body=body,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).update_elc_template(template_id, body)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=template_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=template_id,
+    )
 
 
 # ---------------------------------------------------------------- COGS adjustments ----------
-@router.post("/cogs-adjustments", status_code=201, dependencies=[Depends(require_scope(COGS_CREATE))])
+@router.post(
+    "/cogs-adjustments",
+    status_code=201,
+    dependencies=[Depends(require_scope(COGS_CREATE))],
+    response_model=costing_dto.CogsAdjustmentOut,
+)
 async def create_cogs_adjustment(
-    body: contracts.CogsAdjustmentCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.CogsAdjustmentCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:cogs-adjustments:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/cogs-adjustments", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/cogs-adjustments",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_cogs_adjustment(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.get("/cogs-adjustments", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cogs-adjustments", dependencies=[Depends(require_scope(COST_READ))], response_model=costing_dto.CogsAdjustmentPage
+)
 async def list_cogs_adjustments(db: DbDep, principal: PrincipalDep, status: str | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_cogs_adjustments(status=status)
 
 
-@router.get("/cogs-adjustments/{adjustment_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/cogs-adjustments/{adjustment_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.CogsAdjustmentOut,
+)
 async def get_cogs_adjustment(adjustment_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_cogs_adjustment(adjustment_id)
@@ -795,15 +1342,32 @@ def _cogs_transition(target: str) -> Any:
         adjustment_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
     ) -> dict[str, Any]:
         endpoint = f"costing:cogs-adjustments:{target}"
-        store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                         method="POST", path=f"/api/v1/cogs-adjustments/{{id}}/{target}", body={}, response=response)
+        store, replay = await _idempotent(
+            db=db,
+            principal=principal,
+            endpoint_id=endpoint,
+            key=idempotency_key,
+            method="POST",
+            path=f"/api/v1/cogs-adjustments/{{id}}/{target}",
+            body={},
+            response=response,
+        )
         if replay is not None:
             return replay
         try:
             row = await _service(db, principal).transition_cogs_adjustment(adjustment_id, target)
         except Exception as exc:  # noqa: BLE001
             _raise(exc)
-        return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=adjustment_id)
+        return await _finish(
+            store,
+            principal=principal,
+            endpoint_id=endpoint,
+            key=idempotency_key,
+            status=200,
+            body=row,
+            resource_id=adjustment_id,
+        )
+
     return handler
 
 
@@ -814,34 +1378,67 @@ for _target, _scope in (("submit", COGS_CREATE), ("approve", COGS_POST), ("post"
         methods=["POST"],
         status_code=200,
         dependencies=[Depends(require_scope(_scope))],
+        response_model=costing_dto.CogsAdjustmentOut,
     )
 
 
 # ---------------------------------------------------------------- groups ---------------------
-@router.post("/location-costing-groups", status_code=201, dependencies=[Depends(require_scope(GROUP_MANAGE))])
+@router.post(
+    "/location-costing-groups",
+    status_code=201,
+    dependencies=[Depends(require_scope(GROUP_MANAGE))],
+    response_model=costing_dto.LocationCostingGroupOut,
+)
 async def create_group(
-    body: contracts.CostingGroupCreate, db: DbDep, principal: PrincipalDep, response: Response,
+    body: contracts.CostingGroupCreate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:groups:create"
     body_dict = body.model_dump()
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/location-costing-groups", body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/location-costing-groups",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).create_group(body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=201,
+        body=row,
+        resource_id=row["id"],
+    )
 
 
-@router.get("/location-costing-groups", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/location-costing-groups",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.LocationCostingGroupPage,
+)
 async def list_groups(db: DbDep, principal: PrincipalDep, active: bool | None = None) -> dict[str, Any]:
     return await _service(db, principal).list_groups(active=active)
 
 
-@router.get("/location-costing-groups/{group_id}", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/location-costing-groups/{group_id}",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.LocationCostingGroupOut,
+)
 async def get_group(group_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_group(group_id)
@@ -849,79 +1446,172 @@ async def get_group(group_id: str, db: DbDep, principal: PrincipalDep) -> dict[s
         _raise(exc)
 
 
-@router.patch("/location-costing-groups/{group_id}", dependencies=[Depends(require_scope(GROUP_MANAGE))])
+@router.patch(
+    "/location-costing-groups/{group_id}",
+    dependencies=[Depends(require_scope(GROUP_MANAGE))],
+    response_model=costing_dto.LocationCostingGroupOut,
+)
 async def update_group(
-    group_id: str, body: contracts.CostingGroupUpdate, db: DbDep, principal: PrincipalDep,
-    response: Response, idempotency_key: IdempotencyKey,
+    group_id: str,
+    body: contracts.CostingGroupUpdate,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
+    idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:groups:update"
     body_dict = body.model_dump(exclude_unset=True)
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="PATCH", path=f"/api/v1/location-costing-groups/{group_id}",
-                                     body=body_dict, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="PATCH",
+        path=f"/api/v1/location-costing-groups/{group_id}",
+        body=body_dict,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).update_group(group_id, body_dict)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=group_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=group_id,
+    )
 
 
-@router.post("/location-costing-groups/{group_id}/members", dependencies=[Depends(require_scope(GROUP_MANAGE))])
+@router.post(
+    "/location-costing-groups/{group_id}/members",
+    dependencies=[Depends(require_scope(GROUP_MANAGE))],
+    response_model=costing_dto.LocationCostingGroupOut,
+)
 async def add_group_member(
-    group_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, response: Response,
+    group_id: str,
+    body: costing_dto.CostingAddGroupMemberIn,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "costing:groups:add-member"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path=f"/api/v1/location-costing-groups/{group_id}/members",
-                                     body=body, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path=f"/api/v1/location-costing-groups/{group_id}/members",
+        body=body,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).add_group_member(group_id, str(body["location_id"]))
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=group_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=group_id,
+    )
 
 
-@router.delete("/location-costing-groups/{group_id}/members/{location_id}", dependencies=[Depends(require_scope(GROUP_MANAGE))])
+@router.delete(
+    "/location-costing-groups/{group_id}/members/{location_id}",
+    dependencies=[Depends(require_scope(GROUP_MANAGE))],
+    response_model=costing_dto.LocationCostingGroupOut,
+)
 async def remove_group_member(
-    group_id: str, location_id: str, db: DbDep, principal: PrincipalDep, response: Response,
+    group_id: str,
+    location_id: str,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
     endpoint = "costing:groups:remove-member"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="DELETE", path=f"/api/v1/location-costing-groups/{group_id}/members/{location_id}",
-                                     body={}, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="DELETE",
+        path=f"/api/v1/location-costing-groups/{group_id}/members/{location_id}",
+        body={},
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).remove_group_member(group_id, location_id)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=group_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=group_id,
+    )
 
 
-@router.post("/location-costing-groups/{group_id}/inactivate", dependencies=[Depends(require_scope(GROUP_MANAGE))])
+@router.post(
+    "/location-costing-groups/{group_id}/inactivate",
+    dependencies=[Depends(require_scope(GROUP_MANAGE))],
+    response_model=costing_dto.LocationCostingGroupOut,
+)
 async def inactivate_group(
     group_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:
     endpoint = "costing:groups:inactivate"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path=f"/api/v1/location-costing-groups/{group_id}/inactivate",
-                                     body={}, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path=f"/api/v1/location-costing-groups/{group_id}/inactivate",
+        body={},
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).update_group(group_id, {"is_active": False})
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=group_id)
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=200,
+        body=row,
+        resource_id=group_id,
+    )
 
 
-@router.get("/group-average-balances", dependencies=[Depends(require_scope(COST_READ))])
+@router.get(
+    "/group-average-balances",
+    dependencies=[Depends(require_scope(COST_READ))],
+    response_model=costing_dto.GroupAverageBalancePage,
+)
 async def group_average_balances(
     db: DbDep, principal: PrincipalDep, item_id: str | None = None, group_id: str | None = None
 ) -> dict[str, Any]:
@@ -929,26 +1619,55 @@ async def group_average_balances(
 
 
 # ---------------------------------------------------------------- recalculations -------------
-@router.post("/cost-recalculations", status_code=202, dependencies=[Depends(require_scope(RECALC_RUN))])
+@router.post(
+    "/cost-recalculations",
+    status_code=202,
+    dependencies=[Depends(require_scope(RECALC_RUN))],
+    response_model=costing_dto.RecalculationResultOut,
+)
 async def request_recalculation(
-    body: dict[str, Any], db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
+    body: costing_dto.CostingRequestRecalculationIn,
+    db: DbDep,
+    principal: PrincipalDep,
+    response: Response,
+    idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "costing:recalculations:request"
-    store, replay = await _idempotent(db=db, principal=principal, endpoint_id=endpoint, key=idempotency_key,
-                                     method="POST", path="/api/v1/cost-recalculations", body=body, response=response)
+    store, replay = await _idempotent(
+        db=db,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        method="POST",
+        path="/api/v1/cost-recalculations",
+        body=body,
+        response=response,
+    )
     if replay is not None:
         return replay
     try:
         row = await _service(db, principal).request_recalculation(body)
     except Exception as exc:  # noqa: BLE001
         _raise(exc)
-    return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=202, body=row, resource_id=row.get("job_run_id"))
+    return await _finish(
+        store,
+        principal=principal,
+        endpoint_id=endpoint,
+        key=idempotency_key,
+        status=202,
+        body=row,
+        resource_id=row.get("job_run_id"),
+    )
 
 
-@router.post("/costs/reconcile", dependencies=[Depends(require_scope(RECALC_RUN))])
+@router.post(
+    "/costs/reconcile", dependencies=[Depends(require_scope(RECALC_RUN))], response_model=costing_dto.ReconciliationOut
+)
 async def reconcile(
-    db: DbDep, principal: PrincipalDep, body: dict[str, Any] | None = None
+    db: DbDep, principal: PrincipalDep, body: costing_dto.CostingReconcileIn | None = None
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True) if body is not None else None
     return await _service(db, principal).reconciliation(as_of=(body or {}).get("as_of"))
 
 
@@ -969,7 +1688,12 @@ _CANONICAL_ALIASES: tuple[tuple[str, str, str, str | None], ...] = (
     ("GET", "/api/v1/cost-rollups/{run_id}", "/cost-rollups/{id}", "run_id"),
     ("GET", "/api/v1/cost-rollups/{run_id}/lines", "/cost-rollups/{id}/lines", "run_id"),
     ("GET", "/api/v1/cost-versions/{version_id}", "/cost-versions/{id}", "version_id"),
-    ("GET", "/api/v1/cost-versions/{version_id}/planned-standards", "/cost-versions/{id}/planned-standards", "version_id"),
+    (
+        "GET",
+        "/api/v1/cost-versions/{version_id}/planned-standards",
+        "/cost-versions/{id}/planned-standards",
+        "version_id",
+    ),
     ("GET", "/api/v1/costs/item-costs/{item_cost_id}", "/costs/item-costs/{id}", "item_cost_id"),
     ("GET", "/api/v1/costs/item-costs/{item_cost_id}/layers", "/costs/item-costs/{id}/layers", "item_cost_id"),
     ("GET", "/api/v1/landed-costs/{landed_cost_id}", "/landed-costs/{id}", "landed_cost_id"),
@@ -977,7 +1701,12 @@ _CANONICAL_ALIASES: tuple[tuple[str, str, str, str | None], ...] = (
     ("GET", "/api/v1/location-costing-groups/{group_id}", "/location-costing-groups/{id}", "group_id"),
     ("PATCH", "/api/v1/cost-categories/{category_id}", "/cost-categories/{id}", "category_id"),
     ("PATCH", "/api/v1/cost-templates/{template_id}", "/cost-templates/{id}", "template_id"),
-    ("PATCH", "/api/v1/estimated-landed-cost-templates/{template_id}", "/estimated-landed-cost-templates/{id}", "template_id"),
+    (
+        "PATCH",
+        "/api/v1/estimated-landed-cost-templates/{template_id}",
+        "/estimated-landed-cost-templates/{id}",
+        "template_id",
+    ),
     ("POST", "/api/v1/cogs-adjustments/{adjustment_id}/approve", "/cogs-adjustments/{id}/approve", "adjustment_id"),
     ("POST", "/api/v1/cogs-adjustments/{adjustment_id}/post", "/cogs-adjustments/{id}/post", "adjustment_id"),
     ("POST", "/api/v1/cogs-adjustments/{adjustment_id}/reverse", "/cogs-adjustments/{id}/reverse", "adjustment_id"),
@@ -986,13 +1715,33 @@ _CANONICAL_ALIASES: tuple[tuple[str, str, str, str | None], ...] = (
     ("POST", "/api/v1/cost-revaluations/{revaluation_id}/reverse", "/cost-revaluations/{id}/reverse", "revaluation_id"),
     ("POST", "/api/v1/cost-versions/{version_id}/activate", "/cost-versions/{id}/activate", "version_id"),
     ("POST", "/api/v1/cost-versions/{version_id}/approve", "/cost-versions/{id}/approve", "version_id"),
-    ("POST", "/api/v1/cost-versions/{version_id}/planned-standards", "/cost-versions/{id}/planned-standards", "version_id"),
-    ("POST", "/api/v1/landed-costs/{landed_cost_id}/approve", "/landed-costs/{id}/allocations/approve", "landed_cost_id"),
+    (
+        "POST",
+        "/api/v1/cost-versions/{version_id}/planned-standards",
+        "/cost-versions/{id}/planned-standards",
+        "version_id",
+    ),
+    (
+        "POST",
+        "/api/v1/landed-costs/{landed_cost_id}/approve",
+        "/landed-costs/{id}/allocations/approve",
+        "landed_cost_id",
+    ),
     ("POST", "/api/v1/landed-costs/{landed_cost_id}/post", "/landed-costs/{id}/post", "landed_cost_id"),
     ("POST", "/api/v1/landed-costs/{landed_cost_id}/reverse", "/landed-costs/{id}/reverse", "landed_cost_id"),
     ("POST", "/api/v1/location-costing-groups/{group_id}/members", "/location-costing-groups/{id}/members", "group_id"),
-    ("POST", "/api/v1/location-costing-groups/{group_id}/inactivate", "/location-costing-groups/{id}/inactivate", "group_id"),
-    ("DELETE", "/api/v1/location-costing-groups/{group_id}/members/{location_id}", "/location-costing-groups/{id}/members/{location_id}", "group_id"),
+    (
+        "POST",
+        "/api/v1/location-costing-groups/{group_id}/inactivate",
+        "/location-costing-groups/{id}/inactivate",
+        "group_id",
+    ),
+    (
+        "DELETE",
+        "/api/v1/location-costing-groups/{group_id}/members/{location_id}",
+        "/location-costing-groups/{id}/members/{location_id}",
+        "group_id",
+    ),
     ("POST", "/api/v1/cost-recalculations", "/costs/recalculations", None),
 )
 
@@ -1034,6 +1783,7 @@ def _register_canonical_aliases() -> None:
             methods=[method],
             status_code=int(getattr(concrete_route, "status_code", None) or 200),
             dependencies=[Depends(require_scope(scope))],
+            response_model=getattr(concrete_route, "response_model", None),
         )
         ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = scope
 

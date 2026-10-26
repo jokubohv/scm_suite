@@ -12,14 +12,67 @@ from fastapi import APIRouter, Depends, Header, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.common import ActionResult
 from app.api.schemas.inventory import (
     AdjustmentCreate,
     AdjustmentOut,
     AdjustmentPage,
+    AdjustmentPatch,
+    AdjustmentPostRequest,
+    AvailabilityOut,
+    BalanceBinPage,
+    BalanceLotPage,
+    BalancePage,
+    BulkPatchIn,
+    CloseRequest,
+    CommitmentCreate,
+    CommitmentOut,
+    CommitmentPage,
+    CommitmentReallocateRequest,
+    CommitmentReleaseRequest,
+    DistributionCreate,
+    DistributionOut,
+    DistributionPage,
+    FulfilmentCreate,
+    FulfilmentResultOut,
+    ImportBatchCreate,
+    ImportBatchOut,
+    ImportBatchPage,
+    ImportPostResultOut,
+    ImportRowPage,
+    ImportValidationOut,
+    InTransitPage,
     LedgerActionOut,
+    PostingCommandIn,
+    ReallocateOut,
+    ReasonCodeCreate,
+    ReasonCodeOut,
+    ReasonCodePage,
+    ReasonCodeUpdate,
+    ReasonRequest,
+    ReturnCreate,
+    ReturnResultOut,
+    TransactionDetailPage,
+    TransactionLinePage,
+    TransactionOut,
+    TransactionPage,
+    TransferBulkOut,
     TransferCreate,
+    TransferOrderBulkOut,
+    TransferOrderCreate,
+    TransferOrderLinePage,
+    TransferOrderOut,
+    TransferOrderPage,
+    TransferOrderStageRequest,
+    TransferOrderUpdate,
     TransferOut,
     TransferPage,
+    TransferUpdate,
+    WorksheetBulkOut,
+    WorksheetCreate,
+    WorksheetOut,
+    WorksheetPage,
+    WorksheetUpdate,
 )
 from app.modules.inventory_ledger.documents import LedgerDocuments
 from app.modules.inventory_ledger.errors import IdempotencyKeyRequired, ledger_error
@@ -128,7 +181,7 @@ async def _bulk_patch(db: DbDep, principal: PrincipalDep, document: str, payload
     # --------------------------------------------------------------------------- transactions -----
 
 
-@router.get("/inventory-transactions")
+@router.get("/inventory-transactions", response_model=TransactionPage)
 async def list_transactions(
     principal: ReadDep,
     db: DbDep,
@@ -155,34 +208,35 @@ async def list_transactions(
     )
 
 
-@router.get("/inventory-transactions/{id}")
+@router.get("/inventory-transactions/{id}", response_model=TransactionOut)
 async def get_transaction(id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _ledger(db, principal).get_transaction(id)
 
 
-@router.get("/inventory-transactions/{id}/lines")
+@router.get("/inventory-transactions/{id}/lines", response_model=TransactionLinePage)
 async def get_transaction_lines(id: str, principal: ReadDep, db: DbDep, item_id: str | None = None) -> dict[str, Any]:
     return {"items": await _ledger(db, principal).transaction_lines(id, item_id=item_id)}
 
 
-@router.get("/inventory-transactions/{id}/details")
+@router.get("/inventory-transactions/{id}/details", response_model=TransactionDetailPage)
 async def get_transaction_details(id: str, principal: ReadDep, db: DbDep, line_id: str | None = None) -> dict[str, Any]:
     return {"items": await _ledger(db, principal).transaction_details(id, line_id=line_id)}
 
 
-@router.post("/inventory-transactions/{id}/reverse")
+@router.post("/inventory-transactions/{id}/reverse", response_model=ActionResult)
 async def reverse_transaction(
-    id: str, payload: dict[str, Any], principal: TxReverseDep, db: DbDep, key: IdemDep = None
+    id: str, principal: TxReverseDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _ledger(db, principal).reverse(
-        id, reason=str(payload.get("reason") or "reversal"), idempotency_key=key or ""
+        id, reason=(body.reason if body and body.reason else "reversal"), idempotency_key=key or ""
     )
 
 
-@router.post("/inventory-transactions", status_code=201)
+@router.post("/inventory-transactions", status_code=201, response_model=ActionResult)
 async def generic_posting(
-    payload: dict[str, Any], principal: TxPostDep, db: DbDep, key: IdemDep = None
+    body: PostingCommandIn, principal: TxPostDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True, mode="json")
     return await _ledger(db, principal).post(payload | {"idempotency_key": key})
 
     # --------------------------------------------------------------------------- adjustments ------
@@ -214,75 +268,78 @@ async def submit_adjustment(id: str, principal: AdjCreateDep, db: DbDep, key: Id
 
 @router.post("/inventory-adjustments/{id}/post", response_model=LedgerActionOut)
 async def post_adjustment(
-    id: str, principal: AdjPostDep, db: DbDep, key: IdemDep = None, payload: dict[str, Any] | None = None
+    id: str, principal: AdjPostDep, db: DbDep, key: IdemDep = None, body: AdjustmentPostRequest | None = None
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True, mode="json") if body else {}
     return await _documents(db, principal).post_adjustment(
-        id, idempotency_key=key or "", transaction_date=(payload or {}).get("transaction_date")
+        id, idempotency_key=key or "", transaction_date=payload.get("transaction_date")
     )
 
 
 @router.post("/inventory-adjustments/{id}/reverse", response_model=LedgerActionOut)
 async def reverse_adjustment(
-    id: str, payload: dict[str, Any], principal: TxReverseDep, db: DbDep, key: IdemDep = None
+    id: str, principal: TxReverseDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).reverse_document(
-        "inventory_adjustment", id, reason=str(payload.get("reason") or "reversal"), idempotency_key=key or ""
+        "inventory_adjustment", id, reason=(body.reason if body and body.reason else "reversal"), idempotency_key=key or ""
     )
 
 
 @router.post("/inventory-adjustments/{id}/void", response_model=LedgerActionOut)
 async def void_adjustment(
-    id: str, payload: dict[str, Any], principal: AdjPostDep, db: DbDep, key: IdemDep = None
+    id: str, principal: AdjPostDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).void_document(
-        "inventory_adjustment", id, reason=str(payload.get("reason") or "void")
+        "inventory_adjustment", id, reason=(body.reason if body and body.reason else "void")
     )
 
     # --------------------------------------------------------------------------- worksheets --------
 
 
-@router.post("/inventory-worksheets", status_code=201)
+@router.post("/inventory-worksheets", status_code=201, response_model=WorksheetOut)
 async def create_worksheet(
-    payload: dict[str, Any], principal: WsCreateDep, db: DbDep, key: IdemDep = None
+    body: WorksheetCreate, principal: WsCreateDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).create_worksheet(payload, idempotency_key=key or "")
+    return await _documents(db, principal).create_worksheet(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
 
-@router.get("/inventory-worksheets")
+@router.get("/inventory-worksheets", response_model=WorksheetPage)
 async def list_worksheets(principal: ReadDep, db: DbDep, status: str | None = None) -> dict[str, Any]:
     return await _documents(db, principal).list_documents("inventory_worksheet", status=status)
 
 
-@router.get("/inventory-worksheets/{id}")
+@router.get("/inventory-worksheets/{id}", response_model=WorksheetOut)
 async def get_worksheet(id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _documents(db, principal).get_document("inventory_worksheet", id)
 
 
-@router.post("/inventory-worksheets/{id}/submit")
+@router.post("/inventory-worksheets/{id}/submit", response_model=WorksheetOut)
 async def submit_worksheet(id: str, principal: WsCreateDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).submit_document("inventory_worksheet", id)
 
 
-@router.post("/inventory-worksheets/{id}/post")
+@router.post("/inventory-worksheets/{id}/post", response_model=ActionResult)
 async def post_worksheet(id: str, principal: WsPostDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).post_worksheet(id, idempotency_key=key or "")
 
 
-@router.post("/inventory-worksheets/{id}/reverse")
+@router.post("/inventory-worksheets/{id}/reverse", response_model=ActionResult)
 async def reverse_worksheet(
-    id: str, payload: dict[str, Any], principal: TxReverseDep, db: DbDep, key: IdemDep = None
+    id: str, principal: TxReverseDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).reverse_document(
-        "inventory_worksheet", id, reason=str(payload.get("reason") or "reversal"), idempotency_key=key or ""
+        "inventory_worksheet", id, reason=(body.reason if body and body.reason else "reversal"), idempotency_key=key or ""
     )
 
 
-@router.post("/inventory-worksheets/{id}/void")
+@router.post("/inventory-worksheets/{id}/void", response_model=ActionResult)
 async def void_worksheet(
-    id: str, payload: dict[str, Any], principal: WsPostDep, db: DbDep, key: IdemDep = None
+    id: str, principal: WsPostDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).void_document(
-        "inventory_worksheet", id, reason=str(payload.get("reason") or "void")
+        "inventory_worksheet", id, reason=(body.reason if body and body.reason else "void")
     )
 
     # --------------------------------------------------------------------------- transfers ---------
@@ -319,98 +376,102 @@ async def post_transfer(id: str, principal: TrfPostDep, db: DbDep, key: IdemDep 
 
 @router.post("/inventory-transfers/{id}/reverse", response_model=LedgerActionOut)
 async def reverse_transfer(
-    id: str, payload: dict[str, Any], principal: TxReverseDep, db: DbDep, key: IdemDep = None
+    id: str, principal: TxReverseDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).reverse_document(
-        "inventory_transfer", id, reason=str(payload.get("reason") or "reversal"), idempotency_key=key or ""
+        "inventory_transfer", id, reason=(body.reason if body and body.reason else "reversal"), idempotency_key=key or ""
     )
 
 
 @router.post("/inventory-transfers/{id}/void", response_model=LedgerActionOut)
 async def void_transfer(
-    id: str, payload: dict[str, Any], principal: TrfPostDep, db: DbDep, key: IdemDep = None
+    id: str, principal: TrfPostDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).void_document(
-        "inventory_transfer", id, reason=str(payload.get("reason") or "void")
+        "inventory_transfer", id, reason=(body.reason if body and body.reason else "void")
     )
 
     # --------------------------------------------------------------------------- transfer orders ---
 
 
-@router.post("/transfer-orders", status_code=201)
+@router.post("/transfer-orders", status_code=201, response_model=TransferOrderOut)
 async def create_transfer_order(
-    payload: dict[str, Any], principal: ToCreateDep, db: DbDep, key: IdemDep = None
+    body: TransferOrderCreate, principal: ToCreateDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).create_transfer_order(payload, idempotency_key=key or "")
+    return await _documents(db, principal).create_transfer_order(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
 
-@router.get("/transfer-orders")
+@router.get("/transfer-orders", response_model=TransferOrderPage)
 async def list_transfer_orders(principal: ReadDep, db: DbDep, status: str | None = None) -> dict[str, Any]:
     return await _documents(db, principal).list_documents("transfer_order", status=status)
 
 
-@router.get("/transfer-orders/{id}")
+@router.get("/transfer-orders/{id}", response_model=TransferOrderOut)
 async def get_transfer_order(id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _documents(db, principal).get_document("transfer_order", id)
 
 
-@router.get("/transfer-orders/{id}/lines")
+@router.get("/transfer-orders/{id}/lines", response_model=TransferOrderLinePage)
 async def get_transfer_order_lines(id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return {"items": (await _documents(db, principal).get_document("transfer_order", id))["lines"]}
 
 
-@router.post("/transfer-orders/{id}/submit")
+@router.post("/transfer-orders/{id}/submit", response_model=TransferOrderOut)
 async def submit_transfer_order(id: str, principal: ToCreateDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).submit_transfer_order(id)
 
 
-@router.post("/transfer-orders/{id}/approve")
+@router.post("/transfer-orders/{id}/approve", response_model=ActionResult)
 async def approve_transfer_order(id: str, principal: ToApproveDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).approve_transfer_order(id)
 
 
-@router.post("/transfer-orders/{id}/fulfil")
+@router.post("/transfer-orders/{id}/fulfil", response_model=ActionResult)
 async def fulfil_transfer_order(
-    id: str, payload: dict[str, Any], principal: ToFulfilDep, db: DbDep, key: IdemDep = None
+    id: str, body: TransferOrderStageRequest, principal: ToFulfilDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).fulfil_transfer_order(
-        id, payload.get("lines") or [], idempotency_key=key or ""
+        id, body.model_dump(exclude_unset=True, mode="json").get("lines") or [], idempotency_key=key or ""
     )
 
 
-@router.post("/transfer-orders/{id}/receive")
+@router.post("/transfer-orders/{id}/receive", response_model=ActionResult)
 async def receive_transfer_order(
-    id: str, payload: dict[str, Any], principal: ToReceiveDep, db: DbDep, key: IdemDep = None
+    id: str, body: TransferOrderStageRequest, principal: ToReceiveDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).receive_transfer_order(
-        id, payload.get("lines") or [], idempotency_key=key or ""
+        id, body.model_dump(exclude_unset=True, mode="json").get("lines") or [], idempotency_key=key or ""
     )
 
 
-@router.post("/transfer-orders/{id}/close")
+@router.post("/transfer-orders/{id}/close", response_model=ActionResult)
 async def close_transfer_order(
-    id: str, principal: ToCloseDep, db: DbDep, key: IdemDep = None, payload: dict[str, Any] | None = None
+    id: str, principal: ToCloseDep, db: DbDep, key: IdemDep = None, body: CloseRequest | None = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).close_transfer_order(id, reason=(payload or {}).get("reason"))
+    return await _documents(db, principal).close_transfer_order(id, reason=(body.reason if body else None))
 
 
-@router.post("/transfer-orders/{id}/cancel")
+@router.post("/transfer-orders/{id}/cancel", response_model=ActionResult)
 async def cancel_transfer_order(
-    id: str, principal: ToCreateDep, db: DbDep, key: IdemDep = None, payload: dict[str, Any] | None = None
+    id: str, principal: ToCreateDep, db: DbDep, key: IdemDep = None, body: CloseRequest | None = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).cancel_transfer_order(id, reason=(payload or {}).get("reason"))
+    return await _documents(db, principal).cancel_transfer_order(id, reason=(body.reason if body else None))
 
     # --------------------------------------------------------------------------- commitments -------
 
 
-@router.post("/inventory/commitments", status_code=201)
+@router.post("/inventory/commitments", status_code=201, response_model=ActionResult)
 async def commit_orders(
-    payload: dict[str, Any], principal: CommitDep, db: DbDep, key: IdemDep = None
+    body: CommitmentCreate, principal: CommitDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).commit(payload, idempotency_key=key or "")
+    return await _documents(db, principal).commit(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
 
-@router.get("/inventory/commitments")
+@router.get("/inventory/commitments", response_model=CommitmentPage)
 async def list_commitments(
     principal: BalanceDep,
     db: DbDep,
@@ -425,54 +486,61 @@ async def list_commitments(
     )
 
 
-@router.get("/inventory/commitments/{id}")
+@router.get("/inventory/commitments/{id}", response_model=CommitmentOut)
 async def get_commitment(id: str, principal: BalanceDep, db: DbDep) -> dict[str, Any]:
     return await _documents(db, principal).get_commitment(id)
 
 
-@router.post("/inventory/commitments/{id}/release")
+@router.post("/inventory/commitments/{id}/release", response_model=ActionResult)
 async def release_commitment(
-    id: str, principal: ReleaseDep, db: DbDep, key: IdemDep = None, payload: dict[str, Any] | None = None
+    id: str, principal: ReleaseDep, db: DbDep, key: IdemDep = None, body: CommitmentReleaseRequest | None = None
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True, mode="json") if body else {}
     return await _documents(db, principal).release_commitment(
-        id, qty=(payload or {}).get("qty"), reason=(payload or {}).get("reason")
+        id, qty=payload.get("qty"), reason=payload.get("reason")
     )
 
 
-@router.post("/inventory/commitments/reallocate")
+@router.post("/inventory/commitments/reallocate", response_model=ReallocateOut)
 async def reallocate(
-    principal: ReallocateDep, db: DbDep, key: IdemDep = None, payload: dict[str, Any] | None = None
+    body: CommitmentReallocateRequest, principal: ReallocateDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).reallocate(payload or {}, idempotency_key=key or "")
+    return await _documents(db, principal).reallocate(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
     # --------------------------------------------------------------------------- fulfil/return ------
 
 
-@router.post("/fulfillments", status_code=201)
+@router.post("/fulfillments", status_code=201, response_model=FulfilmentResultOut)
 async def post_fulfillment(
-    payload: dict[str, Any], principal: FulfilDep, db: DbDep, key: IdemDep = None
+    body: FulfilmentCreate, principal: FulfilDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).post_fulfillment(payload, idempotency_key=key or "")
+    return await _documents(db, principal).post_fulfillment(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
 
-@router.get("/fulfillments/{transaction_id}")
+@router.get("/fulfillments/{transaction_id}", response_model=TransactionOut)
 async def get_fulfillment(transaction_id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _ledger(db, principal).get_transaction(transaction_id)
 
 
-@router.post("/returns", status_code=201)
-async def post_return(payload: dict[str, Any], principal: ReturnDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
-    return await _documents(db, principal).post_return(payload, idempotency_key=key or "")
+@router.post("/returns", status_code=201, response_model=ReturnResultOut)
+async def post_return(body: ReturnCreate, principal: ReturnDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
+    return await _documents(db, principal).post_return(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
 
-@router.get("/returns/{transaction_id}")
+@router.get("/returns/{transaction_id}", response_model=TransactionOut)
 async def get_return(transaction_id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _ledger(db, principal).get_transaction(transaction_id)
 
     # --------------------------------------------------------------------------- balances ----------
 
 
-@router.get("/inventory/balances")
+@router.get("/inventory/balances", response_model=BalancePage)
 async def balances(
     principal: BalanceDep,
     db: DbDep,
@@ -495,7 +563,7 @@ async def balances(
     )
 
 
-@router.get("/inventory/balances/by-bin")
+@router.get("/inventory/balances/by-bin", response_model=BalanceBinPage)
 async def balances_by_bin(
     principal: BalanceDep,
     db: DbDep,
@@ -506,7 +574,7 @@ async def balances_by_bin(
     return await _ledger(db, principal).balance_by_bin(item_id=item_id, location_id=location_id, bin_id=bin_id)
 
 
-@router.get("/inventory/balances/by-lot")
+@router.get("/inventory/balances/by-lot", response_model=BalanceLotPage)
 async def balances_by_lot(
     principal: BalanceDep,
     db: DbDep,
@@ -517,7 +585,7 @@ async def balances_by_lot(
     return await _ledger(db, principal).balance_by_lot(item_id=item_id, location_id=location_id, lot_id=lot_id)
 
 
-@router.get("/inventory/availability")
+@router.get("/inventory/availability", response_model=AvailabilityOut)
 async def availability(
     principal: BalanceDep, db: DbDep, item_id: str, location_id: str, inventory_status_id: str | None = None
 ) -> dict[str, Any]:
@@ -526,7 +594,7 @@ async def availability(
     )
 
 
-@router.get("/inventory/in-transit")
+@router.get("/inventory/in-transit", response_model=InTransitPage)
 async def in_transit(
     principal: BalanceDep,
     db: DbDep,
@@ -539,163 +607,190 @@ async def in_transit(
     # --------------------------------------------------------------------------- distributions -----
 
 
-@router.post("/inventory/distributions", status_code=201)
+@router.post("/inventory/distributions", status_code=201, response_model=DistributionOut)
 async def create_distribution(
-    payload: dict[str, Any], principal: DistCreateDep, db: DbDep, key: IdemDep = None
+    body: DistributionCreate, principal: DistCreateDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).create_distribution(payload, idempotency_key=key or "")
+    return await _documents(db, principal).create_distribution(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
 
-@router.get("/inventory/distributions")
+@router.get("/inventory/distributions", response_model=DistributionPage)
 async def list_distributions(principal: BalanceDep, db: DbDep, status: str | None = None) -> dict[str, Any]:
     return await _documents(db, principal).list_documents("inventory_distribution", status=status)
 
 
-@router.get("/inventory/distributions/{id}")
+@router.get("/inventory/distributions/{id}", response_model=DistributionOut)
 async def get_distribution(id: str, principal: BalanceDep, db: DbDep) -> dict[str, Any]:
     return await _documents(db, principal).get_document("inventory_distribution", id)
 
 
-@router.post("/inventory/distributions/{id}/post")
+@router.post("/inventory/distributions/{id}/post", response_model=ActionResult)
 async def post_distribution(id: str, principal: DistPostDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).post_distribution(id, idempotency_key=key or "")
 
 
-@router.post("/inventory/distributions/{id}/reverse")
+@router.post("/inventory/distributions/{id}/reverse", response_model=ActionResult)
 async def reverse_distribution(
-    id: str, payload: dict[str, Any], principal: TxReverseDep, db: DbDep, key: IdemDep = None
+    id: str, principal: TxReverseDep, db: DbDep, key: IdemDep = None, body: ReasonRequest | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).reverse_document(
-        "inventory_distribution", id, reason=str(payload.get("reason") or "reversal"), idempotency_key=key or ""
+        "inventory_distribution", id, reason=(body.reason if body and body.reason else "reversal"), idempotency_key=key or ""
     )
 
     # --------------------------------------------------------------------------- imports ------------
 
 
-@router.post("/imports", status_code=201)
+@router.post("/imports", status_code=201, response_model=ImportBatchOut)
 async def create_import(
-    payload: dict[str, Any], principal: ImportCreateDep, db: DbDep, key: IdemDep = None
+    body: ImportBatchCreate, principal: ImportCreateDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True, mode="json")
+    if not payload.get("filename") and payload.get("file_name"):
+        payload["filename"] = payload["file_name"]
     return await _documents(db, principal).create_import(payload, idempotency_key=key or "")
 
 
-@router.get("/imports")
+@router.get("/imports", response_model=ImportBatchPage)
 async def list_imports(principal: BalanceDep, db: DbDep, status: str | None = None) -> dict[str, Any]:
     return await _documents(db, principal).list_documents("import_batch", status=status)
 
 
-@router.get("/imports/{id}")
+@router.get("/imports/{id}", response_model=ImportBatchOut)
 async def get_import(id: str, principal: BalanceDep, db: DbDep) -> dict[str, Any]:
     return await _documents(db, principal).get_import(id)
 
 
-@router.get("/imports/{id}/rows")
+@router.get("/imports/{id}/rows", response_model=ImportRowPage)
 async def get_import_rows(id: str, principal: BalanceDep, db: DbDep, status: str | None = None) -> dict[str, Any]:
     return await _documents(db, principal).import_rows(id, status=status)
 
 
-@router.post("/imports/{id}/validate")
+@router.post("/imports/{id}/validate", response_model=ImportValidationOut)
 async def validate_import(id: str, principal: ImportPostDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).validate_import(id)
 
 
-@router.post("/imports/{id}/post")
+@router.post("/imports/{id}/post", response_model=ImportPostResultOut)
 async def post_import(id: str, principal: ImportPostDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).post_import(id, idempotency_key=key or "")
 
 
-@router.post("/imports/{id}/retry")
+@router.post("/imports/{id}/retry", response_model=ImportPostResultOut)
 async def retry_import(id: str, principal: ImportPostDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).post_import(id, idempotency_key=key or "")
 
     # --------------------------------------------------------------------------- reason codes ------
 
 
-@router.get("/inventory-reason-codes")
+@router.get("/inventory-reason-codes", response_model=ReasonCodePage)
 async def list_reason_codes(
     principal: BalanceDep, db: DbDep, reason_type: str | None = None, active: bool | None = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).list_reason_codes(reason_type=reason_type, active=active)
 
 
-@router.post("/inventory-reason-codes", status_code=201)
+@router.post("/inventory-reason-codes", status_code=201, response_model=ReasonCodeOut)
 async def create_reason_code(
-    payload: dict[str, Any], principal: ReasonDep, db: DbDep, key: IdemDep = None
+    body: ReasonCodeCreate, principal: ReasonDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).create_reason_code(payload, idempotency_key=key or "")
+    return await _documents(db, principal).create_reason_code(
+        body.model_dump(exclude_unset=True, mode="json"), idempotency_key=key or ""
+    )
 
 
-@router.patch("/inventory-reason-codes/{id}")
-async def update_reason_code(id: str, payload: dict[str, Any], principal: ReasonDep, db: DbDep) -> dict[str, Any]:
-    return await _documents(db, principal).update_reason_code(id, payload)
+@router.patch("/inventory-reason-codes/{id}", response_model=ReasonCodeOut)
+async def update_reason_code(id: str, body: ReasonCodeUpdate, principal: ReasonDep, db: DbDep) -> dict[str, Any]:
+    return await _documents(db, principal).update_reason_code(
+        id, body.model_dump(exclude_unset=True, mode="json")
+    )
 
     # --------------------------------------------------------------------------- pre-post edits -----
 
 
-@router.patch("/inventory-adjustments/{id}", dependencies=[Depends(require_scope(ADJ_CREATE))])
+@router.patch(
+    "/inventory-adjustments/{id}",
+    dependencies=[Depends(require_scope(ADJ_CREATE))],
+    response_model=AdjustmentOut,
+)
 async def patch_adjustment(
-    id: str, payload: dict[str, Any], principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
+    id: str, body: AdjustmentPatch, principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).update_document(
-        "inventory_adjustment", id, payload, expected_version=_version(if_match)
+        "inventory_adjustment", id, body.model_dump(exclude_unset=True, mode="json"), expected_version=_version(if_match)
     )
 
 
 @router.patch(
-    "/inventory-worksheets", dependencies=[Depends(require_scope(WS_CREATE))]
+    "/inventory-worksheets",
+    dependencies=[Depends(require_scope(WS_CREATE))],
+    response_model=WorksheetBulkOut,
 )
-async def bulk_patch_worksheets(payload: dict[str, Any], principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
-    return await _bulk_patch(db, principal, "inventory_worksheet", payload)
+async def bulk_patch_worksheets(body: BulkPatchIn, principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
+    return await _bulk_patch(db, principal, "inventory_worksheet", body.model_dump(exclude_unset=True, mode="json"))
 
 
 @router.patch(
-    "/inventory-worksheets/{id}", dependencies=[Depends(require_scope(WS_CREATE))]
+    "/inventory-worksheets/{id}",
+    dependencies=[Depends(require_scope(WS_CREATE))],
+    response_model=WorksheetOut,
 )
 async def patch_worksheet(
-    id: str, payload: dict[str, Any], principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
+    id: str, body: WorksheetUpdate, principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).update_document(
-        "inventory_worksheet", id, payload, expected_version=_version(if_match)
+        "inventory_worksheet", id, body.model_dump(exclude_unset=True, mode="json"), expected_version=_version(if_match)
     )
 
 
 @router.patch(
-    "/inventory-transfers", dependencies=[Depends(require_scope(TRF_CREATE))]
+    "/inventory-transfers",
+    dependencies=[Depends(require_scope(TRF_CREATE))],
+    response_model=TransferBulkOut,
 )
-async def bulk_patch_transfers(payload: dict[str, Any], principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
-    return await _bulk_patch(db, principal, "inventory_transfer", payload)
+async def bulk_patch_transfers(body: BulkPatchIn, principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
+    return await _bulk_patch(db, principal, "inventory_transfer", body.model_dump(exclude_unset=True, mode="json"))
 
 
 @router.patch(
-    "/inventory-transfers/{id}", dependencies=[Depends(require_scope(TRF_CREATE))]
+    "/inventory-transfers/{id}",
+    dependencies=[Depends(require_scope(TRF_CREATE))],
+    response_model=TransferOut,
 )
 async def patch_transfer(
-    id: str, payload: dict[str, Any], principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
+    id: str, body: TransferUpdate, principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).update_document(
-        "inventory_transfer", id, payload, expected_version=_version(if_match)
+        "inventory_transfer", id, body.model_dump(exclude_unset=True, mode="json"), expected_version=_version(if_match)
     )
 
 
-@router.patch("/transfer-orders", dependencies=[Depends(require_scope(TO_CREATE))])
-async def bulk_patch_transfer_orders(payload: dict[str, Any], principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
-    return await _bulk_patch(db, principal, "transfer_order", payload)
+@router.patch(
+    "/transfer-orders",
+    dependencies=[Depends(require_scope(TO_CREATE))],
+    response_model=TransferOrderBulkOut,
+)
+async def bulk_patch_transfer_orders(body: BulkPatchIn, principal: PrincipalDep, db: DbDep) -> dict[str, Any]:
+    return await _bulk_patch(db, principal, "transfer_order", body.model_dump(exclude_unset=True, mode="json"))
 
 
 @router.patch(
-    "/transfer-orders/{id}", dependencies=[Depends(require_scope(TO_CREATE))]
+    "/transfer-orders/{id}",
+    dependencies=[Depends(require_scope(TO_CREATE))],
+    response_model=TransferOrderOut,
 )
 async def patch_transfer_order(
-    id: str, payload: dict[str, Any], principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
+    id: str, body: TransferOrderUpdate, principal: PrincipalDep, db: DbDep, if_match: IfMatch = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).update_document(
-        "transfer_order", id, payload, expected_version=_version(if_match)
+        "transfer_order", id, body.model_dump(exclude_unset=True, mode="json"), expected_version=_version(if_match)
     )
 
     # --------------------------------------------------------------------------- distributions -----
 
 
-@router.post("/inventory/distributions/{id}/approve")
+@router.post("/inventory/distributions/{id}/approve", response_model=DistributionOut)
 async def approve_distribution(id: str, principal: DistCreateDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).approve_distribution(id)
 

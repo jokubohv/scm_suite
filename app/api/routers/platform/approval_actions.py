@@ -15,6 +15,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.platform import PlatformObject
 from app.core.approvals import ApprovalService
 
 router = APIRouter(tags=["platform-approvals"])
@@ -32,7 +33,7 @@ def _service(session: DbDep) -> ApprovalService:
     return ApprovalService(session)
 
 
-@router.post("/api/v1/approvals/{request_id}/actions")
+@router.post("/api/v1/approvals/{request_id}/actions", response_model=PlatformObject)
 async def decide_approval(
     request_id: str,
     body: DecisionIn,
@@ -49,7 +50,7 @@ async def decide_approval(
     )
 
 
-@router.get("/api/v1/approvals/{request_id}/status")
+@router.get("/api/v1/approvals/{request_id}/status", response_model=PlatformObject)
 async def approval_status(
     request_id: str,
     session: DbDep,

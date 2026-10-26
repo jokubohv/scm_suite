@@ -26,6 +26,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.platform import PlatformObject
 from app.core.repositories.config import (
     ConfigError,
     ConfigRepository,
@@ -155,12 +156,12 @@ async def _list_currencies(repo: ConfigRepository, *, is_active: bool | None) ->
     return {"items": items, "count": len(items)}
 
 
-@router.get("/admin/currencies", dependencies=[Depends(require_scope(REFERENCE_READ))])
+@router.get("/admin/currencies", response_model=PlatformObject, dependencies=[Depends(require_scope(REFERENCE_READ))])
 async def list_currencies(repo: RepoDep, _: ReferenceReader, is_active: bool | None = None) -> dict[str, Any]:
     return await _list_currencies(repo, is_active=is_active)
 
 
-@router.get("/reference/currencies", dependencies=[Depends(require_scope(REFERENCE_READ))])
+@router.get("/reference/currencies", response_model=PlatformObject, dependencies=[Depends(require_scope(REFERENCE_READ))])
 async def list_reference_currencies(
     repo: RepoDep, _: ReferenceReader, is_active: bool | None = None
 ) -> dict[str, Any]:
@@ -168,7 +169,7 @@ async def list_reference_currencies(
     return await _list_currencies(repo, is_active=is_active)
 
 
-@router.post("/admin/currencies", status_code=201)
+@router.post("/admin/currencies", response_model=PlatformObject, status_code=201)
 async def create_currency(
     body: CurrencyCreate,
     repo: RepoDep,
@@ -183,7 +184,7 @@ async def create_currency(
         raise _http_error(exc) from exc
 
 
-@router.get("/admin/currencies/{code}", dependencies=[Depends(require_scope(REFERENCE_READ))])
+@router.get("/admin/currencies/{code}", response_model=PlatformObject, dependencies=[Depends(require_scope(REFERENCE_READ))])
 async def get_currency(code: str, repo: RepoDep, _: ReferenceReader) -> dict[str, Any]:
     try:
         currency = await repo.get_currency(code)
@@ -194,7 +195,7 @@ async def get_currency(code: str, repo: RepoDep, _: ReferenceReader) -> dict[str
     return currency
 
 
-@router.patch("/admin/currencies/{code}")
+@router.patch("/admin/currencies/{code}", response_model=PlatformObject)
 async def update_currency(
     code: str,
     body: CurrencyUpdate,
@@ -227,7 +228,7 @@ async def _list_fiscal_periods(
     return {"items": items, "count": len(items)}
 
 
-@router.get("/admin/fiscal-periods", dependencies=[Depends(require_scope(FINANCE_READ))])
+@router.get("/admin/fiscal-periods", response_model=PlatformObject, dependencies=[Depends(require_scope(FINANCE_READ))])
 async def list_fiscal_periods(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -240,7 +241,7 @@ async def list_fiscal_periods(
     )
 
 
-@router.get("/reference/fiscal-periods", dependencies=[Depends(require_scope(FINANCE_READ))])
+@router.get("/reference/fiscal-periods", response_model=PlatformObject, dependencies=[Depends(require_scope(FINANCE_READ))])
 async def list_reference_fiscal_periods(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -254,7 +255,7 @@ async def list_reference_fiscal_periods(
     )
 
 
-@router.post("/admin/fiscal-periods", status_code=201)
+@router.post("/admin/fiscal-periods", response_model=PlatformObject, status_code=201)
 async def create_fiscal_period(
     body: FiscalPeriodCreate,
     repo: RepoDep,
@@ -270,7 +271,7 @@ async def create_fiscal_period(
 
 
 # ------------------------------------------------------------------------ custom fields --------
-@router.get("/admin/custom-fields", dependencies=[Depends(require_scope(CUSTOM_FIELD_MANAGE))])
+@router.get("/admin/custom-fields", response_model=PlatformObject, dependencies=[Depends(require_scope(CUSTOM_FIELD_MANAGE))])
 async def list_custom_fields(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -284,7 +285,7 @@ async def list_custom_fields(
     return {"items": items, "count": len(items)}
 
 
-@router.post("/admin/custom-fields", status_code=201)
+@router.post("/admin/custom-fields", response_model=PlatformObject, status_code=201)
 async def create_custom_field(
     body: CustomFieldCreate,
     repo: RepoDep,
@@ -299,7 +300,7 @@ async def create_custom_field(
         raise _http_error(exc) from exc
 
 
-@router.get("/admin/custom-fields/{field_def_id}", dependencies=[Depends(require_scope(CUSTOM_FIELD_MANAGE))])
+@router.get("/admin/custom-fields/{field_def_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(CUSTOM_FIELD_MANAGE))])
 async def get_custom_field(field_def_id: str, repo: RepoDep, principal: PrincipalDep, _: CustomFieldManager) -> dict[str, Any]:
     field = await repo.get_custom_field(principal.tenant_id, field_def_id)
     if field is None:
@@ -307,7 +308,7 @@ async def get_custom_field(field_def_id: str, repo: RepoDep, principal: Principa
     return field
 
 
-@router.patch("/admin/custom-fields/{field_def_id}")
+@router.patch("/admin/custom-fields/{field_def_id}", response_model=PlatformObject)
 async def update_custom_field(
     field_def_id: str,
     body: CustomFieldUpdate,
@@ -329,7 +330,7 @@ async def update_custom_field(
         raise _http_error(exc) from exc
 
 
-@router.delete("/admin/custom-fields/{field_def_id}")
+@router.delete("/admin/custom-fields/{field_def_id}", response_model=PlatformObject)
 async def delete_custom_field(
     field_def_id: str,
     repo: RepoDep,
@@ -356,7 +357,7 @@ async def _list_flags(
     return {"items": items, "count": len(items)}
 
 
-@router.get("/admin/flags", dependencies=[Depends(require_scope(FLAG_MANAGE))])
+@router.get("/admin/flags", response_model=PlatformObject, response_model_exclude_none=True, dependencies=[Depends(require_scope(FLAG_MANAGE))])
 async def list_flags(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -366,7 +367,7 @@ async def list_flags(
     return await _list_flags(repo, tenant_id=principal.tenant_id, flag_key=flag_key)
 
 
-@router.get("/admin/feature-flags", dependencies=[Depends(require_scope(FLAG_MANAGE))])
+@router.get("/admin/feature-flags", response_model=PlatformObject, response_model_exclude_none=True, dependencies=[Depends(require_scope(FLAG_MANAGE))])
 async def list_feature_flags_alias(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -377,7 +378,7 @@ async def list_feature_flags_alias(
     return await _list_flags(repo, tenant_id=principal.tenant_id, flag_key=flag_key)
 
 
-@router.get("/admin/flags/{flag_key}", dependencies=[Depends(require_scope(FLAG_MANAGE))])
+@router.get("/admin/flags/{flag_key}", response_model=PlatformObject, response_model_exclude_none=True, dependencies=[Depends(require_scope(FLAG_MANAGE))])
 async def get_flag(flag_key: str, repo: RepoDep, principal: PrincipalDep, _: FlagManager) -> dict[str, Any]:
     try:
         flag = await repo.get_feature_flag(principal.tenant_id, flag_key)
@@ -388,7 +389,7 @@ async def get_flag(flag_key: str, repo: RepoDep, principal: PrincipalDep, _: Fla
     return flag
 
 
-@router.patch("/admin/flags/{flag_key}")
+@router.patch("/admin/flags/{flag_key}", response_model=PlatformObject)
 async def set_flag(
     flag_key: str,
     body: FeatureFlagUpdate,
@@ -404,7 +405,7 @@ async def set_flag(
         raise _http_error(exc) from exc
 
 
-@router.put("/admin/feature-flags/{flag_key}")
+@router.put("/admin/feature-flags/{flag_key}", response_model=PlatformObject)
 async def set_flag_put_alias(
     flag_key: str,
     body: FeatureFlagUpdate,
@@ -432,7 +433,7 @@ async def _list_sequences(
     return {"items": items, "count": len(items)}
 
 
-@router.get("/admin/sequences", dependencies=[Depends(require_scope(SEQUENCE_MANAGE))])
+@router.get("/admin/sequences", response_model=PlatformObject, dependencies=[Depends(require_scope(SEQUENCE_MANAGE))])
 async def list_sequences(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -443,7 +444,7 @@ async def list_sequences(
     return await _list_sequences(repo, tenant_id=principal.tenant_id, doc_type=doc_type, limit=limit)
 
 
-@router.get("/admin/number-sequences", dependencies=[Depends(require_scope(SEQUENCE_MANAGE))])
+@router.get("/admin/number-sequences", response_model=PlatformObject, dependencies=[Depends(require_scope(SEQUENCE_MANAGE))])
 async def list_number_sequences_alias(
     repo: RepoDep,
     principal: PrincipalDep,

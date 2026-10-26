@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.platform import PlatformObject
 from app.core.repositories import approvals
 
 router = APIRouter(tags=["platform-approvals"])
@@ -25,18 +26,18 @@ class DefinitionCreate(BaseModel):
     is_enabled: bool = True
 
 
-@router.get("/api/v1/admin/approval-definitions")
+@router.get("/api/v1/admin/approval-definitions", response_model=PlatformObject)
 async def list_definitions(session: DbDep, principal: PrincipalDep, _: DefinitionManager, document_type: str | None = None) -> dict[str, object]:
     return {"items": await approvals.list_definitions(session, principal.tenant_id, document_type)}
 
 
-@router.post("/api/v1/admin/approval-definitions", status_code=201)
+@router.post("/api/v1/admin/approval-definitions", response_model=PlatformObject, status_code=201)
 async def create_definition(payload: DefinitionCreate, session: DbDep, principal: PrincipalDep, _: DefinitionManager) -> dict[str, object]:
     created = await approvals.create_definition(session, principal.tenant_id, payload.model_dump(), principal.app_user_id)
     return {"definition": created}
 
 
-@router.get("/api/v1/approvals")
+@router.get("/api/v1/approvals", response_model=PlatformObject)
 async def list_requests(
     session: DbDep,
     principal: PrincipalDep,
@@ -48,7 +49,7 @@ async def list_requests(
     return {"items": await approvals.list_requests(session, principal.tenant_id, status=status, document_type=document_type, limit=limit)}
 
 
-@router.get("/api/v1/approvals/{request_id}")
+@router.get("/api/v1/approvals/{request_id}", response_model=PlatformObject)
 async def get_request(request_id: str, session: DbDep, principal: PrincipalDep, _: ApprovalActor) -> dict[str, object]:
     result = await approvals.get_request(session, principal.tenant_id, request_id)
     if result is None:

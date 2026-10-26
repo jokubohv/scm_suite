@@ -16,6 +16,116 @@ from fastapi import APIRouter, Body, Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.wms import (
+    BinBlockCreate,
+    BinBlockOut,
+    BinBlockPage,
+    CancelTaskIn,
+    CarrierServiceLevelCreate,
+    CarrierServiceLevelOut,
+    CarrierServiceLevelPage,
+    CartCreate,
+    CartOut,
+    CartPage,
+    CartUpdate,
+    CycleCountRequestCreate,
+    CycleCountRequestOut,
+    DeviceSessionCreate,
+    DeviceSessionOut,
+    FulfillmentGenerationPage,
+    GeneratePutawayOut,
+    InboundShipmentCreate,
+    InboundShipmentOut,
+    InboundShipmentPage,
+    ItemBinAssignmentOut,
+    ItemBinAssignmentPut,
+    ItemProcessAssignmentCreate,
+    ItemProcessAssignmentOut,
+    ItemProcessAssignmentPage,
+    ItemProcessFamilyCreate,
+    ItemProcessFamilyOut,
+    ItemProcessFamilyPage,
+    ItemProcessGroupCreate,
+    ItemProcessGroupOut,
+    ItemProcessGroupPage,
+    ItemStockLocationCreate,
+    ItemStockLocationOut,
+    ItemStockLocationPage,
+    ItemStockLocationUpdate,
+    OrderReleaseStatusPage,
+    OrderTypeCreate,
+    OrderTypeOut,
+    OrderTypePage,
+    PackCartonCreate,
+    PackCartonOut,
+    PackCompleteRequest,
+    PackTaskCreate,
+    PackTaskOut,
+    PackTaskPage,
+    PickCompleteRequest,
+    PickStrategyCreate,
+    PickStrategyOut,
+    PickStrategyPage,
+    PickStrategyUpdate,
+    PickTaskOut,
+    PickTaskPage,
+    PutawayGenerateRequest,
+    PutawayStrategyCreate,
+    PutawayStrategyOut,
+    PutawayStrategyPage,
+    PutawayStrategyUpdate,
+    PutawayTaskOut,
+    PutawayTaskPage,
+    ReceivingCompleteOut,
+    ReceivingCompleteRequest,
+    ReceivingOrderCreate,
+    ReceivingOrderOut,
+    ReceivingOrderPage,
+    ReceivingReverseOut,
+    ReleaseWaveOut,
+    ReplenishmentPlanCreate,
+    ReplenishmentPlanOut,
+    ReplenishmentPlanPage,
+    ReplenishmentTaskComplete,
+    ReplenishmentTaskOut,
+    ReplenishmentTaskPage,
+    ScheduleRunOut,
+    ShipManifestCreate,
+    ShipManifestOut,
+    ShipManifestPage,
+    ShipmentActionRequest,
+    ShipmentCreate,
+    ShipmentOut,
+    ShipmentPage,
+    StatusChangeTaskCreate,
+    StatusChangeTaskOut,
+    SystemRulePage,
+    SystemRulePut,
+    SystemRuleSettingOut,
+    TaskAssignIn,
+    TaskCompleteRequest,
+    TaskExceptionIn,
+    TaskSummaryPage,
+    TransitionIn,
+    UccCodeFormatCreate,
+    UccCodeFormatOut,
+    UccCodeFormatPage,
+    WarehouseCreate,
+    WarehouseInventoryCreate,
+    WarehouseInventoryCreateOut,
+    WarehouseInventoryOut,
+    WarehouseOut,
+    WarehousePage,
+    WarehouseUpdate,
+    WaveCreate,
+    WaveOut,
+    WavePage,
+    WaveReleaseRequest,
+    WaveReleaseScheduleCreate,
+    WaveReleaseScheduleOut,
+    WaveReleaseSchedulePage,
+    WaveReleaseScheduleUpdate,
+)
 from app.modules.wms.errors import WmsError
 from app.modules.wms.service import WmsService
 
@@ -67,11 +177,12 @@ _route("GET", "/api/v1/warehouses/{id}", WMS_READ)
 _route("PATCH", "/api/v1/warehouses/{id}", WMS_SETUP)
 
 
-@router.post("/warehouses", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/warehouses", response_model=WarehouseOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_warehouse(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: WarehouseCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_warehouse(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -80,7 +191,7 @@ async def create_warehouse(
         _raise(exc)
 
 
-@router.get("/warehouses", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/warehouses", response_model=WarehousePage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_warehouses(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None,
     is_active: bool | None = None, limit: int = 100,
@@ -91,7 +202,7 @@ async def list_warehouses(
     return {"items": items, "count": len(items)}
 
 
-@router.get("/warehouses/{id}", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/warehouses/{id}", response_model=WarehouseOut, dependencies=[Depends(require_scope(WMS_READ))])
 async def get_warehouse(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_warehouse(id)
@@ -99,10 +210,11 @@ async def get_warehouse(id: str, db: DbDep, principal: PrincipalDep) -> dict[str
         _raise(exc)
 
 
-@router.patch("/warehouses/{id}", dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.patch("/warehouses/{id}", response_model=WarehouseOut, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def update_warehouse(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    id: str, db: DbDep, principal: PrincipalDep, body: WarehouseUpdate = Body(...)
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).update_warehouse(
             id, payload, actor_id=principal.app_user_id, expected_version=payload.get("version")
@@ -129,16 +241,17 @@ for _path, _kind in _SETUP_LISTS.items():
         ROUTE_SCOPES[("PATCH", f"/api/v1/{_path}")] = WMS_SETUP
 
 
-@router.get("/item-process-families", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/item-process-families", response_model=ItemProcessFamilyPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_process_families(db: DbDep, principal: PrincipalDep, limit: int = 100) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_setup("families", limit=_limit(limit))}
 
 
-@router.post("/item-process-families", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/item-process-families", response_model=ItemProcessFamilyOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_process_family(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ItemProcessFamilyCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_setup(
             "families", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -147,7 +260,7 @@ async def create_process_family(
         _raise(exc)
 
 
-@router.get("/item-process-groups", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/item-process-groups", response_model=ItemProcessGroupPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_process_groups(
     db: DbDep, principal: PrincipalDep, item_process_family_id: str | None = None, limit: int = 100
 ) -> dict[str, Any]:
@@ -156,11 +269,12 @@ async def list_process_groups(
     )}
 
 
-@router.post("/item-process-groups", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/item-process-groups", response_model=ItemProcessGroupOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_process_group(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ItemProcessGroupCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_setup(
             "groups", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -169,7 +283,7 @@ async def create_process_group(
         _raise(exc)
 
 
-@router.get("/item-process-assignments", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/item-process-assignments", response_model=ItemProcessAssignmentPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_process_assignments(
     db: DbDep, principal: PrincipalDep, item_id: str | None = None, limit: int = 100
 ) -> dict[str, Any]:
@@ -178,11 +292,12 @@ async def list_process_assignments(
     )}
 
 
-@router.post("/item-process-assignments", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/item-process-assignments", response_model=ItemProcessAssignmentOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_process_assignment(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ItemProcessAssignmentCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_setup(
             "assignments", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -191,7 +306,7 @@ async def create_process_assignment(
         _raise(exc)
 
 
-@router.get("/item-stock-locations", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/item-stock-locations", response_model=ItemStockLocationPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_stock_locations(
     db: DbDep, principal: PrincipalDep, item_id: str | None = None, location_id: str | None = None,
     limit: int = 100,
@@ -201,11 +316,12 @@ async def list_stock_locations(
     )}
 
 
-@router.post("/item-stock-locations", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/item-stock-locations", response_model=ItemStockLocationOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_stock_location(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ItemStockLocationCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_setup(
             "stock-locations", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -214,10 +330,11 @@ async def create_stock_location(
         _raise(exc)
 
 
-@router.patch("/item-stock-locations", dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.patch("/item-stock-locations", response_model=ItemStockLocationOut, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def update_stock_location(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    db: DbDep, principal: PrincipalDep, body: ItemStockLocationUpdate = Body(...)
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     stock_id = payload.get("id")
     if not stock_id:
         raise HTTPException(status_code=422, detail={"code": "VALIDATION_FAILED", "message": "id is required"})
@@ -230,16 +347,17 @@ async def update_stock_location(
         _raise(exc)
 
 
-@router.get("/order-types", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/order-types", response_model=OrderTypePage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_order_types(db: DbDep, principal: PrincipalDep, limit: int = 100) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_setup("order-types", limit=_limit(limit))}
 
 
-@router.post("/order-types", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/order-types", response_model=OrderTypeOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_order_type(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: OrderTypeCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_setup(
             "order-types", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -248,16 +366,17 @@ async def create_order_type(
         _raise(exc)
 
 
-@router.get("/ucc-code-formats", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/ucc-code-formats", response_model=UccCodeFormatPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_ucc_formats(db: DbDep, principal: PrincipalDep, limit: int = 100) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_setup("ucc-code-formats", limit=_limit(limit))}
 
 
-@router.post("/ucc-code-formats", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/ucc-code-formats", response_model=UccCodeFormatOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_ucc_format(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: UccCodeFormatCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_setup(
             "ucc-code-formats", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -266,16 +385,17 @@ async def create_ucc_format(
         _raise(exc)
 
 
-@router.get("/carrier-service-levels", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/carrier-service-levels", response_model=CarrierServiceLevelPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_carrier_service_levels(db: DbDep, principal: PrincipalDep, limit: int = 100) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_setup("carrier-service-levels", limit=_limit(limit))}
 
 
-@router.post("/carrier-service-levels", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/carrier-service-levels", response_model=CarrierServiceLevelOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_carrier_service_level(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: CarrierServiceLevelCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_setup(
             "carrier-service-levels", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -284,7 +404,7 @@ async def create_carrier_service_level(
         _raise(exc)
 
 
-@router.get("/pick-strategies", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/pick-strategies", response_model=PickStrategyPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_pick_strategies(
     db: DbDep, principal: PrincipalDep, is_active: bool | None = None, limit: int = 100
 ) -> dict[str, Any]:
@@ -293,11 +413,12 @@ async def list_pick_strategies(
     )}
 
 
-@router.post("/pick-strategies", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/pick-strategies", response_model=PickStrategyOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_pick_strategy(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: PickStrategyCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_strategy(
             "pick-strategies", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -306,8 +427,9 @@ async def create_pick_strategy(
         _raise(exc)
 
 
-@router.patch("/pick-strategies", dependencies=[Depends(require_scope(WMS_SETUP))])
-async def update_pick_strategy(db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
+@router.patch("/pick-strategies", response_model=PickStrategyOut, dependencies=[Depends(require_scope(WMS_SETUP))])
+async def update_pick_strategy(db: DbDep, principal: PrincipalDep, body: PickStrategyUpdate = Body(...)) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     strategy_id = payload.get("id")
     if not strategy_id:
         raise HTTPException(status_code=422, detail={"code": "VALIDATION_FAILED", "message": "id is required"})
@@ -320,7 +442,7 @@ async def update_pick_strategy(db: DbDep, principal: PrincipalDep, payload: dict
         _raise(exc)
 
 
-@router.get("/putaway-strategies", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/putaway-strategies", response_model=PutawayStrategyPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_putaway_strategies(
     db: DbDep, principal: PrincipalDep, is_active: bool | None = None, limit: int = 100
 ) -> dict[str, Any]:
@@ -329,11 +451,12 @@ async def list_putaway_strategies(
     )}
 
 
-@router.post("/putaway-strategies", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/putaway-strategies", response_model=PutawayStrategyOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_putaway_strategy(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: PutawayStrategyCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_strategy(
             "putaway-strategies", payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -342,10 +465,11 @@ async def create_putaway_strategy(
         _raise(exc)
 
 
-@router.patch("/putaway-strategies", dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.patch("/putaway-strategies", response_model=PutawayStrategyOut, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def update_putaway_strategy(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    db: DbDep, principal: PrincipalDep, body: PutawayStrategyUpdate = Body(...)
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     strategy_id = payload.get("id")
     if not strategy_id:
         raise HTTPException(status_code=422, detail={"code": "VALIDATION_FAILED", "message": "id is required"})
@@ -367,17 +491,18 @@ _route("POST", "/api/v1/bin-blocks", WMS_SETUP)
 _route("POST", "/api/v1/bin-blocks/{id}/release", WMS_SETUP)
 
 
-@router.get("/system-rules", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/system-rules", response_model=SystemRulePage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_system_rules(db: DbDep, principal: PrincipalDep, warehouse_id: str | None = None) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_system_rules(warehouse_id)}
 
 
 @router.put(
-    "/warehouses/{id}/system-rules/{code}", dependencies=[Depends(require_scope(WMS_SETUP))]
+    "/warehouses/{id}/system-rules/{code}", response_model=SystemRuleSettingOut, dependencies=[Depends(require_scope(WMS_SETUP))]
 )
 async def set_system_rule(
-    id: str, code: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict)
+    id: str, code: str, db: DbDep, principal: PrincipalDep, body: SystemRulePut | None = Body(default=None)
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).set_system_rule(
             id, code, payload, actor_id=principal.app_user_id
@@ -387,12 +512,13 @@ async def set_system_rule(
 
 
 @router.put(
-    "/warehouses/{id}/item-bin-assignments", dependencies=[Depends(require_scope(WMS_SETUP))]
+    "/warehouses/{id}/item-bin-assignments", response_model=ItemBinAssignmentOut, dependencies=[Depends(require_scope(WMS_SETUP))]
 )
 async def assign_item_bins(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    id: str, db: DbDep, principal: PrincipalDep, body: ItemBinAssignmentPut = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).assign_item_bins(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -401,7 +527,7 @@ async def assign_item_bins(
         _raise(exc)
 
 
-@router.get("/bin-blocks", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/bin-blocks", response_model=BinBlockPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_bin_blocks(
     db: DbDep, principal: PrincipalDep, bin_id: str | None = None, released: bool | None = None,
     limit: int = 100,
@@ -411,11 +537,12 @@ async def list_bin_blocks(
     )}
 
 
-@router.post("/bin-blocks", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/bin-blocks", response_model=BinBlockOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_bin_block(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: BinBlockCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_bin_block(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -424,9 +551,9 @@ async def create_bin_block(
         _raise(exc)
 
 
-@router.post("/bin-blocks/{id}/release", dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/bin-blocks/{id}/release", response_model=BinBlockOut, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def release_bin_block(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:
@@ -443,7 +570,7 @@ _route("POST", "/api/v1/warehouses/{id}/inventory", WMS_INVENTORY)
 _route("POST", "/api/v1/warehouses/{id}/cycle-count-requests", WMS_INVENTORY)
 
 
-@router.get("/warehouses/{id}/inventory", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/warehouses/{id}/inventory", response_model=WarehouseInventoryOut, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_warehouse_inventory(
     id: str, db: DbDep, principal: PrincipalDep, item_id: str | None = None, bin_id: str | None = None,
     inventory_status_id: str | None = None, limit: int = 100,
@@ -456,11 +583,12 @@ async def list_warehouse_inventory(
         _raise(exc)
 
 
-@router.post("/warehouses/{id}/inventory", status_code=201, dependencies=[Depends(require_scope(WMS_INVENTORY))])
+@router.post("/warehouses/{id}/inventory", response_model=WarehouseInventoryCreateOut, status_code=201, dependencies=[Depends(require_scope(WMS_INVENTORY))])
 async def create_warehouse_inventory(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    id: str, db: DbDep, principal: PrincipalDep, body: WarehouseInventoryCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_warehouse_inventory(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -470,13 +598,14 @@ async def create_warehouse_inventory(
 
 
 @router.post(
-    "/warehouses/{id}/cycle-count-requests", status_code=201,
+    "/warehouses/{id}/cycle-count-requests", response_model=CycleCountRequestOut, status_code=201,
     dependencies=[Depends(require_scope(WMS_INVENTORY))],
 )
 async def request_cycle_count(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: CycleCountRequestCreate | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).request_cycle_count(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -511,7 +640,7 @@ for _method, _path, _scope in (
     ROUTE_SCOPES[(_method, _path)] = _scope
 
 
-@router.get("/inbound-shipments", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/inbound-shipments", response_model=InboundShipmentPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_inbound_shipments(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None, status: str | None = None,
     limit: int = 100,
@@ -521,11 +650,12 @@ async def list_inbound_shipments(
     )}
 
 
-@router.post("/inbound-shipments", status_code=201, dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/inbound-shipments", response_model=InboundShipmentOut, status_code=201, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def create_inbound_shipment(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: InboundShipmentCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_inbound_shipment(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -534,7 +664,7 @@ async def create_inbound_shipment(
         _raise(exc)
 
 
-@router.get("/inbound-shipments/{id}", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/inbound-shipments/{id}", response_model=InboundShipmentOut, dependencies=[Depends(require_scope(WMS_READ))])
 async def get_inbound_shipment(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_inbound_shipment(id)
@@ -542,9 +672,9 @@ async def get_inbound_shipment(id: str, db: DbDep, principal: PrincipalDep) -> d
         _raise(exc)
 
 
-@router.post("/inbound-shipments/{id}/arrive", dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/inbound-shipments/{id}/arrive", response_model=InboundShipmentOut, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def arrive_inbound_shipment(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:
@@ -555,9 +685,9 @@ async def arrive_inbound_shipment(
         _raise(exc)
 
 
-@router.post("/inbound-shipments/{id}/cancel", dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/inbound-shipments/{id}/cancel", response_model=InboundShipmentOut, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def cancel_inbound_shipment(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:
@@ -568,7 +698,7 @@ async def cancel_inbound_shipment(
         _raise(exc)
 
 
-@router.get("/receiving-orders", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/receiving-orders", response_model=ReceivingOrderPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_receiving_orders(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None, status: str | None = None,
     limit: int = 100,
@@ -578,11 +708,12 @@ async def list_receiving_orders(
     )}
 
 
-@router.post("/receiving-orders", status_code=201, dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/receiving-orders", response_model=ReceivingOrderOut, status_code=201, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def create_receiving_order(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ReceivingOrderCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_receiving_order(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -591,7 +722,7 @@ async def create_receiving_order(
         _raise(exc)
 
 
-@router.get("/receiving-orders/{id}", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/receiving-orders/{id}", response_model=ReceivingOrderOut, dependencies=[Depends(require_scope(WMS_READ))])
 async def get_receiving_order(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_receiving_order(id)
@@ -599,9 +730,9 @@ async def get_receiving_order(id: str, db: DbDep, principal: PrincipalDep) -> di
         _raise(exc)
 
 
-@router.post("/receiving-orders/{id}/start", dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/receiving-orders/{id}/start", response_model=ReceivingOrderOut, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def start_receiving_order(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:
@@ -612,11 +743,12 @@ async def start_receiving_order(
         _raise(exc)
 
 
-@router.post("/receiving-orders/{id}/complete", dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/receiving-orders/{id}/complete", response_model=ReceivingCompleteOut, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def complete_receiving_order(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    id: str, db: DbDep, principal: PrincipalDep, body: ReceivingCompleteRequest = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).complete_receiving_order(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -625,11 +757,12 @@ async def complete_receiving_order(
         _raise(exc)
 
 
-@router.post("/receiving-orders/{id}/reverse-receipt", dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/receiving-orders/{id}/reverse-receipt", response_model=ReceivingReverseOut, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def reverse_receiving_order(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: CancelTaskIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).reverse_receiving_order(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -638,9 +771,9 @@ async def reverse_receiving_order(
         _raise(exc)
 
 
-@router.post("/receiving-orders/{id}/cancel", dependencies=[Depends(require_scope(WMS_RECEIVE))])
+@router.post("/receiving-orders/{id}/cancel", response_model=ReceivingOrderOut, dependencies=[Depends(require_scope(WMS_RECEIVE))])
 async def cancel_receiving_order(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:
@@ -651,7 +784,7 @@ async def cancel_receiving_order(
         _raise(exc)
 
 
-@router.get("/putaway-tasks", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/putaway-tasks", response_model=PutawayTaskPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_putaway_tasks(
     db: DbDep, principal: PrincipalDep, status: str | None = None, warehouse_id: str | None = None,
     assigned_user_id: str | None = None, limit: int = 100,
@@ -661,11 +794,12 @@ async def list_putaway_tasks(
     )}
 
 
-@router.post("/putaway-tasks/generate", status_code=201, dependencies=[Depends(require_scope(WMS_PUTAWAY))])
+@router.post("/putaway-tasks/generate", response_model=GeneratePutawayOut, status_code=201, dependencies=[Depends(require_scope(WMS_PUTAWAY))])
 async def generate_putaway_tasks(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: PutawayGenerateRequest = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).generate_putaway_tasks(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -674,7 +808,7 @@ async def generate_putaway_tasks(
         _raise(exc)
 
 
-@router.get("/putaway-tasks/{id}", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/putaway-tasks/{id}", response_model=PutawayTaskOut, dependencies=[Depends(require_scope(WMS_READ))])
 async def get_putaway_task(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_putaway_task(id)
@@ -682,11 +816,12 @@ async def get_putaway_task(id: str, db: DbDep, principal: PrincipalDep) -> dict[
         _raise(exc)
 
 
-@router.post("/putaway-tasks/{id}/assign", dependencies=[Depends(require_scope(WMS_PUTAWAY))])
+@router.post("/putaway-tasks/{id}/assign", response_model=PutawayTaskOut, dependencies=[Depends(require_scope(WMS_PUTAWAY))])
 async def assign_putaway_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TaskAssignIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).assign_putaway_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -695,9 +830,9 @@ async def assign_putaway_task(
         _raise(exc)
 
 
-@router.post("/putaway-tasks/{id}/start", dependencies=[Depends(require_scope(WMS_PUTAWAY))])
+@router.post("/putaway-tasks/{id}/start", response_model=PutawayTaskOut, dependencies=[Depends(require_scope(WMS_PUTAWAY))])
 async def start_putaway_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:
@@ -708,11 +843,12 @@ async def start_putaway_task(
         _raise(exc)
 
 
-@router.post("/putaway-tasks/{id}/complete", dependencies=[Depends(require_scope(WMS_PUTAWAY))])
+@router.post("/putaway-tasks/{id}/complete", response_model=PutawayTaskOut, dependencies=[Depends(require_scope(WMS_PUTAWAY))])
 async def complete_putaway_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TaskCompleteRequest | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).complete_putaway_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -721,11 +857,12 @@ async def complete_putaway_task(
         _raise(exc)
 
 
-@router.post("/putaway-tasks/{id}/exception", dependencies=[Depends(require_scope(WMS_PUTAWAY))])
+@router.post("/putaway-tasks/{id}/exception", response_model=PutawayTaskOut, dependencies=[Depends(require_scope(WMS_PUTAWAY))])
 async def exception_putaway_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TaskExceptionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).exception_putaway_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -734,11 +871,12 @@ async def exception_putaway_task(
         _raise(exc)
 
 
-@router.post("/putaway-tasks/{id}/cancel", dependencies=[Depends(require_scope(WMS_PUTAWAY))])
+@router.post("/putaway-tasks/{id}/cancel", response_model=PutawayTaskOut, dependencies=[Depends(require_scope(WMS_PUTAWAY))])
 async def cancel_putaway_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: CancelTaskIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).cancel_putaway_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -781,7 +919,7 @@ for _method, _path, _scope in (
     ROUTE_SCOPES[(_method, _path)] = _scope
 
 
-@router.get("/waves", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/waves", response_model=WavePage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_waves(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None, status: str | None = None,
     limit: int = 100,
@@ -791,11 +929,12 @@ async def list_waves(
     )}
 
 
-@router.post("/waves", status_code=201, dependencies=[Depends(require_scope(WMS_WAVE))])
+@router.post("/waves", response_model=WaveOut, status_code=201, dependencies=[Depends(require_scope(WMS_WAVE))])
 async def create_wave(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: WaveCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_wave(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -804,7 +943,7 @@ async def create_wave(
         _raise(exc)
 
 
-@router.get("/waves/{id}", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/waves/{id}", response_model=WaveOut, dependencies=[Depends(require_scope(WMS_READ))])
 async def get_wave(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_wave(id)
@@ -812,11 +951,12 @@ async def get_wave(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any
         _raise(exc)
 
 
-@router.post("/waves/{id}/release", dependencies=[Depends(require_scope(WMS_WAVE))])
+@router.post("/waves/{id}/release", response_model=ReleaseWaveOut, dependencies=[Depends(require_scope(WMS_WAVE))])
 async def release_wave(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: WaveReleaseRequest | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).release_wave(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -825,11 +965,12 @@ async def release_wave(
         _raise(exc)
 
 
-@router.post("/waves/{id}/cancel", dependencies=[Depends(require_scope(WMS_WAVE))])
+@router.post("/waves/{id}/cancel", response_model=WaveOut, dependencies=[Depends(require_scope(WMS_WAVE))])
 async def cancel_wave(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: CancelTaskIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).cancel_wave(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -838,7 +979,7 @@ async def cancel_wave(
         _raise(exc)
 
 
-@router.get("/wave-release-schedules", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/wave-release-schedules", response_model=WaveReleaseSchedulePage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_wave_release_schedules(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None, is_active: bool | None = None,
     limit: int = 100,
@@ -848,11 +989,12 @@ async def list_wave_release_schedules(
     )}
 
 
-@router.post("/wave-release-schedules", status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.post("/wave-release-schedules", response_model=WaveReleaseScheduleOut, status_code=201, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def create_wave_release_schedule(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: WaveReleaseScheduleCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_wave_release_schedule(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -861,10 +1003,11 @@ async def create_wave_release_schedule(
         _raise(exc)
 
 
-@router.patch("/wave-release-schedules", dependencies=[Depends(require_scope(WMS_SETUP))])
+@router.patch("/wave-release-schedules", response_model=WaveReleaseScheduleOut, dependencies=[Depends(require_scope(WMS_SETUP))])
 async def update_wave_release_schedule(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    db: DbDep, principal: PrincipalDep, body: WaveReleaseScheduleUpdate = Body(...)
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     schedule_id = payload.get("id")
     if not schedule_id:
         raise HTTPException(status_code=422, detail={"code": "VALIDATION_FAILED", "message": "id is required"})
@@ -877,12 +1020,13 @@ async def update_wave_release_schedule(
 
 
 @router.post(
-    "/wave-release-schedules/{id}/run-now", dependencies=[Depends(require_scope(WMS_WAVE))]
+    "/wave-release-schedules/{id}/run-now", response_model=ScheduleRunOut, dependencies=[Depends(require_scope(WMS_WAVE))]
 )
 async def run_wave_release_schedule(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).run_wave_release_schedule(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -891,7 +1035,7 @@ async def run_wave_release_schedule(
         _raise(exc)
 
 
-@router.get("/pick-tasks", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/pick-tasks", response_model=PickTaskPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_pick_tasks(
     db: DbDep, principal: PrincipalDep, wave_id: str | None = None, status: str | None = None,
     task_type: str | None = None, assigned_user_id: str | None = None, limit: int = 100,
@@ -902,7 +1046,7 @@ async def list_pick_tasks(
     )}
 
 
-@router.get("/pick-tasks/{id}", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/pick-tasks/{id}", response_model=PickTaskOut, dependencies=[Depends(require_scope(WMS_READ))])
 async def get_pick_task(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_pick_task(id)
@@ -910,11 +1054,12 @@ async def get_pick_task(id: str, db: DbDep, principal: PrincipalDep) -> dict[str
         _raise(exc)
 
 
-@router.post("/pick-tasks/{id}/assign", dependencies=[Depends(require_scope(WMS_PICK))])
+@router.post("/pick-tasks/{id}/assign", response_model=PickTaskOut, dependencies=[Depends(require_scope(WMS_PICK))])
 async def assign_pick_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TaskAssignIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).assign_pick_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -923,9 +1068,9 @@ async def assign_pick_task(
         _raise(exc)
 
 
-@router.post("/pick-tasks/{id}/start", dependencies=[Depends(require_scope(WMS_PICK))])
+@router.post("/pick-tasks/{id}/start", response_model=PickTaskOut, dependencies=[Depends(require_scope(WMS_PICK))])
 async def start_pick_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:
@@ -936,11 +1081,12 @@ async def start_pick_task(
         _raise(exc)
 
 
-@router.post("/pick-tasks/{id}/complete", dependencies=[Depends(require_scope(WMS_PICK))])
+@router.post("/pick-tasks/{id}/complete", response_model=PickTaskOut, dependencies=[Depends(require_scope(WMS_PICK))])
 async def complete_pick_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: PickCompleteRequest | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).complete_pick_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -949,11 +1095,12 @@ async def complete_pick_task(
         _raise(exc)
 
 
-@router.post("/pick-tasks/{id}/reverse", dependencies=[Depends(require_scope(WMS_PICK))])
+@router.post("/pick-tasks/{id}/reverse", response_model=PickTaskOut, dependencies=[Depends(require_scope(WMS_PICK))])
 async def reverse_pick_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: CancelTaskIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).reverse_pick_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -962,18 +1109,19 @@ async def reverse_pick_task(
         _raise(exc)
 
 
-@router.get("/pack-tasks", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/pack-tasks", response_model=PackTaskPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_pack_tasks(
     db: DbDep, principal: PrincipalDep, status: str | None = None, limit: int = 100
 ) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_pack_tasks(status=status, limit=_limit(limit))}
 
 
-@router.post("/pack-tasks", status_code=201, dependencies=[Depends(require_scope(WMS_PACK))])
+@router.post("/pack-tasks", response_model=PackTaskOut, status_code=201, dependencies=[Depends(require_scope(WMS_PACK))])
 async def create_pack_task(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: PackTaskCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_pack_task(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -982,11 +1130,12 @@ async def create_pack_task(
         _raise(exc)
 
 
-@router.post("/pack-tasks/{id}/cartons", status_code=201, dependencies=[Depends(require_scope(WMS_PACK))])
+@router.post("/pack-tasks/{id}/cartons", response_model=PackCartonOut, status_code=201, dependencies=[Depends(require_scope(WMS_PACK))])
 async def add_pack_carton(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    id: str, db: DbDep, principal: PrincipalDep, body: PackCartonCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).add_pack_carton(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -995,11 +1144,12 @@ async def add_pack_carton(
         _raise(exc)
 
 
-@router.post("/pack-tasks/{id}/complete", dependencies=[Depends(require_scope(WMS_PACK))])
+@router.post("/pack-tasks/{id}/complete", response_model=PackTaskOut, dependencies=[Depends(require_scope(WMS_PACK))])
 async def complete_pack_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: PackCompleteRequest | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).complete_pack_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1008,7 +1158,7 @@ async def complete_pack_task(
         _raise(exc)
 
 
-@router.get("/shipments", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/shipments", response_model=ShipmentPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_shipments(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None, status: str | None = None,
     limit: int = 100,
@@ -1018,11 +1168,12 @@ async def list_shipments(
     )}
 
 
-@router.post("/shipments", status_code=201, dependencies=[Depends(require_scope(WMS_SHIP))])
+@router.post("/shipments", response_model=ShipmentOut, status_code=201, dependencies=[Depends(require_scope(WMS_SHIP))])
 async def create_shipment(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ShipmentCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_shipment(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1035,9 +1186,11 @@ for _action, _method in (("ready", "READY"), ("ship", "SHIPPED"), ("confirm", "S
                          ("cancel", "CANCELLED")):
 
     async def _shipment_action(
-        id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+        id: str, db: DbDep, principal: PrincipalDep,
+        body: ShipmentActionRequest | None = Body(default=None),
         idempotency_key: IdempotencyHeader = None, _target: str = _method,
     ) -> dict[str, Any]:
+        payload = body.model_dump(exclude_unset=True) if body is not None else {}
         try:
             return await _service(db, principal).transition_shipment(
                 id, _target, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1050,23 +1203,25 @@ for _action, _method in (("ready", "READY"), ("ship", "SHIPPED"), ("confirm", "S
         f"/shipments/{{id}}/{_action}",
         _shipment_action,
         methods=["POST"],
+        response_model=ShipmentOut,
         dependencies=[Depends(require_scope(WMS_SHIP))],
         name=_shipment_action.__name__,
     )
 
 
-@router.get("/ship-manifests", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/ship-manifests", response_model=ShipManifestPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_ship_manifests(
     db: DbDep, principal: PrincipalDep, status: str | None = None, limit: int = 100
 ) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_ship_manifests(status=status, limit=_limit(limit))}
 
 
-@router.post("/ship-manifests", status_code=201, dependencies=[Depends(require_scope(WMS_SHIP))])
+@router.post("/ship-manifests", response_model=ShipManifestOut, status_code=201, dependencies=[Depends(require_scope(WMS_SHIP))])
 async def create_ship_manifest(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ShipManifestCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_ship_manifest(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1075,11 +1230,12 @@ async def create_ship_manifest(
         _raise(exc)
 
 
-@router.post("/ship-manifests/{id}/send", dependencies=[Depends(require_scope(WMS_SHIP))])
+@router.post("/ship-manifests/{id}/send", response_model=ShipManifestOut, dependencies=[Depends(require_scope(WMS_SHIP))])
 async def send_ship_manifest(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).send_ship_manifest(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1110,7 +1266,7 @@ for _method, _path, _scope in (
     ROUTE_SCOPES[(_method, _path)] = _scope
 
 
-@router.get("/replenishment-plans", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/replenishment-plans", response_model=ReplenishmentPlanPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_replenishment_plans(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None, status: str | None = None,
     limit: int = 100,
@@ -1120,11 +1276,12 @@ async def list_replenishment_plans(
     )}
 
 
-@router.post("/replenishment-plans", status_code=201, dependencies=[Depends(require_scope(WMS_REPLENISH))])
+@router.post("/replenishment-plans", response_model=ReplenishmentPlanOut, status_code=201, dependencies=[Depends(require_scope(WMS_REPLENISH))])
 async def create_replenishment_plan(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: ReplenishmentPlanCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_replenishment_plan(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1133,11 +1290,12 @@ async def create_replenishment_plan(
         _raise(exc)
 
 
-@router.post("/replenishment-plans/{id}/approve", dependencies=[Depends(require_scope(WMS_REPLENISH))])
+@router.post("/replenishment-plans/{id}/approve", response_model=ReplenishmentPlanOut, dependencies=[Depends(require_scope(WMS_REPLENISH))])
 async def approve_replenishment_plan(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).approve_replenishment_plan(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1146,18 +1304,19 @@ async def approve_replenishment_plan(
         _raise(exc)
 
 
-@router.get("/replenishment-tasks", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/replenishment-tasks", response_model=ReplenishmentTaskPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_replenishment_tasks(
     db: DbDep, principal: PrincipalDep, status: str | None = None, limit: int = 100
 ) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_replenishment_tasks(status=status, limit=_limit(limit))}
 
 
-@router.post("/replenishment-tasks/{id}/complete", dependencies=[Depends(require_scope(WMS_REPLENISH))])
+@router.post("/replenishment-tasks/{id}/complete", response_model=ReplenishmentTaskOut, dependencies=[Depends(require_scope(WMS_REPLENISH))])
 async def complete_replenishment_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: ReplenishmentTaskComplete | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).complete_replenishment_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1166,11 +1325,12 @@ async def complete_replenishment_task(
         _raise(exc)
 
 
-@router.post("/status-change-tasks", status_code=201, dependencies=[Depends(require_scope(WMS_INVENTORY))])
+@router.post("/status-change-tasks", response_model=StatusChangeTaskOut, status_code=201, dependencies=[Depends(require_scope(WMS_INVENTORY))])
 async def create_status_change_task(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: StatusChangeTaskCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_status_change_task(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1180,12 +1340,13 @@ async def create_status_change_task(
 
 
 @router.post(
-    "/status-change-tasks/{id}/complete", dependencies=[Depends(require_scope(WMS_INVENTORY))]
+    "/status-change-tasks/{id}/complete", response_model=StatusChangeTaskOut, dependencies=[Depends(require_scope(WMS_INVENTORY))]
 )
 async def complete_status_change_task(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TaskCompleteRequest | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True) if body is not None else {}
     try:
         return await _service(db, principal).complete_status_change_task(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1194,7 +1355,7 @@ async def complete_status_change_task(
         _raise(exc)
 
 
-@router.get("/wms/tasks", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/wms/tasks", response_model=TaskSummaryPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_tasks(
     db: DbDep, principal: PrincipalDep, task_type: str | None = None, status: str | None = None,
     warehouse_id: str | None = None, assigned_user_id: str | None = None, limit: int = 100,
@@ -1205,7 +1366,7 @@ async def list_tasks(
     )
 
 
-@router.get("/wms/fulfillment-generations", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/wms/fulfillment-generations", response_model=FulfillmentGenerationPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def list_fulfillment_generations(
     db: DbDep, principal: PrincipalDep, wave_id: str | None = None, status: str | None = None,
     limit: int = 100,
@@ -1215,7 +1376,7 @@ async def list_fulfillment_generations(
     )
 
 
-@router.get("/wms/order-release-status", dependencies=[Depends(require_scope(WMS_READ))])
+@router.get("/wms/order-release-status", response_model=OrderReleaseStatusPage, dependencies=[Depends(require_scope(WMS_READ))])
 async def order_release_status(
     db: DbDep, principal: PrincipalDep, location_id: str | None = None, status: str | None = None,
     limit: int = 100,
@@ -1225,18 +1386,19 @@ async def order_release_status(
     )
 
 
-@router.get("/wms/carts", dependencies=[Depends(require_scope(WMS_ADMIN))])
+@router.get("/wms/carts", response_model=CartPage, dependencies=[Depends(require_scope(WMS_ADMIN))])
 async def list_carts(
     db: DbDep, principal: PrincipalDep, status: str | None = None, limit: int = 100
 ) -> dict[str, Any]:
     return {"items": await _service(db, principal).list_carts(status=status, limit=_limit(limit))}
 
 
-@router.post("/wms/carts", status_code=201, dependencies=[Depends(require_scope(WMS_ADMIN))])
+@router.post("/wms/carts", response_model=CartOut, status_code=201, dependencies=[Depends(require_scope(WMS_ADMIN))])
 async def create_cart(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: CartCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_cart(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1245,11 +1407,12 @@ async def create_cart(
         _raise(exc)
 
 
-@router.patch("/wms/carts/{id}", dependencies=[Depends(require_scope(WMS_ADMIN))])
+@router.patch("/wms/carts/{id}", response_model=CartOut, dependencies=[Depends(require_scope(WMS_ADMIN))])
 async def update_cart(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    id: str, db: DbDep, principal: PrincipalDep, body: CartUpdate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).update_cart(
             id, payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1258,11 +1421,12 @@ async def update_cart(
         _raise(exc)
 
 
-@router.post("/wms/device-sessions", status_code=201, dependencies=[Depends(require_scope(WMS_ADMIN))])
+@router.post("/wms/device-sessions", response_model=DeviceSessionOut, status_code=201, dependencies=[Depends(require_scope(WMS_ADMIN))])
 async def create_device_session(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...),
+    db: DbDep, principal: PrincipalDep, body: DeviceSessionCreate = Body(...),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     try:
         return await _service(db, principal).create_device_session(
             payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
@@ -1272,7 +1436,7 @@ async def create_device_session(
 
 
 @router.patch(
-    "/wms/device-sessions/{id}/heartbeat", dependencies=[Depends(require_scope(WMS_ADMIN))]
+    "/wms/device-sessions/{id}/heartbeat", response_model=DeviceSessionOut, dependencies=[Depends(require_scope(WMS_ADMIN))]
 )
 async def heartbeat_device_session(id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     try:
@@ -1281,9 +1445,9 @@ async def heartbeat_device_session(id: str, db: DbDep, principal: PrincipalDep) 
         _raise(exc)
 
 
-@router.post("/wms/device-sessions/{id}/end", dependencies=[Depends(require_scope(WMS_ADMIN))])
+@router.post("/wms/device-sessions/{id}/end", response_model=DeviceSessionOut, dependencies=[Depends(require_scope(WMS_ADMIN))])
 async def end_device_session(
-    id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(default_factory=dict),
+    id: str, db: DbDep, principal: PrincipalDep, body: TransitionIn | None = Body(default=None),
     idempotency_key: IdempotencyHeader = None,
 ) -> dict[str, Any]:
     try:

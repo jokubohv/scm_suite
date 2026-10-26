@@ -31,6 +31,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, R
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_account_creation_authority, require_scope
+from app.api.schemas.platform import PlatformObject
 from app.core.custom_fields import CustomFieldError
 from app.core.repositories.platform_extras import (
     PlatformExtrasError,
@@ -199,7 +200,7 @@ class NumberSequencePatch(BaseModel):
 
 
 # --------------------------------------------------------------------------- tenant extras -----
-@router.post("/platform/tenants/{tenant_id}/offboard")
+@router.post("/platform/tenants/{tenant_id}/offboard", response_model=PlatformObject)
 async def offboard_tenant(
     tenant_id: str,
     body: OffboardIn,
@@ -235,7 +236,7 @@ async def offboard_tenant(
     )
 
 
-@router.post("/platform/tenants/{tenant_id}/bootstrap-admin")
+@router.post("/platform/tenants/{tenant_id}/bootstrap-admin", response_model=PlatformObject)
 async def bootstrap_admin(
     tenant_id: str,
     body: BootstrapAdminIn,
@@ -272,7 +273,7 @@ async def bootstrap_admin(
 
 
 # --------------------------------------------------------------------------- custom fields -----
-@router.get("/custom-field-values", dependencies=[Depends(require_scope(CUSTOM_FIELD_READ))])
+@router.get("/custom-field-values", response_model=PlatformObject, dependencies=[Depends(require_scope(CUSTOM_FIELD_READ))])
 async def read_custom_field_values(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -290,7 +291,7 @@ async def read_custom_field_values(
     return {"items": items, "count": len(items)}
 
 
-@router.put("/admin/custom-field-values")
+@router.put("/admin/custom-field-values", response_model=PlatformObject)
 async def put_custom_field_values(
     body: CustomFieldValuesPut,
     repo: RepoDep,
@@ -335,7 +336,7 @@ async def put_custom_field_values(
 
 
 # --------------------------------------------------------------------------- data scopes ------
-@router.put("/admin/users/{user_id}/data-scopes")
+@router.put("/admin/users/{user_id}/data-scopes", response_model=PlatformObject)
 async def replace_user_data_scopes(
     user_id: str,
     body: DataScopesPut,
@@ -373,7 +374,7 @@ async def replace_user_data_scopes(
 
 
 # ------------------------------------------------------------------- definitions / sequences --
-@router.patch("/admin/approval-definitions/{definition_id}")
+@router.patch("/admin/approval-definitions/{definition_id}", response_model=PlatformObject)
 async def patch_approval_definition(
     definition_id: str,
     body: ApprovalDefinitionPatch,
@@ -402,7 +403,7 @@ async def patch_approval_definition(
     return {"definition": definition}
 
 
-@router.patch("/admin/number-sequences/{sequence_id}")
+@router.patch("/admin/number-sequences/{sequence_id}", response_model=PlatformObject)
 async def patch_number_sequence(
     sequence_id: str,
     body: NumberSequencePatch,
@@ -432,7 +433,7 @@ async def patch_number_sequence(
 
 
 # --------------------------------------------------------------------------- audit alias ------
-@router.get("/audit-events", dependencies=[Depends(require_scope(AUDIT_READ))])
+@router.get("/audit-events", response_model=PlatformObject, dependencies=[Depends(require_scope(AUDIT_READ))])
 async def query_audit_events(
     repo: RepoDep,
     principal: PrincipalDep,

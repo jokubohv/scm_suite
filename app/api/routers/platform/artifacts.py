@@ -37,6 +37,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from pydantic import AliasChoices, BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.platform import PlatformObject
 from app.core.repositories.artifacts import (
     DEFAULT_PAGE_LIMIT,
     ArtifactsError,
@@ -144,12 +145,12 @@ class DocumentLinkCreate(BaseModel):
 
 # --------------------------------------------------------------------------- attachments -------
 @router.post(
-    "/attachments",
+    "/attachments", response_model=PlatformObject,
     status_code=201,
     dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))],
 )
 @router.post(
-    "/admin/attachments",
+    "/admin/attachments", response_model=PlatformObject,
     status_code=201,
     include_in_schema=False,
     dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))],
@@ -205,8 +206,8 @@ def _replay_response(body: dict[str, Any], status_code: int) -> Any:
     return JSONResponse(status_code=status_code, content=body, headers={"Idempotency-Replayed": "true"})
 
 
-@router.get("/attachments", dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
-@router.get("/admin/attachments", include_in_schema=False, dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
+@router.get("/attachments", response_model=PlatformObject, dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
+@router.get("/admin/attachments", response_model=PlatformObject, include_in_schema=False, dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
 async def list_attachments(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -224,9 +225,9 @@ async def list_attachments(
     return {"items": [serialize_attachment(row) for row in rows], "count": len(rows), "limit": limit}
 
 
-@router.get("/attachments/{attachment_id}", dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
+@router.get("/attachments/{attachment_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
 @router.get(
-    "/admin/attachments/{attachment_id}",
+    "/admin/attachments/{attachment_id}", response_model=PlatformObject,
     include_in_schema=False,
     dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))],
 )
@@ -248,9 +249,9 @@ async def get_attachment(
     return {"attachment": serialize_attachment(row), "download_url": download_url}
 
 
-@router.delete("/attachments/{attachment_id}", dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
+@router.delete("/attachments/{attachment_id}", response_model=PlatformObject, response_model_exclude_none=True, dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))])
 @router.delete(
-    "/admin/attachments/{attachment_id}",
+    "/admin/attachments/{attachment_id}", response_model=PlatformObject,
     include_in_schema=False,
     dependencies=[Depends(require_scope(ATTACHMENT_MANAGE))],
 )
@@ -272,12 +273,12 @@ async def delete_attachment(
 
 # -------------------------------------------------------------------------- document links ----
 @router.post(
-    "/document-links",
+    "/document-links", response_model=PlatformObject,
     status_code=201,
     dependencies=[Depends(require_scope(DOCUMENTLINK_READ))],
 )
 @router.post(
-    "/admin/document-links",
+    "/admin/document-links", response_model=PlatformObject,
     status_code=201,
     include_in_schema=False,
     dependencies=[Depends(require_scope(DOCUMENTLINK_READ))],
@@ -303,9 +304,9 @@ async def create_document_link(
     return {"link": result.link, "created": result.created}
 
 
-@router.get("/document-links", dependencies=[Depends(require_scope(DOCUMENTLINK_READ))])
+@router.get("/document-links", response_model=PlatformObject, dependencies=[Depends(require_scope(DOCUMENTLINK_READ))])
 @router.get(
-    "/admin/document-links",
+    "/admin/document-links", response_model=PlatformObject,
     include_in_schema=False,
     dependencies=[Depends(require_scope(DOCUMENTLINK_READ))],
 )
@@ -335,9 +336,9 @@ async def list_document_links(
     return {"items": [serialize_document_link(row) for row in rows], "count": len(rows), "limit": limit}
 
 
-@router.get("/document-links/{link_id}", dependencies=[Depends(require_scope(DOCUMENTLINK_READ))])
+@router.get("/document-links/{link_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(DOCUMENTLINK_READ))])
 @router.get(
-    "/admin/document-links/{link_id}",
+    "/admin/document-links/{link_id}", response_model=PlatformObject,
     include_in_schema=False,
     dependencies=[Depends(require_scope(DOCUMENTLINK_READ))],
 )
@@ -356,9 +357,9 @@ async def get_document_link(
     return {"link": serialize_document_link(row)}
 
 
-@router.delete("/document-links/{link_id}", dependencies=[Depends(require_scope(DOCUMENTLINK_READ))])
+@router.delete("/document-links/{link_id}", response_model=PlatformObject, response_model_exclude_none=True, dependencies=[Depends(require_scope(DOCUMENTLINK_READ))])
 @router.delete(
-    "/admin/document-links/{link_id}",
+    "/admin/document-links/{link_id}", response_model=PlatformObject,
     include_in_schema=False,
     dependencies=[Depends(require_scope(DOCUMENTLINK_READ))],
 )
@@ -382,7 +383,7 @@ async def delete_document_link(
 
 
 # -------------------------------------------------------------------- finance intents (read) --
-@router.get("/finance/journal-intents", dependencies=[Depends(require_scope(FINANCE_READ))])
+@router.get("/finance/journal-intents", response_model=PlatformObject, dependencies=[Depends(require_scope(FINANCE_READ))])
 async def list_finance_journal_intents(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -421,7 +422,7 @@ async def list_finance_journal_intents(
     }
 
 
-@router.get("/finance/journal-intents/{intent_id}", dependencies=[Depends(require_scope(FINANCE_READ))])
+@router.get("/finance/journal-intents/{intent_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(FINANCE_READ))])
 async def get_finance_journal_intent(
     intent_id: UUID,
     repo: RepoDep,
@@ -437,7 +438,7 @@ async def get_finance_journal_intent(
     return serialize_journal_intent(row, include_payload=True)
 
 
-@router.get("/finance/journal-intents/{id}", dependencies=[Depends(require_scope(FINANCE_READ))])
+@router.get("/finance/journal-intents/{id}", response_model=PlatformObject, dependencies=[Depends(require_scope(FINANCE_READ))])
 async def get_finance_journal_intent_canonical(
     id: UUID,
     repo: RepoDep,

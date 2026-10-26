@@ -36,6 +36,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope, scope_registry, token_service
+from app.api.schemas.platform import PlatformObject
 from app.core.config import get_settings
 from app.core.platform_events import emit_platform_event, sod_blocked
 from app.core.repositories.auth import AuthRepository, hash_refresh_token
@@ -635,7 +636,7 @@ async def _validate_mapping_roles(
 
 
 # =========================================================================== public endpoints ===
-@router.post("/auth/sso/start")
+@router.post("/auth/sso/start", response_model=PlatformObject)
 async def sso_start(payload: SsoStartRequest, repo: RepoDep, store: StateStoreDep) -> dict[str, Any]:
     """Resolve the tenant connection and return the Dex authorization URL (public, no auth)."""
     rows = await repo.list_active_connection_rows()
@@ -677,7 +678,7 @@ async def sso_start(payload: SsoStartRequest, repo: RepoDep, store: StateStoreDe
     }
 
 
-@router.get("/auth/sso/callback")
+@router.get("/auth/sso/callback", response_model=PlatformObject)
 async def sso_callback(
     request: Request,
     repo: RepoDep,
@@ -882,7 +883,7 @@ async def _connection_role_codes(repo: SsoRepository, tenant_id: Any, row: Mappi
     return {str(role_id): role["code"] for role_id, role in roles.items()}
 
 
-@router.get("/admin/sso-connections")
+@router.get("/admin/sso-connections", response_model=PlatformObject)
 async def list_sso_connections(
     repo: RepoDep,
     principal: ReadDep,
@@ -901,7 +902,7 @@ async def list_sso_connections(
     return {"items": items, "limit": limit, "offset": offset}
 
 
-@router.post("/admin/sso-connections", status_code=201)
+@router.post("/admin/sso-connections", response_model=PlatformObject, status_code=201)
 async def create_sso_connection(payload: ConnectionCreate, repo: RepoDep, principal: ManageDep) -> dict[str, Any]:
     if payload.jit_provisioning and not get_settings().sso_jit_provisioning_enabled:
         raise HTTPException(status_code=403, detail={"code": "JIT_PROVISIONING_DISABLED",
@@ -932,7 +933,7 @@ async def create_sso_connection(payload: ConnectionCreate, repo: RepoDep, princi
     return _connection_response(row, role_codes=codes)
 
 
-@router.get("/admin/sso-connections/{connection_id}")
+@router.get("/admin/sso-connections/{connection_id}", response_model=PlatformObject)
 async def get_sso_connection(connection_id: str, repo: RepoDep, principal: ReadDep) -> dict[str, Any]:
     row = await _connection_row_or_404(repo, principal.tenant_id, connection_id)
     codes = await _connection_role_codes(repo, principal.tenant_id, row)
@@ -940,7 +941,7 @@ async def get_sso_connection(connection_id: str, repo: RepoDep, principal: ReadD
     return _connection_response(row, role_codes=codes) | {"active_identity_links": active_links}
 
 
-@router.patch("/admin/sso-connections/{connection_id}")
+@router.patch("/admin/sso-connections/{connection_id}", response_model=PlatformObject)
 async def update_sso_connection(
     connection_id: str, payload: ConnectionUpdate, repo: RepoDep, principal: ManageDep
 ) -> dict[str, Any]:
@@ -984,7 +985,7 @@ async def update_sso_connection(
     return _connection_response(row, role_codes=codes)
 
 
-@router.delete("/admin/sso-connections/{connection_id}")
+@router.delete("/admin/sso-connections/{connection_id}", response_model=PlatformObject)
 async def delete_sso_connection(connection_id: str, repo: RepoDep, principal: ManageDep) -> dict[str, Any]:
     row = await _connection_row_or_404(repo, principal.tenant_id, connection_id)
     active_links = await repo.count_active_links(principal.tenant_id, row["id"])
@@ -1003,7 +1004,7 @@ async def delete_sso_connection(connection_id: str, repo: RepoDep, principal: Ma
     return {"deleted": True, "connection_id": str(row["id"])}
 
 
-@router.post("/admin/sso-connections/{connection_id}/test")
+@router.post("/admin/sso-connections/{connection_id}/test", response_model=PlatformObject)
 async def test_sso_connection(connection_id: str, repo: RepoDep, principal: ManageDep, dex: DexDep) -> dict[str, Any]:
     row = await _connection_row_or_404(repo, principal.tenant_id, connection_id)
     tenant = await repo.get_tenant(principal.tenant_id)
@@ -1053,7 +1054,7 @@ async def test_sso_connection(connection_id: str, repo: RepoDep, principal: Mana
     return _connection_response(updated or row, role_codes=codes)
 
 
-@router.post("/admin/sso-connections/{connection_id}/rotate-secret")
+@router.post("/admin/sso-connections/{connection_id}/rotate-secret", response_model=PlatformObject)
 async def rotate_sso_secret(
     connection_id: str, payload: SecretRotation, repo: RepoDep, principal: ManageDep
 ) -> dict[str, Any]:
@@ -1078,7 +1079,7 @@ async def rotate_sso_secret(
 
 
 # =========================================================================== group mappings =====
-@router.get("/admin/sso-connections/{connection_id}/group-mappings")
+@router.get("/admin/sso-connections/{connection_id}/group-mappings", response_model=PlatformObject)
 async def get_group_mappings(connection_id: str, repo: RepoDep, principal: ReadDep) -> dict[str, Any]:
     row = await _connection_row_or_404(repo, principal.tenant_id, connection_id)
     items = await repo.list_group_mappings(principal.tenant_id, row["id"])
@@ -1100,7 +1101,7 @@ async def get_group_mappings(connection_id: str, repo: RepoDep, principal: ReadD
     }
 
 
-@router.put("/admin/sso-connections/{connection_id}/group-mappings")
+@router.put("/admin/sso-connections/{connection_id}/group-mappings", response_model=PlatformObject)
 async def put_group_mappings(
     connection_id: str, payload: GroupMappingsPut, repo: RepoDep, principal: ManageDep
 ) -> dict[str, Any]:
@@ -1149,7 +1150,7 @@ async def put_group_mappings(
 
 
 # =========================================================================== identity links =====
-@router.get("/admin/sso-connections/{connection_id}/links")
+@router.get("/admin/sso-connections/{connection_id}/links", response_model=PlatformObject)
 async def list_connection_links(
     connection_id: str,
     repo: RepoDep,
@@ -1170,7 +1171,7 @@ async def list_connection_links(
     }
 
 
-@router.delete("/admin/sso-connections/{connection_id}/links/{link_id}")
+@router.delete("/admin/sso-connections/{connection_id}/links/{link_id}", response_model=PlatformObject)
 async def revoke_connection_link(
     connection_id: str, link_id: str, repo: RepoDep, principal: ManageDep
 ) -> dict[str, Any]:
@@ -1205,7 +1206,7 @@ def _identity_link_response(item: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-@router.get("/admin/users/{user_id}/identity-links")
+@router.get("/admin/users/{user_id}/identity-links", response_model=PlatformObject)
 async def list_user_identity_links(user_id: str, repo: RepoDep, principal: ReadDep) -> dict[str, Any]:
     member = await repo.get_member(principal.tenant_id, user_id)
     if member is None:
@@ -1214,7 +1215,7 @@ async def list_user_identity_links(user_id: str, repo: RepoDep, principal: ReadD
     return {"user_id": str(member["id"]), "items": [_identity_link_response(item) for item in items]}
 
 
-@router.post("/admin/users/{user_id}/identity-links", status_code=201)
+@router.post("/admin/users/{user_id}/identity-links", response_model=PlatformObject, status_code=201)
 async def create_user_identity_link(
     user_id: str, payload: IdentityLinkCreate, repo: RepoDep, principal: ManageDep
 ) -> dict[str, Any]:
@@ -1240,7 +1241,7 @@ async def create_user_identity_link(
     return _identity_link_response(link | {"identity_email": email or None, "connection_name": connection.get("name")})
 
 
-@router.delete("/admin/users/{user_id}/identity-links/{link_id}")
+@router.delete("/admin/users/{user_id}/identity-links/{link_id}", response_model=PlatformObject)
 async def delete_user_identity_link(user_id: str, link_id: str, repo: RepoDep, principal: ManageDep) -> dict[str, Any]:
     member = await repo.get_member(principal.tenant_id, user_id)
     if member is None:

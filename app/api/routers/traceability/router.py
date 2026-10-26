@@ -17,6 +17,7 @@ from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.traceability import TraceabilityRequest, TraceabilityResponse
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.traceability.errors import TraceabilityError
@@ -246,15 +247,16 @@ async def _run_write(
     # =========================================================================== locations =========
 
 
-@router.post("/locations", status_code=201, dependencies=[Depends(require_scope(LOCATION_MANAGE))])
+@router.post("/locations", status_code=201, dependencies=[Depends(require_scope(LOCATION_MANAGE))], response_model=TraceabilityResponse)
 async def create_location(
-    body: dict[str, Any],
+    body: TraceabilityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     service = _service(db)
     return await _run_write(
@@ -272,7 +274,7 @@ async def create_location(
     )
 
 
-@router.get("/locations", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations", dependencies=[Depends(require_scope(LOCATION_READ))], response_model=TraceabilityResponse)
 async def list_locations(
     db: DbDep,
     principal: PrincipalDep,
@@ -298,7 +300,7 @@ async def list_locations(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/locations/{id}", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations/{id}", dependencies=[Depends(require_scope(LOCATION_READ))], response_model=TraceabilityResponse)
 async def get_location(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     service = _service(db)
@@ -314,10 +316,11 @@ async def get_location(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) 
     return {"location": location, "resolved_flags": resolved_flags}
 
 
-@router.patch("/locations/{id}", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
+@router.patch("/locations/{id}", dependencies=[Depends(require_scope(LOCATION_MANAGE))], response_model=TraceabilityResponse)
 async def patch_location(
-    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: TraceabilityRequest, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     service = _service(db)
     try:
@@ -333,7 +336,7 @@ async def patch_location(
     return {"location": location}
 
 
-@router.post("/locations/{id}/activate", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
+@router.post("/locations/{id}/activate", dependencies=[Depends(require_scope(LOCATION_MANAGE))], response_model=TraceabilityResponse)
 async def activate_location(
     id: str,
     body: LifecycleIn,
@@ -359,7 +362,7 @@ async def activate_location(
     )
 
 
-@router.post("/locations/{id}/inactivate", dependencies=[Depends(require_scope(LOCATION_MANAGE))])
+@router.post("/locations/{id}/inactivate", dependencies=[Depends(require_scope(LOCATION_MANAGE))], response_model=TraceabilityResponse)
 async def inactivate_location(
     id: str,
     body: InactivateIn,
@@ -387,7 +390,7 @@ async def inactivate_location(
     )
 
 
-@router.get("/locations/{id}/children", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations/{id}/children", dependencies=[Depends(require_scope(LOCATION_READ))], response_model=TraceabilityResponse)
 async def location_children(
     id: str, db: DbDep, principal: PrincipalDep, gate: Gate, active: bool | None = None
 ) -> dict[str, Any]:
@@ -402,7 +405,7 @@ async def location_children(
     return {"items": items}
 
 
-@router.get("/locations/{id}/descendants", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations/{id}/descendants", dependencies=[Depends(require_scope(LOCATION_READ))], response_model=TraceabilityResponse)
 async def location_descendants(
     id: str,
     db: DbDep,
@@ -423,7 +426,7 @@ async def location_descendants(
     return {"items": items, "depth": max((int(item["depth"]) for item in items), default=0)}
 
 
-@router.get("/locations/{id}/bins", dependencies=[Depends(require_scope(BIN_READ))])
+@router.get("/locations/{id}/bins", dependencies=[Depends(require_scope(BIN_READ))], response_model=TraceabilityResponse)
 async def location_bins(
     id: str,
     db: DbDep,
@@ -452,7 +455,7 @@ async def location_bins(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/locations/{id}/posting-eligibility", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/locations/{id}/posting-eligibility", dependencies=[Depends(require_scope(LOCATION_READ))], response_model=TraceabilityResponse)
 async def posting_eligibility(
     id: str,
     item_id: UUID,
@@ -506,15 +509,16 @@ async def posting_eligibility(
     # =========================================================================== zones =============
 
 
-@router.post("/zones", status_code=201, dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/zones", status_code=201, dependencies=[Depends(require_scope(BIN_MANAGE))], response_model=TraceabilityResponse)
 async def create_zone(
-    body: dict[str, Any],
+    body: TraceabilityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     service = _service(db)
     return await _run_write(
@@ -532,7 +536,7 @@ async def create_zone(
     )
 
 
-@router.get("/zones", dependencies=[Depends(require_scope(BIN_READ))])
+@router.get("/zones", dependencies=[Depends(require_scope(BIN_READ))], response_model=TraceabilityResponse)
 async def list_zones(
     db: DbDep,
     principal: PrincipalDep,
@@ -548,7 +552,7 @@ async def list_zones(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/zones/{id}", dependencies=[Depends(require_scope(BIN_READ))])
+@router.get("/zones/{id}", dependencies=[Depends(require_scope(BIN_READ))], response_model=TraceabilityResponse)
 async def get_zone(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
@@ -558,10 +562,11 @@ async def get_zone(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> d
     return {"zone": zone}
 
 
-@router.patch("/zones/{id}", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.patch("/zones/{id}", dependencies=[Depends(require_scope(BIN_MANAGE))], response_model=TraceabilityResponse)
 async def patch_zone(
-    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: TraceabilityRequest, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         zone = await _service(db).update_zone(
@@ -576,7 +581,7 @@ async def patch_zone(
     return {"zone": zone}
 
 
-@router.post("/zones/{id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/zones/{id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))], response_model=TraceabilityResponse)
 async def inactivate_zone(
     id: str,
     body: LifecycleIn,
@@ -604,15 +609,16 @@ async def inactivate_zone(
     # =========================================================================== bins ==============
 
 
-@router.post("/bins", status_code=201, dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/bins", status_code=201, dependencies=[Depends(require_scope(BIN_MANAGE))], response_model=TraceabilityResponse)
 async def create_bin(
-    body: dict[str, Any],
+    body: TraceabilityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     service = _service(db)
     return await _run_write(
@@ -630,7 +636,7 @@ async def create_bin(
     )
 
 
-@router.get("/bins", dependencies=[Depends(require_scope(BIN_READ))])
+@router.get("/bins", dependencies=[Depends(require_scope(BIN_READ))], response_model=TraceabilityResponse)
 async def list_bins(
     db: DbDep,
     principal: PrincipalDep,
@@ -655,7 +661,7 @@ async def list_bins(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/bins/{id}", dependencies=[Depends(require_scope(BIN_READ))])
+@router.get("/bins/{id}", dependencies=[Depends(require_scope(BIN_READ))], response_model=TraceabilityResponse)
 async def get_bin(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
@@ -665,10 +671,11 @@ async def get_bin(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> di
     return {"bin": bin_row}
 
 
-@router.patch("/bins/{id}", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.patch("/bins/{id}", dependencies=[Depends(require_scope(BIN_MANAGE))], response_model=TraceabilityResponse)
 async def patch_bin(
-    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: TraceabilityRequest, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         bin_row = await _service(db).update_bin(
@@ -683,7 +690,7 @@ async def patch_bin(
     return {"bin": bin_row}
 
 
-@router.post("/bins/{id}/activate", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/bins/{id}/activate", dependencies=[Depends(require_scope(BIN_MANAGE))], response_model=TraceabilityResponse)
 async def activate_bin(
     id: str,
     body: LifecycleIn,
@@ -709,7 +716,7 @@ async def activate_bin(
     )
 
 
-@router.post("/bins/{id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))])
+@router.post("/bins/{id}/inactivate", dependencies=[Depends(require_scope(BIN_MANAGE))], response_model=TraceabilityResponse)
 async def inactivate_bin(
     id: str,
     body: InactivateIn,
@@ -739,15 +746,16 @@ async def inactivate_bin(
     # =========================================================================== statuses ==========
 
 
-@router.post("/inventory-statuses", status_code=201, dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.post("/inventory-statuses", status_code=201, dependencies=[Depends(require_scope(STATUS_MANAGE))], response_model=TraceabilityResponse)
 async def create_status(
-    body: dict[str, Any],
+    body: TraceabilityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     service = _service(db)
     return await _run_write(
@@ -765,7 +773,7 @@ async def create_status(
     )
 
 
-@router.get("/inventory-statuses", dependencies=[Depends(require_scope(STATUS_READ))])
+@router.get("/inventory-statuses", dependencies=[Depends(require_scope(STATUS_READ))], response_model=TraceabilityResponse)
 async def list_statuses(
     db: DbDep,
     principal: PrincipalDep,
@@ -782,7 +790,7 @@ async def list_statuses(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/inventory-statuses/{id}", dependencies=[Depends(require_scope(STATUS_READ))])
+@router.get("/inventory-statuses/{id}", dependencies=[Depends(require_scope(STATUS_READ))], response_model=TraceabilityResponse)
 async def get_status(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
@@ -792,10 +800,11 @@ async def get_status(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) ->
     return {"inventory_status": status}
 
 
-@router.patch("/inventory-statuses/{id}", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.patch("/inventory-statuses/{id}", dependencies=[Depends(require_scope(STATUS_MANAGE))], response_model=TraceabilityResponse)
 async def patch_status(
-    id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: TraceabilityRequest, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         status = await _service(db).update_status(
@@ -810,7 +819,7 @@ async def patch_status(
     return {"inventory_status": status}
 
 
-@router.post("/inventory-statuses/{id}/activate", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.post("/inventory-statuses/{id}/activate", dependencies=[Depends(require_scope(STATUS_MANAGE))], response_model=TraceabilityResponse)
 async def activate_status(
     id: str,
     body: LifecycleIn,
@@ -836,7 +845,7 @@ async def activate_status(
     )
 
 
-@router.post("/inventory-statuses/{id}/inactivate", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.post("/inventory-statuses/{id}/inactivate", dependencies=[Depends(require_scope(STATUS_MANAGE))], response_model=TraceabilityResponse)
 async def inactivate_status(
     id: str,
     body: InactivateIn,
@@ -864,7 +873,7 @@ async def inactivate_status(
     )
 
 
-@router.post("/inventory-statuses/{id}/set-default", dependencies=[Depends(require_scope(STATUS_MANAGE))])
+@router.post("/inventory-statuses/{id}/set-default", dependencies=[Depends(require_scope(STATUS_MANAGE))], response_model=TraceabilityResponse)
 async def set_default_status(
     id: str, db: DbDep, principal: PrincipalDep, response: Response, gate: Gate, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:
@@ -886,7 +895,7 @@ async def set_default_status(
     # =========================================================================== bootstrap =========
 
 
-@router.get("/traceability/bootstrap", dependencies=[Depends(require_scope(LOCATION_READ))])
+@router.get("/traceability/bootstrap", dependencies=[Depends(require_scope(LOCATION_READ))], response_model=TraceabilityResponse)
 async def bootstrap_state(db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:

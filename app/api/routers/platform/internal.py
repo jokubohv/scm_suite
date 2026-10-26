@@ -28,6 +28,7 @@ from app.api.routers.platform.boundary import (
     _http_error,
     get_adapter,
 )
+from app.api.schemas.platform import PlatformObject
 from app.core.models import platform as p
 from app.core.platform_events import emit_platform_event
 from app.core.repositories.boundary import (
@@ -70,7 +71,7 @@ class FiscalPeriodsIn(BaseModel):
     periods: list[FiscalPeriodIn] = Field(default_factory=list, max_length=5000)
 
 
-@router.get("/internal/deps")
+@router.get("/internal/deps", response_model=PlatformObject)
 async def internal_deps(request: Request, _: InternalService) -> dict[str, Any]:
     return {
         "platform_version": __version__,
@@ -87,7 +88,7 @@ async def root_openapi(request: Request) -> dict[str, Any]:
     return request.app.openapi()
 
 
-@router.post("/internal/outbox/replay", dependencies=[Depends(require_scope(PLATFORM_INTERNAL))])
+@router.post("/internal/outbox/replay", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_INTERNAL))])
 async def outbox_replay(body: OutboxReplayIn, db: DbDep, principal: PrincipalDep,
                         _: InternalService, idempotency_key: IdempotencyKey) -> dict[str, Any]:
     try:
@@ -101,7 +102,7 @@ async def outbox_replay(body: OutboxReplayIn, db: DbDep, principal: PrincipalDep
         raise _http_error(exc) from exc
 
 
-@router.put("/internal/finance/exchange-rates", dependencies=[Depends(require_scope(PLATFORM_FINANCE_SYNC))])
+@router.put("/internal/finance/exchange-rates", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_FINANCE_SYNC))])
 async def finance_exchange_rates(body: ExchangeRatesIn, db: DbDep, principal: PrincipalDep,
                                  _: FinanceSyncWriter, idempotency_key: IdempotencyKey) -> dict[str, Any]:
     try:
@@ -110,7 +111,7 @@ async def finance_exchange_rates(body: ExchangeRatesIn, db: DbDep, principal: Pr
         raise _http_error(exc) from exc
 
 
-@router.put("/internal/finance/fiscal-periods", dependencies=[Depends(require_scope(PLATFORM_FINANCE_SYNC))])
+@router.put("/internal/finance/fiscal-periods", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_FINANCE_SYNC))])
 async def finance_fiscal_periods(body: FiscalPeriodsIn, db: DbDep, principal: PrincipalDep,
                                  _: FinanceSyncWriter, idempotency_key: IdempotencyKey) -> dict[str, Any]:
     upserted: list[str] = []
@@ -143,7 +144,7 @@ async def finance_fiscal_periods(body: FiscalPeriodsIn, db: DbDep, principal: Pr
     return {"upserted": len(upserted), "period_keys": upserted, "rejected": rejected}
 
 
-@router.put("/internal/order-boundary/demand-doubles", dependencies=[Depends(require_scope(PLATFORM_INTERNAL))])
+@router.put("/internal/order-boundary/demand-doubles", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_INTERNAL))])
 async def demand_doubles(body: DemandDoublesIn, db: DbDep, principal: PrincipalDep,
                          adapter: AdapterDep, _: InternalService,
                          idempotency_key: IdempotencyKey) -> dict[str, Any]:

@@ -16,6 +16,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.quality import QualityRequest, QualityResponse
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.quality.errors import QualityError
@@ -194,15 +195,16 @@ async def _run_write(
 
 
 # =========================================================================== specs =============
-@router.post("/quality/specs", status_code=201, dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))])
+@router.post("/quality/specs", status_code=201, dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))], response_model=QualityResponse)
 async def create_spec(
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -219,7 +221,7 @@ async def create_spec(
     )
 
 
-@router.get("/quality/specs", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/specs", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def list_specs(
     db: DbDep,
     principal: PrincipalDep,
@@ -237,7 +239,7 @@ async def list_specs(
     )
 
 
-@router.get("/quality/specs/{spec_id}", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/specs/{spec_id}", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def get_spec(spec_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
@@ -248,17 +250,19 @@ async def get_spec(spec_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate
 
 
 @router.post(
-    "/quality/specs/{spec_id}/versions", status_code=201, dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))]
+    "/quality/specs/{spec_id}/versions", status_code=201, dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))],
+    response_model=QualityResponse,
 )
 async def new_spec_version(
     spec_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -277,7 +281,7 @@ async def new_spec_version(
     )
 
 
-@router.post("/quality/specs/{spec_id}/activate", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))])
+@router.post("/quality/specs/{spec_id}/activate", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))], response_model=QualityResponse)
 async def activate_spec(
     spec_id: UUID, db: DbDep, principal: PrincipalDep, response: Response, gate: Gate, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:
@@ -298,16 +302,17 @@ async def activate_spec(
     )
 
 
-@router.post("/quality/specs/{spec_id}/retire", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))])
+@router.post("/quality/specs/{spec_id}/retire", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))], response_model=QualityResponse)
 async def retire_spec(
     spec_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -330,15 +335,16 @@ async def retire_spec(
 
 
 # =========================================================================== plans =============
-@router.post("/quality/inspection-plans", status_code=201, dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))])
+@router.post("/quality/inspection-plans", status_code=201, dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))], response_model=QualityResponse)
 async def create_plan(
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -355,7 +361,7 @@ async def create_plan(
     )
 
 
-@router.get("/quality/inspection-plans", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/inspection-plans", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def list_plans(
     db: DbDep,
     principal: PrincipalDep,
@@ -372,7 +378,7 @@ async def list_plans(
     )
 
 
-@router.get("/quality/inspection-plans/{plan_id}", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/inspection-plans/{plan_id}", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def get_plan(plan_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
@@ -382,10 +388,11 @@ async def get_plan(plan_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate
     return {"plan": plan, "version": plan["version"]}
 
 
-@router.patch("/quality/inspection-plans/{plan_id}", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))])
+@router.patch("/quality/inspection-plans/{plan_id}", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))], response_model=QualityResponse)
 async def patch_plan(
-    plan_id: UUID, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+    plan_id: UUID, body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         plan = await _service(db).update_plan(
@@ -397,15 +404,16 @@ async def patch_plan(
 
 
 # =========================================================================== queues ============
-@router.post("/quality/inspection-queues", status_code=201, dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+@router.post("/quality/inspection-queues", status_code=201, dependencies=[Depends(require_scope(QUALITY_ADMIN))], response_model=QualityResponse)
 async def create_queue(
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -422,7 +430,7 @@ async def create_queue(
     )
 
 
-@router.get("/quality/inspection-queues", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/inspection-queues", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def list_queues(
     db: DbDep,
     principal: PrincipalDep,
@@ -436,7 +444,7 @@ async def list_queues(
     )
 
 
-@router.get("/quality/inspection-queues/{queue_id}/items", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/inspection-queues/{queue_id}/items", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def queue_items(
     queue_id: UUID,
     db: DbDep,
@@ -454,15 +462,16 @@ async def queue_items(
 
 
 # =========================================================================== triggers ==========
-@router.post("/quality/inspection-triggers", status_code=201, dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+@router.post("/quality/inspection-triggers", status_code=201, dependencies=[Depends(require_scope(QUALITY_ADMIN))], response_model=QualityResponse)
 async def create_trigger(
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -479,7 +488,7 @@ async def create_trigger(
     )
 
 
-@router.get("/quality/inspection-triggers", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/inspection-triggers", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def list_triggers(
     db: DbDep,
     principal: PrincipalDep,
@@ -496,10 +505,11 @@ async def list_triggers(
     )
 
 
-@router.patch("/quality/inspection-triggers/{trigger_id}", dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+@router.patch("/quality/inspection-triggers/{trigger_id}", dependencies=[Depends(require_scope(QUALITY_ADMIN))], response_model=QualityResponse)
 async def patch_trigger(
-    trigger_id: UUID, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+    trigger_id: UUID, body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         trigger = await _service(db).update_trigger(
@@ -511,17 +521,19 @@ async def patch_trigger(
 
 
 @router.post(
-    "/quality/inspection-triggers/{trigger_id}/reset-counter", dependencies=[Depends(require_scope(QUALITY_ADMIN))]
+    "/quality/inspection-triggers/{trigger_id}/reset-counter", dependencies=[Depends(require_scope(QUALITY_ADMIN))],
+    response_model=QualityResponse,
 )
 async def reset_counter(
     trigger_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -539,16 +551,17 @@ async def reset_counter(
     )
 
 
-@router.post("/quality/inspection-triggers/{trigger_id}/evaluate", dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+@router.post("/quality/inspection-triggers/{trigger_id}/evaluate", dependencies=[Depends(require_scope(QUALITY_ADMIN))], response_model=QualityResponse)
 async def evaluate_trigger(
     trigger_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -567,7 +580,7 @@ async def evaluate_trigger(
 
 
 # =========================================================================== inspections =======
-@router.get("/quality/inspections", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/inspections", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def list_inspections(
     db: DbDep,
     principal: PrincipalDep,
@@ -593,15 +606,16 @@ async def list_inspections(
     )
 
 
-@router.post("/quality/inspections", status_code=201, dependencies=[Depends(require_scope(QUALITY_INSPECT))])
+@router.post("/quality/inspections", status_code=201, dependencies=[Depends(require_scope(QUALITY_INSPECT))], response_model=QualityResponse)
 async def create_inspection(
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -620,7 +634,7 @@ async def create_inspection(
     )
 
 
-@router.get("/quality/inspections/{inspection_id}", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/inspections/{inspection_id}", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def get_inspection(inspection_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
@@ -630,10 +644,11 @@ async def get_inspection(inspection_id: UUID, db: DbDep, principal: PrincipalDep
     return {"inspection": inspection, "version": inspection["version"]}
 
 
-@router.post("/quality/inspections/{inspection_id}/start", dependencies=[Depends(require_scope(QUALITY_INSPECT))])
+@router.post("/quality/inspections/{inspection_id}/start", dependencies=[Depends(require_scope(QUALITY_INSPECT))], response_model=QualityResponse)
 async def start_inspection(
-    inspection_id: UUID, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+    inspection_id: UUID, body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         inspection = await _service(db).start_inspection(
@@ -647,10 +662,11 @@ async def start_inspection(
     return {"inspection": inspection, "version": inspection["version"]}
 
 
-@router.post("/quality/inspections/{inspection_id}/results", dependencies=[Depends(require_scope(QUALITY_INSPECT))])
+@router.post("/quality/inspections/{inspection_id}/results", dependencies=[Depends(require_scope(QUALITY_INSPECT))], response_model=QualityResponse)
 async def record_results(
-    inspection_id: UUID, body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+    inspection_id: UUID, body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         result = await _service(db).record_results(
@@ -665,17 +681,19 @@ async def record_results(
 
 
 @router.post(
-    "/quality/inspections/{inspection_id}/complete", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))]
+    "/quality/inspections/{inspection_id}/complete", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))],
+    response_model=QualityResponse,
 )
 async def complete_inspection(
     inspection_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -697,16 +715,17 @@ async def complete_inspection(
     )
 
 
-@router.post("/quality/inspections/{inspection_id}/waive", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))])
+@router.post("/quality/inspections/{inspection_id}/waive", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))], response_model=QualityResponse)
 async def waive_inspection(
     inspection_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -728,16 +747,17 @@ async def waive_inspection(
     )
 
 
-@router.post("/quality/inspections/{inspection_id}/cancel", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))])
+@router.post("/quality/inspections/{inspection_id}/cancel", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))], response_model=QualityResponse)
 async def cancel_inspection(
     inspection_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -758,16 +778,17 @@ async def cancel_inspection(
     )
 
 
-@router.post("/quality/inspections/{inspection_id}/hold", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))])
+@router.post("/quality/inspections/{inspection_id}/hold", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))], response_model=QualityResponse)
 async def hold_inspection(
     inspection_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -789,17 +810,19 @@ async def hold_inspection(
 
 
 @router.post(
-    "/quality/inspections/{inspection_id}/release-hold", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))]
+    "/quality/inspections/{inspection_id}/release-hold", dependencies=[Depends(require_scope(QUALITY_DISPOSITION))],
+    response_model=QualityResponse,
 )
 async def release_hold(
     inspection_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -824,16 +847,18 @@ async def release_hold(
     "/quality/inspections/{inspection_id}/images",
     status_code=201,
     dependencies=[Depends(require_scope(QUALITY_INSPECT))],
+    response_model=QualityResponse,
 )
 async def attach_image(
     inspection_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -856,15 +881,16 @@ async def attach_image(
 
 
 # =========================================================================== COA ===============
-@router.post("/quality/coas", status_code=201, dependencies=[Depends(require_scope(QUALITY_COA_WRITE))])
+@router.post("/quality/coas", status_code=201, dependencies=[Depends(require_scope(QUALITY_COA_WRITE))], response_model=QualityResponse)
 async def create_coa(
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -881,7 +907,7 @@ async def create_coa(
     )
 
 
-@router.get("/quality/coas", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/coas", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def list_coas(
     db: DbDep,
     principal: PrincipalDep,
@@ -899,7 +925,7 @@ async def list_coas(
     )
 
 
-@router.get("/quality/coas/{coa_id}", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/coas/{coa_id}", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def get_coa(coa_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     try:
@@ -909,16 +935,17 @@ async def get_coa(coa_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate) 
     return {"coa": coa, "version": coa["version"]}
 
 
-@router.post("/quality/coas/{coa_id}/issue", dependencies=[Depends(require_scope(QUALITY_COA_WRITE))])
+@router.post("/quality/coas/{coa_id}/issue", dependencies=[Depends(require_scope(QUALITY_COA_WRITE))], response_model=QualityResponse)
 async def issue_coa(
     coa_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     issued_at = datetime.fromisoformat(body["issued_at"]) if body.get("issued_at") else None
     return await _run_write(
@@ -937,16 +964,17 @@ async def issue_coa(
     )
 
 
-@router.post("/quality/coas/{coa_id}/revoke", dependencies=[Depends(require_scope(QUALITY_COA_WRITE))])
+@router.post("/quality/coas/{coa_id}/revoke", dependencies=[Depends(require_scope(QUALITY_COA_WRITE))], response_model=QualityResponse)
 async def revoke_coa(
     coa_id: UUID,
-    body: dict[str, Any],
+    body: QualityRequest,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     gate: Gate,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     return await _run_write(
         response=response,
@@ -968,14 +996,15 @@ async def revoke_coa(
 
 
 # =========================================================================== settings ==========
-@router.get("/quality/settings", dependencies=[Depends(require_scope(QUALITY_READ))])
+@router.get("/quality/settings", dependencies=[Depends(require_scope(QUALITY_READ))], response_model=QualityResponse)
 async def get_settings(db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     return {"settings": await _service(db).get_settings(principal.tenant_id)}
 
 
-@router.patch("/quality/settings", dependencies=[Depends(require_scope(QUALITY_ADMIN))])
-async def patch_settings(body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
+@router.patch("/quality/settings", dependencies=[Depends(require_scope(QUALITY_ADMIN))], response_model=QualityResponse)
+async def patch_settings(body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     try:
         settings = await _service(db).update_settings(
@@ -999,10 +1028,11 @@ def _body_id(body: dict[str, Any], *names: str) -> UUID:
     )
 
 
-@router.patch("/quality/inspection-plans", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))])
+@router.patch("/quality/inspection-plans", dependencies=[Depends(require_scope(QUALITY_SPEC_WRITE))], response_model=QualityResponse)
 async def patch_plan_collection(
-    body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+    body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     plan_id = _body_id(body, "id", "plan_id")
     try:
@@ -1014,10 +1044,11 @@ async def patch_plan_collection(
     return {"plan": plan, "version": plan["version"]}
 
 
-@router.patch("/quality/inspection-queues", dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+@router.patch("/quality/inspection-queues", dependencies=[Depends(require_scope(QUALITY_ADMIN))], response_model=QualityResponse)
 async def patch_queue_collection(
-    body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+    body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     queue_id = _body_id(body, "id", "queue_id")
     try:
@@ -1029,10 +1060,11 @@ async def patch_queue_collection(
     return {"queue": queue, "version": queue["version"]}
 
 
-@router.patch("/quality/inspection-triggers", dependencies=[Depends(require_scope(QUALITY_ADMIN))])
+@router.patch("/quality/inspection-triggers", dependencies=[Depends(require_scope(QUALITY_ADMIN))], response_model=QualityResponse)
 async def patch_trigger_collection(
-    body: dict[str, Any], db: DbDep, principal: PrincipalDep, gate: Gate
+    body: QualityRequest, db: DbDep, principal: PrincipalDep, gate: Gate
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     del gate
     trigger_id = _body_id(body, "id", "trigger_id")
     try:
@@ -1099,11 +1131,13 @@ def _register_canonical_aliases() -> None:
         if alias_route is None:  # pragma: no cover - defensive: drift detected by route-surface tests
             continue
         alias = _alias_endpoint(alias_route.endpoint, implementation_param)
+        alias_status = int(getattr(alias_route, "status_code", None) or 200)
         router.add_api_route(
             relative_path,
             alias,
             methods=[method],
-            status_code=int(getattr(alias_route, "status_code", None) or 200),
+            status_code=alias_status,
+            response_model=None if alias_status == 204 else QualityResponse,
             dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, declared_path)]))],
         )
         ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, declared_path)]

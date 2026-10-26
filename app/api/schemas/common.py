@@ -28,6 +28,8 @@ class Page[T](APIModel):
 
 
 class ActionResult(APIModel):
+    model_config = ConfigDict(extra="allow", from_attributes=True, populate_by_name=True)
+
     id: str | None = None
     status: str | None = None
     document_number: str | None = None

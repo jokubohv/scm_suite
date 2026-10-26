@@ -21,6 +21,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, SettingsDep, require_scope, scope_registry
+from app.api.schemas.platform import PlatformObject
 from app.core.config import Settings
 from app.core.idempotency_store import build_fingerprint, complete, guard
 from app.core.repositories.api_keys import (
@@ -91,7 +92,7 @@ def _issued_payload(issued: Any) -> dict[str, Any]:
 
 
 @router.post(
-    "/admin/api-keys", status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_scope(API_KEY_ADMIN))]
+    "/admin/api-keys", response_model=PlatformObject, status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_scope(API_KEY_ADMIN))]
 )
 async def create_api_key(body: ApiKeyCreate, repo: RepoDep, principal: PrincipalDep) -> dict[str, Any]:
     """Create a machine credential. Scopes are catalogue-validated and SoD-checked."""
@@ -108,7 +109,7 @@ async def create_api_key(body: ApiKeyCreate, repo: RepoDep, principal: Principal
     return _issued_payload(issued)
 
 
-@router.get("/admin/api-keys", dependencies=[Depends(require_scope(API_KEY_ADMIN))])
+@router.get("/admin/api-keys", response_model=PlatformObject, dependencies=[Depends(require_scope(API_KEY_ADMIN))])
 async def list_api_keys(
     repo: RepoDep,
     principal: PrincipalDep,
@@ -136,7 +137,7 @@ async def revoke_api_key(key_id: str, repo: RepoDep, principal: PrincipalDep) ->
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post("/admin/api-keys/{key_id}/rotate", dependencies=[Depends(require_scope(API_KEY_ADMIN))])
+@router.post("/admin/api-keys/{key_id}/rotate", response_model=PlatformObject, dependencies=[Depends(require_scope(API_KEY_ADMIN))])
 async def rotate_api_key(key_id: str, repo: RepoDep, principal: PrincipalDep) -> dict[str, Any]:
     """Rotate the secret in place (old secret invalid immediately); new secret shown once."""
     issued = await repo.rotate(tenant_id=principal.tenant_id, actor_id=principal.app_user_id, key_id=key_id)
@@ -145,7 +146,7 @@ async def rotate_api_key(key_id: str, repo: RepoDep, principal: PrincipalDep) ->
     return _issued_payload(issued)
 
 
-@router.post("/admin/api-keys/{key_id}/revoke", dependencies=[Depends(require_scope(API_KEY_ADMIN))])
+@router.post("/admin/api-keys/{key_id}/revoke", response_model=PlatformObject, dependencies=[Depends(require_scope(API_KEY_ADMIN))])
 async def revoke_api_key_alias(
     key_id: str,
     body: ApiKeyRevokeIn,

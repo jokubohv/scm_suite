@@ -19,6 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.traceability import TraceabilityResponse
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.traceability_numbered.errors import NumberedError
@@ -256,7 +257,7 @@ async def _run_write(
 
 
 # =========================================================================== lots ===============
-@router.post("/lots", status_code=201, dependencies=[Depends(require_scope(LOT_WRITE))])
+@router.post("/lots", status_code=201, dependencies=[Depends(require_scope(LOT_WRITE))], response_model=TraceabilityResponse)
 async def create_lot(
     body: LotCreate,
     db: DbDep,
@@ -291,7 +292,7 @@ async def create_lot(
     )
 
 
-@router.get("/lots", dependencies=[Depends(require_scope(LOT_READ))])
+@router.get("/lots", dependencies=[Depends(require_scope(LOT_READ))], response_model=TraceabilityResponse)
 async def list_lots(
     db: DbDep,
     principal: PrincipalDep,
@@ -316,7 +317,7 @@ async def list_lots(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/lots/{lot_id}", dependencies=[Depends(require_scope(LOT_READ))])
+@router.get("/lots/{lot_id}", dependencies=[Depends(require_scope(LOT_READ))], response_model=TraceabilityResponse)
 async def get_lot(
     lot_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate, include_positions: bool = False
 ) -> dict[str, Any]:
@@ -328,7 +329,7 @@ async def get_lot(
     return {"lot": lot, "version": lot["version"]}
 
 
-@router.patch("/lots/{lot_id}", dependencies=[Depends(require_scope(LOT_WRITE))])
+@router.patch("/lots/{lot_id}", dependencies=[Depends(require_scope(LOT_WRITE))], response_model=TraceabilityResponse)
 async def patch_lot(
     lot_id: UUID,
     body: LotPatch,
@@ -352,7 +353,7 @@ async def patch_lot(
     return {"lot": lot, "version": lot["version"]}
 
 
-@router.post("/lots/{lot_id}/inactivate", dependencies=[Depends(require_scope(LOT_INACTIVATE))])
+@router.post("/lots/{lot_id}/inactivate", dependencies=[Depends(require_scope(LOT_INACTIVATE))], response_model=TraceabilityResponse)
 async def inactivate_lot(
     lot_id: UUID,
     body: InactivateIn,
@@ -379,7 +380,7 @@ async def inactivate_lot(
     )
 
 
-@router.get("/items/{item_id}/lots", dependencies=[Depends(require_scope(LOT_READ))])
+@router.get("/items/{item_id}/lots", dependencies=[Depends(require_scope(LOT_READ))], response_model=TraceabilityResponse)
 async def list_item_lots(
     item_id: UUID,
     db: DbDep,
@@ -403,7 +404,7 @@ async def list_item_lots(
 
 
 # =========================================================================== serials ============
-@router.post("/serials", status_code=201, dependencies=[Depends(require_scope(SERIAL_REGISTER))])
+@router.post("/serials", status_code=201, dependencies=[Depends(require_scope(SERIAL_REGISTER))], response_model=TraceabilityResponse)
 async def register_serial(
     body: SerialRegister,
     db: DbDep,
@@ -436,7 +437,7 @@ async def register_serial(
     )
 
 
-@router.get("/serials/{serial_id}", dependencies=[Depends(require_scope(SERIAL_READ))])
+@router.get("/serials/{serial_id}", dependencies=[Depends(require_scope(SERIAL_READ))], response_model=TraceabilityResponse)
 async def get_serial(
     serial_id: UUID, db: DbDep, principal: PrincipalDep, gate: Gate, include_history: bool = False
 ) -> dict[str, Any]:
@@ -448,7 +449,7 @@ async def get_serial(
     return {"serial": serial, "version": serial["version"]}
 
 
-@router.get("/serials/{serial_id}/history", dependencies=[Depends(require_scope(SERIAL_READ))])
+@router.get("/serials/{serial_id}/history", dependencies=[Depends(require_scope(SERIAL_READ))], response_model=TraceabilityResponse)
 async def serial_history(
     serial_id: UUID,
     db: DbDep,
@@ -481,7 +482,7 @@ async def serial_history(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/items/{item_id}/serials", dependencies=[Depends(require_scope(SERIAL_READ))])
+@router.get("/items/{item_id}/serials", dependencies=[Depends(require_scope(SERIAL_READ))], response_model=TraceabilityResponse)
 async def list_item_serials(
     item_id: UUID,
     db: DbDep,
@@ -506,7 +507,7 @@ async def list_item_serials(
     return _page(items, limit=limit, offset=offset)
 
 
-@router.get("/serials", dependencies=[Depends(require_scope(SERIAL_READ))])
+@router.get("/serials", dependencies=[Depends(require_scope(SERIAL_READ))], response_model=TraceabilityResponse)
 async def list_serials(
     db: DbDep,
     principal: PrincipalDep,
@@ -532,7 +533,7 @@ async def list_serials(
 
 
 # =========================================================================== numbered =========
-@router.post("/numbered-inventory/validate", dependencies=[Depends(require_scope(NUMBERED_VALIDATE))])
+@router.post("/numbered-inventory/validate", dependencies=[Depends(require_scope(NUMBERED_VALIDATE))], response_model=TraceabilityResponse)
 async def validate_numbered_posting(body: ValidateIn, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     return await _service(db).validate_posting(
@@ -543,7 +544,7 @@ async def validate_numbered_posting(body: ValidateIn, db: DbDep, principal: Prin
     )
 
 
-@router.post("/numbered-inventory/fefo-plan", dependencies=[Depends(require_scope(LOT_READ))])
+@router.post("/numbered-inventory/fefo-plan", dependencies=[Depends(require_scope(LOT_READ))], response_model=TraceabilityResponse)
 async def fefo_plan(body: FefoPlanIn, db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate
     return await _service(db).plan_fefo(
@@ -557,7 +558,7 @@ async def fefo_plan(body: FefoPlanIn, db: DbDep, principal: PrincipalDep, gate: 
     )
 
 
-@router.get("/numbered-inventory/search", dependencies=[Depends(require_scope(SERIAL_READ))])
+@router.get("/numbered-inventory/search", dependencies=[Depends(require_scope(SERIAL_READ))], response_model=TraceabilityResponse)
 async def numbered_search(
     db: DbDep,
     principal: PrincipalDep,
@@ -583,7 +584,7 @@ async def numbered_search(
     )
 
 
-@router.get("/numbered-inventory/deferred-fks/status", dependencies=[Depends(require_scope(NUMBERED_RECONCILE))])
+@router.get("/numbered-inventory/deferred-fks/status", dependencies=[Depends(require_scope(NUMBERED_RECONCILE))], response_model=TraceabilityResponse)
 async def deferred_fks_status(db: DbDep, principal: PrincipalDep, gate: Gate) -> dict[str, Any]:
     del gate, principal
     return await _service(db).deferred_fk_status()
@@ -645,11 +646,13 @@ def _register_canonical_aliases() -> None:
         if alias_route is None or implementation_path is None:
             continue
         alias = _alias_endpoint(alias_route.endpoint, implementation_param)
+        alias_status = int(getattr(alias_route, "status_code", None) or 200)
         router.add_api_route(
             relative_path,
             alias,
             methods=[method],
-            status_code=int(getattr(alias_route, "status_code", None) or 200),
+            status_code=alias_status,
+            response_model=None if alias_status == 204 else TraceabilityResponse,
             dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, implementation_path)]))],
         )
         ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, implementation_path)]

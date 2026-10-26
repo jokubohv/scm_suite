@@ -20,6 +20,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas import pricing as pricing_dto
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.pricing import tables as t
@@ -284,15 +285,21 @@ class CouponValidateIn(BaseModel):
 
 
 # --------------------------------------------------------------------------- price levels -----
-@router.post("/price-levels", status_code=201, dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.post(
+    "/price-levels",
+    status_code=201,
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.PriceLevelEnvelope,
+)
 async def create_price_level(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreatePriceLevelIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: LevelManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:price-levels:create"
     store, replay = await _idempotent(
         db=db,
@@ -323,7 +330,9 @@ async def create_price_level(
     )
 
 
-@router.get("/price-levels", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-levels", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.PriceLevelPage
+)
 async def list_price_levels(
     db: DbDep,
     principal: PrincipalDep,
@@ -341,7 +350,11 @@ async def list_price_levels(
     return {"items": items}
 
 
-@router.get("/price-levels/{price_level_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-levels/{price_level_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PriceLevelOut,
+)
 async def get_price_level(price_level_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         return await _service(db).get_master(t.price_level, principal.tenant_id, price_level_id)
@@ -349,15 +362,20 @@ async def get_price_level(price_level_id: str, db: DbDep, principal: PrincipalDe
         _raise(exc)
 
 
-@router.patch("/price-levels/{price_level_id}", dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.patch(
+    "/price-levels/{price_level_id}",
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.PriceLevelEnvelope,
+)
 async def patch_price_level(
     price_level_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchPriceLevelIn,
     db: DbDep,
     principal: PrincipalDep,
     _: LevelManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     try:
         return {
             "price_level": await _service(db).update_price_level(
@@ -373,15 +391,21 @@ async def patch_price_level(
 
 
 # --------------------------------------------------------------------------- item groups -----
-@router.post("/item-groups", status_code=201, dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.post(
+    "/item-groups",
+    status_code=201,
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.ItemGroupEnvelope,
+)
 async def create_item_group(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreateItemGroupIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: LevelManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:item-groups:create"
     store, replay = await _idempotent(
         db=db,
@@ -412,7 +436,9 @@ async def create_item_group(
     )
 
 
-@router.get("/item-groups", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-groups", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.ItemGroupPage
+)
 async def list_item_groups(
     db: DbDep,
     principal: PrincipalDep,
@@ -430,7 +456,11 @@ async def list_item_groups(
     }
 
 
-@router.get("/item-groups/{item_group_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-groups/{item_group_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.ItemGroupOut,
+)
 async def get_item_group(item_group_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     service = _service(db)
     try:
@@ -443,15 +473,20 @@ async def get_item_group(item_group_id: str, db: DbDep, principal: PrincipalDep,
     return {"item_group": group, "items": members}
 
 
-@router.patch("/item-groups/{item_group_id}", dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.patch(
+    "/item-groups/{item_group_id}",
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.ItemGroupEnvelope,
+)
 async def patch_item_group(
     item_group_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchItemGroupIn,
     db: DbDep,
     principal: PrincipalDep,
     _: LevelManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     service = _service(db)
     try:
         await service.get_master(t.item_group, principal.tenant_id, item_group_id)
@@ -470,7 +505,11 @@ async def patch_item_group(
     return {"item_group": row}
 
 
-@router.get("/item-groups/{item_group_id}/members", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-groups/{item_group_id}/members",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.ItemGroupMemberPage,
+)
 async def list_item_group_members(item_group_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     items = await _service(db).repo.list_rows(
         t.item_group_member, principal.tenant_id, filters={"item_group_id": UUID(item_group_id)}, limit=500
@@ -478,16 +517,21 @@ async def list_item_group_members(item_group_id: str, db: DbDep, principal: Prin
     return {"items": items}
 
 
-@router.post("/item-groups/{item_group_id}/members", dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.post(
+    "/item-groups/{item_group_id}/members",
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.PricingActionOut,
+)
 async def add_item_group_members(
     item_group_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingAddItemGroupMembersIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: LevelManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:item-groups:{item_group_id}:members"
     store, replay = await _idempotent(
         db=db,
@@ -549,15 +593,21 @@ async def remove_item_group_member(
 
 
 # --------------------------------------------------------------------------- customer groups --
-@router.post("/customer-groups", status_code=201, dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.post(
+    "/customer-groups",
+    status_code=201,
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.CustomerGroupEnvelope,
+)
 async def create_customer_group(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreateCustomerGroupIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: LevelManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:customer-groups:create"
     store, replay = await _idempotent(
         db=db,
@@ -588,7 +638,11 @@ async def create_customer_group(
     )
 
 
-@router.get("/customer-groups", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/customer-groups",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.CustomerGroupPage,
+)
 async def list_customer_groups(
     db: DbDep,
     principal: PrincipalDep,
@@ -621,7 +675,11 @@ async def list_customer_groups(
     return {"items": items}
 
 
-@router.get("/customer-groups/{customer_group_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/customer-groups/{customer_group_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.CustomerGroupOut,
+)
 async def get_customer_group(customer_group_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     service = _service(db)
     try:
@@ -634,15 +692,20 @@ async def get_customer_group(customer_group_id: str, db: DbDep, principal: Princ
     return {"customer_group": group, "members": members}
 
 
-@router.patch("/customer-groups/{customer_group_id}", dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.patch(
+    "/customer-groups/{customer_group_id}",
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.CustomerGroupEnvelope,
+)
 async def patch_customer_group(
     customer_group_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchCustomerGroupIn,
     db: DbDep,
     principal: PrincipalDep,
     _: LevelManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     service = _service(db)
     try:
         await service.get_master(t.customer_group, principal.tenant_id, customer_group_id)
@@ -661,7 +724,11 @@ async def patch_customer_group(
     return {"customer_group": row}
 
 
-@router.get("/customer-groups/{customer_group_id}/members", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/customer-groups/{customer_group_id}/members",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.CustomerGroupMemberPage,
+)
 async def list_customer_group_members(
     customer_group_id: str, db: DbDep, principal: PrincipalDep, _: Read
 ) -> dict[str, Any]:
@@ -675,16 +742,21 @@ async def list_customer_group_members(
     }
 
 
-@router.post("/customer-groups/{customer_group_id}/members", dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.post(
+    "/customer-groups/{customer_group_id}/members",
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.PricingActionOut,
+)
 async def add_customer_group_members(
     customer_group_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingAddCustomerGroupMembersIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: LevelManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:customer-groups:{customer_group_id}:members"
     store, replay = await _idempotent(
         db=db,
@@ -742,15 +814,21 @@ async def remove_customer_group_member(
 
 
 # --------------------------------------------------------------------------- pricing groups ---
-@router.post("/pricing-groups", status_code=201, dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.post(
+    "/pricing-groups",
+    status_code=201,
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.PricingGroupEnvelope,
+)
 async def create_pricing_group(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreatePricingGroupIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: LevelManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:pricing-groups:create"
     store, replay = await _idempotent(
         db=db,
@@ -781,7 +859,9 @@ async def create_pricing_group(
     )
 
 
-@router.get("/pricing-groups", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/pricing-groups", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.PricingGroupPage
+)
 async def list_pricing_groups(
     db: DbDep,
     principal: PrincipalDep,
@@ -802,7 +882,11 @@ async def list_pricing_groups(
     }
 
 
-@router.get("/pricing-groups/{pricing_group_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/pricing-groups/{pricing_group_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PricingGroupOut,
+)
 async def get_pricing_group(pricing_group_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         return await _service(db).get_master(t.pricing_group, principal.tenant_id, pricing_group_id)
@@ -810,15 +894,20 @@ async def get_pricing_group(pricing_group_id: str, db: DbDep, principal: Princip
         _raise(exc)
 
 
-@router.patch("/pricing-groups/{pricing_group_id}", dependencies=[Depends(require_scope(LEVEL_MANAGE))])
+@router.patch(
+    "/pricing-groups/{pricing_group_id}",
+    dependencies=[Depends(require_scope(LEVEL_MANAGE))],
+    response_model=pricing_dto.PricingGroupEnvelope,
+)
 async def patch_pricing_group(
     pricing_group_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchPricingGroupIn,
     db: DbDep,
     principal: PrincipalDep,
     _: LevelManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     service = _service(db)
     values: dict[str, Any] = {}
     for key in ("price_level_id", "is_default"):
@@ -846,15 +935,21 @@ async def patch_pricing_group(
 
 
 # --------------------------------------------------------------------------- item prices ------
-@router.post("/item-prices", status_code=201, dependencies=[Depends(require_scope(PRICE_MANAGE))])
+@router.post(
+    "/item-prices",
+    status_code=201,
+    dependencies=[Depends(require_scope(PRICE_MANAGE))],
+    response_model=pricing_dto.ItemPriceEnvelope,
+)
 async def create_item_price(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreateItemPriceIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: PriceManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:item-prices:create"
     store, replay = await _idempotent(
         db=db,
@@ -885,7 +980,9 @@ async def create_item_price(
     )
 
 
-@router.get("/item-prices", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-prices", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.ItemPricePage
+)
 async def list_item_prices(
     db: DbDep,
     principal: PrincipalDep,
@@ -929,7 +1026,11 @@ async def list_item_prices(
     return {"items": rows, "next_cursor": next_cursor}
 
 
-@router.get("/item-prices/{item_price_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-prices/{item_price_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.ItemPriceOut,
+)
 async def get_item_price(item_price_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         return await _service(db).get_master(t.item_price, principal.tenant_id, item_price_id)
@@ -937,15 +1038,20 @@ async def get_item_price(item_price_id: str, db: DbDep, principal: PrincipalDep,
         _raise(exc)
 
 
-@router.patch("/item-prices/{item_price_id}", dependencies=[Depends(require_scope(PRICE_MANAGE))])
+@router.patch(
+    "/item-prices/{item_price_id}",
+    dependencies=[Depends(require_scope(PRICE_MANAGE))],
+    response_model=pricing_dto.ItemPriceEnvelope,
+)
 async def patch_item_price(
     item_price_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchItemPriceIn,
     db: DbDep,
     principal: PrincipalDep,
     _: PriceManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     try:
         return {
             "item_price": await _service(db).update_item_price(
@@ -960,7 +1066,12 @@ async def patch_item_price(
         _raise(exc)
 
 
-@router.post("/item-prices/bulk-upsert", status_code=201, dependencies=[Depends(require_scope(PRICE_MANAGE))])
+@router.post(
+    "/item-prices/bulk-upsert",
+    status_code=201,
+    dependencies=[Depends(require_scope(PRICE_MANAGE))],
+    response_model=pricing_dto.BulkResultOut,
+)
 async def bulk_upsert_item_prices(
     body: BulkUpsertIn,
     db: DbDep,
@@ -999,15 +1110,21 @@ async def bulk_upsert_item_prices(
     )
 
 
-@router.post("/item-prices/swap-levels", status_code=202, dependencies=[Depends(require_scope(PACKAGE_MASS_UPDATE))])
+@router.post(
+    "/item-prices/swap-levels",
+    status_code=202,
+    dependencies=[Depends(require_scope(PACKAGE_MASS_UPDATE))],
+    response_model=pricing_dto.BulkResultOut,
+)
 async def swap_price_levels(
-    body: dict[str, Any],
+    body: pricing_dto.PricingSwapPriceLevelsIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: MassUpdater,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:item-prices:swap-levels"
     store, replay = await _idempotent(
         db=db,
@@ -1045,16 +1162,20 @@ async def swap_price_levels(
 
 
 @router.post(
-    "/item-prices/purchase-price-updates", status_code=202, dependencies=[Depends(require_scope(PACKAGE_MASS_UPDATE))]
+    "/item-prices/purchase-price-updates",
+    status_code=202,
+    dependencies=[Depends(require_scope(PACKAGE_MASS_UPDATE))],
+    response_model=pricing_dto.BulkResultOut,
 )
 async def purchase_price_updates(
-    body: dict[str, Any],
+    body: pricing_dto.PricingPurchasePriceUpdatesIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: MassUpdater,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:item-prices:purchase-price-updates"
     store, replay = await _idempotent(
         db=db,
@@ -1089,15 +1210,21 @@ async def purchase_price_updates(
 
 
 # --------------------------------------------------------------------------- schedules -------
-@router.post("/price-schedules", status_code=201, dependencies=[Depends(require_scope(SCHEDULE_MANAGE))])
+@router.post(
+    "/price-schedules",
+    status_code=201,
+    dependencies=[Depends(require_scope(SCHEDULE_MANAGE))],
+    response_model=pricing_dto.PriceScheduleEnvelope,
+)
 async def create_price_schedule(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreatePriceScheduleIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: ScheduleManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:price-schedules:create"
     store, replay = await _idempotent(
         db=db,
@@ -1128,7 +1255,11 @@ async def create_price_schedule(
     )
 
 
-@router.get("/price-schedules", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-schedules",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PriceSchedulePage,
+)
 async def list_price_schedules(
     db: DbDep,
     principal: PrincipalDep,
@@ -1149,7 +1280,11 @@ async def list_price_schedules(
     }
 
 
-@router.get("/price-schedules/{price_schedule_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-schedules/{price_schedule_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PriceScheduleOut,
+)
 async def get_price_schedule(price_schedule_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     result = await _service(db).repo.schedule_with_breaks(principal.tenant_id, UUID(price_schedule_id))
     if result is None:
@@ -1157,15 +1292,20 @@ async def get_price_schedule(price_schedule_id: str, db: DbDep, principal: Princ
     return result
 
 
-@router.patch("/price-schedules/{price_schedule_id}", dependencies=[Depends(require_scope(SCHEDULE_MANAGE))])
+@router.patch(
+    "/price-schedules/{price_schedule_id}",
+    dependencies=[Depends(require_scope(SCHEDULE_MANAGE))],
+    response_model=pricing_dto.PriceScheduleEnvelope,
+)
 async def patch_price_schedule(
     price_schedule_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchPriceScheduleIn,
     db: DbDep,
     principal: PrincipalDep,
     _: ScheduleManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     service = _service(db)
     values = {
         key: (body[key].upper() if key == "calculation_mode" and body.get(key) else body[key])
@@ -1189,7 +1329,11 @@ async def patch_price_schedule(
     return {"price_schedule": row}
 
 
-@router.get("/price-schedules/{price_schedule_id}/breaks", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-schedules/{price_schedule_id}/breaks",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PriceScheduleBreaksOut,
+)
 async def list_schedule_breaks(price_schedule_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     return {
         "items": await _service(db).repo.list_rows(
@@ -1202,16 +1346,21 @@ async def list_schedule_breaks(price_schedule_id: str, db: DbDep, principal: Pri
     }
 
 
-@router.put("/price-schedules/{price_schedule_id}/breaks", dependencies=[Depends(require_scope(SCHEDULE_MANAGE))])
+@router.put(
+    "/price-schedules/{price_schedule_id}/breaks",
+    dependencies=[Depends(require_scope(SCHEDULE_MANAGE))],
+    response_model=pricing_dto.PriceScheduleBreaksOut,
+)
 async def replace_schedule_breaks(
     price_schedule_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingReplaceScheduleBreaksIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: ScheduleManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:price-schedules:{price_schedule_id}:breaks"
     store, replay = await _idempotent(
         db=db,
@@ -1238,15 +1387,21 @@ async def replace_schedule_breaks(
 
 
 # --------------------------------------------------------------------------- rules -----------
-@router.post("/price-rules", status_code=201, dependencies=[Depends(require_scope(RULE_MANAGE))])
+@router.post(
+    "/price-rules",
+    status_code=201,
+    dependencies=[Depends(require_scope(RULE_MANAGE))],
+    response_model=pricing_dto.PriceRuleDetailOut,
+)
 async def create_price_rule(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreatePriceRuleIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: RuleManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:price-rules:create"
     store, replay = await _idempotent(
         db=db,
@@ -1277,7 +1432,9 @@ async def create_price_rule(
     )
 
 
-@router.get("/price-rules", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-rules", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.PriceRulePage
+)
 async def list_price_rules(
     db: DbDep,
     principal: PrincipalDep,
@@ -1305,7 +1462,11 @@ async def list_price_rules(
     return {"items": rows}
 
 
-@router.get("/price-rules/{price_rule_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-rules/{price_rule_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PriceRuleDetailOut,
+)
 async def get_price_rule(price_rule_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     result = await _service(db).repo.rule_with_parts(principal.tenant_id, UUID(price_rule_id))
     if result is None:
@@ -1313,15 +1474,20 @@ async def get_price_rule(price_rule_id: str, db: DbDep, principal: PrincipalDep,
     return result
 
 
-@router.patch("/price-rules/{price_rule_id}", dependencies=[Depends(require_scope(RULE_MANAGE))])
+@router.patch(
+    "/price-rules/{price_rule_id}",
+    dependencies=[Depends(require_scope(RULE_MANAGE))],
+    response_model=pricing_dto.PriceRuleEnvelope,
+)
 async def patch_price_rule(
     price_rule_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchPriceRuleIn,
     db: DbDep,
     principal: PrincipalDep,
     _: RuleManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     try:
         return {
             "price_rule": await _service(db).update_rule(
@@ -1336,16 +1502,21 @@ async def patch_price_rule(
         _raise(exc)
 
 
-@router.put("/price-rules/{price_rule_id}/criteria", dependencies=[Depends(require_scope(RULE_MANAGE))])
+@router.put(
+    "/price-rules/{price_rule_id}/criteria",
+    dependencies=[Depends(require_scope(RULE_MANAGE))],
+    response_model=pricing_dto.PriceRuleDetailOut,
+)
 async def replace_rule_criteria(
     price_rule_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingReplaceRuleCriteriaIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: RuleManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:price-rules:{price_rule_id}:criteria"
     store, replay = await _idempotent(
         db=db,
@@ -1393,16 +1564,21 @@ async def replace_rule_criteria(
     )
 
 
-@router.put("/price-rules/{price_rule_id}/actions", dependencies=[Depends(require_scope(RULE_MANAGE))])
+@router.put(
+    "/price-rules/{price_rule_id}/actions",
+    dependencies=[Depends(require_scope(RULE_MANAGE))],
+    response_model=pricing_dto.PriceRuleDetailOut,
+)
 async def replace_rule_action(
     price_rule_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingReplaceRuleActionIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: RuleManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:price-rules:{price_rule_id}:actions"
     store, replay = await _idempotent(
         db=db,
@@ -1447,15 +1623,21 @@ async def replace_rule_action(
 
 
 # --------------------------------------------------------------------------- collections -----
-@router.post("/item-collections", status_code=201, dependencies=[Depends(require_scope(COLLECTION_MANAGE))])
+@router.post(
+    "/item-collections",
+    status_code=201,
+    dependencies=[Depends(require_scope(COLLECTION_MANAGE))],
+    response_model=pricing_dto.ItemCollectionEnvelope,
+)
 async def create_item_collection(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreateItemCollectionIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: CollectionManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:item-collections:create"
     store, replay = await _idempotent(
         db=db,
@@ -1486,7 +1668,11 @@ async def create_item_collection(
     )
 
 
-@router.get("/item-collections", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-collections",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.ItemCollectionPage,
+)
 async def list_item_collections(
     db: DbDep,
     principal: PrincipalDep,
@@ -1507,7 +1693,11 @@ async def list_item_collections(
     }
 
 
-@router.get("/item-collections/{collection_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-collections/{collection_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.ItemCollectionOut,
+)
 async def get_item_collection(collection_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     service = _service(db)
     try:
@@ -1520,15 +1710,20 @@ async def get_item_collection(collection_id: str, db: DbDep, principal: Principa
     return {"item_collection": collection, "members": members}
 
 
-@router.patch("/item-collections/{collection_id}", dependencies=[Depends(require_scope(COLLECTION_MANAGE))])
+@router.patch(
+    "/item-collections/{collection_id}",
+    dependencies=[Depends(require_scope(COLLECTION_MANAGE))],
+    response_model=pricing_dto.ItemCollectionEnvelope,
+)
 async def patch_item_collection(
     collection_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchItemCollectionIn,
     db: DbDep,
     principal: PrincipalDep,
     _: CollectionManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     service = _service(db)
     try:
         await service.get_master(t.item_collection, principal.tenant_id, collection_id)
@@ -1550,7 +1745,11 @@ async def patch_item_collection(
     return {"item_collection": row}
 
 
-@router.get("/item-collections/{collection_id}/members", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/item-collections/{collection_id}/members",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.ItemCollectionMemberPage,
+)
 async def list_collection_members(collection_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     return {
         "items": await _service(db).repo.list_rows(
@@ -1562,16 +1761,21 @@ async def list_collection_members(collection_id: str, db: DbDep, principal: Prin
     }
 
 
-@router.post("/item-collections/{collection_id}/members", dependencies=[Depends(require_scope(COLLECTION_MANAGE))])
+@router.post(
+    "/item-collections/{collection_id}/members",
+    dependencies=[Depends(require_scope(COLLECTION_MANAGE))],
+    response_model=pricing_dto.BulkResultOut,
+)
 async def add_collection_members(
     collection_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingAddCollectionMembersIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: CollectionManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:item-collections:{collection_id}:members"
     store, replay = await _idempotent(
         db=db,
@@ -1629,16 +1833,18 @@ async def remove_collection_member(
     "/item-collections/{collection_id}/recompute",
     status_code=202,
     dependencies=[Depends(require_scope(COLLECTION_MANAGE))],
+    response_model=pricing_dto.BulkResultOut,
 )
 async def recompute_collection(
     collection_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingRecomputeCollectionIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: CollectionManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:item-collections:{collection_id}:recompute"
     store, replay = await _idempotent(
         db=db,
@@ -1673,15 +1879,21 @@ async def recompute_collection(
 
 
 # --------------------------------------------------------------------------- coupons ---------
-@router.post("/coupons", status_code=201, dependencies=[Depends(require_scope(COUPON_MANAGE))])
+@router.post(
+    "/coupons",
+    status_code=201,
+    dependencies=[Depends(require_scope(COUPON_MANAGE))],
+    response_model=pricing_dto.CouponEnvelope,
+)
 async def create_coupon(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreateCouponIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: CouponManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:coupons:create"
     store, replay = await _idempotent(
         db=db,
@@ -1712,7 +1924,7 @@ async def create_coupon(
     )
 
 
-@router.get("/coupons", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get("/coupons", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.CouponPage)
 async def list_coupons(
     db: DbDep,
     principal: PrincipalDep,
@@ -1736,7 +1948,9 @@ async def list_coupons(
     return {"items": rows}
 
 
-@router.get("/coupons/{coupon_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/coupons/{coupon_id}", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.CouponOut
+)
 async def get_coupon(coupon_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     service = _service(db)
     try:
@@ -1760,10 +1974,20 @@ async def get_coupon(coupon_id: str, db: DbDep, principal: PrincipalDep, _: Read
     }
 
 
-@router.patch("/coupons/{coupon_id}", dependencies=[Depends(require_scope(COUPON_MANAGE))])
+@router.patch(
+    "/coupons/{coupon_id}",
+    dependencies=[Depends(require_scope(COUPON_MANAGE))],
+    response_model=pricing_dto.CouponEnvelope,
+)
 async def patch_coupon(
-    coupon_id: str, body: dict[str, Any], db: DbDep, principal: PrincipalDep, _: CouponManager, if_match: IfMatch = None
+    coupon_id: str,
+    body: pricing_dto.PricingPatchCouponIn,
+    db: DbDep,
+    principal: PrincipalDep,
+    _: CouponManager,
+    if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     service = _service(db)
     try:
         await service.get_master(t.coupon, principal.tenant_id, coupon_id)
@@ -1778,7 +2002,11 @@ async def patch_coupon(
     return {"coupon": row}
 
 
-@router.post("/coupons/validate", dependencies=[Depends(require_scope(PRICING_RESOLVE))])
+@router.post(
+    "/coupons/validate",
+    dependencies=[Depends(require_scope(PRICING_RESOLVE))],
+    response_model=pricing_dto.CouponValidationOut,
+)
 async def validate_coupon(body: CouponValidateIn, db: DbDep, principal: PrincipalDep, _: Resolver) -> dict[str, Any]:
     service = _service(db)
     payload = {
@@ -1801,15 +2029,21 @@ async def validate_coupon(body: CouponValidateIn, db: DbDep, principal: Principa
 
 
 # --------------------------------------------------------------------------- price updates ---
-@router.post("/price-updates", status_code=201, dependencies=[Depends(require_scope(UPDATE_MANAGE))])
+@router.post(
+    "/price-updates",
+    status_code=201,
+    dependencies=[Depends(require_scope(UPDATE_MANAGE))],
+    response_model=pricing_dto.PriceUpdateResultOut,
+)
 async def create_price_update(
-    body: dict[str, Any],
+    body: pricing_dto.PricingCreatePriceUpdateIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: UpdateManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = "pricing:price-updates:create"
     store, replay = await _idempotent(
         db=db,
@@ -1840,7 +2074,9 @@ async def create_price_update(
     )
 
 
-@router.get("/price-updates", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-updates", dependencies=[Depends(require_scope(PRICING_READ))], response_model=pricing_dto.PriceUpdatePage
+)
 async def list_price_updates(
     db: DbDep,
     principal: PrincipalDep,
@@ -1865,7 +2101,11 @@ async def list_price_updates(
     return {"items": rows}
 
 
-@router.get("/price-updates/{price_update_id}", dependencies=[Depends(require_scope(PRICING_READ))])
+@router.get(
+    "/price-updates/{price_update_id}",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PriceUpdateOut,
+)
 async def get_price_update(price_update_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         result = await _service(db).price_update_detail(tenant_id=principal.tenant_id, update_id=price_update_id)
@@ -1876,15 +2116,20 @@ async def get_price_update(price_update_id: str, db: DbDep, principal: Principal
     return result
 
 
-@router.patch("/price-updates/{price_update_id}", dependencies=[Depends(require_scope(UPDATE_MANAGE))])
+@router.patch(
+    "/price-updates/{price_update_id}",
+    dependencies=[Depends(require_scope(UPDATE_MANAGE))],
+    response_model=pricing_dto.PriceUpdateEnvelope,
+)
 async def patch_price_update(
     price_update_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingPatchPriceUpdateIn,
     db: DbDep,
     principal: PrincipalDep,
     _: UpdateManager,
     if_match: IfMatch = None,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     service = _service(db)
     try:
         row = await service.get_master(t.price_update, principal.tenant_id, price_update_id)
@@ -1915,16 +2160,21 @@ async def patch_price_update(
     return {"price_update": updated}
 
 
-@router.post("/price-updates/{price_update_id}/apply", dependencies=[Depends(require_scope(UPDATE_MANAGE))])
+@router.post(
+    "/price-updates/{price_update_id}/apply",
+    dependencies=[Depends(require_scope(UPDATE_MANAGE))],
+    response_model=pricing_dto.PriceUpdateResultOut,
+)
 async def apply_price_update(
     price_update_id: str,
-    body: dict[str, Any],
+    body: pricing_dto.PricingApplyPriceUpdateIn,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
     _: UpdateManager,
     idempotency_key: IdempotencyKey,
 ) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     endpoint = f"pricing:price-updates:{price_update_id}:apply"
     store, replay = await _idempotent(
         db=db,
@@ -1958,7 +2208,11 @@ async def apply_price_update(
     )
 
 
-@router.post("/price-updates/{price_update_id}/cancel", dependencies=[Depends(require_scope(UPDATE_MANAGE))])
+@router.post(
+    "/price-updates/{price_update_id}/cancel",
+    dependencies=[Depends(require_scope(UPDATE_MANAGE))],
+    response_model=pricing_dto.PriceUpdateResultOut,
+)
 async def cancel_price_update(
     price_update_id: str,
     body: ReasonIn,
@@ -1998,7 +2252,11 @@ async def cancel_price_update(
     )
 
 
-@router.post("/price-updates/{price_update_id}/revert", dependencies=[Depends(require_scope(UPDATE_MANAGE))])
+@router.post(
+    "/price-updates/{price_update_id}/revert",
+    dependencies=[Depends(require_scope(UPDATE_MANAGE))],
+    response_model=pricing_dto.PriceUpdateResultOut,
+)
 async def revert_price_update(
     price_update_id: str,
     body: ReasonIn,
@@ -2039,7 +2297,11 @@ async def revert_price_update(
 
 
 # --------------------------------------------------------------------------- resolution ------
-@router.post("/prices/resolve", dependencies=[Depends(require_scope(PRICING_RESOLVE))])
+@router.post(
+    "/prices/resolve",
+    dependencies=[Depends(require_scope(PRICING_RESOLVE))],
+    response_model=pricing_dto.PriceResolutionOut,
+)
 async def resolve_prices(body: ResolveIn, db: DbDep, principal: PrincipalDep, _: Resolver) -> dict[str, Any]:
     payload = body.model_dump(mode="json", exclude_none=True)
     try:
@@ -2048,7 +2310,11 @@ async def resolve_prices(body: ResolveIn, db: DbDep, principal: PrincipalDep, _:
         _raise(exc)
 
 
-@router.get("/prices/effective", dependencies=[Depends(require_scope(PRICING_RESOLVE))])
+@router.get(
+    "/prices/effective",
+    dependencies=[Depends(require_scope(PRICING_RESOLVE))],
+    response_model=pricing_dto.EffectivePriceOut,
+)
 async def effective_price(
     item_id: UUID,
     db: DbDep,
@@ -2072,8 +2338,15 @@ async def effective_price(
         _raise(exc)
 
 
-@router.post("/price-lists/generate", dependencies=[Depends(require_scope(PRICING_READ))])
-async def generate_price_list(body: dict[str, Any], db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
+@router.post(
+    "/price-lists/generate",
+    dependencies=[Depends(require_scope(PRICING_READ))],
+    response_model=pricing_dto.PriceListOut,
+)
+async def generate_price_list(
+    body: pricing_dto.PricingGeneratePriceListIn, db: DbDep, principal: PrincipalDep, _: Read
+) -> dict[str, Any]:
+    body = body.model_dump(exclude_unset=True)
     try:
         return await _service(db).price_list(tenant_id=principal.tenant_id, payload=body)
     except Exception as exc:  # noqa: BLE001

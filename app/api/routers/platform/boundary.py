@@ -34,6 +34,7 @@ from fastapi import APIRouter, Body, Depends, Header, HTTPException, Query, Resp
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.platform import PlatformObject
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.platform_events import emit_platform_event
 from app.core.repositories.boundary import (
@@ -189,7 +190,7 @@ async def _run_idempotent(
 
 
 # --------------------------------------------------------------------------- order boundary --
-@router.get("/order/demand/open", dependencies=[Depends(require_scope(INVENTORY_BALANCE_READ))])
+@router.get("/order/demand/open", response_model=PlatformObject, dependencies=[Depends(require_scope(INVENTORY_BALANCE_READ))])
 async def open_order_demand(
     _: BalanceReader,
     adapter: AdapterDep,
@@ -219,7 +220,7 @@ async def open_order_demand(
 
 
 @router.put(
-    "/internal/order-boundary/demand-doubles",
+    "/internal/order-boundary/demand-doubles", response_model=PlatformObject,
     dependencies=[Depends(require_scope(PLATFORM_INTERNAL))],
 )
 async def replace_demand_doubles(
@@ -270,7 +271,7 @@ async def replace_demand_doubles(
 
 
 # --------------------------------------------------------------------------- finance -----------
-@router.get("/finance/period-status", dependencies=[Depends(require_scope(PLATFORM_FINANCE_READ))])
+@router.get("/finance/period-status", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_FINANCE_READ))])
 async def finance_period_status(
     db: DbDep,
     principal: PrincipalDep,
@@ -286,7 +287,7 @@ async def finance_period_status(
     return status
 
 
-@router.get("/reference/exchange-rates", dependencies=[Depends(require_scope(PLATFORM_REFERENCE_READ))])
+@router.get("/reference/exchange-rates", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_REFERENCE_READ))])
 async def reference_exchange_rates(
     db: DbDep,
     principal: PrincipalDep,
@@ -311,7 +312,7 @@ async def reference_exchange_rates(
         raise _http_error(exc) from exc
 
 
-@router.put("/internal/finance/exchange-rates", dependencies=[Depends(require_scope(PLATFORM_FINANCE_SYNC))])
+@router.put("/internal/finance/exchange-rates", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_FINANCE_SYNC))])
 async def sync_exchange_rates(
     body: ExchangeRatesIn,
     db: DbDep,
@@ -350,7 +351,7 @@ async def sync_exchange_rates(
 
 
 # --------------------------------------------------------------------------- outbox -----------
-@router.post("/internal/outbox/replay", dependencies=[Depends(require_scope(PLATFORM_INTERNAL))])
+@router.post("/internal/outbox/replay", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_INTERNAL))])
 async def internal_outbox_replay(
     body: OutboxReplayIn,
     db: DbDep,
@@ -398,7 +399,7 @@ async def internal_outbox_replay(
 
 
 # --------------------------------------------------------------------------- jobs --------------
-@router.post("/admin/jobs/{name}/run", status_code=202, dependencies=[Depends(require_scope(PLATFORM_JOB_MANAGE))])
+@router.post("/admin/jobs/{name}/run", response_model=PlatformObject, status_code=202, dependencies=[Depends(require_scope(PLATFORM_JOB_MANAGE))])
 async def run_job(
     name: str,
     db: DbDep,
@@ -423,7 +424,7 @@ async def run_job(
     return {"job_run_id": result["job_run_id"], "status": "QUEUED", "run": result}
 
 
-@router.get("/admin/job-runs", dependencies=[Depends(require_scope(PLATFORM_JOB_MANAGE))])
+@router.get("/admin/job-runs", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_JOB_MANAGE))])
 async def job_runs_list(
     db: DbDep,
     principal: PrincipalDep,
@@ -450,7 +451,7 @@ async def job_runs_list(
         raise _http_error(exc) from exc
 
 
-@router.get("/admin/job-runs/{run_id}", dependencies=[Depends(require_scope(PLATFORM_JOB_MANAGE))])
+@router.get("/admin/job-runs/{run_id}", response_model=PlatformObject, dependencies=[Depends(require_scope(PLATFORM_JOB_MANAGE))])
 async def job_run_detail(
     run_id: UUID,
     db: DbDep,
@@ -464,7 +465,7 @@ async def job_run_detail(
 
 
 @router.post(
-    "/admin/job-runs/{run_id}/cancel",
+    "/admin/job-runs/{run_id}/cancel", response_model=PlatformObject,
     dependencies=[Depends(require_scope(PLATFORM_JOB_MANAGE))],
 )
 async def job_run_cancel(
