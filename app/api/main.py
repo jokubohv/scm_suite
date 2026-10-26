@@ -17,6 +17,7 @@ from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
 from app.api.request_schemas import apply_request_schemas
+from app.api.response_schemas import apply_contract_metadata
 from app.api.routers.consigned import router as consigned_router
 from app.api.routers.costing import router as costing_router
 from app.api.routers.counts import router as counts_router
@@ -198,6 +199,7 @@ def create_app() -> FastAPI:
             return app.openapi_schema
         schema = original_openapi()
         apply_request_schemas(schema)
+        apply_contract_metadata(schema)
         app.openapi_schema = schema
         return schema
 

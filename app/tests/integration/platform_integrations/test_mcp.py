@@ -180,3 +180,67 @@ async def test_mcp_rejects_jwt_bearer() -> None:
             json={"jsonrpc": "2.0", "id": 1, "method": "ping", "params": {}},
         )
         assert jwt.status_code == 401
+
+
+async def test_openapi_contract_is_complete() -> None:
+    from app.api.main import create_app as _create
+
+    spec = _create().openapi()
+
+    def deref(schema):
+        seen = set()
+        while isinstance(schema, dict) and "$ref" in schema:
+            ref = schema["$ref"]
+            if ref in seen:
+                break
+            seen.add(ref)
+            node = spec
+            for part in ref[2:].split("/"):
+                node = node.get(part, {}) if isinstance(node, dict) else {}
+            schema = node
+        return schema
+
+    def typed(schema) -> bool:
+        schema = deref(schema)
+        if not isinstance(schema, dict) or not schema:
+            return False
+        if schema.get("type") == "object" or "properties" in schema:
+            return bool(schema.get("properties")) or schema.get("additionalProperties") is False
+        if schema.get("type") == "array":
+            return typed(schema.get("items") or {})
+        return bool(schema.get("type") or schema.get("anyOf") or schema.get("oneOf"))
+
+    opaque_requests = []
+    opaque_2xx = []
+    missing_problem = []
+    for path, item in spec["paths"].items():
+        for method, operation in item.items():
+            if method not in {"get", "post", "put", "patch", "delete"}:
+                continue
+            request_body = operation.get("requestBody")
+            if request_body:
+                schema = deref((request_body.get("content") or {}).get("application/json", {}).get("schema") or {})
+                props = schema.get("properties") or {}
+                if schema.get("additionalProperties") is True or (schema.get("type") == "object" and not props):
+                    opaque_requests.append(f"{method.upper()} {path}")
+            responses = operation.get("responses") or {}
+            for code, response in responses.items():
+                if code.startswith("2"):
+                    for media, content in (response.get("content") or {}).items():
+                        if "json" not in media:
+                            continue
+                        if not typed(content.get("schema") or {}):
+                            opaque_2xx.append(f"{method.upper()} {path} {code}")
+            for code in ("400", "401", "403", "404", "409", "422", "500"):
+                if "application/problem+json" not in (responses.get(code, {}).get("content") or {}):
+                    missing_problem.append(f"{method.upper()} {path} {code}")
+
+    assert not opaque_requests, opaque_requests[:10]
+    assert not opaque_2xx, opaque_2xx[:10]
+    assert not missing_problem, missing_problem[:10]
+    assert {"BearerAuth", "ApiKeyAuth", "SuperAdminToken"} <= set(
+        spec["components"]["securitySchemes"]
+    )
+    assert spec.get("security")
+    reports = [p for p in spec["paths"] if p.startswith("/api/v1/reports")]
+    assert len(reports) == 22

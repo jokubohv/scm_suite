@@ -154,3 +154,17 @@ Request schemas added at the API layer (`app/api/request_schemas.py`) and inject
   `lines[]` with receipt-line fields, required flags and enums
 - tests assert zero opaque API request bodies and zero opaque MCP body tools
 - full suite 1,320 passed
+
+
+## OpenAPI contract completeness
+
+- 1,244 / 1,244 2xx JSON responses typed
+- 714 / 714 request bodies typed
+- 0 opaque request bodies, 0 opaque MCP body tools
+- 1,259 / 1,259 operations have problem+json responses for 400/401/403/404/409/422/500
+- security schemes: BearerAuth, ApiKeyAuth, SuperAdminToken
+- global security plus public/MCP/bootstrap overrides
+- report route count: 22
+- full suite: 1,321 passed
+- E2E: 204 checks, 0 failures
+- surface smoke: 1,259 operations, 0 × 5xx

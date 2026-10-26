@@ -67,3 +67,41 @@ they now document their optional action fields.
 The registry fixes the documented API/MCP contract. Service-layer validation remains the
 authoritative runtime validator as before; boundary-level enforcement of these schemas is a separate
 follow-up (recommended next).
+
+
+## Response, error and security contract (final phase)
+
+Implemented in `app/api/response_schemas.py` and applied during `app.openapi()` generation.
+
+| Contract area | Coverage |
+|---|---:|
+| 2xx JSON responses | 1,244 / 1,244 typed |
+| Opaque 2xx JSON responses | **0** |
+| Request bodies | 714 / 714 typed |
+| Opaque request bodies | **0** |
+| Operations with 400/401/403/404/409/422/500 `application/problem+json` | 1,259 / 1,259 |
+| Problem+json error response definitions | 8,813 |
+| Security schemes | BearerAuth, ApiKeyAuth, SuperAdminToken |
+| Global security | Bearer JWT or tenant/OpenAPI API key |
+| Public/auth overrides | login, select-tenant, providers, SSO, invitation accept, health/readiness |
+| MCP endpoint | ApiKeyAuth only |
+| Bootstrap endpoints | SuperAdminToken |
+| Report operations | 22 |
+
+The response layer uses shared typed envelopes for:
+
+- list responses: `items[]`, `count`, `next_cursor`
+- detail/create/update: resource object with core fields plus documented domain fields
+- lifecycle actions: typed action result
+- reports: typed report envelope
+- health/readiness/OpenAPI/MCP-specific shapes
+- problem+json errors
+
+`test_openapi_contract_is_complete` now fails if any request body, 2xx JSON response, problem+json error,
+security scheme, or report-route count regresses.
+
+### Contract caveat
+
+The response object is typed, but nested report rows and some variable-shape extension payloads are
+intentionally open objects because their columns depend on the report/consumer configuration. All
+first-level API success and error shapes are constrained.

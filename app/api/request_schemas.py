@@ -781,7 +781,7 @@ PHASE2_RULES: tuple[Rule, ...] = (
 )
 
 
-def schema_for_operation(method: str, path: str) -> dict[str, Any] | None:  # type: ignore[no-redef]
+def _schema_for_operation_phase2(method: str, path: str) -> dict[str, Any] | None:
     method = method.upper()
     normalized = _normalise_path(path)
     explicit = EXPLICIT_SCHEMAS.get((method, normalized))
@@ -790,17 +790,184 @@ def schema_for_operation(method: str, path: str) -> dict[str, Any] | None:  # ty
     for rule in RULES + PHASE2_RULES:
         base = rule.base
         if normalized == base:
-            if method == "POST":
+            if method == "POST" and rule.create is not None:
                 return rule.create
-            if method in {"PATCH", "PUT"}:
+            if method in {"PATCH", "PUT"} and rule.update is not None:
                 return rule.update
-            return None
+            continue
         if re.fullmatch(re.escape(base) + r"/\{\}", normalized):
-            if method in {"PATCH", "PUT"}:
+            if method in {"PATCH", "PUT"} and rule.update is not None:
                 return rule.update
-            return None
+            continue
         match = re.fullmatch(re.escape(base) + r"/\{\}/([A-Za-z0-9_.-]+)", normalized)
         if match and method == "POST":
             action = match.group(1)
-            return rule.actions.get(action, rule.default_action)
+            schema = rule.actions.get(action, rule.default_action)
+            if schema is not None:
+                return schema
+    return None
+
+# =============================================================================================
+# Phase 3 schemas: manufacturing, WIP, outsourced operations, scheduling and related setup.
+# =============================================================================================
+
+ASSEMBLY = P2({"item_id": UUID, "assembly_type": TEXT, "default_bom_id": UUID, "default_routing_id": UUID,
+               "revision_control": TEXT, "backflush_default": BOOL}, required=("item_id",))
+BOM = P2({"assembly_item_id": UUID, "bom_code": TEXT, "name": TEXT, "is_default": BOOL,
+          "effective_from": DATE, "effective_to": DATE}, required=("assembly_item_id", "bom_code"))
+BOM_REVISION = P2({"revision_code": TEXT, "effective_from": DATE, "effective_to": DATE, "status": TEXT},
+                  required=("revision_code",))
+BOM_COMPONENT = P2({"line_number": INT, "component_item_id": UUID, "qty_per": DECIMAL, "uom_id": UUID,
+                    "operation_sequence": INT, "scrap_percent": DECIMAL, "is_phantom": BOOL},
+                   required=("component_item_id", "qty_per"))
+BOM_COMPONENT_UPDATE = P2({"qty_per": DECIMAL, "operation_sequence": INT, "scrap_percent": DECIMAL})
+BOM_CONTROL = P2({"controlled": BOOL, "control_type": TEXT, "effective_from": DATE})
+ROUTING_STEP = P2({"sequence": INT, "work_center_id": UUID, "setup_time": DECIMAL, "run_time": DECIMAL,
+                   "description": TEXT}, required=("sequence", "work_center_id"))
+ROUTING_STEP_UPDATE = P2({"sequence": INT, "work_center_id": UUID, "setup_time": DECIMAL,
+                          "run_time": DECIMAL, "description": TEXT})
+ROUTING_STEP_CHARGE = P2({"charge_type": TEXT, "amount": MONEY, "currency_code": TEXT,
+                          "description": TEXT}, required=("charge_type", "amount"))
+WORK_CENTER_GROUP = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_active": BOOL},
+                       required=("code", "name"))
+WORK_CENTER_CALENDAR = P2({"code": TEXT, "name": TEXT, "timezone": TEXT, "working_days": _arr(INT),
+                            "shift_start": TEXT, "shift_end": TEXT}, required=("code", "name"))
+CALENDAR_DAYS = P2({"days": _arr(P2({"date": DATE, "is_working": BOOL, "hours": DECIMAL}))},
+                   required=("days",))
+COST_TEMPLATE_CREATE = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_active": BOOL,
+                           "lines": _lines(P2({"component": TEXT, "category": TEXT, "value": DECIMAL}))},
+                          required=("code", "name"))
+COST_TEMPLATE_LINE = P2({"component": TEXT, "category": TEXT, "value": DECIMAL},
+                        required=("component", "category", "value"))
+MANUFACTURING_PREFS = P2({"default_wip_location_id": UUID, "backflush_default": BOOL,
+                          "default_cost_template_id": UUID, "component_yield_percent": DECIMAL})
+WORK_CENTER = P2({"code": TEXT, "name": TEXT, "location_id": UUID, "capacity_per_day": DECIMAL,
+                  "cost_per_hour": MONEY, "is_active": BOOL}, required=("code", "name"))
+WORK_ORDER = P2({"assembly_item_id": UUID, "qty_ordered": DECIMAL, "start_date": DATE, "end_date": DATE,
+                 "uom_id": UUID, "wo_type": TEXT, "bom_revision_id": UUID, "routing_id": UUID,
+                 "wip_location_id": UUID, "external_sales_ref": TEXT, "memo": TEXT},
+                required=("assembly_item_id", "qty_ordered"))
+WORK_ORDER_MASS = P2({"orders": _arr(P2({"assembly_item_id": UUID, "qty_ordered": DECIMAL,
+                                         "start_date": DATE, "end_date": DATE, "memo": TEXT},
+                                        required=("assembly_item_id", "qty_ordered")))},
+                     required=("orders",))
+WORK_ORDER_OPERATION_COMPLETE = P2({"qty_completed": DECIMAL, "completed_at": DATETIME,
+                                    "labor_hours": DECIMAL, "memo": TEXT},
+                                   required=("qty_completed",))
+WORK_ORDER_OPERATION_UPDATE = P2({"status": TEXT, "assigned_to": UUID, "scheduled_start": DATETIME,
+                                  "scheduled_end": DATETIME})
+WORK_ORDER_COMPONENT_UPDATE = P2({"qty_required": DECIMAL, "qty_issued": DECIMAL, "memo": TEXT})
+ASSEMBLY_BUILD = P2({"work_order_id": UUID, "qty": DECIMAL, "location_id": UUID, "lot_id": UUID,
+                     "serial_ids": _arr(UUID), "memo": TEXT}, required=("work_order_id", "qty"))
+ASSEMBLY_UNBUILD = P2({"work_order_id": UUID, "qty": DECIMAL, "location_id": UUID, "lot_id": UUID,
+                       "disposition": {"type": "string", "enum": ["RETURN_TO_STOCK", "SCRAP", "HOLD"]},
+                       "memo": TEXT}, required=("work_order_id", "qty"))
+WIP_TRANSACTION = P2({"work_order_id": UUID, "transaction_type": TEXT, "qty": DECIMAL,
+                      "location_id": UUID, "memo": TEXT}, required=("work_order_id", "transaction_type", "qty"))
+OUTSOURCED_OPERATION = P2({"work_order_id": UUID, "operation_id": UUID, "vendor_id": UUID,
+                           "qty": DECIMAL, "expected_return_date": DATE, "unit_cost": MONEY,
+                           "memo": TEXT}, required=("work_order_id", "vendor_id", "qty"))
+OUTSOURCED_RECEIVE = P2({"qty_received": DECIMAL, "received_at": DATETIME, "location_id": UUID,
+                         "unit_cost": MONEY, "memo": TEXT}, required=("qty_received",))
+ECO = P2({"eco_number": TEXT, "title": TEXT, "description": TEXT, "effective_date": DATE,
+          "item_ids": _arr(UUID), "status": TEXT}, required=("eco_number", "title"))
+SCHEDULING_RUN = P2({"horizon_start": DATE, "horizon_end": DATE, "work_center_ids": _arr(UUID),
+                     "memo": TEXT}, required=("horizon_start", "horizon_end"))
+AVAILABLE_TO_BUILD = P2({"assembly_item_id": UUID, "qty": DECIMAL, "location_id": UUID},
+                        required=("assembly_item_id", "qty"))
+CONDITION_CODE = P2({"code": TEXT, "name": TEXT, "description": TEXT, "is_active": BOOL},
+                    required=("code", "name"))
+COMPAT_ATTRIBUTE = P2({"code": TEXT, "name": TEXT, "data_type": TEXT, "is_active": BOOL},
+                      required=("code", "name"))
+COMPAT_RULE_SET = P2({"code": TEXT, "name": TEXT, "scope": TEXT, "is_active": BOOL},
+                     required=("code", "name"))
+COMPAT_RULE = P2({"rule_set_id": UUID, "condition": {"type": "object", "additionalProperties": True},
+                  "action": {"type": "object", "additionalProperties": True}, "priority": INT},
+                 required=("rule_set_id",))
+COMPAT_SLOT = P2({"code": TEXT, "name": TEXT, "slot_type": TEXT, "capacity": DECIMAL, "is_active": BOOL},
+                 required=("code", "name"))
+CONFIG_VALIDATE = P2({"assembly_item_id": UUID, "configuration": {"type": "object",
+                                                                  "additionalProperties": True}},
+                     required=("assembly_item_id", "configuration"))
+ITEM_COMPAT = P2({"compat_attributes": _arr(P2({"attribute_id": UUID, "value": TEXT}))},
+                 required=("compat_attributes",))
+COST_VERSION_APPROVE = P2({"effective_from": DATE, "memo": TEXT})
+COSTS_RECONCILE = P2({"item_ids": _arr(UUID), "location_ids": _arr(UUID), "as_of_date": DATE})
+COMMITMENT_REALLOCATE = P2({"item_id": UUID, "location_id": UUID, "qty": DECIMAL,
+                            "target_status_id": UUID}, required=("item_id", "location_id", "qty"))
+
+EXPLICIT_SCHEMAS.update({
+    ("PUT", "/api/v1/items/{}/compat-attributes"): ITEM_COMPAT,
+    ("PUT", "/api/v1/bom-components/{}/control"): BOM_CONTROL,
+    ("PUT", "/api/v1/work-center-calendars/{}/days"): CALENDAR_DAYS,
+    ("POST", "/api/v1/available-to-build/calculate"): AVAILABLE_TO_BUILD,
+    ("POST", "/api/v1/work-orders/mass-create"): WORK_ORDER_MASS,
+    ("POST", "/api/v1/outsourced-operations/consolidate"): P2({"operation_ids": _arr(UUID)}),
+    ("POST", "/api/v1/manufacturing/configurations/validate"): CONFIG_VALIDATE,
+    ("POST", "/api/v1/manufacturing/configurations/simulate"): CONFIG_VALIDATE,
+    ("POST", "/api/v1/cost-versions/{}/approve"): COST_VERSION_APPROVE,
+    ("POST", "/api/v1/costs/reconcile"): COSTS_RECONCILE,
+    ("POST", "/api/v1/inventory/commitments/reallocate"): COMMITMENT_REALLOCATE,
+})
+
+PHASE3_RULES: tuple[Rule, ...] = (
+    Rule("/api/v1/assemblies", create=ASSEMBLY),
+    Rule("/api/v1/boms", create=BOM),
+    Rule("/api/v1/bom-revisions", update=BOM_REVISION,
+         actions={"components": BOM_COMPONENT}),
+    Rule("/api/v1/bom-components", update=BOM_COMPONENT_UPDATE),
+    Rule("/api/v1/routing-steps", update=ROUTING_STEP_UPDATE, actions={"charges": ROUTING_STEP_CHARGE}),
+    Rule("/api/v1/routing-step-charges", update=ROUTING_STEP_CHARGE),
+    Rule("/api/v1/work-center-groups", create=WORK_CENTER_GROUP),
+    Rule("/api/v1/work-center-calendars", create=WORK_CENTER_CALENDAR),
+    Rule("/api/v1/manufacturing-cost-templates", create=COST_TEMPLATE_CREATE),
+    Rule("/api/v1/manufacturing-cost-templates/{template_id}/lines", create=COST_TEMPLATE_LINE),
+    Rule("/api/v1/manufacturing-preferences", update=MANUFACTURING_PREFS),
+    Rule("/api/v1/work-orders", create=WORK_ORDER, actions={"mass-create": WORK_ORDER_MASS}),
+    Rule("/api/v1/work-order-operations", update=WORK_ORDER_OPERATION_UPDATE,
+         actions={"complete": WORK_ORDER_OPERATION_COMPLETE}),
+    Rule("/api/v1/work-order-components", update=WORK_ORDER_COMPONENT_UPDATE),
+    Rule("/api/v1/assembly-builds", create=ASSEMBLY_BUILD,
+         actions={"post": ACTION, "reverse": REASON}),
+    Rule("/api/v1/assembly-unbuilds", create=ASSEMBLY_UNBUILD,
+         actions={"post": ACTION, "reverse": REASON}),
+    Rule("/api/v1/wip-transactions", create=WIP_TRANSACTION,
+         actions={"post": ACTION, "reverse": REASON}),
+    Rule("/api/v1/outsourced-operations", create=OUTSOURCED_OPERATION,
+         actions={"create-po": P2({"po_type": TEXT}), "receive": OUTSOURCED_RECEIVE}),
+    Rule("/api/v1/ecos", create=ECO),
+    Rule("/api/v1/scheduling-runs", create=SCHEDULING_RUN, actions={"apply": ACTION}),
+    Rule("/api/v1/manufacturing/condition-codes", create=CONDITION_CODE, update=CONDITION_CODE),
+    Rule("/api/v1/manufacturing/compat/attributes", create=COMPAT_ATTRIBUTE, update=COMPAT_ATTRIBUTE),
+    Rule("/api/v1/manufacturing/compat/rule-sets", create=COMPAT_RULE_SET, update=COMPAT_RULE_SET,
+         actions={"rules": COMPAT_RULE}),
+    Rule("/api/v1/manufacturing/compat/rules", update=COMPAT_RULE),
+    Rule("/api/v1/manufacturing/compat/slots", create=COMPAT_SLOT, update=COMPAT_SLOT),
+)
+
+
+def schema_for_operation(method: str, path: str) -> dict[str, Any] | None:  # type: ignore[no-redef]
+    method = method.upper()
+    normalized = _normalise_path(path)
+    explicit = EXPLICIT_SCHEMAS.get((method, normalized))
+    if explicit is not None:
+        return explicit
+    for rule in RULES + PHASE2_RULES + PHASE3_RULES:
+        base = rule.base
+        if normalized == base:
+            if method == "POST" and rule.create is not None:
+                return rule.create
+            if method in {"PATCH", "PUT"} and rule.update is not None:
+                return rule.update
+            continue
+        if re.fullmatch(re.escape(base) + r"/\{\}", normalized):
+            if method in {"PATCH", "PUT"} and rule.update is not None:
+                return rule.update
+            continue
+        match = re.fullmatch(re.escape(base) + r"/\{\}/([A-Za-z0-9_.-]+)", normalized)
+        if match and method == "POST":
+            action = match.group(1)
+            schema = rule.actions.get(action, rule.default_action)
+            if schema is not None:
+                return schema
     return None
