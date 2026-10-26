@@ -51,7 +51,7 @@ docker compose run --rm api alembic upgrade head
 
 # 3) API + docs
 curl localhost:28000/healthz
-# OpenAPI: http://localhost:28000/api/v1/openapi.json
+# OpenAPI (local test env): http://localhost:28000/api/v1/openapi.json
 
 # 4) tests (needs the dev Postgres)
 TEST_DATABASE_URL=postgresql+asyncpg://inventory:inventory-dev-password@localhost:5432/inventory \
@@ -85,6 +85,7 @@ make seed             # idempotent reference-data bootstrap
 - `app/modules/<context>/` is owned by that feature set's builder; shared files (`app/api/main.py`,
   `app/api/registry.py`, contract aggregation, Alembic chain order, `app/tests/conftest.py`, `app/seed/`,
   compose/scripts) are integrator-owned.
+- Production OpenAPI: `curl -H "X-API-Key: $OPENAPI_API_KEY" https://scm.k1hub.com/api/v1/openapi.json`
 - Do not edit plan docs (`../design/**`, `../feature-sets/**`, `../PLAN.md`, `../README.md`) from the
   implementation repo; plan changes go through the Lead.
 - Build is parallel (B4 = up to 8 FS cards) but deployment stays wave-ordered. S0 must pass

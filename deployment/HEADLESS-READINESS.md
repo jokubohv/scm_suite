@@ -9,7 +9,7 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
 
 | Area | State |
 |---|---|
-| Headless surface | REST-only FastAPI app (no UI); API docs at `/api/v1/docs`, OpenAPI at `/api/v1/openapi.json`; workers/outbox-relay are separate entrypoints. |
+| Headless surface | REST-only FastAPI app (no UI); `/api/v1/docs` is disabled and `/api/v1/openapi.json` requires `X-API-Key: $OPENAPI_API_KEY` in production; workers/outbox-relay are separate entrypoints. |
 | Image/runtime | Multi-stage `Dockerfile`, non-root runtime user `10001:10001`, one image for API/worker/relay; `docker-compose.yml` + `docker-compose.dev.yml` for the dev stack. |
 | Database | 30 Alembic migrations, single linear chain, head `0030_rls_grants_verify`; RLS enabled (280 tables/569 policies in dev); `scripts/up.sh`/`deploy_set.sh` run migrations. |
 | Tests | 1302 passed, 1 skipped across the full suite; contract lint 0 errors/0 warnings; deployment state 16/16 feature sets verified. |
@@ -21,8 +21,8 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
 
 ## 2. OpenAPI answer
 
-- **Use the runtime spec for clients:** `GET /api/v1/openapi.json` (also committed as
-  `deployment/runtime.openapi.json`, regenerated/checked by
+- **Use the runtime spec for clients:** `GET /api/v1/openapi.json` with `X-API-Key` in production
+  (also committed as `deployment/runtime.openapi.json`, regenerated/checked by
   `python tools/export_runtime_openapi.py`). It is OpenAPI 3.1, contains only mounted operations, has
   unique operationIds and no TODO entries. Generate SDKs from this file.
 - **Do not use the contract aggregate as a strict client spec without filtering:**
@@ -58,7 +58,7 @@ COMPOSE_PROJECT_NAME=inv-dev scripts/up.sh --profile dev --wait
 docker compose run --rm api alembic upgrade head
 curl -fsS localhost:8000/healthz
 curl -fsS localhost:8000/readyz
-curl -fsS localhost:8000/api/v1/openapi.json > runtime.openapi.json
+curl -fsS -H "X-API-Key: $OPENAPI_API_KEY" localhost:8000/api/v1/openapi.json > runtime.openapi.json
 python -m app.seed.cli --profile sqlalchemy --tenant system   # optional reference data
 ```
 

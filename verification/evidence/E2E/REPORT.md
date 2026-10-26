@@ -71,6 +71,8 @@ After a successful production deployment (run `40254816539`), a read-only GET sw
 - item-master DELETE grants verified (2/2)
 - no writes performed on production
 
+Production image: `ghcr.io/jokubohv/scm-suite-api:bc35d213...`; deploy job `40258481911` recreated API/worker/outbox/Caddy and passed readiness.
+
 Evidence: `verification/evidence/E2E/prod-read-smoke.json`.
 
 

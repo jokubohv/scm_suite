@@ -88,7 +88,7 @@ rotate it by updating `.env.production` and restarting the API.
 - **Backups:** back up the `postgres_data` volume (and any external S3 bucket); Redis is not authoritative.
 - **Rollback:** deploy a previous image tag with the same workflow/manual compose; Alembic downgrades are
   not automatic (migrations are additive; restore a backup for destructive changes).
-- **Public docs:** Caddy serves `/api/v1/docs` and `/api/v1/openapi.json`; restrict in `deployment/Caddyfile`
+- **Docs/spec:** `/api/v1/docs` is disabled; `/api/v1/openapi.json` requires `X-API-Key: $OPENAPI_API_KEY` (set in `.env.production`; deploy fails if missing/weak).
   if the API is private.
 
 ## Hardening checklist
