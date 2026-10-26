@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from app import __version__
-from app.api.deps import reject_empty_create_body
+from app.api.deps import authenticate_api_key, reject_empty_create_body
 from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
@@ -69,27 +69,41 @@ def create_app() -> FastAPI:
         redoc_url=None,
         dependencies=[Depends(reject_empty_create_body)],
     )
-    def _require_openapi_key(x_api_key: str | None = Header(default=None, alias="X-API-Key")) -> None:
+    async def _require_openapi_key(
+        x_api_key: str | None = Header(default=None, alias="X-API-Key"),
+    ) -> None:
         configured = settings.openapi_api_key.strip()
-        if not configured:
-            # Production hardening: fail closed for both "production" and the short "prod" alias.
-            if settings.env.strip().lower() not in {"production", "prod"}:
+        is_prod = settings.env.strip().lower() in {"production", "prod"}
+        # 1) deployment-wide OpenAPI key (for operators/tooling)
+        if configured and len(configured) >= 32 and x_api_key and compare_digest(x_api_key, configured):
+            return
+        # 2) any active tenant API key (the tenant key is validated by prefix/hash and tenant status)
+        if x_api_key:
+            try:
+                tenant_auth = await authenticate_api_key(x_api_key)
+            except Exception:  # noqa: BLE001 - a broken key lookup must not make the spec endpoint 500
+                tenant_auth = None
+            if tenant_auth is not None:
                 return
-            raise HTTPException(
-                status_code=503,
-                detail={"code": "OPENAPI_KEY_NOT_CONFIGURED", "message": "OpenAPI access is not configured"},
-            )
-        if len(configured) < 32:
+        # 3) dev/test remains usable without a configured key for local tooling
+        if not configured:
+            if not is_prod and not x_api_key:
+                return
+            if is_prod:
+                raise HTTPException(
+                    status_code=503,
+                    detail={"code": "OPENAPI_KEY_NOT_CONFIGURED", "message": "OpenAPI access is not configured"},
+                )
+        if configured and len(configured) < 32:
             raise HTTPException(
                 status_code=503,
                 detail={"code": "OPENAPI_KEY_INVALID", "message": "OpenAPI access key is misconfigured"},
             )
-        if not x_api_key or not compare_digest(x_api_key, configured):
-            raise HTTPException(
-                status_code=401,
-                detail={"code": "API_KEY_REQUIRED", "message": "a valid X-API-Key header is required"},
-                headers={"WWW-Authenticate": "ApiKey"},
-            )
+        raise HTTPException(
+            status_code=401,
+            detail={"code": "API_KEY_REQUIRED", "message": "a valid X-API-Key header is required"},
+            headers={"WWW-Authenticate": "ApiKey"},
+        )
 
     @app.get(f"{settings.api_prefix}/openapi.json", include_in_schema=False)
     async def openapi_document(_: None = Depends(_require_openapi_key)) -> JSONResponse:

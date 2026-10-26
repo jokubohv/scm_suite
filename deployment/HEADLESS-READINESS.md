@@ -33,8 +33,9 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
 - Regenerate/verify: `make contracts` (contract lint/generation) and
   `python tools/export_runtime_openapi.py --check`; the test
   `app/tests/contracts/test_runtime_openapi_spec.py` enforces freshness.
-- `/api/v1/docs` is disabled. `/api/v1/openapi.json` requires `X-API-Key` in production; business
-  endpoints accept a tenant API key (`X-API-Key`) or bearer JWT.
+- `/api/v1/docs` is disabled. `/api/v1/openapi.json` requires `X-API-Key` in production; accepted
+  keys are the deployment-wide `OPENAPI_API_KEY` or any active tenant API key. Business endpoints
+  accept a tenant API key (`X-API-Key`) or bearer JWT.
 
 See `deployment/VPS-DEPLOYMENT.md` for the VPS Docker Compose + GitHub Actions deployment and the operator-only account bootstrap flow.
 

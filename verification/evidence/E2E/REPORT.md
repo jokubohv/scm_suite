@@ -85,6 +85,8 @@ The runtime OpenAPI document is no longer a public endpoint:
 - production fails closed (503) if the key is not configured; wrong/missing key returns 401
 - successful spec responses carry `Cache-Control: no-store, private`
 - `/api/v1/docs` returns 404
+- `/api/v1/openapi.json` accepts either the deployment-wide `OPENAPI_API_KEY` **or any active tenant API key** in `X-API-Key`
+- the spec is global (one runtime document), not tenant-specific
 - deploy workflow refuses to run without a >=32-character `OPENAPI_API_KEY` in `.env.production`
 
 
@@ -97,7 +99,7 @@ Live E2E now creates a tenant-scoped API key with `items.read`, then verifies:
 - `POST /api/v1/items` with the same key → **403** (items.update absent)
 - revoked key on `GET /api/v1/items` → **401**
 
-Latest local run: **181 checks, 0 failures**; full suite **1,314 passed**; full-surface sweep **1,257 operations, 0 × 5xx**.
+Latest local run: **183 checks, 0 failures**; full suite **1,314 passed**; full-surface sweep **1,257 operations, 0 × 5xx**.
 
 
 ## Production API-key verification

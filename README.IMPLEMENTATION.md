@@ -83,8 +83,9 @@ curl -s https://scm.k1hub.com/api/v1/items \
 ```
 
 API keys are tenant-scoped, honour their scope list, expire/rotate/revoke through
-`/api/v1/admin/api-keys`, and are audited like other machine credentials. The separate
-`OPENAPI_API_KEY` only gates the runtime OpenAPI document.
+`/api/v1/admin/api-keys`, and are audited like other machine credentials. The runtime OpenAPI
+document accepts either the deployment-wide `OPENAPI_API_KEY` or any active tenant API key in
+`X-API-Key` (the spec itself is global, not tenant-specific).
 
 ## Commands
 

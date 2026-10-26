@@ -1,8 +1,8 @@
-# Live E2E — E2E10261433BF17
+# Live E2E — E2E102614490D7B
 
 Base: `http://127.0.0.1:28080`
 
-Checks: **181**, failures: **0**
+Checks: **183**, failures: **0**
 
 - PASS — readiness (200)
 - PASS — readiness db ok (200)
@@ -96,6 +96,8 @@ Checks: **181**, failures: **0**
 - PASS — api key secret returned once (201)
 - PASS — api key read items (200)
 - PASS — api key authenticates business GET (200)
+- PASS — api key openapi access (200)
+- PASS — api key can fetch runtime OpenAPI (200)
 - PASS — api key scope denied (403)
 - PASS — api key cannot exceed scopes (403)
 - PASS — api key write scope denied (403)

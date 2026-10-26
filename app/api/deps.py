@@ -148,7 +148,7 @@ def _is_public_auth_path(path: str) -> bool:
     )
 
 
-async def _authenticate_api_key(raw_key: str) -> AuthContext | None:
+async def authenticate_api_key(raw_key: str) -> AuthContext | None:
     """Resolve an X-API-Key to a tenant-scoped principal.
 
     API keys are indexed by their non-secret prefix. Lookup runs in a separate privileged session
@@ -233,7 +233,7 @@ async def get_request_auth(
         # self-service endpoints (login/refresh/switch-tenant/me). Those require a JWT.
         if path.startswith("/api/v1/auth/") or path == "/api/v1/me" or path.startswith("/api/v1/me/"):
             return None
-        return await _authenticate_api_key(api_key)
+        return await authenticate_api_key(api_key)
     authorization = request.headers.get("authorization", "")
     if authorization.lower().startswith("bearer "):
         token = authorization.split(" ", 1)[1].strip()

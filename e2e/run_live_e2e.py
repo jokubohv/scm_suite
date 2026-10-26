@@ -173,6 +173,10 @@ def run_api_key_integration(c: httpx.Client, result: Result, tenant: dict[str, A
     allowed = request(c, "GET", "/api/v1/items", headers=key_headers, expected=200,
                       result=result, name="api key read items")
     result.check("api key authenticates business GET", allowed.status_code == 200, allowed.status_code)
+    spec = request(c, "GET", "/api/v1/openapi.json", headers=key_headers, expected=200,
+                   result=result, name="api key openapi access")
+    result.check("api key can fetch runtime OpenAPI", spec.status_code == 200 and "paths" in spec.json(),
+                 spec.status_code)
     denied = request(c, "GET", "/api/v1/admin/flags", headers=key_headers, expected=403,
                      result=result, name="api key scope denied")
     result.check("api key cannot exceed scopes", denied.status_code == 403, denied.status_code)
@@ -284,7 +288,9 @@ def run_quality(c: httpx.Client, result: Result, tenant: dict[str, Any], env: di
 
 def run_wms(c: httpx.Client, result: Result, tenant: dict[str, Any], env: dict[str, Any],
             item: dict[str, Any], vendor: dict[str, Any]) -> None:
-    token = tenant["token"]; warehouse = env["warehouse"]; location = env["location"]
+    token = tenant["token"]
+    warehouse = env["warehouse"]
+    location = env["location"]
     asn = request(c, "POST", "/api/v1/inbound-shipments", token=token, expected=201, headers=idem(),
                   body={"location_id": location["id"], "vendor_id": vendor["id"], "carrier_code": "UPS",
                         "expected_arrival_date": TODAY,
