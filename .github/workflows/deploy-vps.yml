@@ -99,6 +99,7 @@ jobs:
           scp deployment/Caddyfile "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_DIR }}/deployment/Caddyfile"
           scp deployment/provision-db-roles.sh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_DIR }}/deployment/provision-db-roles.sh"
           scp deployment/backfill-existing-db.sql "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_DIR }}/deployment/backfill-existing-db.sql"
+          scp deployment/deploy-app.sh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_DIR }}/deployment/deploy-app.sh"
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "cp '${{ secrets.VPS_DEPLOY_DIR }}/deployment/Caddyfile' '${{ secrets.VPS_DEPLOY_DIR }}/Caddyfile'"
       - name: Authenticate VPS to GHCR (private packages only)
         env:
@@ -115,26 +116,4 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_DEPLOY_DIR: ${{ secrets.VPS_DEPLOY_DIR }}
         run: |
-          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && INVENTORY_IMAGE='$IMAGE' bash -s" <<'REMOTE'
-          set -euo pipefail
-          test -f .env.production || { echo "missing .env.production on VPS; see .env.production.example"; exit 1; }
-          grep -Eq '^OPENAPI_API_KEY=.{32,}' .env.production || { echo "missing/weak OPENAPI_API_KEY in .env.production (>=32 chars required)" >&2; exit 1; }
-          if grep -q '^INVENTORY_IMAGE=' .env.production; then
-            sed -i "s#^INVENTORY_IMAGE=.*#INVENTORY_IMAGE=$INVENTORY_IMAGE#" .env.production
-          else
-            echo "INVENTORY_IMAGE=$INVENTORY_IMAGE" >> .env.production
-          fi
-          docker compose --env-file .env.production -f docker-compose.prod.yml pull
-          docker compose --env-file .env.production -f docker-compose.prod.yml up -d --wait postgres redis
-          bash deployment/provision-db-roles.sh
-          docker compose --env-file .env.production -f docker-compose.prod.yml run --rm --no-TTY migrate </dev/null
-          # Existing DBs at head 0030 still need the auth-service role grants; fresh DBs get them in 0030.
-          docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres sh -c \
-            'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "ALTER ROLE platform_auth BYPASSRLS; GRANT USAGE ON SCHEMA platform TO platform_auth; GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA platform TO platform_auth; GRANT DELETE ON item_master.item_related, item_master.kit_group_member TO platform_app;"'
-          # Existing DBs also need the global-currency RLS policy and the canonical traceability flag.
-          docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres sh -c \
-            'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < deployment/backfill-existing-db.sql
-          docker compose --env-file .env.production -f docker-compose.prod.yml up -d --remove-orphans --force-recreate api worker outbox-relay caddy
-          docker compose --env-file .env.production -f docker-compose.prod.yml exec -T api \
-            python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=10).read().decode())"
-          REMOTE
+          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && INVENTORY_IMAGE='$IMAGE' bash deployment/deploy-app.sh"
