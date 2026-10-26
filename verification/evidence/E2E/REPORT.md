@@ -141,3 +141,15 @@ Deployed image `ghcr.io/jokubohv/scm-suite-api:92b0cf48...`:
 - approval API key can open MCP discovery (**200**), with per-tool approval scopes still enforced
 - JWT bearer on MCP → **401**
 - `locations_list` returned a controlled `409 DOMAIN_DISABLED` because IntelRanch feature flags are still at defaults; enable the relevant flags to use those tools
+
+
+## API request-schema / MCP input-schema quality
+
+Phase 1 request schemas added at the API layer (`app/api/request_schemas.py`) and injected into
+`app.openapi()`:
+
+- MCP opaque body tools: **113 → 0** (out of 151 body tools)
+- global opaque API request bodies: **360 → 171**
+- `item_receipts_create` MCP schema now documents `vendor_id`, `receipt_type`, `location_id`,
+  `lines[]` with receipt-line fields, required flags and enums
+- tests assert no opaque MCP body tool and verify representative API schemas

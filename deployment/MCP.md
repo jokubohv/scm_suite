@@ -38,7 +38,9 @@ The server derives a curated catalogue from the runtime OpenAPI document:
 - resources: `scm://openapi`, `scm://mcp/info`, `scm://mcp/tools`
 - prompts: `inventory_adjustment`, `procure_to_pay`, `cycle_count`
 
-Every tool inherits the caller's tenant and API-key scopes. Write calls automatically receive an
+Every tool input schema is generated from the runtime OpenAPI contract. Phase 1 request-schema
+coverage removed all opaque MCP body tools: the 151 body-bearing tools now expose real fields,
+required flags, enums and nested line schemas. Every tool inherits the caller's tenant and API-key scopes. Write calls automatically receive an
 `Idempotency-Key`; approval tools require a key with the relevant approval scope.
 
 ## Examples

@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from hmac import compare_digest
+from typing import Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Response
 from fastapi.responses import JSONResponse
@@ -15,6 +16,7 @@ from app.api.deps import authenticate_api_key, reject_empty_create_body
 from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
+from app.api.request_schemas import apply_request_schemas
 from app.api.routers.consigned import router as consigned_router
 from app.api.routers.costing import router as costing_router
 from app.api.routers.counts import router as counts_router
@@ -187,6 +189,19 @@ def create_app() -> FastAPI:
         response.status_code = 200 if ready else 503
         return {"status": "ok" if ready else "unavailable", "checks": checks}
 
+    # Runtime request-body schemas: the routers still accept free-form dicts, but the OpenAPI
+    # contract (and therefore MCP tool input schemas) carries the real fields/types/enums.
+    original_openapi = app.openapi
+
+    def _openapi_with_request_schemas() -> dict[str, Any]:
+        if app.openapi_schema:
+            return app.openapi_schema
+        schema = original_openapi()
+        apply_request_schemas(schema)
+        app.openapi_schema = schema
+        return schema
+
+    app.openapi = _openapi_with_request_schemas  # type: ignore[method-assign]
     return app
 
 

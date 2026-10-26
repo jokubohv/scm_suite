@@ -48,6 +48,9 @@ async def test_tool_registry_is_derived_from_runtime_openapi() -> None:
     assert any(name.startswith("inventory_adjustments_") for name in names)
     assert any(name.startswith("purchase_orders_") for name in names)
     assert any(name.startswith("work_orders_") for name in names)
+    opaque_body_tools = [tool.name for tool in tools
+                         if tool.has_body and tool.body_additional and not tool.body_properties]
+    assert not opaque_body_tools, opaque_body_tools
     for tool in tools:
         if tool.name == "scm_api_request":
             continue
@@ -60,6 +63,24 @@ async def test_tool_registry_is_derived_from_runtime_openapi() -> None:
             assert parameter in tool.input_schema.get("properties", {})
             assert parameter in tool.input_schema.get("required", [])
         assert re.match(r"^[a-z0-9_]+$", tool.name)
+
+
+async def test_api_request_schemas_are_typed_and_injected() -> None:
+    spec = create_app().openapi()
+    receipt = spec["paths"]["/api/v1/item-receipts"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+    assert {"vendor_id", "lines", "receipt_type", "location_id"} <= set(receipt["properties"])
+    assert "vendor_id" in receipt["required"] and "lines" in receipt["required"]
+    adjustment = spec["paths"]["/api/v1/inventory-adjustments"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+    assert "lines" in adjustment["properties"] and "transaction_date" in adjustment["required"]
+
+    from app.api.main import create_app as _create
+
+    tools = mcp_router.build_tool_registry(_create().openapi())
+    by_name = {tool.name: tool for tool in tools}
+    receipt_tool = by_name["item_receipts_create"]
+    assert "vendor_id" in receipt_tool.input_schema["properties"]
+    assert "lines" in receipt_tool.input_schema["properties"]
+    assert receipt_tool.body_additional is False
 
 
 async def test_mcp_info_and_tools_list_require_api_key_dependency() -> None:
