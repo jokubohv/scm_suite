@@ -97,10 +97,14 @@ def upgrade() -> None:
     install_standard_triggers(op, models.REVISION_0001_TABLES + tuple(t for t in SECURITY_TABLES if t.name in {"tenant_invitation", "user_session", "tenant_sso_connection", "user_identity_link", "sso_group_role_map", "finance_journal_intent"}))
     # 5. Defence in depth: tenant RLS on every tenant-owned platform table + SYSTEM_TENANT read policy.
     apply_tenant_rls(op, RLS_TABLES)
+    # ISO currency reference rows are global (tenant_id NULL); allow all tenants to read them.
+    op.execute("DROP POLICY IF EXISTS global_currency_read ON platform.currency")
+    op.execute("CREATE POLICY global_currency_read ON platform.currency FOR SELECT USING (tenant_id IS NULL)")
     grant_app_role_privileges(op, RLS_TABLES)
 
 
 def downgrade() -> None:
+    op.execute("DROP POLICY IF EXISTS global_currency_read ON platform.currency")
     disable_tenant_rls(op, RLS_TABLES)
     op.execute('DROP TABLE IF EXISTS platform.audit_event CASCADE')
     drop_table(op, models.finance_journal_intent)

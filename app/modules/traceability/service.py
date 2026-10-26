@@ -66,6 +66,7 @@ BIN_TYPES = frozenset({"STORAGE", "PICKING", "STAGING", "RECEIVING", "DOCK"})
 CODE_RE = re.compile(r"^[A-Z0-9][A-Z0-9_.\-]{0,63}$")
 MAX_LOCATION_DEPTH = 10
 DOMAIN_FLAG = "traceability.registry.enabled"
+LEGACY_DOMAIN_FLAGS = ("traceability.registry.enabled", "inventory.storage_registry.enabled")
 
 SETTING_BINS = ("inventory", "bins.enabled")
 SETTING_STATUSES = ("inventory", "statuses.enabled")
@@ -299,10 +300,11 @@ class TraceabilityService:
         table = platform_models.metadata.tables["platform.feature_flag"]
         result = await self.session.execute(
             select(table.c.is_enabled).where(
-                table.c.tenant_id == _uuid(tenant_id, field="tenant_id"), table.c.flag_key == DOMAIN_FLAG
+                table.c.tenant_id == _uuid(tenant_id, field="tenant_id"),
+                table.c.flag_key.in_(LEGACY_DOMAIN_FLAGS),
             )
         )
-        return bool(result.scalar_one_or_none())
+        return any(bool(value) for value in result.scalars().all())
 
     async def bins_enabled_for_tenant(self, tenant_id: str | UUID) -> bool:
         return bool(await self.tenant_setting(tenant_id, *SETTING_BINS, default=True))

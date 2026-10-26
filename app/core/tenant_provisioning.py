@@ -231,7 +231,7 @@ TENANT_FLAG_DEFAULTS: tuple[str, ...] = (
     'inventory.item_master.enabled',
     'inventory.ledger.enabled',
     'inventory.numbered.enabled',
-    'inventory.storage_registry.enabled',
+    'traceability.registry.enabled',
     'manufacturing.enabled',
     'manufacturing.wip.enabled',
     'platform.core.enabled',

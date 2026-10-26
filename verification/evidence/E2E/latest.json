@@ -1,0 +1,2700 @@
+{
+  "run": "E2E10260101DBB3",
+  "checked": 128,
+  "failure_count": 0,
+  "failures": [],
+  "checks": [
+    {
+      "name": "readiness",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "readiness db ok",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "bootstrap whoami",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "bootstrap whoami without token",
+      "ok": true,
+      "status": 401,
+      "detail": null
+    },
+    {
+      "name": "runtime openapi",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "bootstrap tenant A",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "login tenant A",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "list flags A",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A consigned.assembly_incompatible_guard",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A consigned.inventory.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A costing.engine.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A extensions.registry.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A extensions.upc.auto_assign",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A inventory.counts.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A inventory.item_master.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A inventory.ledger.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A inventory.numbered.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A inventory.storage_registry.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A manufacturing.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A manufacturing.wip.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A platform.core.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A pricing.engine.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.blanket_orders_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.drop_ship_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.multiple_vendors_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.p2p.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.purchase_contracts_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.purchase_requests_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.requisitions_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A procurement.rfq_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A quality.management.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A replenishment.planning.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A reporting.readmodels.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A wms.execution.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A traceability.registry.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable A traceability.numbered.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "bootstrap tenant B",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "login tenant B",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "list flags B",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B consigned.assembly_incompatible_guard",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B consigned.inventory.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B costing.engine.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B extensions.registry.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B extensions.upc.auto_assign",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B inventory.counts.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B inventory.item_master.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B inventory.ledger.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B inventory.numbered.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B inventory.storage_registry.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B manufacturing.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B manufacturing.wip.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B platform.core.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B pricing.engine.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.blanket_orders_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.drop_ship_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.multiple_vendors_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.p2p.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.purchase_contracts_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.purchase_requests_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.requisitions_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B procurement.rfq_enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B quality.management.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B replenishment.planning.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B reporting.readmodels.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B wms.execution.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B traceability.registry.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "enable B traceability.numbered.enabled",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "location A1",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin A1 RCV",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin A1 STG",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin A1 PICK",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "warehouse A1",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "statuses A1",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "location A2",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin A2 RCV",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin A2 STG",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin A2 PICK",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "warehouse A2",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "statuses A2",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "location B1",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin B1 RCV",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin B1 STG",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "bin B1 PICK",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "warehouse B1",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "statuses B1",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "item ITEM-A",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "item ITEM-B",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "item ITEM-A",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "create adjustment",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "submit adjustment",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "post adjustment",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "read balances after adjustment",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "on-hand after adjustment == 10",
+      "ok": true,
+      "status": 200,
+      "detail": 10.0
+    },
+    {
+      "name": "create transfer",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "submit transfer",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "post transfer",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "A1 balance",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "A2 balance",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "A1 on-hand after transfer == 6",
+      "ok": true,
+      "status": null,
+      "detail": null
+    },
+    {
+      "name": "A2 on-hand after transfer == 4",
+      "ok": true,
+      "status": null,
+      "detail": null
+    },
+    {
+      "name": "create approver",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "login approver",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "create count",
+      "ok": true,
+      "status": 201,
+      "detail": null
+    },
+    {
+      "name": "start count",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "count lines",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "capture count",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "submit count",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "approve count",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "cross-tenant item denied",
+      "ok": true,
+      "status": 404,
+      "detail": null
+    },
+    {
+      "name": "cross-tenant item no data leak",
+      "ok": true,
+      "status": 404,
+      "detail": null
+    },
+    {
+      "name": "cross-tenant location denied",
+      "ok": true,
+      "status": 404,
+      "detail": null
+    },
+    {
+      "name": "cross-tenant location no data leak",
+      "ok": true,
+      "status": 404,
+      "detail": null
+    },
+    {
+      "name": "cross-tenant warehouse denied",
+      "ok": true,
+      "status": 404,
+      "detail": null
+    },
+    {
+      "name": "cross-tenant warehouse no data leak",
+      "ok": true,
+      "status": 404,
+      "detail": null
+    },
+    {
+      "name": "report catalogue",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report inventory-balance",
+      "ok": true,
+      "status": 404,
+      "detail": null
+    },
+    {
+      "name": "report stock-ledger",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report inventory-valuation",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report inventory-snapshot",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report negative-inventory",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report lot-expiry",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report manufacturing-workbench",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report planning-workbench",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report atp-workbench",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report quality-inspections",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report consigned-balance",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "report purchase-history",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "name": "GET surface sweep has no 5xx",
+      "ok": true,
+      "status": null,
+      "detail": []
+    }
+  ],
+  "data": {
+    "run": "E2E10260101DBB3",
+    "base": "http://127.0.0.1:28080",
+    "tenants": [
+      {
+        "code": "E2E10260101DBB3_A",
+        "id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+        "email": "e2e-e2e10260101dbb3-a@example.com",
+        "password": "E2E-fIQJPEcvrpcH5-X9TtdyC3Cl",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbnZlbnRvcnktcGxhdGZvcm0iLCJhdWQiOiJpbnZlbnRvcnktcGxhdGZvcm0tYXBpIiwic3ViIjoiYmQ1MGEzY2UtOWMxMC00YmUzLTlmYjQtYjA2ZTVkY2RkMWRiIiwidWlkIjoiZTdiNmJlMWMtMzA1Ny00Y2JiLTljMGMtODQxN2FlYTU5MDdkIiwidGlkIjoiYjk0MzE4YTItMDNkYy00NDJlLWJkMjgtNzU3OTEwNjVlN2M0IiwidHYiOjAsImp0aSI6ImNhN2M3MDk1MDc2ZDRmMDA5ODlhMGFhN2IzNGIyYWY4IiwiaWF0IjoxNzkyOTc2NTE0LCJleHAiOjE3OTI5Nzc0MTQsInR5cCI6ImFjY2VzcyIsInNjb3BlcyI6WyJhdHAucmVidWlsZCIsImNvbnNpZ25lZC5hZG1pbiIsImNvbnNpZ25lZC5hZ3JlZW1lbnQubWFuYWdlIiwiY29uc2lnbmVkLmFncmVlbWVudC53cml0ZSIsImNvbnNpZ25lZC5vd25lcnNoaXAudHJhbnNmZXIiLCJjb25zaWduZWQucmVhZCIsImNvbnNpZ25lZC50cmFuc2Zlci53cml0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LmNyZWF0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LnBvc3QiLCJjb3N0aW5nLmNvc3QubWFuYWdlIiwiY29zdGluZy5jb3N0LnJlYWQiLCJjb3N0aW5nLmNvc3QudmlldyIsImNvc3RpbmcuZXN0aW1hdGVkX2xhbmRlZF9jb3N0Lm1hbmFnZSIsImNvc3RpbmcuZ3JvdXAubWFuYWdlIiwiY29zdGluZy5sYW5kZWRfY29zdC5jcmVhdGUiLCJjb3N0aW5nLmxhbmRlZF9jb3N0LnBvc3QiLCJjb3N0aW5nLmxhbmRlZGNvc3QubWFuYWdlIiwiY29zdGluZy5tZXRob2QubWFuYWdlIiwiY29zdGluZy5yZWFkIiwiY29zdGluZy5yZWNhbGMucnVuIiwiY29zdGluZy5yZXZhbHVhdGlvbi5hcHByb3ZlIiwiY29zdGluZy5yZXZhbHVhdGlvbi5jcmVhdGUiLCJjb3N0aW5nLnJldmFsdWF0aW9uLnBvc3QiLCJjb3N0aW5nLnN0YW5kYXJkLmFjdGl2YXRlIiwiY29zdGluZy5zdGFuZGFyZC5yb2xsdXAiLCJjb3N0aW5nLnZhcmlhbmNlLnZpZXciLCJjb3Vwb25zLnZhbGlkYXRlIiwiY3VzdG9tZXJwYXJ0Lm1hbmFnZSIsImRlbWFuZF9wbGFuLmNyZWF0ZSIsImRlbWFuZF9wbGFuX2xpbmUub3ZlcnJpZGUiLCJleHRlbnNpb25zLmNsYWltcy53cml0ZSIsImV4dGVuc2lvbnMuY3VzdG9tZXJwYXJ0LndyaXRlIiwiZXh0ZW5zaW9ucy5yZWFkIiwiZXh0ZW5zaW9ucy51cGMud3JpdGUiLCJleHRlbnNpb25zLndhcnJhbnR5LndyaXRlIiwiaW52ZW50b3J5LmFkanVzdG1lbnQuYXBwcm92ZSIsImludmVudG9yeS5hZGp1c3RtZW50LmNyZWF0ZSIsImludmVudG9yeS5hZGp1c3RtZW50LnBvc3QiLCJpbnZlbnRvcnkuYmFsYW5jZS5yZWFkIiwiaW52ZW50b3J5LmJpbi5tYW5hZ2UiLCJpbnZlbnRvcnkuYmluLnJlYWQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5jb21taXQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5tYW5hZ2UiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5yZWFsbG9jYXRlIiwiaW52ZW50b3J5LmNvbW1pdG1lbnQucmVsZWFzZSIsImludmVudG9yeS5jb3N0LnZpZXciLCJpbnZlbnRvcnkuY291bnQuYXBwcm92ZSIsImludmVudG9yeS5jb3VudC5jYXB0dXJlIiwiaW52ZW50b3J5LmNvdW50LmNyZWF0ZSIsImludmVudG9yeS5jb3VudC5wbGFuLm1hbmFnZSIsImludmVudG9yeS5jb3VudC5wb3N0IiwiaW52ZW50b3J5LmNvdW50LnJlYWQiLCJpbnZlbnRvcnkuY291bnQucmVjb3VudCIsImludmVudG9yeS5kaXN0cmlidXRpb24uY3JlYXRlIiwiaW52ZW50b3J5LmRpc3RyaWJ1dGlvbi5wb3N0IiwiaW52ZW50b3J5LmZ1bGZpbGxtZW50LnBvc3QiLCJpbnZlbnRvcnkuaW1wb3J0LmNyZWF0ZSIsImludmVudG9yeS5pbXBvcnQucG9zdCIsImludmVudG9yeS5sb2NhdGlvbi5tYW5hZ2UiLCJpbnZlbnRvcnkubG9jYXRpb24ucmVhZCIsImludmVudG9yeS5sb3QuaW5hY3RpdmF0ZSIsImludmVudG9yeS5sb3QucmVhZCIsImludmVudG9yeS5sb3Qud3JpdGUiLCJpbnZlbnRvcnkubnVtYmVyZWQucmVjb25jaWxlIiwiaW52ZW50b3J5Lm51bWJlcmVkLnZhbGlkYXRlIiwiaW52ZW50b3J5LnJlYXNvbi5tYW5hZ2UiLCJpbnZlbnRvcnkucmVjZWlwdC5wb3N0IiwiaW52ZW50b3J5LnJldHVybi5wb3N0IiwiaW52ZW50b3J5LnNlcmlhbC5yZWFkIiwiaW52ZW50b3J5LnNlcmlhbC5yZWdpc3RlciIsImludmVudG9yeS5zdGF0dXMubWFuYWdlIiwiaW52ZW50b3J5LnN0YXR1cy5yZWFkIiwiaW52ZW50b3J5LnRvLmFwcHJvdmUiLCJpbnZlbnRvcnkudG8uY2xvc2UiLCJpbnZlbnRvcnkudG8uY3JlYXRlIiwiaW52ZW50b3J5LnRvLmZ1bGZpbCIsImludmVudG9yeS50by5yZWNlaXZlIiwiaW52ZW50b3J5LnRyYW5zYWN0aW9uLnBvc3QiLCJpbnZlbnRvcnkudHJhbnNhY3Rpb24ucmVhZCIsImludmVudG9yeS50cmFuc2FjdGlvbi5yZXZlcnNlIiwiaW52ZW50b3J5LnRyYW5zZmVyLmNyZWF0ZSIsImludmVudG9yeS50cmFuc2Zlci5wb3N0IiwiaW52ZW50b3J5LndvcmtzaGVldC5hcHByb3ZlIiwiaW52ZW50b3J5LndvcmtzaGVldC5jcmVhdGUiLCJpbnZlbnRvcnkud29ya3NoZWV0LnBvc3QiLCJpdGVtcy5iYXJjb2RlLm1hbmFnZSIsIml0ZW1zLmNhdGVnb3J5Lm1hbmFnZSIsIml0ZW1zLmNyZWF0ZSIsIml0ZW1zLmluYWN0aXZhdGUiLCJpdGVtcy5sb2NhdGlvbi5tYW5hZ2UiLCJpdGVtcy5tYXRyaXgubWFuYWdlIiwiaXRlbXMucGxhbm5pbmcubWFuYWdlIiwiaXRlbXMucmVhZCIsIml0ZW1zLnVvbS5tYW5hZ2UiLCJpdGVtcy51cGRhdGUiLCJtYW51ZmFjdHVyaW5nLmFkbWluIiwibWFudWZhY3R1cmluZy5hcHByb3ZlIiwibWFudWZhY3R1cmluZy5ib20ubWFuYWdlIiwibWFudWZhY3R1cmluZy5idWlsZC5wb3N0IiwibWFudWZhY3R1cmluZy5jb21wYXQubWFuYWdlIiwibWFudWZhY3R1cmluZy5jb21wYXQub3ZlcnJpZGUiLCJtYW51ZmFjdHVyaW5nLmNvbXBhdC52YWxpZGF0ZSIsIm1hbnVmYWN0dXJpbmcuY29zdC52aWV3IiwibWFudWZhY3R1cmluZy5wb3N0IiwibWFudWZhY3R1cmluZy5yZWFkIiwibWFudWZhY3R1cmluZy5yZWxlYXNlIiwibWFudWZhY3R1cmluZy51bmJ1aWxkLmRpc3Bvc2UiLCJtYW51ZmFjdHVyaW5nLndpcC5wb3N0IiwibWFudWZhY3R1cmluZy53by5jcmVhdGUiLCJtYW51ZmFjdHVyaW5nLndvLnJlbGVhc2UiLCJtYW51ZmFjdHVyaW5nLndyaXRlIiwib3JkZXJfaXRlbXMucmVhZCIsInBsYW5uaW5nLmFsbG9jYXRpb24ucnVuIiwicGxhbm5pbmcuYXBwcm92ZSIsInBsYW5uaW5nLmF0cC5yZWFkIiwicGxhbm5pbmcucnVsZXMubWFuYWdlIiwicGxhbm5pbmcucnVuIiwicGxhbm5pbmcuc3VwcGx5LnJ1biIsInBsYXRmb3JtLmFkbWluIiwicGxhdGZvcm0uYXBwcm92YWwuYWN0IiwicGxhdGZvcm0uYXBwcm92YWwuZGVmaW5pdGlvbi5tYW5hZ2UiLCJwbGF0Zm9ybS5hdHRhY2htZW50Lm1hbmFnZSIsInBsYXRmb3JtLmF1ZGl0LnJlYWQiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5tYW5hZ2UiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5yZWFkIiwicGxhdGZvcm0uZGF0YV9zY29wZS5tYW5hZ2UiLCJwbGF0Zm9ybS5kb2N1bWVudGxpbmsucmVhZCIsInBsYXRmb3JtLmZpbmFuY2UucmVhZCIsInBsYXRmb3JtLmZpbmFuY2Uuc3luYyIsInBsYXRmb3JtLmZsYWcubWFuYWdlIiwicGxhdGZvcm0uaW52aXRhdGlvbnMubWFuYWdlIiwicGxhdGZvcm0uam9iLm1hbmFnZSIsInBsYXRmb3JtLnJlZmVyZW5jZS5yZWFkIiwicGxhdGZvcm0ucm9sZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXF1ZW5jZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXNzaW9ucy5yZXZva2UiLCJwbGF0Zm9ybS5zc28ubWFuYWdlIiwicGxhdGZvcm0uc3NvLnJlYWQiLCJwbGF0Zm9ybS51c2Vycy5tYW5hZ2UiLCJwcmljaW5nLmNvbGxlY3Rpb24ubWFuYWdlIiwicHJpY2luZy5jb3Vwb24ubWFuYWdlIiwicHJpY2luZy5sZXZlbC5tYW5hZ2UiLCJwcmljaW5nLm1hc3N1cGRhdGUiLCJwcmljaW5nLnByaWNlLm1hbmFnZSIsInByaWNpbmcucmVhZCIsInByaWNpbmcucmVzb2x2ZSIsInByaWNpbmcucnVsZS5tYW5hZ2UiLCJwcmljaW5nLnNjaGVkdWxlLm1hbmFnZSIsInByaWNpbmcudXBkYXRlLm1hbmFnZSIsInByb2N1cmVtZW50LmJpbGwuYXBwcm92ZSIsInByb2N1cmVtZW50LmJpbGwubWF0Y2giLCJwcm9jdXJlbWVudC5iaWxsLnBvc3QiLCJwcm9jdXJlbWVudC5iaWxsLnJlYWQiLCJwcm9jdXJlbWVudC5iaWxsLndyaXRlIiwicHJvY3VyZW1lbnQuY29udHJhY3QuYXBwcm92ZSIsInByb2N1cmVtZW50LmNvbnRyYWN0LnJlYWQiLCJwcm9jdXJlbWVudC5jb250cmFjdC53cml0ZSIsInByb2N1cmVtZW50LmNyZWRpdC5hcHBseSIsInByb2N1cmVtZW50LmNyZWRpdC5wb3N0IiwicHJvY3VyZW1lbnQuY3JlZGl0LnJlYWQiLCJwcm9jdXJlbWVudC5jcmVkaXQud3JpdGUiLCJwcm9jdXJlbWVudC5kcm9wc2hpcC53cml0ZSIsInByb2N1cmVtZW50Lm1hdGNoLm92ZXJyaWRlIiwicHJvY3VyZW1lbnQucG8uYXBwcm92ZSIsInByb2N1cmVtZW50LnBvLmNsb3NlIiwicHJvY3VyZW1lbnQucG8uY3JlYXRlIiwicHJvY3VyZW1lbnQucG8ucmVhZCIsInByb2N1cmVtZW50LnBvLndyaXRlIiwicHJvY3VyZW1lbnQucmVjZWlwdC5wb3N0IiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZWFkIiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZXZlcnNlIiwicHJvY3VyZW1lbnQucmVjZWlwdC53cml0ZSIsInByb2N1cmVtZW50LnJlcXVlc3QuYXBwcm92ZSIsInByb2N1cmVtZW50LnJlcXVlc3QucmVhZCIsInByb2N1cmVtZW50LnJlcXVlc3Qud3JpdGUiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5hcHByb3ZlIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ub3JkZXIiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5yZWFkIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ud3JpdGUiLCJwcm9jdXJlbWVudC5yZXR1cm4uYXBwcm92ZSIsInByb2N1cmVtZW50LnJldHVybi5jbG9zZSIsInByb2N1cmVtZW50LnJldHVybi5jcmVkaXQiLCJwcm9jdXJlbWVudC5yZXR1cm4ucG9zdCIsInByb2N1cmVtZW50LnJldHVybi5yZWFkIiwicHJvY3VyZW1lbnQucmV0dXJuLnNoaXAiLCJwcm9jdXJlbWVudC5yZXR1cm4ud3JpdGUiLCJwcm9jdXJlbWVudC5yZnEuYXdhcmQiLCJwcm9jdXJlbWVudC5yZnEucmVhZCIsInByb2N1cmVtZW50LnJmcS53cml0ZSIsInByb2N1cmVtZW50LnZlbmRvci5tYW5hZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IubWVyZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IucmVhZCIsInByb2N1cmVtZW50LnZlbmRvci53cml0ZSIsInF1YWxpdHkuYWRtaW4iLCJxdWFsaXR5LmNvYS5tYW5hZ2UiLCJxdWFsaXR5LmNvYS53cml0ZSIsInF1YWxpdHkuZGlzcG9zaXRpb24iLCJxdWFsaXR5LmhvbGQubWFuYWdlIiwicXVhbGl0eS5pbnNwZWN0IiwicXVhbGl0eS5pbnNwZWN0aW9uLmFwcHJvdmUiLCJxdWFsaXR5Lmluc3BlY3Rpb24ucmVjb3JkIiwicXVhbGl0eS5yZWFkIiwicXVhbGl0eS5zcGVjLm1hbmFnZSIsInF1YWxpdHkuc3BlYy53cml0ZSIsInJlb3JkZXJfcmVtaW5kZXJzLnJlYWQiLCJyZXBsZW5pc2htZW50LmFkbWluIiwicmVwbGVuaXNobWVudC5hcHByb3ZlIiwicmVwbGVuaXNobWVudC5jb252ZXJ0IiwicmVwbGVuaXNobWVudC5yZWFkIiwicmVwbGVuaXNobWVudC5ydW4iLCJyZXBsZW5pc2htZW50LndyaXRlIiwicmVwb3J0aW5nLmNvc3QudmlldyIsInJlcG9ydGluZy5leHBvcnQiLCJyZXBvcnRpbmcucmVhZCIsInNjaGVkdWxpbmdfcnVuLmNyZWF0ZSIsInNjaGVkdWxpbmdfcnVuLmV4ZWN1dGUiLCJ0cmFjZWFiaWxpdHkuYmluLm1hbmFnZSIsInRyYWNlYWJpbGl0eS5sb2NhdGlvbi5tYW5hZ2UiLCJ0cmFjZWFiaWxpdHkubnVtYmVyZWQubWFuYWdlIiwidHJhY2VhYmlsaXR5LnN0YXR1cy5tYW5hZ2UiLCJ1cGMuYmF0Y2hfYXNzaWduIiwidXBjLm1hbmFnZSIsIndhcnJhbnR5LmNsYWltLm1hbmFnZSIsIndhcnJhbnR5Lm1hbmFnZSIsIndtcy5hZG1pbiIsIndtcy5pbnZlbnRvcnkiLCJ3bXMucGFjayIsIndtcy5waWNrIiwid21zLnBpY2suY29uZmlybSIsIndtcy5wdXRhd2F5Iiwid21zLnJlYWQiLCJ3bXMucmVjZWlwdC5jb25maXJtIiwid21zLnJlY2VpdmUiLCJ3bXMucmVwbGVuaXNoIiwid21zLnNldHVwLndyaXRlIiwid21zLnNoaXAiLCJ3bXMuc3RyYXRlZ3kubWFuYWdlIiwid21zLnRhc2suYXNzaWduIiwid21zLnRhc2sucmVhZCIsIndtcy53YXJlaG91c2UubWFuYWdlIiwid21zLndhdmUiXX0.VohIQJ3hqF69_RZzZPivaSZowVrSXsgBnSLuLrqnWik",
+        "admin": {
+          "app_user_id": "e7b6be1c-3057-4cbb-9c0c-8417aea5907d",
+          "identity_id": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+          "email": "e2e-e2e10260101dbb3-a@example.com",
+          "role_codes": [
+            "admin"
+          ]
+        },
+        "flags": [
+          {
+            "id": "c946d739-47cd-4a38-8ff8-7ab255561c3a",
+            "flag_key": "consigned.assembly_incompatible_guard",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "59b05348-eeb5-4798-b7bc-e34f52e01058",
+            "flag_key": "consigned.inventory.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "2bb2ce9c-640d-404c-b07c-87cc3e0fdc6a",
+            "flag_key": "costing.engine.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "1a862134-f3ee-459d-a5dd-b68913794767",
+            "flag_key": "extensions.registry.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "d7dc0bee-ba2d-4e44-81dc-1feb23455b03",
+            "flag_key": "extensions.upc.auto_assign",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "97f8f817-d989-4560-af43-3b554e39b7af",
+            "flag_key": "inventory.counts.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "bd5122a2-0c81-4977-9c56-118c1875b622",
+            "flag_key": "inventory.item_master.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "4f6a3da8-1c2e-4c05-937b-2e39b0cc7eb1",
+            "flag_key": "inventory.ledger.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "4e8a7987-544a-4280-8fdf-8765906bbba9",
+            "flag_key": "inventory.numbered.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "6662ac4a-56c3-49ae-b903-67ac6317edb3",
+            "flag_key": "inventory.storage_registry.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "54572e25-f549-4ef0-bd75-871fd4d4576e",
+            "flag_key": "manufacturing.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "549ccb59-8c17-4c82-a14b-6d27966ed58c",
+            "flag_key": "manufacturing.wip.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "75b0b1ad-69b5-449b-a8d1-714c1b72a777",
+            "flag_key": "platform.core.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "44e9ea62-21b8-49d6-b453-d4d0b5d6361f",
+            "flag_key": "pricing.engine.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "a74c06cd-1173-4c77-8150-96588e9af237",
+            "flag_key": "procurement.blanket_orders_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "05d8a122-2f1b-4617-9283-3d78d7cb6422",
+            "flag_key": "procurement.drop_ship_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "e3fd03a8-2431-4aae-9904-701790b744db",
+            "flag_key": "procurement.multiple_vendors_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "0cbfad86-2be3-471f-816c-012064d39918",
+            "flag_key": "procurement.p2p.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "9a2eab9f-2e4a-4a4e-b338-cecbb70c19fe",
+            "flag_key": "procurement.purchase_contracts_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "549a9d11-eb4e-4943-a6ca-d4b21764ddb1",
+            "flag_key": "procurement.purchase_requests_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "85673582-455c-4b82-8926-0fbc41319154",
+            "flag_key": "procurement.requisitions_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "e9c0300c-d862-4929-942c-4edd8f46feda",
+            "flag_key": "procurement.rfq_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "aacff92b-d5d3-45a8-9db8-be219fd82e34",
+            "flag_key": "quality.management.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "a6695911-5d28-46bc-88b1-5f6c7bf667e9",
+            "flag_key": "replenishment.planning.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "9a6a85d2-8540-4a0a-8ec9-48cecfd6421e",
+            "flag_key": "reporting.readmodels.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          },
+          {
+            "id": "f66b2d82-cb9a-4cf2-b786-09839fe289af",
+            "flag_key": "wms.execution.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.159524+00:00",
+            "updated_at": "2026-10-26T01:01:54.159524+00:00"
+          }
+        ]
+      },
+      {
+        "code": "E2E10260101DBB3_B",
+        "id": "82d223da-020e-477b-98b0-840c491e76de",
+        "email": "e2e-e2e10260101dbb3-b@example.com",
+        "password": "E2E-eLXXcmIWr91k7FePHaX7hECQ",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbnZlbnRvcnktcGxhdGZvcm0iLCJhdWQiOiJpbnZlbnRvcnktcGxhdGZvcm0tYXBpIiwic3ViIjoiMjFmMTFlMTAtZGQ2My00Mjg1LTgzN2EtNGFhYzNiMzIwMWEyIiwidWlkIjoiZTViOWQ3MGItYzVjMy00MWJiLTg0YmQtMTBkZTVkNjQ1MWI3IiwidGlkIjoiODJkMjIzZGEtMDIwZS00NzdiLTk4YjAtODQwYzQ5MWU3NmRlIiwidHYiOjAsImp0aSI6IjU4NzAxY2NkNDc4YzRiZWQ4ZDFhMDg3ZDYzNDE1YjJiIiwiaWF0IjoxNzkyOTc2NTE1LCJleHAiOjE3OTI5Nzc0MTUsInR5cCI6ImFjY2VzcyIsInNjb3BlcyI6WyJhdHAucmVidWlsZCIsImNvbnNpZ25lZC5hZG1pbiIsImNvbnNpZ25lZC5hZ3JlZW1lbnQubWFuYWdlIiwiY29uc2lnbmVkLmFncmVlbWVudC53cml0ZSIsImNvbnNpZ25lZC5vd25lcnNoaXAudHJhbnNmZXIiLCJjb25zaWduZWQucmVhZCIsImNvbnNpZ25lZC50cmFuc2Zlci53cml0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LmNyZWF0ZSIsImNvc3RpbmcuY29nc19hZGp1c3RtZW50LnBvc3QiLCJjb3N0aW5nLmNvc3QubWFuYWdlIiwiY29zdGluZy5jb3N0LnJlYWQiLCJjb3N0aW5nLmNvc3QudmlldyIsImNvc3RpbmcuZXN0aW1hdGVkX2xhbmRlZF9jb3N0Lm1hbmFnZSIsImNvc3RpbmcuZ3JvdXAubWFuYWdlIiwiY29zdGluZy5sYW5kZWRfY29zdC5jcmVhdGUiLCJjb3N0aW5nLmxhbmRlZF9jb3N0LnBvc3QiLCJjb3N0aW5nLmxhbmRlZGNvc3QubWFuYWdlIiwiY29zdGluZy5tZXRob2QubWFuYWdlIiwiY29zdGluZy5yZWFkIiwiY29zdGluZy5yZWNhbGMucnVuIiwiY29zdGluZy5yZXZhbHVhdGlvbi5hcHByb3ZlIiwiY29zdGluZy5yZXZhbHVhdGlvbi5jcmVhdGUiLCJjb3N0aW5nLnJldmFsdWF0aW9uLnBvc3QiLCJjb3N0aW5nLnN0YW5kYXJkLmFjdGl2YXRlIiwiY29zdGluZy5zdGFuZGFyZC5yb2xsdXAiLCJjb3N0aW5nLnZhcmlhbmNlLnZpZXciLCJjb3Vwb25zLnZhbGlkYXRlIiwiY3VzdG9tZXJwYXJ0Lm1hbmFnZSIsImRlbWFuZF9wbGFuLmNyZWF0ZSIsImRlbWFuZF9wbGFuX2xpbmUub3ZlcnJpZGUiLCJleHRlbnNpb25zLmNsYWltcy53cml0ZSIsImV4dGVuc2lvbnMuY3VzdG9tZXJwYXJ0LndyaXRlIiwiZXh0ZW5zaW9ucy5yZWFkIiwiZXh0ZW5zaW9ucy51cGMud3JpdGUiLCJleHRlbnNpb25zLndhcnJhbnR5LndyaXRlIiwiaW52ZW50b3J5LmFkanVzdG1lbnQuYXBwcm92ZSIsImludmVudG9yeS5hZGp1c3RtZW50LmNyZWF0ZSIsImludmVudG9yeS5hZGp1c3RtZW50LnBvc3QiLCJpbnZlbnRvcnkuYmFsYW5jZS5yZWFkIiwiaW52ZW50b3J5LmJpbi5tYW5hZ2UiLCJpbnZlbnRvcnkuYmluLnJlYWQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5jb21taXQiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5tYW5hZ2UiLCJpbnZlbnRvcnkuY29tbWl0bWVudC5yZWFsbG9jYXRlIiwiaW52ZW50b3J5LmNvbW1pdG1lbnQucmVsZWFzZSIsImludmVudG9yeS5jb3N0LnZpZXciLCJpbnZlbnRvcnkuY291bnQuYXBwcm92ZSIsImludmVudG9yeS5jb3VudC5jYXB0dXJlIiwiaW52ZW50b3J5LmNvdW50LmNyZWF0ZSIsImludmVudG9yeS5jb3VudC5wbGFuLm1hbmFnZSIsImludmVudG9yeS5jb3VudC5wb3N0IiwiaW52ZW50b3J5LmNvdW50LnJlYWQiLCJpbnZlbnRvcnkuY291bnQucmVjb3VudCIsImludmVudG9yeS5kaXN0cmlidXRpb24uY3JlYXRlIiwiaW52ZW50b3J5LmRpc3RyaWJ1dGlvbi5wb3N0IiwiaW52ZW50b3J5LmZ1bGZpbGxtZW50LnBvc3QiLCJpbnZlbnRvcnkuaW1wb3J0LmNyZWF0ZSIsImludmVudG9yeS5pbXBvcnQucG9zdCIsImludmVudG9yeS5sb2NhdGlvbi5tYW5hZ2UiLCJpbnZlbnRvcnkubG9jYXRpb24ucmVhZCIsImludmVudG9yeS5sb3QuaW5hY3RpdmF0ZSIsImludmVudG9yeS5sb3QucmVhZCIsImludmVudG9yeS5sb3Qud3JpdGUiLCJpbnZlbnRvcnkubnVtYmVyZWQucmVjb25jaWxlIiwiaW52ZW50b3J5Lm51bWJlcmVkLnZhbGlkYXRlIiwiaW52ZW50b3J5LnJlYXNvbi5tYW5hZ2UiLCJpbnZlbnRvcnkucmVjZWlwdC5wb3N0IiwiaW52ZW50b3J5LnJldHVybi5wb3N0IiwiaW52ZW50b3J5LnNlcmlhbC5yZWFkIiwiaW52ZW50b3J5LnNlcmlhbC5yZWdpc3RlciIsImludmVudG9yeS5zdGF0dXMubWFuYWdlIiwiaW52ZW50b3J5LnN0YXR1cy5yZWFkIiwiaW52ZW50b3J5LnRvLmFwcHJvdmUiLCJpbnZlbnRvcnkudG8uY2xvc2UiLCJpbnZlbnRvcnkudG8uY3JlYXRlIiwiaW52ZW50b3J5LnRvLmZ1bGZpbCIsImludmVudG9yeS50by5yZWNlaXZlIiwiaW52ZW50b3J5LnRyYW5zYWN0aW9uLnBvc3QiLCJpbnZlbnRvcnkudHJhbnNhY3Rpb24ucmVhZCIsImludmVudG9yeS50cmFuc2FjdGlvbi5yZXZlcnNlIiwiaW52ZW50b3J5LnRyYW5zZmVyLmNyZWF0ZSIsImludmVudG9yeS50cmFuc2Zlci5wb3N0IiwiaW52ZW50b3J5LndvcmtzaGVldC5hcHByb3ZlIiwiaW52ZW50b3J5LndvcmtzaGVldC5jcmVhdGUiLCJpbnZlbnRvcnkud29ya3NoZWV0LnBvc3QiLCJpdGVtcy5iYXJjb2RlLm1hbmFnZSIsIml0ZW1zLmNhdGVnb3J5Lm1hbmFnZSIsIml0ZW1zLmNyZWF0ZSIsIml0ZW1zLmluYWN0aXZhdGUiLCJpdGVtcy5sb2NhdGlvbi5tYW5hZ2UiLCJpdGVtcy5tYXRyaXgubWFuYWdlIiwiaXRlbXMucGxhbm5pbmcubWFuYWdlIiwiaXRlbXMucmVhZCIsIml0ZW1zLnVvbS5tYW5hZ2UiLCJpdGVtcy51cGRhdGUiLCJtYW51ZmFjdHVyaW5nLmFkbWluIiwibWFudWZhY3R1cmluZy5hcHByb3ZlIiwibWFudWZhY3R1cmluZy5ib20ubWFuYWdlIiwibWFudWZhY3R1cmluZy5idWlsZC5wb3N0IiwibWFudWZhY3R1cmluZy5jb21wYXQubWFuYWdlIiwibWFudWZhY3R1cmluZy5jb21wYXQub3ZlcnJpZGUiLCJtYW51ZmFjdHVyaW5nLmNvbXBhdC52YWxpZGF0ZSIsIm1hbnVmYWN0dXJpbmcuY29zdC52aWV3IiwibWFudWZhY3R1cmluZy5wb3N0IiwibWFudWZhY3R1cmluZy5yZWFkIiwibWFudWZhY3R1cmluZy5yZWxlYXNlIiwibWFudWZhY3R1cmluZy51bmJ1aWxkLmRpc3Bvc2UiLCJtYW51ZmFjdHVyaW5nLndpcC5wb3N0IiwibWFudWZhY3R1cmluZy53by5jcmVhdGUiLCJtYW51ZmFjdHVyaW5nLndvLnJlbGVhc2UiLCJtYW51ZmFjdHVyaW5nLndyaXRlIiwib3JkZXJfaXRlbXMucmVhZCIsInBsYW5uaW5nLmFsbG9jYXRpb24ucnVuIiwicGxhbm5pbmcuYXBwcm92ZSIsInBsYW5uaW5nLmF0cC5yZWFkIiwicGxhbm5pbmcucnVsZXMubWFuYWdlIiwicGxhbm5pbmcucnVuIiwicGxhbm5pbmcuc3VwcGx5LnJ1biIsInBsYXRmb3JtLmFkbWluIiwicGxhdGZvcm0uYXBwcm92YWwuYWN0IiwicGxhdGZvcm0uYXBwcm92YWwuZGVmaW5pdGlvbi5tYW5hZ2UiLCJwbGF0Zm9ybS5hdHRhY2htZW50Lm1hbmFnZSIsInBsYXRmb3JtLmF1ZGl0LnJlYWQiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5tYW5hZ2UiLCJwbGF0Zm9ybS5jdXN0b21maWVsZC5yZWFkIiwicGxhdGZvcm0uZGF0YV9zY29wZS5tYW5hZ2UiLCJwbGF0Zm9ybS5kb2N1bWVudGxpbmsucmVhZCIsInBsYXRmb3JtLmZpbmFuY2UucmVhZCIsInBsYXRmb3JtLmZpbmFuY2Uuc3luYyIsInBsYXRmb3JtLmZsYWcubWFuYWdlIiwicGxhdGZvcm0uaW52aXRhdGlvbnMubWFuYWdlIiwicGxhdGZvcm0uam9iLm1hbmFnZSIsInBsYXRmb3JtLnJlZmVyZW5jZS5yZWFkIiwicGxhdGZvcm0ucm9sZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXF1ZW5jZS5tYW5hZ2UiLCJwbGF0Zm9ybS5zZXNzaW9ucy5yZXZva2UiLCJwbGF0Zm9ybS5zc28ubWFuYWdlIiwicGxhdGZvcm0uc3NvLnJlYWQiLCJwbGF0Zm9ybS51c2Vycy5tYW5hZ2UiLCJwcmljaW5nLmNvbGxlY3Rpb24ubWFuYWdlIiwicHJpY2luZy5jb3Vwb24ubWFuYWdlIiwicHJpY2luZy5sZXZlbC5tYW5hZ2UiLCJwcmljaW5nLm1hc3N1cGRhdGUiLCJwcmljaW5nLnByaWNlLm1hbmFnZSIsInByaWNpbmcucmVhZCIsInByaWNpbmcucmVzb2x2ZSIsInByaWNpbmcucnVsZS5tYW5hZ2UiLCJwcmljaW5nLnNjaGVkdWxlLm1hbmFnZSIsInByaWNpbmcudXBkYXRlLm1hbmFnZSIsInByb2N1cmVtZW50LmJpbGwuYXBwcm92ZSIsInByb2N1cmVtZW50LmJpbGwubWF0Y2giLCJwcm9jdXJlbWVudC5iaWxsLnBvc3QiLCJwcm9jdXJlbWVudC5iaWxsLnJlYWQiLCJwcm9jdXJlbWVudC5iaWxsLndyaXRlIiwicHJvY3VyZW1lbnQuY29udHJhY3QuYXBwcm92ZSIsInByb2N1cmVtZW50LmNvbnRyYWN0LnJlYWQiLCJwcm9jdXJlbWVudC5jb250cmFjdC53cml0ZSIsInByb2N1cmVtZW50LmNyZWRpdC5hcHBseSIsInByb2N1cmVtZW50LmNyZWRpdC5wb3N0IiwicHJvY3VyZW1lbnQuY3JlZGl0LnJlYWQiLCJwcm9jdXJlbWVudC5jcmVkaXQud3JpdGUiLCJwcm9jdXJlbWVudC5kcm9wc2hpcC53cml0ZSIsInByb2N1cmVtZW50Lm1hdGNoLm92ZXJyaWRlIiwicHJvY3VyZW1lbnQucG8uYXBwcm92ZSIsInByb2N1cmVtZW50LnBvLmNsb3NlIiwicHJvY3VyZW1lbnQucG8uY3JlYXRlIiwicHJvY3VyZW1lbnQucG8ucmVhZCIsInByb2N1cmVtZW50LnBvLndyaXRlIiwicHJvY3VyZW1lbnQucmVjZWlwdC5wb3N0IiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZWFkIiwicHJvY3VyZW1lbnQucmVjZWlwdC5yZXZlcnNlIiwicHJvY3VyZW1lbnQucmVjZWlwdC53cml0ZSIsInByb2N1cmVtZW50LnJlcXVlc3QuYXBwcm92ZSIsInByb2N1cmVtZW50LnJlcXVlc3QucmVhZCIsInByb2N1cmVtZW50LnJlcXVlc3Qud3JpdGUiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5hcHByb3ZlIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ub3JkZXIiLCJwcm9jdXJlbWVudC5yZXF1aXNpdGlvbi5yZWFkIiwicHJvY3VyZW1lbnQucmVxdWlzaXRpb24ud3JpdGUiLCJwcm9jdXJlbWVudC5yZXR1cm4uYXBwcm92ZSIsInByb2N1cmVtZW50LnJldHVybi5jbG9zZSIsInByb2N1cmVtZW50LnJldHVybi5jcmVkaXQiLCJwcm9jdXJlbWVudC5yZXR1cm4ucG9zdCIsInByb2N1cmVtZW50LnJldHVybi5yZWFkIiwicHJvY3VyZW1lbnQucmV0dXJuLnNoaXAiLCJwcm9jdXJlbWVudC5yZXR1cm4ud3JpdGUiLCJwcm9jdXJlbWVudC5yZnEuYXdhcmQiLCJwcm9jdXJlbWVudC5yZnEucmVhZCIsInByb2N1cmVtZW50LnJmcS53cml0ZSIsInByb2N1cmVtZW50LnZlbmRvci5tYW5hZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IubWVyZ2UiLCJwcm9jdXJlbWVudC52ZW5kb3IucmVhZCIsInByb2N1cmVtZW50LnZlbmRvci53cml0ZSIsInF1YWxpdHkuYWRtaW4iLCJxdWFsaXR5LmNvYS5tYW5hZ2UiLCJxdWFsaXR5LmNvYS53cml0ZSIsInF1YWxpdHkuZGlzcG9zaXRpb24iLCJxdWFsaXR5LmhvbGQubWFuYWdlIiwicXVhbGl0eS5pbnNwZWN0IiwicXVhbGl0eS5pbnNwZWN0aW9uLmFwcHJvdmUiLCJxdWFsaXR5Lmluc3BlY3Rpb24ucmVjb3JkIiwicXVhbGl0eS5yZWFkIiwicXVhbGl0eS5zcGVjLm1hbmFnZSIsInF1YWxpdHkuc3BlYy53cml0ZSIsInJlb3JkZXJfcmVtaW5kZXJzLnJlYWQiLCJyZXBsZW5pc2htZW50LmFkbWluIiwicmVwbGVuaXNobWVudC5hcHByb3ZlIiwicmVwbGVuaXNobWVudC5jb252ZXJ0IiwicmVwbGVuaXNobWVudC5yZWFkIiwicmVwbGVuaXNobWVudC5ydW4iLCJyZXBsZW5pc2htZW50LndyaXRlIiwicmVwb3J0aW5nLmNvc3QudmlldyIsInJlcG9ydGluZy5leHBvcnQiLCJyZXBvcnRpbmcucmVhZCIsInNjaGVkdWxpbmdfcnVuLmNyZWF0ZSIsInNjaGVkdWxpbmdfcnVuLmV4ZWN1dGUiLCJ0cmFjZWFiaWxpdHkuYmluLm1hbmFnZSIsInRyYWNlYWJpbGl0eS5sb2NhdGlvbi5tYW5hZ2UiLCJ0cmFjZWFiaWxpdHkubnVtYmVyZWQubWFuYWdlIiwidHJhY2VhYmlsaXR5LnN0YXR1cy5tYW5hZ2UiLCJ1cGMuYmF0Y2hfYXNzaWduIiwidXBjLm1hbmFnZSIsIndhcnJhbnR5LmNsYWltLm1hbmFnZSIsIndhcnJhbnR5Lm1hbmFnZSIsIndtcy5hZG1pbiIsIndtcy5pbnZlbnRvcnkiLCJ3bXMucGFjayIsIndtcy5waWNrIiwid21zLnBpY2suY29uZmlybSIsIndtcy5wdXRhd2F5Iiwid21zLnJlYWQiLCJ3bXMucmVjZWlwdC5jb25maXJtIiwid21zLnJlY2VpdmUiLCJ3bXMucmVwbGVuaXNoIiwid21zLnNldHVwLndyaXRlIiwid21zLnNoaXAiLCJ3bXMuc3RyYXRlZ3kubWFuYWdlIiwid21zLnRhc2suYXNzaWduIiwid21zLnRhc2sucmVhZCIsIndtcy53YXJlaG91c2UubWFuYWdlIiwid21zLndhdmUiXX0.40CnGjB5FexK40-ub4PVfJPDmEOw1fWReiFf9N2Y41w",
+        "admin": {
+          "app_user_id": "e5b9d70b-c5c3-41bb-84bd-10de5d6451b7",
+          "identity_id": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+          "email": "e2e-e2e10260101dbb3-b@example.com",
+          "role_codes": [
+            "admin"
+          ]
+        },
+        "flags": [
+          {
+            "id": "18d5f252-4f9e-4b61-a6cb-81cf2f0a6767",
+            "flag_key": "consigned.assembly_incompatible_guard",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "d20b5b2e-a779-4c19-ac45-d0e245e78f42",
+            "flag_key": "consigned.inventory.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "bf6da04a-4c69-4c47-b6ed-0bc6810738d0",
+            "flag_key": "costing.engine.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "30e8e53a-a632-4736-a872-ccb280a978b8",
+            "flag_key": "extensions.registry.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "f62f6ea0-a102-40ea-987e-9c604287593e",
+            "flag_key": "extensions.upc.auto_assign",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "4426208a-47f8-42e3-be11-c3db414650f7",
+            "flag_key": "inventory.counts.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "e18fe53a-c6bf-4a85-9c17-40cfe2bd7046",
+            "flag_key": "inventory.item_master.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "e2ae4b82-e936-47fc-a820-5b6d986cf750",
+            "flag_key": "inventory.ledger.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "26b3aa9a-117e-4f76-9006-dd6d1f41ccfb",
+            "flag_key": "inventory.numbered.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "e2615ce2-95ea-4ec2-9a5c-9933325fd54b",
+            "flag_key": "inventory.storage_registry.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "64f17b6f-01ff-4022-b40e-bf8cc997f0f8",
+            "flag_key": "manufacturing.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "54372490-b707-40a9-a9e0-7111da19f8b7",
+            "flag_key": "manufacturing.wip.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "b7e64afa-ed03-4b4e-835a-969674c74570",
+            "flag_key": "platform.core.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "76249b75-5377-49d0-b84e-6ef2071e0601",
+            "flag_key": "pricing.engine.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "3d4d7e51-bd45-4a02-99b2-3ef2dfe3c64a",
+            "flag_key": "procurement.blanket_orders_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "889adf50-f566-4f28-9654-b1cb822314e0",
+            "flag_key": "procurement.drop_ship_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "699a68e9-c743-43ba-ad29-5ce6d7cbd4be",
+            "flag_key": "procurement.multiple_vendors_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "a04aa4df-8a33-4426-a75d-1897972929aa",
+            "flag_key": "procurement.p2p.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "0f788984-c4f2-425a-9015-0289be4cb449",
+            "flag_key": "procurement.purchase_contracts_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "0d2e3012-6ded-42ac-aaaa-32466762507c",
+            "flag_key": "procurement.purchase_requests_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "966bd136-fe0b-4ff0-ac77-cf5ad6f036fd",
+            "flag_key": "procurement.requisitions_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "92186b75-88aa-4952-bf4f-9123bf05c1f0",
+            "flag_key": "procurement.rfq_enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "ef19d762-0cc8-4457-b52d-80409dcf02f5",
+            "flag_key": "quality.management.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "6d6570e2-dad6-44b3-a365-89da01bda810",
+            "flag_key": "replenishment.planning.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "f35097aa-453a-4c8b-81c4-b0118891b6a7",
+            "flag_key": "reporting.readmodels.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          },
+          {
+            "id": "dd2d38df-a2db-46f3-8851-a299e13a804c",
+            "flag_key": "wms.execution.enabled",
+            "is_enabled": false,
+            "source": "DEFAULT",
+            "changed_by": null,
+            "changed_at": null,
+            "notes": null,
+            "version": 1,
+            "created_at": "2026-10-26T01:01:54.897276+00:00",
+            "updated_at": "2026-10-26T01:01:54.897276+00:00"
+          }
+        ]
+      }
+    ],
+    "warehouses": {
+      "A1": {
+        "location": {
+          "id": "0bc651f8-64fe-4cd2-9369-475cbcb2a528",
+          "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+          "code": "E2E10260101DBB3_A-WH-A1",
+          "name": "Warehouse A1",
+          "parent_id": null,
+          "location_type": "WAREHOUSE",
+          "is_bins_enabled": true,
+          "is_statuses_enabled": true,
+          "is_consignment_allowed": false,
+          "allow_commit_from_non_available": false,
+          "subsidiary_ref": null,
+          "timezone": "UTC",
+          "address": null,
+          "is_unallocated": false,
+          "is_inactive": false,
+          "inactive_at": null,
+          "inactive_reason": null,
+          "created_at": "2026-10-26T01:01:55.630694+00:00",
+          "updated_at": "2026-10-26T01:01:55.630694+00:00",
+          "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+          "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+          "version": 1
+        },
+        "bins": {
+          "RCV": {
+            "id": "1fd624e2-4278-4f10-9b10-64a0adbf5b18",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "location_id": "0bc651f8-64fe-4cd2-9369-475cbcb2a528",
+            "zone_id": null,
+            "code": "RCV-A1",
+            "name": "RCV",
+            "bin_type": "RECEIVING",
+            "is_pickable": false,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.643822+00:00",
+            "updated_at": "2026-10-26T01:01:55.643822+00:00",
+            "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "version": 1
+          },
+          "STG": {
+            "id": "5ad5d33f-1465-442e-a759-6fc11f6afe99",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "location_id": "0bc651f8-64fe-4cd2-9369-475cbcb2a528",
+            "zone_id": null,
+            "code": "STG-A1",
+            "name": "STG",
+            "bin_type": "STORAGE",
+            "is_pickable": false,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.656199+00:00",
+            "updated_at": "2026-10-26T01:01:55.656199+00:00",
+            "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "version": 1
+          },
+          "PICK": {
+            "id": "fb51881f-4628-4a8e-9bad-2eecb834d72f",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "location_id": "0bc651f8-64fe-4cd2-9369-475cbcb2a528",
+            "zone_id": null,
+            "code": "PICK-A1",
+            "name": "PICK",
+            "bin_type": "PICKING",
+            "is_pickable": true,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.667657+00:00",
+            "updated_at": "2026-10-26T01:01:55.667657+00:00",
+            "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "version": 1
+          }
+        },
+        "warehouse": {
+          "id": "68399e4a-3fad-43cc-84f8-f11b979faf11",
+          "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+          "location_id": "0bc651f8-64fe-4cd2-9369-475cbcb2a528",
+          "code": "WH-A1",
+          "name": "Warehouse A1",
+          "is_wms_enabled": true,
+          "receiving_bin_id": "1fd624e2-4278-4f10-9b10-64a0adbf5b18",
+          "staging_bin_id": "5ad5d33f-1465-442e-a759-6fc11f6afe99",
+          "shipping_bin_id": "fb51881f-4628-4a8e-9bad-2eecb834d72f",
+          "default_order_type_id": null,
+          "timezone": "UTC",
+          "is_active": true,
+          "created_at": "2026-10-26T01:01:55.674215Z",
+          "updated_at": "2026-10-26T01:01:55.674215Z",
+          "created_by": "e7b6be1c-3057-4cbb-9c0c-8417aea5907d",
+          "updated_by": "e7b6be1c-3057-4cbb-9c0c-8417aea5907d",
+          "version": 1,
+          "location_code": "E2E10260101DBB3_A-WH-A1",
+          "location_name": "Warehouse A1",
+          "rules": [
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "STAGING_AT_RECEIVING",
+              "name": "Staging at receiving",
+              "description": "Receiving puts stock into the staging bin before putaway",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "DEFERRED_RECEIPT_POSTING",
+              "name": "Deferred item receipt posting",
+              "description": "Receiving completes into PENDING_POSTING",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "AUTO_FIRM_COMMIT_WAVE",
+              "name": "Firm commitments when wave releases",
+              "description": "Commit order lines when the wave releases",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "ALLOW_OVER_PICK_WO",
+              "name": "Allow over-picking work orders",
+              "description": "Permit qty_picked > qty_requested for work-order picks",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "PICK_EXPIRED_GUARD",
+              "name": "Reject expired lots at pick",
+              "description": "Expired lots are excluded and raise an exception",
+              "default_enabled": true,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": true,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "CART_REQUIRED_PUTAWAY",
+              "name": "Cart required for putaway",
+              "description": "Putaway tasks require a cart container",
+              "default_enabled": false,
+              "applies_to": "WAREHOUSE",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "WAVE_AUTO_RELEASE",
+              "name": "Auto-release scheduled waves",
+              "description": "Wave release schedules release created waves immediately",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "PUTAWAY_REQUIRE_SCAN_CONFIRM",
+              "name": "Require scan confirmation on putaway",
+              "description": "Directed putaway requires an actual-bin confirmation",
+              "default_enabled": true,
+              "applies_to": "WAREHOUSE",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": true,
+              "override": null
+            }
+          ]
+        },
+        "statuses": {
+          "AVAILABLE": {
+            "id": "52cc2d8e-284f-49f7-8674-e9456552dd08",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "AVAILABLE",
+            "name": "Available",
+            "is_available_for_allocation": true,
+            "is_committable": true,
+            "is_sellable": true,
+            "is_consigned": false,
+            "is_default": true,
+            "is_system": true,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "CONSIGNED_GOOD": {
+            "id": "59a2012f-5a50-4325-9af2-4e23dadf59c9",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "CONSIGNED_GOOD",
+            "name": "Consigned Good",
+            "is_available_for_allocation": true,
+            "is_committable": true,
+            "is_sellable": true,
+            "is_consigned": true,
+            "is_default": false,
+            "is_system": true,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "DAMAGED": {
+            "id": "e7a3627a-d0c5-481e-a3a6-736cfcd6dcad",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "DAMAGED",
+            "name": "Damaged",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "HOLD": {
+            "id": "41514166-b12e-46df-b1c4-ca47674f5569",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "HOLD",
+            "name": "Hold",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "REFURB": {
+            "id": "b7fcc00b-83b3-4aa0-810e-377da13c9d9c",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "REFURB",
+            "name": "Refurbished",
+            "is_available_for_allocation": true,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "RETURNED": {
+            "id": "d67fbff4-6afe-42ff-af20-2e4a62ea5d37",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "RETURNED",
+            "name": "Returned",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "USED": {
+            "id": "4c3d2639-f47d-464a-b0f1-1af68d80953b",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "USED",
+            "name": "Used",
+            "is_available_for_allocation": true,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          }
+        }
+      },
+      "A2": {
+        "location": {
+          "id": "34f12702-1e4d-47ae-8267-84025758af21",
+          "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+          "code": "E2E10260101DBB3_A-WH-A2",
+          "name": "Warehouse A2",
+          "parent_id": null,
+          "location_type": "WAREHOUSE",
+          "is_bins_enabled": true,
+          "is_statuses_enabled": true,
+          "is_consignment_allowed": false,
+          "allow_commit_from_non_available": false,
+          "subsidiary_ref": null,
+          "timezone": "UTC",
+          "address": null,
+          "is_unallocated": false,
+          "is_inactive": false,
+          "inactive_at": null,
+          "inactive_reason": null,
+          "created_at": "2026-10-26T01:01:55.698102+00:00",
+          "updated_at": "2026-10-26T01:01:55.698102+00:00",
+          "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+          "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+          "version": 1
+        },
+        "bins": {
+          "RCV": {
+            "id": "29a5a48f-e5f6-4cdd-b321-73a5c7329705",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "location_id": "34f12702-1e4d-47ae-8267-84025758af21",
+            "zone_id": null,
+            "code": "RCV-A2",
+            "name": "RCV",
+            "bin_type": "RECEIVING",
+            "is_pickable": false,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.708049+00:00",
+            "updated_at": "2026-10-26T01:01:55.708049+00:00",
+            "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "version": 1
+          },
+          "STG": {
+            "id": "9f694916-b689-484b-b487-357200ba4ba6",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "location_id": "34f12702-1e4d-47ae-8267-84025758af21",
+            "zone_id": null,
+            "code": "STG-A2",
+            "name": "STG",
+            "bin_type": "STORAGE",
+            "is_pickable": false,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.716778+00:00",
+            "updated_at": "2026-10-26T01:01:55.716778+00:00",
+            "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "version": 1
+          },
+          "PICK": {
+            "id": "a7bc8d7b-1e22-4f3f-9561-f36dc0c5cd0b",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "location_id": "34f12702-1e4d-47ae-8267-84025758af21",
+            "zone_id": null,
+            "code": "PICK-A2",
+            "name": "PICK",
+            "bin_type": "PICKING",
+            "is_pickable": true,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.727207+00:00",
+            "updated_at": "2026-10-26T01:01:55.727207+00:00",
+            "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+            "version": 1
+          }
+        },
+        "warehouse": {
+          "id": "d6c84284-174b-49ad-96aa-3b1e7e1b2d4e",
+          "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+          "location_id": "34f12702-1e4d-47ae-8267-84025758af21",
+          "code": "WH-A2",
+          "name": "Warehouse A2",
+          "is_wms_enabled": true,
+          "receiving_bin_id": "29a5a48f-e5f6-4cdd-b321-73a5c7329705",
+          "staging_bin_id": "9f694916-b689-484b-b487-357200ba4ba6",
+          "shipping_bin_id": "a7bc8d7b-1e22-4f3f-9561-f36dc0c5cd0b",
+          "default_order_type_id": null,
+          "timezone": "UTC",
+          "is_active": true,
+          "created_at": "2026-10-26T01:01:55.732814Z",
+          "updated_at": "2026-10-26T01:01:55.732814Z",
+          "created_by": "e7b6be1c-3057-4cbb-9c0c-8417aea5907d",
+          "updated_by": "e7b6be1c-3057-4cbb-9c0c-8417aea5907d",
+          "version": 1,
+          "location_code": "E2E10260101DBB3_A-WH-A2",
+          "location_name": "Warehouse A2",
+          "rules": [
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "STAGING_AT_RECEIVING",
+              "name": "Staging at receiving",
+              "description": "Receiving puts stock into the staging bin before putaway",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "DEFERRED_RECEIPT_POSTING",
+              "name": "Deferred item receipt posting",
+              "description": "Receiving completes into PENDING_POSTING",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "AUTO_FIRM_COMMIT_WAVE",
+              "name": "Firm commitments when wave releases",
+              "description": "Commit order lines when the wave releases",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "ALLOW_OVER_PICK_WO",
+              "name": "Allow over-picking work orders",
+              "description": "Permit qty_picked > qty_requested for work-order picks",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "PICK_EXPIRED_GUARD",
+              "name": "Reject expired lots at pick",
+              "description": "Expired lots are excluded and raise an exception",
+              "default_enabled": true,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": true,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "CART_REQUIRED_PUTAWAY",
+              "name": "Cart required for putaway",
+              "description": "Putaway tasks require a cart container",
+              "default_enabled": false,
+              "applies_to": "WAREHOUSE",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "WAVE_AUTO_RELEASE",
+              "name": "Auto-release scheduled waves",
+              "description": "Wave release schedules release created waves immediately",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+              "code": "PUTAWAY_REQUIRE_SCAN_CONFIRM",
+              "name": "Require scan confirmation on putaway",
+              "description": "Directed putaway requires an actual-bin confirmation",
+              "default_enabled": true,
+              "applies_to": "WAREHOUSE",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": true,
+              "override": null
+            }
+          ]
+        },
+        "statuses": {
+          "AVAILABLE": {
+            "id": "52cc2d8e-284f-49f7-8674-e9456552dd08",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "AVAILABLE",
+            "name": "Available",
+            "is_available_for_allocation": true,
+            "is_committable": true,
+            "is_sellable": true,
+            "is_consigned": false,
+            "is_default": true,
+            "is_system": true,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "CONSIGNED_GOOD": {
+            "id": "59a2012f-5a50-4325-9af2-4e23dadf59c9",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "CONSIGNED_GOOD",
+            "name": "Consigned Good",
+            "is_available_for_allocation": true,
+            "is_committable": true,
+            "is_sellable": true,
+            "is_consigned": true,
+            "is_default": false,
+            "is_system": true,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "DAMAGED": {
+            "id": "e7a3627a-d0c5-481e-a3a6-736cfcd6dcad",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "DAMAGED",
+            "name": "Damaged",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "HOLD": {
+            "id": "41514166-b12e-46df-b1c4-ca47674f5569",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "HOLD",
+            "name": "Hold",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "REFURB": {
+            "id": "b7fcc00b-83b3-4aa0-810e-377da13c9d9c",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "REFURB",
+            "name": "Refurbished",
+            "is_available_for_allocation": true,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "RETURNED": {
+            "id": "d67fbff4-6afe-42ff-af20-2e4a62ea5d37",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "RETURNED",
+            "name": "Returned",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "USED": {
+            "id": "4c3d2639-f47d-464a-b0f1-1af68d80953b",
+            "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+            "code": "USED",
+            "name": "Used",
+            "is_available_for_allocation": true,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.621916+00:00",
+            "updated_at": "2026-10-26T01:01:55.621916+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          }
+        }
+      },
+      "B1": {
+        "location": {
+          "id": "28efedd8-7845-48af-a532-110809f43450",
+          "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+          "code": "E2E10260101DBB3_B-WH-B1",
+          "name": "Warehouse B1",
+          "parent_id": null,
+          "location_type": "WAREHOUSE",
+          "is_bins_enabled": true,
+          "is_statuses_enabled": true,
+          "is_consignment_allowed": false,
+          "allow_commit_from_non_available": false,
+          "subsidiary_ref": null,
+          "timezone": "UTC",
+          "address": null,
+          "is_unallocated": false,
+          "is_inactive": false,
+          "inactive_at": null,
+          "inactive_reason": null,
+          "created_at": "2026-10-26T01:01:55.755423+00:00",
+          "updated_at": "2026-10-26T01:01:55.755423+00:00",
+          "created_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+          "updated_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+          "version": 1
+        },
+        "bins": {
+          "RCV": {
+            "id": "2cc0dbfe-f221-4aa1-b575-9e163930740d",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "location_id": "28efedd8-7845-48af-a532-110809f43450",
+            "zone_id": null,
+            "code": "RCV-B1",
+            "name": "RCV",
+            "bin_type": "RECEIVING",
+            "is_pickable": false,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.765568+00:00",
+            "updated_at": "2026-10-26T01:01:55.765568+00:00",
+            "created_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+            "updated_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+            "version": 1
+          },
+          "STG": {
+            "id": "20de7645-b3ad-427e-8628-4491fafc7f92",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "location_id": "28efedd8-7845-48af-a532-110809f43450",
+            "zone_id": null,
+            "code": "STG-B1",
+            "name": "STG",
+            "bin_type": "STORAGE",
+            "is_pickable": false,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.774649+00:00",
+            "updated_at": "2026-10-26T01:01:55.774649+00:00",
+            "created_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+            "updated_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+            "version": 1
+          },
+          "PICK": {
+            "id": "1cddd28e-8924-4d10-82fe-0323e7a87363",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "location_id": "28efedd8-7845-48af-a532-110809f43450",
+            "zone_id": null,
+            "code": "PICK-B1",
+            "name": "PICK",
+            "bin_type": "PICKING",
+            "is_pickable": true,
+            "is_active": true,
+            "capacity_qty": null,
+            "capacity_uom_id": null,
+            "coordinates": null,
+            "created_at": "2026-10-26T01:01:55.783343+00:00",
+            "updated_at": "2026-10-26T01:01:55.783343+00:00",
+            "created_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+            "updated_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+            "version": 1
+          }
+        },
+        "warehouse": {
+          "id": "d3f7aa49-59e0-4890-948b-6f00b97eeb55",
+          "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+          "location_id": "28efedd8-7845-48af-a532-110809f43450",
+          "code": "WH-B1",
+          "name": "Warehouse B1",
+          "is_wms_enabled": true,
+          "receiving_bin_id": "2cc0dbfe-f221-4aa1-b575-9e163930740d",
+          "staging_bin_id": "20de7645-b3ad-427e-8628-4491fafc7f92",
+          "shipping_bin_id": "1cddd28e-8924-4d10-82fe-0323e7a87363",
+          "default_order_type_id": null,
+          "timezone": "UTC",
+          "is_active": true,
+          "created_at": "2026-10-26T01:01:55.789532Z",
+          "updated_at": "2026-10-26T01:01:55.789532Z",
+          "created_by": "e5b9d70b-c5c3-41bb-84bd-10de5d6451b7",
+          "updated_by": "e5b9d70b-c5c3-41bb-84bd-10de5d6451b7",
+          "version": 1,
+          "location_code": "E2E10260101DBB3_B-WH-B1",
+          "location_name": "Warehouse B1",
+          "rules": [
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "STAGING_AT_RECEIVING",
+              "name": "Staging at receiving",
+              "description": "Receiving puts stock into the staging bin before putaway",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "DEFERRED_RECEIPT_POSTING",
+              "name": "Deferred item receipt posting",
+              "description": "Receiving completes into PENDING_POSTING",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "AUTO_FIRM_COMMIT_WAVE",
+              "name": "Firm commitments when wave releases",
+              "description": "Commit order lines when the wave releases",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "ALLOW_OVER_PICK_WO",
+              "name": "Allow over-picking work orders",
+              "description": "Permit qty_picked > qty_requested for work-order picks",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "PICK_EXPIRED_GUARD",
+              "name": "Reject expired lots at pick",
+              "description": "Expired lots are excluded and raise an exception",
+              "default_enabled": true,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": true,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "CART_REQUIRED_PUTAWAY",
+              "name": "Cart required for putaway",
+              "description": "Putaway tasks require a cart container",
+              "default_enabled": false,
+              "applies_to": "WAREHOUSE",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "WAVE_AUTO_RELEASE",
+              "name": "Auto-release scheduled waves",
+              "description": "Wave release schedules release created waves immediately",
+              "default_enabled": false,
+              "applies_to": "ALL",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": false,
+              "override": null
+            },
+            {
+              "id": null,
+              "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+              "code": "PUTAWAY_REQUIRE_SCAN_CONFIRM",
+              "name": "Require scan confirmation on putaway",
+              "description": "Directed putaway requires an actual-bin confirmation",
+              "default_enabled": true,
+              "applies_to": "WAREHOUSE",
+              "value_type": "BOOLEAN",
+              "is_active": true,
+              "effective_enabled": true,
+              "override": null
+            }
+          ]
+        },
+        "statuses": {
+          "AVAILABLE": {
+            "id": "b0289b78-2496-4374-a046-64b693416b7a",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "code": "AVAILABLE",
+            "name": "Available",
+            "is_available_for_allocation": true,
+            "is_committable": true,
+            "is_sellable": true,
+            "is_consigned": false,
+            "is_default": true,
+            "is_system": true,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.747092+00:00",
+            "updated_at": "2026-10-26T01:01:55.747092+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "CONSIGNED_GOOD": {
+            "id": "dcd89a07-18b0-4150-b999-611a704d88ef",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "code": "CONSIGNED_GOOD",
+            "name": "Consigned Good",
+            "is_available_for_allocation": true,
+            "is_committable": true,
+            "is_sellable": true,
+            "is_consigned": true,
+            "is_default": false,
+            "is_system": true,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.747092+00:00",
+            "updated_at": "2026-10-26T01:01:55.747092+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "DAMAGED": {
+            "id": "5d29e953-f534-4f90-a5b8-00fe1df252dd",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "code": "DAMAGED",
+            "name": "Damaged",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.747092+00:00",
+            "updated_at": "2026-10-26T01:01:55.747092+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "HOLD": {
+            "id": "d90311c9-df0b-4f4e-a005-7cca96dcb2ff",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "code": "HOLD",
+            "name": "Hold",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.747092+00:00",
+            "updated_at": "2026-10-26T01:01:55.747092+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "REFURB": {
+            "id": "6a8f9ceb-0847-49c3-a884-f6f45aef196d",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "code": "REFURB",
+            "name": "Refurbished",
+            "is_available_for_allocation": true,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.747092+00:00",
+            "updated_at": "2026-10-26T01:01:55.747092+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "RETURNED": {
+            "id": "f2e57d05-8b9c-42fd-8ce8-1feb79616554",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "code": "RETURNED",
+            "name": "Returned",
+            "is_available_for_allocation": false,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.747092+00:00",
+            "updated_at": "2026-10-26T01:01:55.747092+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          },
+          "USED": {
+            "id": "da944967-136b-4b7e-ae35-f8aa3448babc",
+            "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+            "code": "USED",
+            "name": "Used",
+            "is_available_for_allocation": true,
+            "is_committable": false,
+            "is_sellable": false,
+            "is_consigned": false,
+            "is_default": false,
+            "is_system": false,
+            "is_active": true,
+            "created_at": "2026-10-26T01:01:55.747092+00:00",
+            "updated_at": "2026-10-26T01:01:55.747092+00:00",
+            "created_by": null,
+            "updated_by": null,
+            "version": 1
+          }
+        }
+      }
+    },
+    "items": {
+      "A1": {
+        "id": "7a08a97c-5ea6-4794-a0f6-f5b004d577ab",
+        "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+        "item_number": "E2E10260101DBB3_A-ITEM-A",
+        "display_name": "E2E10260101DBB3_A-ITEM-A",
+        "description": null,
+        "item_type_id": "5d54c164-ea6f-4dee-a0a2-a7fa239da119",
+        "is_active": true,
+        "inactive_at": null,
+        "matrix_parent_id": null,
+        "base_uom_id": "84727e72-7362-4f01-b15d-00cd04c7b5c2",
+        "units_type_id": "66b64374-85b1-4ec1-9989-a5ef14fd1c31",
+        "item_category_id": null,
+        "upc_code": null,
+        "external_ref": null,
+        "created_from": "MANUAL",
+        "created_at": "2026-10-26T01:01:55.801641+00:00",
+        "updated_at": "2026-10-26T01:01:55.801641+00:00",
+        "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+        "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+        "version": 1,
+        "item_type_code": "INVENTORY",
+        "category_code": null,
+        "category_name": null,
+        "inventory": {
+          "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+          "item_id": "7a08a97c-5ea6-4794-a0f6-f5b004d577ab",
+          "costing_method": "AVERAGE",
+          "costing_method_locked": true,
+          "initial_cost": "10",
+          "asset_account_ref": null,
+          "cogs_account_ref": null,
+          "adjustment_account_ref": null,
+          "variance_account_ref": null,
+          "unbuild_variance_account_ref": null,
+          "reorder_point": "0",
+          "preferred_stock_level": "0",
+          "safety_stock": "0",
+          "lead_time_days": 0,
+          "seasonal_demand": "0",
+          "auto_calculate_planning": false,
+          "use_bins": false,
+          "bin_required_on_txn": false,
+          "use_statuses": false,
+          "default_status_id": null,
+          "allow_negative_inventory": true,
+          "allow_vendor_consignment": false,
+          "is_wip": false,
+          "backflush_default": false,
+          "yield_percent": "100",
+          "round_up_component_qty": false,
+          "stock_uom_id": "84727e72-7362-4f01-b15d-00cd04c7b5c2",
+          "must_be_whole_base_unit": false,
+          "created_at": "2026-10-26T01:01:55.801641+00:00",
+          "updated_at": "2026-10-26T01:01:55.801641+00:00",
+          "created_by": null,
+          "updated_by": null,
+          "version": 1
+        },
+        "purchasing": null,
+        "sales": null,
+        "accounting": null,
+        "uoms": [
+          {
+            "uom_id": "84727e72-7362-4f01-b15d-00cd04c7b5c2",
+            "role": "STOCK",
+            "conversion_override": null,
+            "is_default_for_role": true,
+            "uom_code": "EA",
+            "conversion_factor": "1",
+            "is_base": true,
+            "uom_type_id": "66b64374-85b1-4ec1-9989-a5ef14fd1c31"
+          }
+        ],
+        "custom_fields": []
+      },
+      "A2": {
+        "id": "72e00b93-dbd6-4a2c-a396-afe3b32cb697",
+        "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+        "item_number": "E2E10260101DBB3_A-ITEM-B",
+        "display_name": "E2E10260101DBB3_A-ITEM-B",
+        "description": null,
+        "item_type_id": "5d54c164-ea6f-4dee-a0a2-a7fa239da119",
+        "is_active": true,
+        "inactive_at": null,
+        "matrix_parent_id": null,
+        "base_uom_id": "84727e72-7362-4f01-b15d-00cd04c7b5c2",
+        "units_type_id": "66b64374-85b1-4ec1-9989-a5ef14fd1c31",
+        "item_category_id": null,
+        "upc_code": null,
+        "external_ref": null,
+        "created_from": "MANUAL",
+        "created_at": "2026-10-26T01:01:55.831287+00:00",
+        "updated_at": "2026-10-26T01:01:55.831287+00:00",
+        "created_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+        "updated_by": "bd50a3ce-9c10-4be3-9fb4-b06e5dcdd1db",
+        "version": 1,
+        "item_type_code": "INVENTORY",
+        "category_code": null,
+        "category_name": null,
+        "inventory": {
+          "tenant_id": "b94318a2-03dc-442e-bd28-75791065e7c4",
+          "item_id": "72e00b93-dbd6-4a2c-a396-afe3b32cb697",
+          "costing_method": "AVERAGE",
+          "costing_method_locked": true,
+          "initial_cost": "10",
+          "asset_account_ref": null,
+          "cogs_account_ref": null,
+          "adjustment_account_ref": null,
+          "variance_account_ref": null,
+          "unbuild_variance_account_ref": null,
+          "reorder_point": "0",
+          "preferred_stock_level": "0",
+          "safety_stock": "0",
+          "lead_time_days": 0,
+          "seasonal_demand": "0",
+          "auto_calculate_planning": false,
+          "use_bins": false,
+          "bin_required_on_txn": false,
+          "use_statuses": false,
+          "default_status_id": null,
+          "allow_negative_inventory": true,
+          "allow_vendor_consignment": false,
+          "is_wip": false,
+          "backflush_default": false,
+          "yield_percent": "100",
+          "round_up_component_qty": false,
+          "stock_uom_id": "84727e72-7362-4f01-b15d-00cd04c7b5c2",
+          "must_be_whole_base_unit": false,
+          "created_at": "2026-10-26T01:01:55.831287+00:00",
+          "updated_at": "2026-10-26T01:01:55.831287+00:00",
+          "created_by": null,
+          "updated_by": null,
+          "version": 1
+        },
+        "purchasing": null,
+        "sales": null,
+        "accounting": null,
+        "uoms": [
+          {
+            "uom_id": "84727e72-7362-4f01-b15d-00cd04c7b5c2",
+            "role": "STOCK",
+            "conversion_override": null,
+            "is_default_for_role": true,
+            "uom_code": "EA",
+            "conversion_factor": "1",
+            "is_base": true,
+            "uom_type_id": "66b64374-85b1-4ec1-9989-a5ef14fd1c31"
+          }
+        ],
+        "custom_fields": []
+      },
+      "B1": {
+        "id": "446c0dd4-4cca-4626-98ac-5e7c03539ed7",
+        "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+        "item_number": "E2E10260101DBB3_B-ITEM-A",
+        "display_name": "E2E10260101DBB3_B-ITEM-A",
+        "description": null,
+        "item_type_id": "8cbafec7-ee9b-4db1-b119-058210088968",
+        "is_active": true,
+        "inactive_at": null,
+        "matrix_parent_id": null,
+        "base_uom_id": "5562b535-dfaf-4b8c-a75b-e6a70d965336",
+        "units_type_id": "4766e83e-15c8-4941-a922-39c5f3547cff",
+        "item_category_id": null,
+        "upc_code": null,
+        "external_ref": null,
+        "created_from": "MANUAL",
+        "created_at": "2026-10-26T01:01:55.859040+00:00",
+        "updated_at": "2026-10-26T01:01:55.859040+00:00",
+        "created_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+        "updated_by": "21f11e10-dd63-4285-837a-4aac3b3201a2",
+        "version": 1,
+        "item_type_code": "INVENTORY",
+        "category_code": null,
+        "category_name": null,
+        "inventory": {
+          "tenant_id": "82d223da-020e-477b-98b0-840c491e76de",
+          "item_id": "446c0dd4-4cca-4626-98ac-5e7c03539ed7",
+          "costing_method": "AVERAGE",
+          "costing_method_locked": true,
+          "initial_cost": "10",
+          "asset_account_ref": null,
+          "cogs_account_ref": null,
+          "adjustment_account_ref": null,
+          "variance_account_ref": null,
+          "unbuild_variance_account_ref": null,
+          "reorder_point": "0",
+          "preferred_stock_level": "0",
+          "safety_stock": "0",
+          "lead_time_days": 0,
+          "seasonal_demand": "0",
+          "auto_calculate_planning": false,
+          "use_bins": false,
+          "bin_required_on_txn": false,
+          "use_statuses": false,
+          "default_status_id": null,
+          "allow_negative_inventory": true,
+          "allow_vendor_consignment": false,
+          "is_wip": false,
+          "backflush_default": false,
+          "yield_percent": "100",
+          "round_up_component_qty": false,
+          "stock_uom_id": "5562b535-dfaf-4b8c-a75b-e6a70d965336",
+          "must_be_whole_base_unit": false,
+          "created_at": "2026-10-26T01:01:55.859040+00:00",
+          "updated_at": "2026-10-26T01:01:55.859040+00:00",
+          "created_by": null,
+          "updated_by": null,
+          "version": 1
+        },
+        "purchasing": null,
+        "sales": null,
+        "accounting": null,
+        "uoms": [
+          {
+            "uom_id": "5562b535-dfaf-4b8c-a75b-e6a70d965336",
+            "role": "STOCK",
+            "conversion_override": null,
+            "is_default_for_role": true,
+            "uom_code": "EA",
+            "conversion_factor": "1",
+            "is_base": true,
+            "uom_type_id": "4766e83e-15c8-4941-a922-39c5f3547cff"
+          }
+        ],
+        "custom_fields": []
+      }
+    },
+    "count": {
+      "id": "f9c30767-cc4b-497c-80d4-c9980f283ce6",
+      "lines": 2
+    },
+    "get_sweep": {
+      "attempted": 229,
+      "5xx": []
+    }
+  }
+}

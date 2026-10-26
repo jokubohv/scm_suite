@@ -520,6 +520,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/vendor-categories", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         code = str(data.get("code") or "").strip()
         name = str(data.get("name") or "").strip()
         if not code or not name:
@@ -580,6 +583,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/item-vendors", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         item = await self._item(data.get("item_id"))
         if not item.get("is_active"):
             raise ItemNotPurchasable("item is inactive")
@@ -692,6 +698,9 @@ class ProcurementService:
         idempotency_key: str | None = None,
     ) -> dict[str, Any]:
         await self._require_row("item_vendor", item_vendor_id, "item vendor")
+        replay = await self._idem_begin("POST /api/v1/item-vendors/{id}/prices", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         row_id = uuid.uuid4()
         await self._exec(
             """
@@ -791,6 +800,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/vendor-contracts", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         if not await self._flag("procurement.purchase_contracts_enabled", False) and not await self._setting(
             "purchase_contracts_enabled", False
         ):
@@ -1229,6 +1241,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/purchase-requests", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         lines = list(data.get("lines") or [])
         if not lines:
             raise ValidationFailed("at least one request line is required")
@@ -1357,6 +1372,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/rfqs", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         lines = list(data.get("lines") or [])
         if not lines:
             raise ValidationFailed("at least one RFQ line is required")
@@ -3546,6 +3564,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/vendor-credits", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         vendor = await self._require_row("vendor", data.get("vendor_id"), "vendor")
         lines = list(data.get("lines") or [])
         if not lines:
@@ -3758,6 +3779,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/vendor-returns", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         vendor = await self._require_row("vendor", data.get("vendor_id"), "vendor")
         lines = list(data.get("lines") or [])
         if not lines:
@@ -4033,6 +4057,9 @@ class ProcurementService:
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
         await self._require_enabled()
+        replay = await self._idem_begin("POST /api/v1/special-order-links", idempotency_key, data, actor_id)
+        if replay:
+            return replay["replay"]
         if not await self._flag("procurement.drop_ship_enabled", False) and not await self._setting(
             "drop_ship_enabled", False
         ):
