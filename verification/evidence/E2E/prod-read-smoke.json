@@ -1,6 +1,12 @@
 {
+  "checked_at": "2026-10-26T02:05:52.841366+00:00",
   "base": "https://scm.k1hub.com",
-  "checked_at": "2026-10-26T01:44:06.163034+00:00",
+  "openapi_no_key": 200,
+  "openapi_wrong_key": 200,
+  "openapi_with_key": 200,
+  "openapi_cache_control": null,
+  "openapi_paths": 981,
+  "docs": 200,
   "get_paths": 229,
   "status_counts": {
     "200": 169,
@@ -9,10 +15,7 @@
     "422": 14,
     "503": 16
   },
-  "failures": [],
-  "canonical_flag_present": true,
-  "currencies_status": null,
-  "controlled_feature_disabled_503": 16,
+  "controlled_503": 16,
   "unexpected_5xx": 0,
-  "notes": "Read-only GET sweep against production with MAIN tenant admin. 503s were controlled feature-disabled responses; no 500s."
+  "canonical_flag_present": true
 }

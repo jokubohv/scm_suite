@@ -98,6 +98,7 @@ jobs:
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p '${{ secrets.VPS_DEPLOY_DIR }}/deployment'"
           scp deployment/Caddyfile "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_DIR }}/deployment/Caddyfile"
           scp deployment/provision-db-roles.sh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_DIR }}/deployment/provision-db-roles.sh"
+          scp deployment/backfill-existing-db.sql "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_DEPLOY_DIR }}/deployment/backfill-existing-db.sql"
           ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "cp '${{ secrets.VPS_DEPLOY_DIR }}/deployment/Caddyfile' '${{ secrets.VPS_DEPLOY_DIR }}/Caddyfile'"
       - name: Authenticate VPS to GHCR (private packages only)
         env:
@@ -132,15 +133,7 @@ jobs:
             'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "ALTER ROLE platform_auth BYPASSRLS; GRANT USAGE ON SCHEMA platform TO platform_auth; GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA platform TO platform_auth; GRANT DELETE ON item_master.item_related, item_master.kit_group_member TO platform_app;"'
           # Existing DBs also need the global-currency RLS policy and the canonical traceability flag.
           docker compose --env-file .env.production -f docker-compose.prod.yml exec -T postgres sh -c \
-            'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' <<'SQL'
-          DROP POLICY IF EXISTS global_currency_read ON platform.currency;
-          CREATE POLICY global_currency_read ON platform.currency FOR SELECT USING (tenant_id IS NULL);
-          INSERT INTO platform.feature_flag (id, tenant_id, flag_key, is_enabled, source, created_at, updated_at, version)
-          SELECT gen_random_uuid(), t.id, 'traceability.registry.enabled', false, 'BACKFILL', now(), now(), 1
-          FROM platform.tenant t
-          WHERE t.id <> '00000000-0000-0000-0000-000000000000'::uuid
-            AND NOT EXISTS (SELECT 1 FROM platform.feature_flag f WHERE f.tenant_id = t.id AND f.flag_key = 'traceability.registry.enabled');
-          SQL
+            'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"' < deployment/backfill-existing-db.sql
           docker compose --env-file .env.production -f docker-compose.prod.yml up -d --remove-orphans --force-recreate api worker outbox-relay caddy
           docker compose --env-file .env.production -f docker-compose.prod.yml exec -T api \
             python -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=10).read().decode())"
