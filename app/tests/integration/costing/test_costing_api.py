@@ -198,7 +198,7 @@ async def test_landed_cost_allocation_sums_to_line_amount(client: Any, db_sessio
         ),
         {"id": receipt_id, "t": TENANT_ID, "doc": f"RCV-{uuid4().hex[:6].upper()}", "vendor": vendor_id},
     )
-    for index, (line_id, item_id) in enumerate(zip(receipt_line_ids, [ITEM_A, ITEM_B])):
+    for index, (line_id, item_id) in enumerate(zip(receipt_line_ids, [ITEM_A, ITEM_B], strict=False)):
         await db_session.execute(
             sa_text(
                 "INSERT INTO procurement.item_receipt_line "

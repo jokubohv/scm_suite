@@ -19,6 +19,7 @@ from fastapi import APIRouter, Body, Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.procurement import ReceiptActionOut, ReceiptCreate, ReceiptOut, ReceiptPage, ReceiptUpdate
 from app.core.security.errors import ForbiddenScope
 from app.modules.procurement.errors import ProcurementError
 from app.modules.procurement.service import ProcurementService
@@ -783,7 +784,7 @@ async def list_po_releases(po_id: str, db: DbDep, principal: PrincipalDep) -> di
 
 
 # ------------------------------------------------------------------------------- receipts -----
-@router.get("/item-receipts", dependencies=[Depends(require_scope(RECEIPT_READ))])
+@router.get("/item-receipts", response_model=ReceiptPage, dependencies=[Depends(require_scope(RECEIPT_READ))])
 async def list_receipts(
     db: DbDep,
     principal: PrincipalDep,
@@ -802,12 +803,13 @@ async def list_receipts(
     )
 
 
-@router.post("/item-receipts", status_code=201, dependencies=[Depends(require_scope(RECEIPT_WRITE))])
+@router.post("/item-receipts", status_code=201, response_model=ReceiptOut,
+             dependencies=[Depends(require_scope(RECEIPT_WRITE))])
 async def create_receipt(
-    db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...), idempotency_key: IdempotencyHeader = None
+    db: DbDep, principal: PrincipalDep, body: ReceiptCreate = Body(...), idempotency_key: IdempotencyHeader = None
 ) -> dict[str, Any]:
     return await _service(db, principal).create_receipt(
-        payload, actor_id=principal.app_user_id, idempotency_key=idempotency_key
+        body.model_dump(exclude_unset=True), actor_id=principal.app_user_id, idempotency_key=idempotency_key
     )
 
 
@@ -830,19 +832,24 @@ async def received_not_billed(
     )
 
 
-@router.get("/item-receipts/{receipt_id}", dependencies=[Depends(require_scope(RECEIPT_READ))])
+@router.get("/item-receipts/{receipt_id}", response_model=ReceiptOut,
+            dependencies=[Depends(require_scope(RECEIPT_READ))])
 async def get_receipt(receipt_id: str, db: DbDep, principal: PrincipalDep) -> dict[str, Any]:
     return await _service(db, principal).get_receipt(receipt_id)
 
 
-@router.patch("/item-receipts/{receipt_id}", dependencies=[Depends(require_scope(RECEIPT_WRITE))])
+@router.patch("/item-receipts/{receipt_id}", response_model=ReceiptOut,
+             dependencies=[Depends(require_scope(RECEIPT_WRITE))])
 async def patch_receipt(
-    receipt_id: str, db: DbDep, principal: PrincipalDep, payload: dict[str, Any] = Body(...)
+    receipt_id: str, db: DbDep, principal: PrincipalDep, body: ReceiptUpdate = Body(...)
 ) -> dict[str, Any]:
-    return await _service(db, principal).update_receipt(receipt_id, payload, actor_id=principal.app_user_id)
+    return await _service(db, principal).update_receipt(
+        receipt_id, body.model_dump(exclude_unset=True), actor_id=principal.app_user_id
+    )
 
 
-@router.post("/item-receipts/{receipt_id}/post", dependencies=[Depends(require_scope(RECEIPT_POST))])
+@router.post("/item-receipts/{receipt_id}/post", response_model=ReceiptActionOut,
+             dependencies=[Depends(require_scope(RECEIPT_POST))])
 async def post_receipt(
     receipt_id: str,
     db: DbDep,
@@ -855,7 +862,8 @@ async def post_receipt(
     )
 
 
-@router.post("/item-receipts/{receipt_id}/reverse", dependencies=[Depends(require_scope(RECEIPT_REVERSE))])
+@router.post("/item-receipts/{receipt_id}/reverse", response_model=ReceiptActionOut,
+             dependencies=[Depends(require_scope(RECEIPT_REVERSE))])
 async def reverse_receipt(
     receipt_id: str,
     db: DbDep,

@@ -12,6 +12,15 @@ from fastapi import APIRouter, Depends, Header, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.inventory import (
+    AdjustmentCreate,
+    AdjustmentOut,
+    AdjustmentPage,
+    LedgerActionOut,
+    TransferCreate,
+    TransferOut,
+    TransferPage,
+)
 from app.modules.inventory_ledger.documents import LedgerDocuments
 from app.modules.inventory_ledger.errors import IdempotencyKeyRequired, ledger_error
 from app.modules.inventory_ledger.service import LedgerService
@@ -179,31 +188,31 @@ async def generic_posting(
     # --------------------------------------------------------------------------- adjustments ------
 
 
-@router.post("/inventory-adjustments", status_code=201)
+@router.post("/inventory-adjustments", status_code=201, response_model=AdjustmentOut)
 async def create_adjustment(
-    payload: dict[str, Any], principal: AdjCreateDep, db: DbDep, key: IdemDep = None
+    body: AdjustmentCreate, principal: AdjCreateDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
     return await _documents(db, principal).create_adjustment(
-        payload | {"actor_id": principal.identity_id}, idempotency_key=key or ""
+        body.model_dump(exclude_unset=True) | {"actor_id": principal.identity_id}, idempotency_key=key or ""
     )
 
 
-@router.get("/inventory-adjustments")
+@router.get("/inventory-adjustments", response_model=AdjustmentPage)
 async def list_adjustments(principal: ReadDep, db: DbDep, status: str | None = None) -> dict[str, Any]:
     return await _documents(db, principal).list_documents("inventory_adjustment", status=status)
 
 
-@router.get("/inventory-adjustments/{id}")
+@router.get("/inventory-adjustments/{id}", response_model=AdjustmentOut)
 async def get_adjustment(id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _documents(db, principal).get_document("inventory_adjustment", id)
 
 
-@router.post("/inventory-adjustments/{id}/submit")
+@router.post("/inventory-adjustments/{id}/submit", response_model=LedgerActionOut)
 async def submit_adjustment(id: str, principal: AdjCreateDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).submit_document("inventory_adjustment", id)
 
 
-@router.post("/inventory-adjustments/{id}/post")
+@router.post("/inventory-adjustments/{id}/post", response_model=LedgerActionOut)
 async def post_adjustment(
     id: str, principal: AdjPostDep, db: DbDep, key: IdemDep = None, payload: dict[str, Any] | None = None
 ) -> dict[str, Any]:
@@ -212,7 +221,7 @@ async def post_adjustment(
     )
 
 
-@router.post("/inventory-adjustments/{id}/reverse")
+@router.post("/inventory-adjustments/{id}/reverse", response_model=LedgerActionOut)
 async def reverse_adjustment(
     id: str, payload: dict[str, Any], principal: TxReverseDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
@@ -221,7 +230,7 @@ async def reverse_adjustment(
     )
 
 
-@router.post("/inventory-adjustments/{id}/void")
+@router.post("/inventory-adjustments/{id}/void", response_model=LedgerActionOut)
 async def void_adjustment(
     id: str, payload: dict[str, Any], principal: AdjPostDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
@@ -279,34 +288,36 @@ async def void_worksheet(
     # --------------------------------------------------------------------------- transfers ---------
 
 
-@router.post("/inventory-transfers", status_code=201)
+@router.post("/inventory-transfers", status_code=201, response_model=TransferOut)
 async def create_transfer(
-    payload: dict[str, Any], principal: TrfCreateDep, db: DbDep, key: IdemDep = None
+    body: TransferCreate, principal: TrfCreateDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
-    return await _documents(db, principal).create_transfer(payload, idempotency_key=key or "")
+    return await _documents(db, principal).create_transfer(
+        body.model_dump(exclude_unset=True), idempotency_key=key or ""
+    )
 
 
-@router.get("/inventory-transfers")
+@router.get("/inventory-transfers", response_model=TransferPage)
 async def list_transfers(principal: ReadDep, db: DbDep, status: str | None = None) -> dict[str, Any]:
     return await _documents(db, principal).list_documents("inventory_transfer", status=status)
 
 
-@router.get("/inventory-transfers/{id}")
+@router.get("/inventory-transfers/{id}", response_model=TransferOut)
 async def get_transfer(id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _documents(db, principal).get_document("inventory_transfer", id)
 
 
-@router.post("/inventory-transfers/{id}/submit")
+@router.post("/inventory-transfers/{id}/submit", response_model=LedgerActionOut)
 async def submit_transfer(id: str, principal: TrfCreateDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).submit_document("inventory_transfer", id)
 
 
-@router.post("/inventory-transfers/{id}/post")
+@router.post("/inventory-transfers/{id}/post", response_model=LedgerActionOut)
 async def post_transfer(id: str, principal: TrfPostDep, db: DbDep, key: IdemDep = None) -> dict[str, Any]:
     return await _documents(db, principal).post_transfer(id, idempotency_key=key or "")
 
 
-@router.post("/inventory-transfers/{id}/reverse")
+@router.post("/inventory-transfers/{id}/reverse", response_model=LedgerActionOut)
 async def reverse_transfer(
     id: str, payload: dict[str, Any], principal: TxReverseDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:
@@ -315,7 +326,7 @@ async def reverse_transfer(
     )
 
 
-@router.post("/inventory-transfers/{id}/void")
+@router.post("/inventory-transfers/{id}/void", response_model=LedgerActionOut)
 async def void_transfer(
     id: str, payload: dict[str, Any], principal: TrfPostDep, db: DbDep, key: IdemDep = None
 ) -> dict[str, Any]:

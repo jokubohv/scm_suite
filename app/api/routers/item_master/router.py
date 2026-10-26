@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.items import ItemCreate, ItemOut, ItemPage, ItemUpdate
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.security.idempotency import IdempotencyOutcome
 from app.modules.item_master.errors import IdempotencyKeyRequired, item_error
@@ -224,15 +225,16 @@ async def _idempotent_mutation(
 
 
 # --------------------------------------------------------------------------- items -------------
-@router.post("/items", status_code=201)
+@router.post("/items", status_code=201, response_model=ItemOut)
 async def create_item(
-    payload: dict[str, Any],
+    body: ItemCreate,
     request: Request,
     principal: CreateDep,
     db: DbDep,
     key: IdempotencyDep = None,
 ) -> Any:
     assert key is not None  # dependency raises when the header is missing
+    payload = body.model_dump(exclude_unset=True)
     service = _svc(db, principal)
     store = IdempotencyStore(db)
     fingerprint = build_fingerprint(
@@ -246,7 +248,7 @@ async def create_item(
         actor_id=principal.identity_id,
     )
     if decision.outcome is IdempotencyOutcome.REPLAY and decision.record is not None:
-        return JSONResponse(status_code=decision.record.response_status or 201, content=dict(decision.record.response_body or {}))
+        return dict(decision.record.response_body or {})
     if decision.outcome is IdempotencyOutcome.CONFLICT or decision.outcome is IdempotencyOutcome.IN_PROGRESS:
         decision.raise_for_conflict()
     result = await service.create_item(payload | {"actor_id": principal.identity_id})
@@ -258,10 +260,10 @@ async def create_item(
         response_body=result,
         resource_id=result["id"],
     )
-    return JSONResponse(status_code=201, content=result)
+    return result
 
 
-@router.get("/items")
+@router.get("/items", response_model=ItemPage)
 async def list_items(
     principal: ReadDep,
     db: DbDep,
@@ -289,7 +291,7 @@ async def resolve_alias(alias: str, principal: ReadDep, db: DbDep, alias_type: s
     return await _svc(db, principal).resolve_alias(alias, alias_type)
 
 
-@router.get("/items/{item_id}")
+@router.get("/items/{item_id}", response_model=ItemOut)
 async def get_item(item_id: str, principal: ReadDep, db: DbDep) -> dict[str, Any]:
     return await _svc(db, principal).get_item(item_id)
 
@@ -336,8 +338,9 @@ async def put_item_custom_fields(
     )
 
 
-@router.patch("/items/{item_id}")
-async def patch_item(item_id: str, payload: dict[str, Any], principal: UpdateDep, db: DbDep, if_match: VersionHeader = None) -> dict[str, Any]:
+@router.patch("/items/{item_id}", response_model=ItemOut)
+async def patch_item(item_id: str, body: ItemUpdate, principal: UpdateDep, db: DbDep, if_match: VersionHeader = None) -> dict[str, Any]:
+    payload = body.model_dump(exclude_unset=True)
     return await _svc(db, principal).patch_item(item_id, payload | {"actor_id": principal.identity_id}, expected_version=_version(if_match))
 
 

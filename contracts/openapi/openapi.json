@@ -67946,8 +67946,213 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response List Receipts Api V1 Item Receipts Get",
+                  "properties": {
+                    "count": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Count"
+                    },
+                    "items": {
+                      "items": {
+                        "properties": {
+                          "created_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Created At"
+                          },
+                          "currency_code": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Currency Code"
+                          },
+                          "deferred_posting": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Deferred Posting"
+                          },
+                          "document_number": {
+                            "title": "Document Number",
+                            "type": "string"
+                          },
+                          "id": {
+                            "format": "uuid",
+                            "title": "Id",
+                            "type": "string"
+                          },
+                          "location_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Location Id"
+                          },
+                          "memo": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Memo"
+                          },
+                          "posted_transaction_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Posted Transaction Id"
+                          },
+                          "purchase_order_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Purchase Order Id"
+                          },
+                          "receipt_type": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Receipt Type"
+                          },
+                          "received_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Received At"
+                          },
+                          "reversal_transaction_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Reversal Transaction Id"
+                          },
+                          "status": {
+                            "title": "Status",
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Updated At"
+                          },
+                          "vendor_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Vendor Id"
+                          },
+                          "version": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Version"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "document_number",
+                          "status"
+                        ],
+                        "title": "ReceiptSummaryOut",
+                        "type": "object"
+                      },
+                      "title": "Items",
+                      "type": "array"
+                    },
+                    "next_cursor": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Next Cursor"
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ],
+                  "title": "ReceiptPage",
                   "type": "object"
                 }
               }
@@ -68045,8 +68250,288 @@
           "content": {
             "application/json": {
               "schema": {
-                "additionalProperties": true,
-                "title": "Payload",
+                "properties": {
+                  "currency_code": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Currency Code"
+                  },
+                  "deferred_posting": {
+                    "anyOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Deferred Posting"
+                  },
+                  "exchange_rate": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Exchange Rate"
+                  },
+                  "landed_cost_charges": {
+                    "anyOf": [
+                      {
+                        "items": {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Landed Cost Charges"
+                  },
+                  "lines": {
+                    "items": {
+                      "properties": {
+                        "bin_id": {
+                          "anyOf": [
+                            {
+                              "format": "uuid",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Bin Id"
+                        },
+                        "details": {
+                          "anyOf": [
+                            {
+                              "items": {
+                                "additionalProperties": true,
+                                "type": "object"
+                              },
+                              "type": "array"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Details"
+                        },
+                        "inventory_status_id": {
+                          "anyOf": [
+                            {
+                              "format": "uuid",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Inventory Status Id"
+                        },
+                        "item_id": {
+                          "format": "uuid",
+                          "title": "Item Id",
+                          "type": "string"
+                        },
+                        "location_id": {
+                          "anyOf": [
+                            {
+                              "format": "uuid",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Location Id"
+                        },
+                        "lot_id": {
+                          "anyOf": [
+                            {
+                              "format": "uuid",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Lot Id"
+                        },
+                        "ownership": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Ownership"
+                        },
+                        "purchase_order_line_id": {
+                          "anyOf": [
+                            {
+                              "format": "uuid",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Purchase Order Line Id"
+                        },
+                        "qty_received": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                              "type": "string"
+                            }
+                          ],
+                          "title": "Qty Received"
+                        },
+                        "serial_ids": {
+                          "anyOf": [
+                            {
+                              "items": {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              "type": "array"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Serial Ids"
+                        },
+                        "unit_cost": {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Unit Cost"
+                        }
+                      },
+                      "required": [
+                        "item_id",
+                        "qty_received"
+                      ],
+                      "title": "ReceiptCreateLine",
+                      "type": "object"
+                    },
+                    "title": "Lines",
+                    "type": "array"
+                  },
+                  "location_id": {
+                    "anyOf": [
+                      {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Location Id"
+                  },
+                  "memo": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Memo"
+                  },
+                  "purchase_order_id": {
+                    "anyOf": [
+                      {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Purchase Order Id"
+                  },
+                  "receipt_type": {
+                    "anyOf": [
+                      {
+                        "enum": [
+                          "PO",
+                          "ASN",
+                          "MANUAL",
+                          "STANDALONE",
+                          "INBOUND_SHIPMENT"
+                        ],
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Receipt Type"
+                  },
+                  "received_at": {
+                    "anyOf": [
+                      {
+                        "format": "date-time",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Received At"
+                  },
+                  "vendor_id": {
+                    "anyOf": [
+                      {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Vendor Id"
+                  }
+                },
+                "required": [
+                  "lines"
+                ],
+                "title": "ReceiptCreate",
                 "type": "object"
               }
             }
@@ -68058,8 +68543,668 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Create Receipt Api V1 Item Receipts Post",
+                  "properties": {
+                    "created_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Created At"
+                    },
+                    "created_by": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Created By"
+                    },
+                    "currency_code": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Currency Code"
+                    },
+                    "deferred_posting": {
+                      "anyOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Deferred Posting"
+                    },
+                    "document_number": {
+                      "title": "Document Number",
+                      "type": "string"
+                    },
+                    "exchange_rate": {
+                      "anyOf": [
+                        {
+                          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Exchange Rate"
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "title": "Id",
+                      "type": "string"
+                    },
+                    "landed_cost": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Landed Cost"
+                    },
+                    "lines": {
+                      "items": {
+                        "properties": {
+                          "created_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Created At"
+                          },
+                          "created_by": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Created By"
+                          },
+                          "currency_code": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Currency Code"
+                          },
+                          "description": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Description"
+                          },
+                          "details": {
+                            "items": {
+                              "properties": {
+                                "bin_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Bin Id"
+                                },
+                                "created_at": {
+                                  "anyOf": [
+                                    {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Created At"
+                                },
+                                "created_by": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Created By"
+                                },
+                                "id": {
+                                  "format": "uuid",
+                                  "title": "Id",
+                                  "type": "string"
+                                },
+                                "inventory_status_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Inventory Status Id"
+                                },
+                                "item_receipt_line_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Item Receipt Line Id"
+                                },
+                                "lot_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Lot Id"
+                                },
+                                "ownership": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Ownership"
+                                },
+                                "qty_received": {
+                                  "anyOf": [
+                                    {
+                                      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Qty Received"
+                                },
+                                "serial_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Serial Id"
+                                },
+                                "tenant_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Tenant Id"
+                                },
+                                "updated_at": {
+                                  "anyOf": [
+                                    {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Updated At"
+                                },
+                                "updated_by": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Updated By"
+                                },
+                                "version": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Version"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "title": "ReceiptDetailOut",
+                              "type": "object"
+                            },
+                            "title": "Details",
+                            "type": "array"
+                          },
+                          "exchange_rate": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Exchange Rate"
+                          },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
+                          "id": {
+                            "format": "uuid",
+                            "title": "Id",
+                            "type": "string"
+                          },
+                          "inventory_status_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Inventory Status Id"
+                          },
+                          "is_landed_cost_estimated": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost Estimated"
+                          },
+                          "item_id": {
+                            "format": "uuid",
+                            "title": "Item Id",
+                            "type": "string"
+                          },
+                          "item_receipt_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Item Receipt Id"
+                          },
+                          "line_number": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Line Number"
+                          },
+                          "location_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Location Id"
+                          },
+                          "purchase_order_line_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Purchase Order Line Id"
+                          },
+                          "qty_expected": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Qty Expected"
+                          },
+                          "qty_received": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Qty Received"
+                          },
+                          "tenant_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Tenant Id"
+                          },
+                          "unit_cost": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Unit Cost"
+                          },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
+                          "updated_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Updated At"
+                          },
+                          "updated_by": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Updated By"
+                          },
+                          "version": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Version"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "item_id"
+                        ],
+                        "title": "ReceiptLineOut",
+                        "type": "object"
+                      },
+                      "title": "Lines",
+                      "type": "array"
+                    },
+                    "location_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Location Id"
+                    },
+                    "memo": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Memo"
+                    },
+                    "posted_transaction_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Posted Transaction Id"
+                    },
+                    "purchase_order_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Purchase Order Id"
+                    },
+                    "receipt_type": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Receipt Type"
+                    },
+                    "received_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Received At"
+                    },
+                    "reversal_transaction_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Reversal Transaction Id"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "tenant_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Tenant Id"
+                    },
+                    "updated_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Updated At"
+                    },
+                    "updated_by": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Updated By"
+                    },
+                    "vendor_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Vendor Id"
+                    },
+                    "version": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Version"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "document_number",
+                    "status"
+                  ],
+                  "title": "ReceiptOut",
                   "type": "object"
                 }
               }
@@ -68433,8 +69578,186 @@
           "content": {
             "application/json": {
               "schema": {
-                "additionalProperties": true,
-                "title": "Payload",
+                "properties": {
+                  "lines": {
+                    "anyOf": [
+                      {
+                        "items": {
+                          "properties": {
+                            "bin_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Bin Id"
+                            },
+                            "details": {
+                              "anyOf": [
+                                {
+                                  "items": {
+                                    "additionalProperties": true,
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Details"
+                            },
+                            "inventory_status_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Inventory Status Id"
+                            },
+                            "item_id": {
+                              "format": "uuid",
+                              "title": "Item Id",
+                              "type": "string"
+                            },
+                            "location_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Location Id"
+                            },
+                            "lot_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Lot Id"
+                            },
+                            "ownership": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Ownership"
+                            },
+                            "purchase_order_line_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Purchase Order Line Id"
+                            },
+                            "qty_received": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                }
+                              ],
+                              "title": "Qty Received"
+                            },
+                            "serial_ids": {
+                              "anyOf": [
+                                {
+                                  "items": {
+                                    "format": "uuid",
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Serial Ids"
+                            },
+                            "unit_cost": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Unit Cost"
+                            }
+                          },
+                          "required": [
+                            "item_id",
+                            "qty_received"
+                          ],
+                          "title": "ReceiptCreateLine",
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Lines"
+                  },
+                  "location_id": {
+                    "anyOf": [
+                      {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Location Id"
+                  },
+                  "memo": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Memo"
+                  }
+                },
+                "title": "ReceiptUpdate",
                 "type": "object"
               }
             }
@@ -68791,8 +70114,668 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Get Receipt Api V1 Item Receipts  Receipt Id  Get",
+                  "properties": {
+                    "created_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Created At"
+                    },
+                    "created_by": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Created By"
+                    },
+                    "currency_code": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Currency Code"
+                    },
+                    "deferred_posting": {
+                      "anyOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Deferred Posting"
+                    },
+                    "document_number": {
+                      "title": "Document Number",
+                      "type": "string"
+                    },
+                    "exchange_rate": {
+                      "anyOf": [
+                        {
+                          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Exchange Rate"
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "title": "Id",
+                      "type": "string"
+                    },
+                    "landed_cost": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Landed Cost"
+                    },
+                    "lines": {
+                      "items": {
+                        "properties": {
+                          "created_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Created At"
+                          },
+                          "created_by": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Created By"
+                          },
+                          "currency_code": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Currency Code"
+                          },
+                          "description": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Description"
+                          },
+                          "details": {
+                            "items": {
+                              "properties": {
+                                "bin_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Bin Id"
+                                },
+                                "created_at": {
+                                  "anyOf": [
+                                    {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Created At"
+                                },
+                                "created_by": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Created By"
+                                },
+                                "id": {
+                                  "format": "uuid",
+                                  "title": "Id",
+                                  "type": "string"
+                                },
+                                "inventory_status_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Inventory Status Id"
+                                },
+                                "item_receipt_line_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Item Receipt Line Id"
+                                },
+                                "lot_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Lot Id"
+                                },
+                                "ownership": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Ownership"
+                                },
+                                "qty_received": {
+                                  "anyOf": [
+                                    {
+                                      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Qty Received"
+                                },
+                                "serial_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Serial Id"
+                                },
+                                "tenant_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Tenant Id"
+                                },
+                                "updated_at": {
+                                  "anyOf": [
+                                    {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Updated At"
+                                },
+                                "updated_by": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Updated By"
+                                },
+                                "version": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Version"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "title": "ReceiptDetailOut",
+                              "type": "object"
+                            },
+                            "title": "Details",
+                            "type": "array"
+                          },
+                          "exchange_rate": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Exchange Rate"
+                          },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
+                          "id": {
+                            "format": "uuid",
+                            "title": "Id",
+                            "type": "string"
+                          },
+                          "inventory_status_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Inventory Status Id"
+                          },
+                          "is_landed_cost_estimated": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost Estimated"
+                          },
+                          "item_id": {
+                            "format": "uuid",
+                            "title": "Item Id",
+                            "type": "string"
+                          },
+                          "item_receipt_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Item Receipt Id"
+                          },
+                          "line_number": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Line Number"
+                          },
+                          "location_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Location Id"
+                          },
+                          "purchase_order_line_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Purchase Order Line Id"
+                          },
+                          "qty_expected": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Qty Expected"
+                          },
+                          "qty_received": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Qty Received"
+                          },
+                          "tenant_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Tenant Id"
+                          },
+                          "unit_cost": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Unit Cost"
+                          },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
+                          "updated_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Updated At"
+                          },
+                          "updated_by": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Updated By"
+                          },
+                          "version": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Version"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "item_id"
+                        ],
+                        "title": "ReceiptLineOut",
+                        "type": "object"
+                      },
+                      "title": "Lines",
+                      "type": "array"
+                    },
+                    "location_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Location Id"
+                    },
+                    "memo": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Memo"
+                    },
+                    "posted_transaction_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Posted Transaction Id"
+                    },
+                    "purchase_order_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Purchase Order Id"
+                    },
+                    "receipt_type": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Receipt Type"
+                    },
+                    "received_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Received At"
+                    },
+                    "reversal_transaction_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Reversal Transaction Id"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "tenant_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Tenant Id"
+                    },
+                    "updated_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Updated At"
+                    },
+                    "updated_by": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Updated By"
+                    },
+                    "vendor_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Vendor Id"
+                    },
+                    "version": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Version"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "document_number",
+                    "status"
+                  ],
+                  "title": "ReceiptOut",
                   "type": "object"
                 }
               }
@@ -68899,8 +70882,186 @@
           "content": {
             "application/json": {
               "schema": {
-                "additionalProperties": true,
-                "title": "Payload",
+                "properties": {
+                  "lines": {
+                    "anyOf": [
+                      {
+                        "items": {
+                          "properties": {
+                            "bin_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Bin Id"
+                            },
+                            "details": {
+                              "anyOf": [
+                                {
+                                  "items": {
+                                    "additionalProperties": true,
+                                    "type": "object"
+                                  },
+                                  "type": "array"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Details"
+                            },
+                            "inventory_status_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Inventory Status Id"
+                            },
+                            "item_id": {
+                              "format": "uuid",
+                              "title": "Item Id",
+                              "type": "string"
+                            },
+                            "location_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Location Id"
+                            },
+                            "lot_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Lot Id"
+                            },
+                            "ownership": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Ownership"
+                            },
+                            "purchase_order_line_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Purchase Order Line Id"
+                            },
+                            "qty_received": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                }
+                              ],
+                              "title": "Qty Received"
+                            },
+                            "serial_ids": {
+                              "anyOf": [
+                                {
+                                  "items": {
+                                    "format": "uuid",
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Serial Ids"
+                            },
+                            "unit_cost": {
+                              "anyOf": [
+                                {
+                                  "type": "number"
+                                },
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Unit Cost"
+                            }
+                          },
+                          "required": [
+                            "item_id",
+                            "qty_received"
+                          ],
+                          "title": "ReceiptCreateLine",
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Lines"
+                  },
+                  "location_id": {
+                    "anyOf": [
+                      {
+                        "format": "uuid",
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Location Id"
+                  },
+                  "memo": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "title": "Memo"
+                  }
+                },
+                "title": "ReceiptUpdate",
                 "type": "object"
               }
             }
@@ -68912,8 +71073,668 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Patch Receipt Api V1 Item Receipts  Receipt Id  Patch",
+                  "properties": {
+                    "created_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Created At"
+                    },
+                    "created_by": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Created By"
+                    },
+                    "currency_code": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Currency Code"
+                    },
+                    "deferred_posting": {
+                      "anyOf": [
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Deferred Posting"
+                    },
+                    "document_number": {
+                      "title": "Document Number",
+                      "type": "string"
+                    },
+                    "exchange_rate": {
+                      "anyOf": [
+                        {
+                          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Exchange Rate"
+                    },
+                    "id": {
+                      "format": "uuid",
+                      "title": "Id",
+                      "type": "string"
+                    },
+                    "landed_cost": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Landed Cost"
+                    },
+                    "lines": {
+                      "items": {
+                        "properties": {
+                          "created_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Created At"
+                          },
+                          "created_by": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Created By"
+                          },
+                          "currency_code": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Currency Code"
+                          },
+                          "description": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Description"
+                          },
+                          "details": {
+                            "items": {
+                              "properties": {
+                                "bin_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Bin Id"
+                                },
+                                "created_at": {
+                                  "anyOf": [
+                                    {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Created At"
+                                },
+                                "created_by": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Created By"
+                                },
+                                "id": {
+                                  "format": "uuid",
+                                  "title": "Id",
+                                  "type": "string"
+                                },
+                                "inventory_status_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Inventory Status Id"
+                                },
+                                "item_receipt_line_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Item Receipt Line Id"
+                                },
+                                "lot_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Lot Id"
+                                },
+                                "ownership": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Ownership"
+                                },
+                                "qty_received": {
+                                  "anyOf": [
+                                    {
+                                      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Qty Received"
+                                },
+                                "serial_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Serial Id"
+                                },
+                                "tenant_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Tenant Id"
+                                },
+                                "updated_at": {
+                                  "anyOf": [
+                                    {
+                                      "format": "date-time",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Updated At"
+                                },
+                                "updated_by": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Updated By"
+                                },
+                                "version": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Version"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "title": "ReceiptDetailOut",
+                              "type": "object"
+                            },
+                            "title": "Details",
+                            "type": "array"
+                          },
+                          "exchange_rate": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Exchange Rate"
+                          },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
+                          "id": {
+                            "format": "uuid",
+                            "title": "Id",
+                            "type": "string"
+                          },
+                          "inventory_status_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Inventory Status Id"
+                          },
+                          "is_landed_cost_estimated": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost Estimated"
+                          },
+                          "item_id": {
+                            "format": "uuid",
+                            "title": "Item Id",
+                            "type": "string"
+                          },
+                          "item_receipt_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Item Receipt Id"
+                          },
+                          "line_number": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Line Number"
+                          },
+                          "location_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Location Id"
+                          },
+                          "purchase_order_line_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Purchase Order Line Id"
+                          },
+                          "qty_expected": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Qty Expected"
+                          },
+                          "qty_received": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Qty Received"
+                          },
+                          "tenant_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Tenant Id"
+                          },
+                          "unit_cost": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Unit Cost"
+                          },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
+                          "updated_at": {
+                            "anyOf": [
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Updated At"
+                          },
+                          "updated_by": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Updated By"
+                          },
+                          "version": {
+                            "anyOf": [
+                              {
+                                "type": "integer"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Version"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "item_id"
+                        ],
+                        "title": "ReceiptLineOut",
+                        "type": "object"
+                      },
+                      "title": "Lines",
+                      "type": "array"
+                    },
+                    "location_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Location Id"
+                    },
+                    "memo": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Memo"
+                    },
+                    "posted_transaction_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Posted Transaction Id"
+                    },
+                    "purchase_order_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Purchase Order Id"
+                    },
+                    "receipt_type": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Receipt Type"
+                    },
+                    "received_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Received At"
+                    },
+                    "reversal_transaction_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Reversal Transaction Id"
+                    },
+                    "status": {
+                      "title": "Status",
+                      "type": "string"
+                    },
+                    "tenant_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Tenant Id"
+                    },
+                    "updated_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Updated At"
+                    },
+                    "updated_by": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Updated By"
+                    },
+                    "vendor_id": {
+                      "anyOf": [
+                        {
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Vendor Id"
+                    },
+                    "version": {
+                      "anyOf": [
+                        {
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Version"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "document_number",
+                    "status"
+                  ],
+                  "title": "ReceiptOut",
                   "type": "object"
                 }
               }
@@ -69034,8 +71855,88 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Post Receipt Api V1 Item Receipts  Receipt Id  Post Post",
+                  "properties": {
+                    "approval_mode": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Approval Mode"
+                    },
+                    "id": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Id"
+                    },
+                    "landed_cost": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Landed Cost"
+                    },
+                    "landed_cost_reversal": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Landed Cost Reversal"
+                    },
+                    "posted_transaction_id": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Posted Transaction Id"
+                    },
+                    "reversal_transaction_id": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Reversal Transaction Id"
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Status"
+                    }
+                  },
+                  "title": "ReceiptActionOut",
                   "type": "object"
                 }
               }
@@ -69156,8 +72057,88 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Reverse Receipt Api V1 Item Receipts  Receipt Id  Reverse Post",
+                  "properties": {
+                    "approval_mode": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Approval Mode"
+                    },
+                    "id": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Id"
+                    },
+                    "landed_cost": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Landed Cost"
+                    },
+                    "landed_cost_reversal": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": true,
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Landed Cost Reversal"
+                    },
+                    "posted_transaction_id": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Posted Transaction Id"
+                    },
+                    "reversal_transaction_id": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Reversal Transaction Id"
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Status"
+                    }
+                  },
+                  "title": "ReceiptActionOut",
                   "type": "object"
                 }
               }

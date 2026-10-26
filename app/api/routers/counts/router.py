@@ -16,6 +16,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.schemas.counts import CountActionOut, CountCreateOut, CountOut, CountPage
 from app.contracts.counts import schemas
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.modules.counts.errors import CountsError
@@ -230,7 +231,7 @@ async def generate_from_plan(
 
 
 # ---------------------------------------------------------------------------- counts ---------
-@router.get("/inventory-counts", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/inventory-counts", response_model=CountPage, dependencies=[Depends(require_scope(COUNT_READ))])
 async def list_counts(
     db: DbDep, principal: PrincipalDep, _: Read, status: str | None = None, count_type: str | None = None,
     plan_id: str | None = None, count_date_from: date | None = None, count_date_to: date | None = None,
@@ -242,7 +243,8 @@ async def list_counts(
     )
 
 
-@router.post("/inventory-counts", status_code=201, dependencies=[Depends(require_scope(COUNT_CREATE))])
+@router.post("/inventory-counts", status_code=201, response_model=CountCreateOut,
+             dependencies=[Depends(require_scope(COUNT_CREATE))])
 async def create_count(
     body: schemas.CountCreate, db: DbDep, principal: PrincipalDep, response: Response,
     idempotency_key: IdempotencyKey,
@@ -260,7 +262,8 @@ async def create_count(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["count_id"])
 
 
-@router.get("/inventory-counts/{count_id}", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/inventory-counts/{count_id}", response_model=CountOut,
+            dependencies=[Depends(require_scope(COUNT_READ))])
 async def get_count(count_id: str, db: DbDep, principal: PrincipalDep, _: Read, include_lines: bool = False) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_count(count_id, include_lines=include_lines)
@@ -268,7 +271,7 @@ async def get_count(count_id: str, db: DbDep, principal: PrincipalDep, _: Read, 
         _raise(exc)
 
 
-@router.post("/inventory-counts/{count_id}/start", dependencies=[Depends(require_scope(COUNT_CAPTURE))])
+@router.post("/inventory-counts/{count_id}/start", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_CAPTURE))])
 async def start_count(
     count_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:
@@ -335,7 +338,7 @@ async def recount(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.post("/inventory-counts/{count_id}/submit", dependencies=[Depends(require_scope(COUNT_CAPTURE))])
+@router.post("/inventory-counts/{count_id}/submit", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_CAPTURE))])
 async def submit(
     count_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:
@@ -351,7 +354,7 @@ async def submit(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.post("/inventory-counts/{count_id}/approve", dependencies=[Depends(require_scope(COUNT_APPROVE))])
+@router.post("/inventory-counts/{count_id}/approve", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_APPROVE))])
 async def approve(
     count_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey,
     body: schemas.ApproveIn | None = None,
@@ -370,7 +373,7 @@ async def approve(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.post("/inventory-counts/{count_id}/reject", dependencies=[Depends(require_scope(COUNT_APPROVE))])
+@router.post("/inventory-counts/{count_id}/reject", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_APPROVE))])
 async def reject(
     count_id: str, body: schemas.RejectIn, db: DbDep, principal: PrincipalDep, response: Response,
     idempotency_key: IdempotencyKey,
@@ -389,7 +392,7 @@ async def reject(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.post("/inventory-counts/{count_id}/recalculate-snapshot", dependencies=[Depends(require_scope(COUNT_APPROVE))])
+@router.post("/inventory-counts/{count_id}/recalculate-snapshot", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_APPROVE))])
 async def recalculate_snapshot(
     count_id: str, body: schemas.SnapshotRecalcIn, db: DbDep, principal: PrincipalDep, response: Response,
     idempotency_key: IdempotencyKey,
@@ -409,7 +412,7 @@ async def recalculate_snapshot(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.post("/inventory-counts/{count_id}/post", dependencies=[Depends(require_scope(COUNT_POST))])
+@router.post("/inventory-counts/{count_id}/post", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_POST))])
 async def post_variance(
     count_id: str, db: DbDep, principal: PrincipalDep, response: Response, idempotency_key: IdempotencyKey
 ) -> dict[str, Any]:

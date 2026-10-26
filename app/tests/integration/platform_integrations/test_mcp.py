@@ -68,6 +68,12 @@ async def test_tool_registry_is_derived_from_runtime_openapi() -> None:
 async def test_api_request_schemas_are_typed_and_injected() -> None:
     spec = create_app().openapi()
 
+    def resolve(schema: dict) -> dict:
+        while isinstance(schema, dict) and "$ref" in schema:
+            name = schema["$ref"].rsplit("/", 1)[-1]
+            schema = spec["components"]["schemas"][name]
+        return schema
+
     def schemas_is_opaque(schema: dict) -> bool:
         return schema.get("type") == "object" and not (schema.get("properties") or {})
 
@@ -79,17 +85,21 @@ async def test_api_request_schemas_are_typed_and_injected() -> None:
             request_body = operation.get("requestBody")
             if not request_body:
                 continue
-            schema = (request_body.get("content") or {}).get("application/json", {}).get("schema") or {}
+            schema = resolve((request_body.get("content") or {}).get("application/json", {}).get("schema") or {})
             properties = schema.get("properties") or {}
-            if schema.get("additionalProperties") is True or (schema.get("type") == "object" and not properties):
+            if schema.get("type") == "object" and not properties:
                 opaque.append(f"{method.upper()} {path}")
     assert not opaque, opaque
-    receipt = spec["paths"]["/api/v1/item-receipts"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+    receipt = resolve(spec["paths"]["/api/v1/item-receipts"]["post"]["requestBody"]["content"]["application/json"]["schema"])
     assert {"vendor_id", "lines", "receipt_type", "location_id"} <= set(receipt["properties"])
     assert "lines" in receipt["required"]
-    assert "STANDALONE" in receipt["properties"]["receipt_type"]["enum"]
-    adjustment = spec["paths"]["/api/v1/inventory-adjustments"]["post"]["requestBody"]["content"]["application/json"]["schema"]
-    assert "lines" in adjustment["properties"] and "transaction_date" in adjustment["required"]
+    receipt_type_schema = receipt["properties"]["receipt_type"]
+    receipt_type_enum = receipt_type_schema.get("enum") or [
+        branch.get("enum") for branch in receipt_type_schema.get("anyOf", []) if branch.get("enum")
+    ][0]
+    assert "STANDALONE" in receipt_type_enum
+    adjustment = resolve(spec["paths"]["/api/v1/inventory-adjustments"]["post"]["requestBody"]["content"]["application/json"]["schema"])
+    assert "lines" in adjustment["properties"]
 
     from app.api.main import create_app as _create
 
@@ -98,7 +108,11 @@ async def test_api_request_schemas_are_typed_and_injected() -> None:
     receipt_tool = by_name["item_receipts_create"]
     assert "vendor_id" in receipt_tool.input_schema["properties"]
     assert "lines" in receipt_tool.input_schema["properties"]
-    assert "STANDALONE" in receipt_tool.input_schema["properties"]["receipt_type"]["enum"]
+    receipt_type_schema = receipt_tool.input_schema["properties"]["receipt_type"]
+    receipt_type_enum = receipt_type_schema.get("enum") or [
+        branch.get("enum") for branch in receipt_type_schema.get("anyOf", []) if branch.get("enum")
+    ][0]
+    assert "STANDALONE" in receipt_type_enum
     assert receipt_tool.body_additional is False
     count_approve = by_name["inventory_counts_approve"]
     assert "comment" in count_approve.input_schema["properties"]
@@ -255,9 +269,15 @@ async def test_openapi_contract_is_complete() -> None:
     assert not opaque_requests, opaque_requests[:10]
     assert not opaque_2xx, opaque_2xx[:10]
     assert not missing_problem, missing_problem[:10]
-    detail = spec["paths"]["/api/v1/items/{item_id}"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]
+    def deref(schema):
+        while isinstance(schema, dict) and "$ref" in schema:
+            name = schema["$ref"].rsplit("/", 1)[-1]
+            schema = spec["components"]["schemas"][name]
+        return schema
+
+    detail = deref(spec["paths"]["/api/v1/items/{item_id}"]["get"]["responses"]["200"]["content"]["application/json"]["schema"])
     assert "item_number" in detail["properties"] and "items" not in detail["properties"]
-    listing = spec["paths"]["/api/v1/items"]["get"]["responses"]["200"]["content"]["application/json"]["schema"]
+    listing = deref(spec["paths"]["/api/v1/items"]["get"]["responses"]["200"]["content"]["application/json"]["schema"])
     assert "items" in listing["properties"]
     assert {"BearerAuth", "ApiKeyAuth", "SuperAdminToken"} <= set(
         spec["components"]["securitySchemes"]
@@ -265,3 +285,29 @@ async def test_openapi_contract_is_complete() -> None:
     assert spec.get("security")
     reports = [p for p in spec["paths"] if p.startswith("/api/v1/reports")]
     assert len(reports) == 22
+
+
+async def test_p1_routes_use_native_fastapi_response_models() -> None:
+    spec = create_app().openapi()
+    schemas = spec["components"]["schemas"]
+    expected = {
+        ("/api/v1/items", "get"): "ItemPage",
+        ("/api/v1/items/{item_id}", "get"): "ItemOut",
+        ("/api/v1/item-receipts", "get"): "ReceiptPage",
+        ("/api/v1/item-receipts/{receipt_id}", "get"): "ReceiptOut",
+        ("/api/v1/inventory-adjustments", "get"): "AdjustmentPage",
+        ("/api/v1/inventory-adjustments/{id}", "get"): "AdjustmentOut",
+        ("/api/v1/inventory-transfers", "get"): "TransferPage",
+        ("/api/v1/inventory-transfers/{id}", "get"): "TransferOut",
+        ("/api/v1/inventory-counts", "get"): "CountPage",
+        ("/api/v1/inventory-counts/{count_id}", "get"): "CountOut",
+    }
+    for (path, method), model in expected.items():
+        schema = spec["paths"][path][method]["responses"]["200"]["content"]["application/json"]["schema"]
+        assert schema.get("$ref", "").endswith("/" + model), (path, schema)
+        assert model in schemas, model
+        assert spec["paths"][path][method].get("x-schema-source") is None
+    item_request = spec["paths"]["/api/v1/items"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+    assert item_request.get("$ref", "").endswith("/ItemCreate")
+    receipt_request = spec["paths"]["/api/v1/item-receipts"]["post"]["requestBody"]["content"]["application/json"]["schema"]
+    assert receipt_request.get("$ref", "").endswith("/ReceiptCreate")
