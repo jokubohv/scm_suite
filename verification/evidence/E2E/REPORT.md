@@ -125,3 +125,19 @@ No permanent integration key was left behind; create a named key with the scopes
 - full tool workflow: create → submit → post → read back an inventory adjustment through MCP
 - resources (`scm://openapi`, `scm://mcp/info`, `scm://mcp/tools`) and prompts covered by tests
 - latest local E2E: **204 checks, 0 failures**; full suite **1,319 passed**; surface smoke **1,259 operations, 0 × 5xx**
+
+
+## Production MCP verification
+
+Deployed image `ghcr.io/jokubohv/scm-suite-api:92b0cf48...`:
+
+- `GET /api/v1/mcp` without key → **401**
+- full `serebo-intelranch-full` key → **200**, `tool_count=240`
+- `initialize` → **200**
+- `tools/list` → **200**, 240 tools
+- `items_list` → tool result **200 / isError false**
+- `warehouses_list` → tool result **200 / isError false**
+- `scm_api_request GET /api/v1/items` → tool result **200 / isError false**
+- approval API key can open MCP discovery (**200**), with per-tool approval scopes still enforced
+- JWT bearer on MCP → **401**
+- `locations_list` returned a controlled `409 DOMAIN_DISABLED` because IntelRanch feature flags are still at defaults; enable the relevant flags to use those tools
