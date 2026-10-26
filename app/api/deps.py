@@ -253,6 +253,15 @@ async def get_request_auth(
     return None
 
 
+async def require_api_key_auth(
+    auth: Annotated[AuthContext | None, Depends(get_request_auth)],
+) -> AuthContext:
+    """Require a tenant API key specifically (JWT bearer tokens are not accepted)."""
+    if auth is None or auth.kind != "api_key":
+        raise TokenInvalid("API key required")
+    return auth
+
+
 async def get_request_db(
     request: Request,
     db: Annotated[AsyncSession, Depends(get_db)],
@@ -386,3 +395,4 @@ async def reject_empty_create_body(request: Request) -> None:
 
 DbDep = Annotated[AsyncSession, Depends(get_request_db)]
 PrincipalDep = Annotated[Principal, Depends(get_current_principal)]
+ApiKeyAuthDep = Annotated[AuthContext, Depends(require_api_key_auth)]

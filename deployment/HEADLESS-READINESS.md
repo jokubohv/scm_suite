@@ -13,9 +13,10 @@ production orchestrator, secret integration, DB role bootstrap, metrics stack or
 | Image/runtime | Multi-stage `Dockerfile`, non-root runtime user `10001:10001`, one image for API/worker/relay; `docker-compose.yml` + `docker-compose.dev.yml` for the dev stack. |
 | Database | 30 Alembic migrations, single linear chain, head `0030_rls_grants_verify`; RLS enabled (280 tables/569 policies in dev); `scripts/up.sh`/`deploy_set.sh` run migrations. |
 | Tests | 1,314 passed across the full suite; contract lint 0 errors/0 warnings; deployment state 16/16 feature sets verified. |
+| MCP | API-key-only Streamable HTTP JSON-RPC at `/api/v1/mcp`; 240 curated tools plus `scm_api_request`; discovery at GET `/api/v1/mcp`. |
 | Auth | JWT access/refresh or tenant-scoped `X-API-Key`, RBAC 255 scopes, tenant isolation/RLS, Dex OIDC SSO + local fallback; deny-by-default route guards. |
 | Health | `/healthz` liveness; `/readyz` now checks DB (SELECT 1 + migration head) and Redis, returning **503** when either dependency is unavailable; `/internal/deps` is a catalogued scoped operation. |
-| Contracts | Runtime OpenAPI 3.1 **981 paths / 1257 operations**, unique operationIds, no TODO operations/unresolved component refs; committed artifact `deployment/runtime.openapi.json` with freshness test. Contract-first aggregate additionally carries 11 deliberate skeleton operations (see §5). |
+| Contracts | Runtime OpenAPI 3.1 **982 paths / 1259 operations**, unique operationIds, no TODO operations/unresolved component refs; committed artifact `deployment/runtime.openapi.json` with freshness test. Contract-first aggregate additionally carries 11 deliberate skeleton operations (see §5). |
 | Events | 159 canonical event schemas, all implementation-backed (`x-todo` = 0); outbox relay entrypoint; Redis streams. |
 | Feature flags | All deploy-dark by default; enable per tenant after deployment. Tenant provisioning seeds 201 rows (38 sequences, 136 settings, 26 flags, default count approval) and `app.seed.backfill` exists for existing tenants. |
 

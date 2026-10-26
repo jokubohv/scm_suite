@@ -66,6 +66,17 @@ Deployment is wave-ordered (`0A→…→2`); `deployment-state.dev.json` records
 Final verification evidence: `verification/evidence/FINAL-AUDIT/REPORT.md`; implementation report:
 `verification/evidence/FINAL-IMPLEMENTATION-REPORT.md`.
 
+## MCP (API-key only)
+
+The MCP gateway is available at `POST /api/v1/mcp` (Streamable HTTP JSON-RPC 2.0). It requires
+`X-API-Key`; JWT is rejected. Discovery is `GET /api/v1/mcp`. The curated tool catalogue is derived
+from the runtime OpenAPI document (240 tools at this revision, plus `scm_api_request`). See
+`deployment/MCP.md`.
+
+```bash
+curl -s https://scm.k1hub.com/api/v1/mcp -H "X-API-Key: $SCM_API_KEY"
+```
+
 ## Tenant API keys for integrations
 
 Business API requests accept either a JWT bearer token or a tenant-scoped **API key**:

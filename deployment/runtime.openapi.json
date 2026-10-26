@@ -48438,6 +48438,70 @@
         ]
       }
     },
+    "/api/v1/mcp": {
+      "get": {
+        "description": "API-key-only discovery document for the MCP gateway. Returns protocol, transport, auth, tool count and resource/prompt catalogues. Requires X-API-Key; JWT is rejected.",
+        "operationId": "mcp_info_api_v1_mcp_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Mcp Info Api V1 Mcp Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "MCP server information",
+        "tags": [
+          "mcp"
+        ]
+      },
+      "post": {
+        "description": "API-key-only MCP JSON-RPC 2.0 gateway. Supports initialize, ping, tools/list, tools/call, resources/list, resources/read, prompts/list and prompts/get. Every tool call is executed against the REST API with the caller's X-API-Key, so scopes/tenant RLS are enforced. JWT bearer tokens are rejected.",
+        "operationId": "mcp_endpoint_api_v1_mcp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "title": "Payload",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "MCP Streamable HTTP JSON-RPC endpoint",
+        "tags": [
+          "mcp"
+        ]
+      }
+    },
     "/api/v1/me": {
       "get": {
         "operationId": "me_api_v1_me_get",

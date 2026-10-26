@@ -114,3 +114,14 @@ After deploying `5b3e2b6` to production (`https://scm.k1hub.com`, tenant `intelr
 - machine API keys are rejected on identity/session routes (`/api/v1/auth/*`, `/api/v1/me*`)
 
 No permanent integration key was left behind; create a named key with the scopes your integration needs.
+
+
+## MCP gateway verification
+
+- API-key-only `GET /api/v1/mcp` discovery and `POST /api/v1/mcp` JSON-RPC
+- JWT bearer rejected; no-key rejected; revoked key rejected
+- 240 curated tools listed and **all 240 dispatched** through `tools/call`
+- successful live calls: `items_list`, `locations_list`, `warehouses_list`, `scm_api_request`
+- full tool workflow: create → submit → post → read back an inventory adjustment through MCP
+- resources (`scm://openapi`, `scm://mcp/info`, `scm://mcp/tools`) and prompts covered by tests
+- latest local E2E: **204 checks, 0 failures**; full suite **1,319 passed**; surface smoke **1,259 operations, 0 × 5xx**

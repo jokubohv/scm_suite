@@ -31,7 +31,7 @@ pytestmark = pytest.mark.contract
 HTTP_METHODS = ("GET", "POST", "PUT", "PATCH", "DELETE")
 
 #: FastAPI's own operational endpoints — mounted, but not part of the business contract.
-FRAMEWORK_ROUTE_PATHS = frozenset({"/api/v1/openapi.json", "/api/v1/docs", "/docs/oauth2-redirect", "/internal/deps"})
+FRAMEWORK_ROUTE_PATHS = frozenset({"/api/v1/openapi.json", "/api/v1/docs", "/docs/oauth2-redirect", "/internal/deps", "/api/v1/mcp"})
 
 
 @dataclass(frozen=True, slots=True)

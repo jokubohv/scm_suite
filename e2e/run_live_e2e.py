@@ -28,6 +28,8 @@ import httpx
 BASE = os.environ.get("E2E_BASE", "http://127.0.0.1:28080").rstrip("/")
 SUPER = os.environ.get("E2E_SUPER_TOKEN", "").strip()
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 EVIDENCE = ROOT / "verification/evidence/E2E"
 RUN = "E2E" + datetime.now(UTC).strftime("%m%d%H%M") + secrets.token_hex(2).upper()
 TODAY = datetime.now(UTC).date().isoformat()
@@ -160,7 +162,8 @@ def run_api_key_integration(c: httpx.Client, result: Result, tenant: dict[str, A
                             item: dict[str, Any]) -> dict[str, Any]:
     token = tenant["token"]
     created = request(c, "POST", "/api/v1/admin/api-keys", token=token, expected=201,
-                      body={"name": f"e2e-integration-{RUN}", "scopes": ["items.read"]},
+                      body={"name": f"e2e-integration-{RUN}",
+                            "scopes": ["items.read", "inventory.location.read", "wms.read", "reporting.read"]},
                       result=result, name="api key create")
     if created.status_code != 201:
         return {}
@@ -185,12 +188,124 @@ def run_api_key_integration(c: httpx.Client, result: Result, tenant: dict[str, A
                                  "item_type_code": "INVENTORY"},
                            result=result, name="api key write scope denied")
     result.check("api key cannot write without items.update", write_denied.status_code == 403, write_denied.status_code)
+    # API-key-only MCP surface: JWT must be rejected; the tenant key can initialize/list/call tools.
+    jwt_mcp = request(c, "POST", "/api/v1/mcp", token=tenant["token"], expected=401,
+                      body={"jsonrpc": "2.0", "id": 1, "method": "ping", "params": {}},
+                      result=result, name="mcp rejects jwt")
+    result.check("MCP requires API key, not JWT", jwt_mcp.status_code == 401, jwt_mcp.status_code)
+    mcp_info = request(c, "GET", "/api/v1/mcp", headers=key_headers, expected=200,
+                       result=result, name="mcp info")
+    if mcp_info.status_code == 200:
+        result.check("MCP info advertises tools", int(mcp_info.json().get("tool_count") or 0) >= 200)
+    tools_payload = request(c, "POST", "/api/v1/mcp", headers=key_headers, expected=200,
+                            body={"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}},
+                            result=result, name="mcp tools list")
+    tools = tools_payload.json().get("result", {}).get("tools", []) if tools_payload.status_code == 200 else []
+    result.check("MCP tool catalogue is substantial", len(tools) >= 200, tools_payload.status_code, len(tools))
+    # Exercise every tool through the MCP protocol. Required path params are intentionally omitted,
+    # so most calls return a structured tool error; what matters is that every dispatch is reachable
+    # and no JSON-RPC-level failure occurs.
+    dispatch_failures: list[Any] = []
+    for index, tool in enumerate(tools, start=1):
+        call = c.post(
+            "/api/v1/mcp",
+            headers=key_headers,
+            json={"jsonrpc": "2.0", "id": 10_000 + index, "method": "tools/call",
+                  "params": {"name": tool["name"], "arguments": {}}},
+        )
+        if call.status_code != 200 or "result" not in call.json():
+            dispatch_failures.append(tool["name"])
+        if index % 60 == 0:
+            print(f"MCP tool dispatch {index}/{len(tools)}")
+    result.check("every MCP tool dispatches", not dispatch_failures, None, dispatch_failures[:10])
+    for name, arguments in (
+        ("items_list", {}),
+        ("locations_list", {}),
+        ("warehouses_list", {}),
+        ("scm_api_request", {"method": "GET", "path": "/api/v1/items"}),
+    ):
+        if any(tool["name"] == name for tool in tools):
+            call = c.post("/api/v1/mcp", headers=key_headers,
+                          json={"jsonrpc": "2.0", "id": 20_000, "method": "tools/call",
+                                "params": {"name": name, "arguments": arguments}})
+            body = call.json() if call.status_code == 200 else {}
+            ok = bool(body.get("result")) and body["result"].get("isError") is False
+            result.check(f"MCP tool {name} succeeds", ok, call.status_code, body.get("result", {}).get("content"))
     request(c, "DELETE", f"/api/v1/admin/api-keys/{key_id}", token=token, expected=204,
             result=result, name="api key revoke")
     revoked = request(c, "GET", "/api/v1/items", headers=key_headers, expected=401,
                       result=result, name="api key revoked")
     result.check("revoked api key rejected", revoked.status_code == 401, revoked.status_code)
-    return {"id": key_id, "prefix": payload["key_prefix"]}
+    revoked_mcp = request(c, "POST", "/api/v1/mcp", headers=key_headers, expected=401,
+                          body={"jsonrpc": "2.0", "id": 3, "method": "ping", "params": {}},
+                          result=result, name="mcp revoked key")
+    result.check("revoked key cannot use MCP", revoked_mcp.status_code == 401, revoked_mcp.status_code)
+    return {"id": key_id, "prefix": payload["key_prefix"], "tool_count": len(tools)}
+
+
+def _mcp_call(c: httpx.Client, result: Result, secret: str, name: str, arguments: dict[str, Any],
+             check_name: str) -> dict[str, Any] | None:
+    response = c.post(
+        "/api/v1/mcp",
+        headers={"X-API-Key": secret},
+        json={"jsonrpc": "2.0", "id": f"e2e-{name}", "method": "tools/call",
+              "params": {"name": name, "arguments": arguments}},
+    )
+    body = response.json() if response.status_code == 200 else {}
+    tool_result = body.get("result") or {}
+    ok = bool(tool_result) and tool_result.get("isError") is False
+    detail = tool_result.get("content")
+    result.check(check_name, ok, response.status_code, detail if not ok else None)
+    if not ok:
+        return None
+    try:
+        return json.loads(tool_result["content"][0]["text"])
+    except Exception:
+        return None
+
+
+def run_mcp_write_test(c: httpx.Client, result: Result, tenant: dict[str, Any],
+                       env: dict[str, Any], item: dict[str, Any]) -> None:
+    from app.core.security.scopes import ScopeRegistry
+
+    registry = ScopeRegistry()
+    approval_tails = {pair.b for pair in registry.catalogue.sod_pairs}
+    scopes = sorted(scope.scope for scope in registry.catalogue.scopes
+                    if scope.assignable and scope.scope not in approval_tails)
+    created = request(c, "POST", "/api/v1/admin/api-keys", token=tenant["token"], expected=201,
+                      body={"name": f"e2e-mcp-write-{RUN}", "scopes": scopes},
+                      result=result, name="mcp full key create")
+    if created.status_code != 201:
+        return
+    payload = created.json()
+    key_id, secret = payload["id"], payload["secret"]
+    try:
+        write = _mcp_call(
+            c, result, secret, "inventory_adjustments_create",
+            {"transaction_date": TODAY, "memo": "mcp e2e",
+             "lines": [{"item_id": item["id"], "location_id": env["location"]["id"],
+                        "inventory_status_id": env["statuses"]["AVAILABLE"]["id"],
+                        "qty_delta": "1", "unit_cost": "10"}]},
+            "MCP write tool creates adjustment",
+        )
+        if write and isinstance(write.get("data"), dict):
+            adjustment_id = write["data"].get("id")
+            if adjustment_id:
+                _mcp_call(c, result, secret, "inventory_adjustments_submit", {"id": adjustment_id},
+                          "MCP write tool submits adjustment")
+                posted = _mcp_call(c, result, secret, "inventory_adjustments_post", {"id": adjustment_id},
+                                   "MCP write tool posts adjustment")
+                if posted and isinstance(posted.get("data"), dict):
+                    result.check("MCP adjustment reached POSTED", posted["data"].get("status") == "POSTED",
+                                 None, posted["data"].get("status"))
+                fetched = _mcp_call(c, result, secret, "inventory_adjustments_get",
+                                    {"id": adjustment_id}, "MCP read-by-id tool works")
+                if fetched and isinstance(fetched.get("data"), dict):
+                    result.check("MCP adjustment read back", fetched["data"].get("status") == "POSTED",
+                                 None, fetched["data"].get("status"))
+    finally:
+        request(c, "DELETE", f"/api/v1/admin/api-keys/{key_id}", token=tenant["token"], expected=204,
+                result=result, name="mcp full key revoke")
 
 
 def run_procurement(c: httpx.Client, result: Result, tenant: dict[str, Any],
@@ -421,6 +536,10 @@ def main() -> int:
             result.data["api_key"] = run_api_key_integration(c, result, a, item_a)
         except Exception as exc:
             result.crash("api key integration phase", exc)
+        try:
+            run_mcp_write_test(c, result, a, env_a2, item_a2)
+        except Exception as exc:
+            result.crash("mcp write phase", exc)
 
         # Opening adjustment in A1, then transfer A1 -> A2.
         adj = request(c, "POST", "/api/v1/inventory-adjustments", token=a["token"], expected=201, headers=idem(),

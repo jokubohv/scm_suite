@@ -32,6 +32,7 @@ from app.api.routers.platform import boundary as platform_boundary
 from app.api.routers.platform import config as platform_config
 from app.api.routers.platform import extras as platform_extras
 from app.api.routers.platform import internal as platform_internal
+from app.api.routers.platform import mcp as platform_mcp
 from app.api.routers.platform import ops as platform_ops
 from app.api.routers.platform import platform_admin as platform_admin
 from app.api.routers.platform import rbac as platform_rbac
@@ -130,6 +131,7 @@ def create_app() -> FastAPI:
     register_router(platform_admin.router)
     register_router(platform_bootstrap.router)
     register_router(platform_internal.router)
+    register_router(platform_mcp.router)
     register_router(item_master_router)
     register_router(pricing_router)
     register_router(traceability_router)

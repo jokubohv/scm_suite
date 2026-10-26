@@ -1,8 +1,8 @@
-# Live E2E — E2E102614490D7B
+# Live E2E — E2E1026153212F9
 
 Base: `http://127.0.0.1:28080`
 
-Checks: **183**, failures: **0**
+Checks: **204**, failures: **0**
 
 - PASS — readiness (200)
 - PASS — readiness db ok (200)
@@ -102,9 +102,30 @@ Checks: **183**, failures: **0**
 - PASS — api key cannot exceed scopes (403)
 - PASS — api key write scope denied (403)
 - PASS — api key cannot write without items.update (403)
+- PASS — mcp rejects jwt (401)
+- PASS — MCP requires API key, not JWT (401)
+- PASS — mcp info (200)
+- PASS — MCP info advertises tools
+- PASS — mcp tools list (200)
+- PASS — MCP tool catalogue is substantial (200)
+- PASS — every MCP tool dispatches
+- PASS — MCP tool items_list succeeds (200)
+- PASS — MCP tool locations_list succeeds (200)
+- PASS — MCP tool warehouses_list succeeds (200)
+- PASS — MCP tool scm_api_request succeeds (200)
 - PASS — api key revoke (204)
 - PASS — api key revoked (401)
 - PASS — revoked api key rejected (401)
+- PASS — mcp revoked key (401)
+- PASS — revoked key cannot use MCP (401)
+- PASS — mcp full key create (201)
+- PASS — MCP write tool creates adjustment (200)
+- PASS — MCP write tool submits adjustment (200)
+- PASS — MCP write tool posts adjustment (200)
+- PASS — MCP adjustment reached POSTED
+- PASS — MCP read-by-id tool works (200)
+- PASS — MCP adjustment read back
+- PASS — mcp full key revoke (204)
 - PASS — create adjustment (201)
 - PASS — submit adjustment (200)
 - PASS — post adjustment (200)
