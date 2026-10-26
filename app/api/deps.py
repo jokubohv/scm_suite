@@ -133,7 +133,14 @@ async def get_request_db(
     auth_path = path.startswith("/api/v1/auth") or (
         path.startswith("/api/v1/admin/invitations/") and path.endswith("/accept")
     )
-    if auth_path:
+    if path.startswith("/api/v1/bootstrap"):
+        # Pre-tenant operator endpoints have no tenant claim. Give RLS a safe SYSTEM context so
+        # lookups before the new tenant id exists do not evaluate an empty setting.
+        await db.execute(
+            text("SELECT set_config('app.tenant_id', :tenant_id, true)"),
+            {"tenant_id": "00000000-0000-0000-0000-000000000000"},
+        )
+    elif auth_path:
         exists = await db.scalar(text("SELECT 1 FROM pg_roles WHERE rolname = 'platform_auth'"))
         if exists:
             await db.execute(text("SET LOCAL ROLE platform_auth"))
