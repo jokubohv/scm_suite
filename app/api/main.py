@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from hmac import compare_digest
 
-from fastapi import Depends, FastAPI, Response
+from fastapi import Depends, FastAPI, Header, HTTPException, Response
+from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from app import __version__
@@ -60,11 +62,43 @@ def create_app() -> FastAPI:
         version=__version__,
         description="Multi-tenant SCM inventory/manufacturing backend (plan v1.5.0).",
         lifespan=lifespan,
-        openapi_url=f"{settings.api_prefix}/openapi.json",
-        docs_url=f"{settings.api_prefix}/docs",
+        # The runtime spec and docs are not public surfaces; the spec is served by the explicitly
+        # API-key-gated route below. Disabled built-in URLs also prevent an unauthenticated bypass.
+        openapi_url=None,
+        docs_url=None,
         redoc_url=None,
         dependencies=[Depends(reject_empty_create_body)],
     )
+    def _require_openapi_key(x_api_key: str | None = Header(default=None, alias="X-API-Key")) -> None:
+        configured = settings.openapi_api_key.strip()
+        if not configured:
+            # Production hardening: fail closed for both "production" and the short "prod" alias.
+            if settings.env.strip().lower() not in {"production", "prod"}:
+                return
+            raise HTTPException(
+                status_code=503,
+                detail={"code": "OPENAPI_KEY_NOT_CONFIGURED", "message": "OpenAPI access is not configured"},
+            )
+        if len(configured) < 32:
+            raise HTTPException(
+                status_code=503,
+                detail={"code": "OPENAPI_KEY_INVALID", "message": "OpenAPI access key is misconfigured"},
+            )
+        if not x_api_key or not compare_digest(x_api_key, configured):
+            raise HTTPException(
+                status_code=401,
+                detail={"code": "API_KEY_REQUIRED", "message": "a valid X-API-Key header is required"},
+                headers={"WWW-Authenticate": "ApiKey"},
+            )
+
+    @app.get(f"{settings.api_prefix}/openapi.json", include_in_schema=False)
+    async def openapi_document(_: None = Depends(_require_openapi_key)) -> JSONResponse:
+        """Runtime OpenAPI document, gated by a dedicated API key in production."""
+        return JSONResponse(
+            app.openapi(),
+            headers={"Cache-Control": "no-store, private", "X-Content-Type-Options": "nosniff"},
+        )
+
     install_error_handlers(app)
     app.add_middleware(RequestContextMiddleware)
     register_router(platform_ops.router)

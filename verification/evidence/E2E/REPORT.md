@@ -72,3 +72,15 @@ After a successful production deployment (run `40254816539`), a read-only GET sw
 - no writes performed on production
 
 Evidence: `verification/evidence/E2E/prod-read-smoke.json`.
+
+
+## OpenAPI/docs hardening
+
+The runtime OpenAPI document is no longer a public endpoint:
+
+- built-in FastAPI `/api/v1/openapi.json` and `/api/v1/docs` are disabled
+- a custom `/api/v1/openapi.json` route requires `X-API-Key` matching `OPENAPI_API_KEY`
+- production fails closed (503) if the key is not configured; wrong/missing key returns 401
+- successful spec responses carry `Cache-Control: no-store, private`
+- `/api/v1/docs` returns 404
+- deploy workflow refuses to run without a >=32-character `OPENAPI_API_KEY` in `.env.production`

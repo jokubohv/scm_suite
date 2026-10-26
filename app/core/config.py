@@ -43,6 +43,9 @@ class Settings(BaseSettings):
     # First-party account creation control. The bootstrap token is the only credential that can
     # create tenants/accounts directly through /api/v1/bootstrap/*; empty disables bootstrap.
     super_admin_token: str = ""
+    # Optional API key that gates the runtime OpenAPI document. If unset in production the document
+    # is unavailable (fail closed); in dev/test it remains available for tooling and tests.
+    openapi_api_key: str = ""
     # When true (recommended for production), the regular tenant-admin account/invitation and
     # tenant-provisioning routes also require the super-admin token, so no tenant admin can create
     # accounts without the operator token.

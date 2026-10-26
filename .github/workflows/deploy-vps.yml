@@ -117,6 +117,7 @@ jobs:
           ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && INVENTORY_IMAGE='$IMAGE' bash -s" <<'REMOTE'
           set -euo pipefail
           test -f .env.production || { echo "missing .env.production on VPS; see .env.production.example"; exit 1; }
+          grep -Eq '^OPENAPI_API_KEY=.{32,}' .env.production || { echo "missing/weak OPENAPI_API_KEY in .env.production (>=32 chars required)" >&2; exit 1; }
           if grep -q '^INVENTORY_IMAGE=' .env.production; then
             sed -i "s#^INVENTORY_IMAGE=.*#INVENTORY_IMAGE=$INVENTORY_IMAGE#" .env.production
           else
