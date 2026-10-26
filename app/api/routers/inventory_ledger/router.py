@@ -12,7 +12,8 @@ from fastapi import APIRouter, Depends, Header, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
-from app.api.schemas.common import ActionResult
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES, ActionResult
 from app.api.schemas.inventory import (
     AdjustmentCreate,
     AdjustmentOut,
@@ -78,7 +79,7 @@ from app.modules.inventory_ledger.documents import LedgerDocuments
 from app.modules.inventory_ledger.errors import IdempotencyKeyRequired, ledger_error
 from app.modules.inventory_ledger.service import LedgerService
 
-router = APIRouter(prefix="/api/v1", tags=["inventory-ledger"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["inventory-ledger"], route_class=SCMAPIRoute)
 
 TX_READ = "inventory.transaction.read"
 TX_POST = "inventory.transaction.post"

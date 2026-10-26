@@ -15,11 +15,13 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.manufacturing import ManufacturingResponse
 from app.modules.manufacturing.errors import ManufacturingError
 from app.modules.manufacturing.service import ManufacturingService
 
-router = APIRouter(prefix="/api/v1", tags=["manufacturing"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["manufacturing"], route_class=SCMAPIRoute)
 
 MFG_READ = "manufacturing.read"
 MFG_WRITE = "manufacturing.write"

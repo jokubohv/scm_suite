@@ -14,7 +14,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
-from app.api.schemas.common import ActionResult
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES, ActionResult
 from app.api.schemas.items import (
     AliasResolveOut,
     AvailabilitySettingsOut,
@@ -92,7 +93,7 @@ from app.core.security.idempotency import IdempotencyOutcome
 from app.modules.item_master.errors import IdempotencyKeyRequired, item_error
 from app.modules.item_master.service import ItemMasterService
 
-router = APIRouter(prefix="/api/v1", tags=["item-master"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["item-master"], route_class=SCMAPIRoute)
 
 READ = "items.read"
 CREATE = "items.create"

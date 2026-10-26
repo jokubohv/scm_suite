@@ -16,6 +16,8 @@ from fastapi import APIRouter, Body, Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.wms import (
     BinBlockCreate,
     BinBlockOut,
@@ -129,7 +131,7 @@ from app.api.schemas.wms import (
 from app.modules.wms.errors import WmsError
 from app.modules.wms.service import WmsService
 
-router = APIRouter(prefix="/api/v1", tags=["wms"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["wms"], route_class=SCMAPIRoute)
 
 WMS_READ = "wms.read"
 WMS_SETUP = "wms.setup.write"

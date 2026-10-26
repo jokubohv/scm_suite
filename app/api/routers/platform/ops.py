@@ -7,10 +7,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Query
 
 from app.api.deps import DbDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.repositories import ops
 
-router = APIRouter(tags=["platform-ops"])
+router = APIRouter(responses=PROBLEM_RESPONSES, tags=["platform-ops"], route_class=SCMAPIRoute)
 
 AuditReader = Annotated[
     object,

@@ -17,13 +17,22 @@ from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
-from app.api.schemas.traceability import TraceabilityRequest, TraceabilityResponse
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
+from app.api.schemas.traceability import (
+    InventoryStatusCreate,
+    InventoryStatusUpdate,
+    LocationCreate,
+    LocationUpdate,
+    TraceabilityRequest,
+    TraceabilityResponse,
+)
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.traceability.errors import TraceabilityError
 from app.modules.traceability.service import TraceabilityService
 
-router = APIRouter(prefix="/api/v1", tags=["traceability"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["traceability"], route_class=SCMAPIRoute)
 
 LOCATION_READ = "inventory.location.read"
 LOCATION_MANAGE = "inventory.location.manage"
@@ -249,7 +258,7 @@ async def _run_write(
 
 @router.post("/locations", status_code=201, dependencies=[Depends(require_scope(LOCATION_MANAGE))], response_model=TraceabilityResponse)
 async def create_location(
-    body: TraceabilityRequest,
+    body: LocationCreate,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
@@ -318,7 +327,7 @@ async def get_location(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) 
 
 @router.patch("/locations/{id}", dependencies=[Depends(require_scope(LOCATION_MANAGE))], response_model=TraceabilityResponse)
 async def patch_location(
-    id: str, body: TraceabilityRequest, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: LocationUpdate, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
     body = body.model_dump(exclude_unset=True)
     del gate
@@ -748,7 +757,7 @@ async def inactivate_bin(
 
 @router.post("/inventory-statuses", status_code=201, dependencies=[Depends(require_scope(STATUS_MANAGE))], response_model=TraceabilityResponse)
 async def create_status(
-    body: TraceabilityRequest,
+    body: InventoryStatusCreate,
     db: DbDep,
     principal: PrincipalDep,
     response: Response,
@@ -802,7 +811,7 @@ async def get_status(id: str, db: DbDep, principal: PrincipalDep, gate: Gate) ->
 
 @router.patch("/inventory-statuses/{id}", dependencies=[Depends(require_scope(STATUS_MANAGE))], response_model=TraceabilityResponse)
 async def patch_status(
-    id: str, body: TraceabilityRequest, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
+    id: str, body: InventoryStatusUpdate, db: DbDep, principal: PrincipalDep, gate: Gate, if_match: IfMatch = None
 ) -> dict[str, Any]:
     body = body.model_dump(exclude_unset=True)
     del gate

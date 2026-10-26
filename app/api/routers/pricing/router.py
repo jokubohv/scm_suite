@@ -20,13 +20,15 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
 from app.api.schemas import pricing as pricing_dto
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.pricing import tables as t
 from app.modules.pricing.service import PricingService, PricingServiceError
 
-router = APIRouter(prefix="/api/v1", tags=["pricing"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["pricing"], route_class=SCMAPIRoute)
 
 PRICING_READ = "pricing.read"
 LEVEL_MANAGE = "pricing.level.manage"

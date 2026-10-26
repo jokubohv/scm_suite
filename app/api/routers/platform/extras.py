@@ -31,6 +31,8 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, R
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_account_creation_authority, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.custom_fields import CustomFieldError
 from app.core.repositories.platform_extras import (
@@ -39,7 +41,7 @@ from app.core.repositories.platform_extras import (
     parse_version,
 )
 
-router = APIRouter(prefix="/api/v1", tags=["platform-extras"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["platform-extras"], route_class=SCMAPIRoute)
 
 TENANT_ADMIN = "platform.tenant.manage"
 CUSTOM_FIELD_READ = "platform.customfield.read"

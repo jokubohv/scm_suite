@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import ConfigDict
 
@@ -50,3 +50,53 @@ class TraceabilityRequest(APIModel):
 
 
 __all__ = ["TraceabilityRequest", "TraceabilityResponse"]
+
+
+class LocationCreate(APIModel):
+    code: str
+    name: str
+    location_type: Literal["WAREHOUSE", "STORE", "RECEIVING", "TRANSIT", "CONSUMPTION"]
+    parent_id: str | None = None
+    address: dict | None = None
+    subsidiary_ref: str | None = None
+    timezone: str | None = None
+    is_bins_enabled: bool = False
+    is_statuses_enabled: bool = False
+    is_consignment_allowed: bool = False
+    allow_commit_from_non_available: bool = False
+
+
+class LocationUpdate(APIModel):
+    name: str | None = None
+    code: str | None = None
+    location_type: str | None = None
+    is_unallocated: bool | None = None
+    parent_id: str | None = None
+    address: dict | None = None
+    subsidiary_ref: str | None = None
+    timezone: str | None = None
+    is_bins_enabled: bool | None = None
+    is_statuses_enabled: bool | None = None
+    is_consignment_allowed: bool | None = None
+    allow_commit_from_non_available: bool | None = None
+
+
+class InventoryStatusCreate(APIModel):
+    code: str
+    name: str
+    is_available_for_allocation: bool = True
+    is_committable: bool = True
+    is_sellable: bool = True
+    is_consigned: bool = False
+    is_default: bool = False
+    is_active: bool = True
+
+
+class InventoryStatusUpdate(APIModel):
+    name: str | None = None
+    is_available_for_allocation: bool | None = None
+    is_committable: bool | None = None
+    is_sellable: bool | None = None
+    is_consigned: bool | None = None
+    is_default: bool | None = None
+    is_active: bool | None = None

@@ -23,6 +23,8 @@ from pydantic import BaseModel, Field
 from sqlalchemy import insert, select
 
 from app.api.deps import DbDep, PrincipalDep, require_account_creation_authority, require_scope, scope_registry
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.models import platform as p
 from app.core.platform_events import emit_platform_event, sod_blocked
@@ -40,7 +42,7 @@ from app.core.security.scopes import (
     SodContext,
 )
 
-router = APIRouter(prefix="/api/v1", tags=["platform-rbac"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["platform-rbac"], route_class=SCMAPIRoute)
 
 ROLE_ADMIN = "platform.role.manage"
 USER_ADMIN = "platform.users.manage"

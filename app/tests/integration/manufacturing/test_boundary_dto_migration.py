@@ -63,4 +63,4 @@ def test_dict_request_bodies_are_named_components() -> None:
         schema = openapi["paths"][path]["post"]["requestBody"]["content"]["application/json"]["schema"]
         assert schema["$ref"].endswith("/QualityRequest")
     schema = openapi["paths"]["/api/v1/locations"]["post"]["requestBody"]["content"]["application/json"]["schema"]
-    assert schema["$ref"].endswith("/TraceabilityRequest")
+    assert schema["$ref"].endswith("/LocationCreate")

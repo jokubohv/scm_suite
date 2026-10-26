@@ -13,7 +13,9 @@ from typing import Annotated, Any, NoReturn
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
 from app.api.schemas import reporting as reporting_dto
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.modules.reporting.catalogue import (
     ENDPOINTS,
     REPORT_ALIASES,
@@ -23,7 +25,7 @@ from app.modules.reporting.catalogue import (
 )
 from app.modules.reporting.service import ReportingError, ReportService
 
-router = APIRouter(prefix="/api/v1", tags=["reporting"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["reporting"], route_class=SCMAPIRoute)
 
 
 def _raise(exc: Exception) -> NoReturn:
@@ -426,7 +428,7 @@ async def available_to_build(
     return await _page(service, "v_available_to_build", locals(), cursor, limit, fields)
 
 
-@router.get("/reports/{report}/export", dependencies=[Depends(require_scope(REPORT_EXPORT))])
+@router.get("/reports/{report}/export", response_class=Response, response_model=None, dependencies=[Depends(require_scope(REPORT_EXPORT))])
 async def export_report(
     report: str,
     service: ServiceDep,

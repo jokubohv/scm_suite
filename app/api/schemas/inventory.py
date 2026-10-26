@@ -80,7 +80,12 @@ class AdjustmentCreateLine(APIModel):
     unit_cost: Decimal | None = None
     bin_id: UUID | None = None
     lot_id: UUID | None = None
+    serial_id: UUID | None = None
     serial_ids: list[UUID] | None = None
+    uom_id: UUID | None = None
+    value_delta: Decimal | None = None
+    reason_code_id: UUID | None = None
+    memo: str | None = None
     ownership: str | None = None
 
 
@@ -88,6 +93,7 @@ class AdjustmentCreate(APIModel):
     transaction_date: date | None = None
     memo: str | None = None
     reason_code_id: UUID | None = None
+    adjustment_source: str | None = None
     document_number: str | None = None
     lines: list[AdjustmentCreateLine]
 
@@ -192,6 +198,17 @@ class LedgerActionOut(APIModel):
     posted_transaction_id: str | None = None
     reversal_transaction_id: str | None = None
     document_number: str | None = None
+    ledger_sequence: int | None = None
+    posting_at: datetime | None = None
+    transaction_type: str | None = None
+    source_doc_type: str | None = None
+    source_doc_id: UUID | None = None
+    total_qty_base: Decimal | None = None
+    total_value_base: Decimal | None = None
+    value_only: bool | None = None
+    event_ids: list[str] = Field(default_factory=list)
+    warnings: list[dict] = Field(default_factory=list)
+    replayed: bool | None = None
 
 
 # =====================================================================================
@@ -611,7 +628,7 @@ class CommitmentCreate(APIModel):
     qty: Decimal
     source_type: str | None = None
     source_ref: str | None = None
-    source_line_ref: str | None = None
+    source_line_ref: str
     external_ref: str | None = None
     expires_at: datetime | None = None
     priority: int | None = None

@@ -19,13 +19,15 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.traceability import TraceabilityResponse
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.traceability_numbered.errors import NumberedError
 from app.modules.traceability_numbered.service import NumberedService
 
-router = APIRouter(prefix="/api/v1", tags=["traceability-numbered"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["traceability-numbered"], route_class=SCMAPIRoute)
 
 LOT_READ = "inventory.lot.read"
 LOT_WRITE = "inventory.lot.write"

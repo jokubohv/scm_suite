@@ -16,9 +16,11 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends
 
 from app.api.deps import DbDep
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.core.repositories.rbac import RbacRepository
 
-router = APIRouter(prefix="/api/v1", tags=["self-service"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["self-service"], route_class=SCMAPIRoute)
 
 
 def _repo(db: DbDep) -> RbacRepository:

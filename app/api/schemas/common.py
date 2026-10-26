@@ -1,7 +1,10 @@
 """Shared FastAPI boundary models."""
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+from decimal import Decimal
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class APIModel(BaseModel):
@@ -38,3 +41,46 @@ class ActionResult(APIModel):
     approval_request_id: str | None = None
     transaction_id: str | None = None
     message: str | None = None
+    ledger_sequence: int | None = None
+    posting_at: datetime | None = None
+    transaction_type: str | None = None
+    source_doc_type: str | None = None
+    source_doc_id: str | None = None
+    total_qty_base: Decimal | None = None
+    total_value_base: Decimal | None = None
+    value_only: bool | None = None
+    event_ids: list[str] = Field(default_factory=list)
+    warnings: list[dict] = Field(default_factory=list)
+    replayed: bool | None = None
+    commitment_id: str | None = None
+    qty_committed: Decimal | None = None
+    qty_backordered: Decimal | None = None
+    released_qty: Decimal | None = None
+    auto_posted: bool | None = None
+    tolerance: dict | None = None
+    approval_definition_id: str | None = None
+
+
+class HealthOut(APIModel):
+    status: str
+    version: str | None = None
+    env: str | None = None
+
+
+class ReadyOut(APIModel):
+    status: str
+    checks: dict
+
+
+PROBLEM_RESPONSES: dict[int | str, dict] = {
+    code: {
+        "description": f"Error {code}",
+        "model": Problem,
+        "content": {
+            "application/problem+json": {
+                "schema": {"$ref": "#/components/schemas/Problem"},
+            }
+        },
+    }
+    for code in (400, 401, 403, 404, 409, 412, 422, 500, 503)
+}

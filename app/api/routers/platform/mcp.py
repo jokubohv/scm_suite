@@ -25,9 +25,11 @@ from fastapi.responses import JSONResponse
 
 from app import __version__
 from app.api.deps import require_api_key_auth
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import JSONRPCRequest, PlatformObject
 
-router = APIRouter(prefix="/api/v1/mcp", tags=["mcp"])
+router = APIRouter(prefix="/api/v1/mcp", responses=PROBLEM_RESPONSES, tags=["mcp"], route_class=SCMAPIRoute)
 
 PROTOCOL_VERSION = "2025-03-26"
 SERVER_NAME = "scm-inventory-mcp"

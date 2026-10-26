@@ -32,6 +32,8 @@ from fastapi import APIRouter, Depends, Header, Query, Request, Response
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, Principal, PrincipalDep, scope_registry, token_service
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.core.platform_events import SYSTEM_TENANT_ID, emit_platform_event
 from app.core.repositories.auth import (
     AuthRepository,
@@ -54,7 +56,7 @@ from app.core.security.passwords import PasswordService
 from app.core.security.scopes import ScopeRegistry
 from app.core.security.tokens import TokenPair, TokenService, constant_time_compare
 
-router = APIRouter(tags=["auth"])
+router = APIRouter(responses=PROBLEM_RESPONSES, tags=["auth"], route_class=SCMAPIRoute)
 
 
 def utc_now() -> datetime:

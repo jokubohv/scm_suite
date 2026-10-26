@@ -16,13 +16,15 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from sqlalchemy import select
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.quality import QualityRequest, QualityResponse
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.quality.errors import QualityError
 from app.modules.quality.service import QualityService
 
-router = APIRouter(prefix="/api/v1", tags=["quality"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["quality"], route_class=SCMAPIRoute)
 
 QUALITY_READ = "quality.read"
 QUALITY_SPEC_WRITE = "quality.spec.write"

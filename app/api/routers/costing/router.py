@@ -19,14 +19,16 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
 from app.api.schemas import costing as costing_dto
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.contracts.costing import schemas as contracts
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.models import platform as platform_models
 from app.modules.costing.errors import CostingError
 from app.modules.costing.service import CostingService
 
-router = APIRouter(prefix="/api/v1", tags=["costing"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["costing"], route_class=SCMAPIRoute)
 
 COST_READ = "costing.cost.read"
 COST_MANAGE = "costing.cost.manage"

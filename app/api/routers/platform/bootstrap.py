@@ -22,6 +22,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select, text
 
 from app.api.deps import DbDep, require_super_admin
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.config import get_settings
 from app.core.models import platform as p
@@ -30,7 +32,7 @@ from app.core.repositories.platform_admin import PlatformAdminRepository
 from app.core.security.passwords import InvalidCredentials, PasswordService
 from app.seed.permissions import load_permissions
 
-router = APIRouter(prefix="/api/v1/bootstrap", tags=["platform-bootstrap"])
+router = APIRouter(prefix="/api/v1/bootstrap", responses=PROBLEM_RESPONSES, tags=["platform-bootstrap"], route_class=SCMAPIRoute)
 IdempotencyKey = Annotated[str | None, Header(alias="Idempotency-Key")]
 
 

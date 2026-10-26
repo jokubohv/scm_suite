@@ -17,6 +17,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.replenishment import (
     AllocationExceptionPage,
     AllocationResultPage,
@@ -75,7 +77,7 @@ from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.modules.replenishment.engine import PlanningError
 from app.modules.replenishment.service import PlanningService
 
-router = APIRouter(prefix="/api/v1", tags=["replenishment"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["replenishment"], route_class=SCMAPIRoute)
 
 READ = "replenishment.read"
 WRITE = "replenishment.write"

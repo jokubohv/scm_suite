@@ -8,10 +8,12 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, Header
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
 from app.api.schemas import consigned as consigned_dto
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.modules.consigned.service import ConsignedService
 
-router = APIRouter(prefix="/api/v1", tags=["consigned"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["consigned"], route_class=SCMAPIRoute)
 
 READ = "consigned.read"
 AGREEMENT_WRITE = "consigned.agreement.write"

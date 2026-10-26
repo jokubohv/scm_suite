@@ -16,7 +16,6 @@ from app.api.deps import authenticate_api_key, reject_empty_create_body
 from app.api.errors import install_error_handlers
 from app.api.middleware import RequestContextMiddleware
 from app.api.registry import include_routers, register_router
-from app.api.response_schemas import apply_contract_metadata
 from app.api.routers.consigned import router as consigned_router
 from app.api.routers.costing import router as costing_router
 from app.api.routers.counts import router as counts_router
@@ -48,6 +47,8 @@ from app.api.routers.reporting.router import router as reporting_router
 from app.api.routers.traceability import router as traceability_router
 from app.api.routers.traceability_numbered import router as traceability_numbered_router
 from app.api.routers.wms import router as wms_router
+from app.api.schemas.common import PROBLEM_RESPONSES, HealthOut, ReadyOut
+from app.api.security_metadata import apply_security_schemes
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 
@@ -151,11 +152,11 @@ def create_app() -> FastAPI:
     register_router(reporting_router)
     include_routers(app)
 
-    @app.get("/healthz", tags=["platform"])
+    @app.get("/healthz", tags=["platform"], response_model=HealthOut, responses=PROBLEM_RESPONSES, openapi_extra={"security": []})
     async def healthz() -> dict[str, str]:
         return {"status": "ok", "version": __version__, "env": settings.env}
 
-    @app.get("/readyz", tags=["platform"])
+    @app.get("/readyz", tags=["platform"], response_model=ReadyOut, responses=PROBLEM_RESPONSES, openapi_extra={"security": []})
     async def readyz(response: Response) -> dict[str, object]:
         """Readiness probe: real dependency checks (DB + migration head, Redis)."""
 
@@ -193,15 +194,15 @@ def create_app() -> FastAPI:
     # contract (and therefore MCP tool input schemas) carries the real fields/types/enums.
     original_openapi = app.openapi
 
-    def _openapi_with_request_schemas() -> dict[str, Any]:
+    def _openapi_with_security_schemes() -> dict[str, Any]:
         if app.openapi_schema:
             return app.openapi_schema
         schema = original_openapi()
-        apply_contract_metadata(schema)
+        apply_security_schemes(schema)
         app.openapi_schema = schema
         return schema
 
-    app.openapi = _openapi_with_request_schemas  # type: ignore[method-assign]
+    app.openapi = _openapi_with_security_schemes  # type: ignore[method-assign]
     return app
 
 

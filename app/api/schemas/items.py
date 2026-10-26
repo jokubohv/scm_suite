@@ -93,13 +93,25 @@ class ItemOut(ItemSummaryOut):
     custom_fields: list[dict] = Field(default_factory=list)
 
 
+class ItemUomCreate(APIModel):
+    uom_id: UUID
+    role: str
+    is_default_for_role: bool | None = None
+    conversion_override: Decimal | None = None
+
+
 class ItemCreate(APIModel):
     item_number: str
-    display_name: str
-    item_type_code: str
+    display_name: str | None = None
+    item_type_code: str | None = None
     description: str | None = None
+    units_type_id: UUID | None = None
     base_uom_id: UUID | None = None
     item_category_id: UUID | None = None
+    upc_code: str | None = None
+    external_ref: str | None = None
+    created_from: str | None = None
+    uoms: list[ItemUomCreate] = Field(default_factory=list)
     inventory: ItemInventoryOut | dict | None = None
     purchasing: dict | None = None
     sales: dict | None = None
@@ -110,12 +122,9 @@ class ItemCreate(APIModel):
 class ItemUpdate(APIModel):
     display_name: str | None = None
     description: str | None = None
-    base_uom_id: UUID | None = None
     item_category_id: UUID | None = None
-    inventory: ItemInventoryOut | dict | None = None
-    purchasing: dict | None = None
-    sales: dict | None = None
-    accounting: dict | None = None
+    upc_code: str | None = None
+    external_ref: str | None = None
     custom_fields: dict | None = None
 
 
@@ -479,7 +488,7 @@ class ItemCategoryMove(APIModel):
 
 
 class UomCreate(APIModel):
-    uom_type_id: UUID | None = None
+    uom_type_id: UUID
     code: str
     name: str | None = None
     conversion_factor: Decimal | None = None

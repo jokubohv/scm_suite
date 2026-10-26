@@ -8,10 +8,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.repositories import approvals
 
-router = APIRouter(tags=["platform-approvals"])
+router = APIRouter(responses=PROBLEM_RESPONSES, tags=["platform-approvals"], route_class=SCMAPIRoute)
 
 DefinitionManager = Annotated[object, Depends(require_scope("platform.approval.definition.manage"))]
 ApprovalActor = Annotated[object, Depends(require_scope("platform.approval.act"))]

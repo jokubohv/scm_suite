@@ -37,6 +37,8 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from pydantic import AliasChoices, BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.repositories.artifacts import (
     DEFAULT_PAGE_LIMIT,
@@ -50,7 +52,7 @@ from app.core.repositories.artifacts import (
     serialize_journal_intent,
 )
 
-router = APIRouter(prefix="/api/v1", tags=["platform-artifacts"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["platform-artifacts"], route_class=SCMAPIRoute)
 
 # Capability scopes — all catalogued in design/permissions.json (never invent a scope string).
 ATTACHMENT_MANAGE = "platform.attachment.manage"

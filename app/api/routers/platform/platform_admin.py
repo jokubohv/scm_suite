@@ -29,6 +29,8 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, Principal, PrincipalDep, require_account_creation_authority, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.repositories.platform_admin import (
     DEFAULT_LIST_LIMIT,
@@ -47,7 +49,7 @@ from app.core.repositories.platform_admin import (
 from app.core.security.errors import PlatformAdminRequired
 from app.core.security.tenant_context import PLATFORM_TENANT_ADMIN_SCOPE, SYSTEM_TENANT_ID
 
-router = APIRouter(prefix="/api/v1", tags=["platform-admin"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["platform-admin"], route_class=SCMAPIRoute)
 
 _ENDPOINT_CREATE = "platform-admin:tenants:create"
 _ENDPOINT_SUSPEND = "platform-admin:tenants:suspend"

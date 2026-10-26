@@ -34,6 +34,8 @@ from fastapi import APIRouter, Body, Depends, Header, HTTPException, Query, Resp
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.core.platform_events import emit_platform_event
@@ -54,7 +56,7 @@ from app.core.repositories.boundary import (
     upsert_exchange_rates,
 )
 
-router = APIRouter(prefix="/api/v1", tags=["platform-boundary"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["platform-boundary"], route_class=SCMAPIRoute)
 
 # Capability scopes — all catalogued in design/permissions.json (never invent a scope string).
 INVENTORY_BALANCE_READ = "inventory.balance.read"

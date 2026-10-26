@@ -21,6 +21,8 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 
 from app.api.deps import DbDep, PrincipalDep, SettingsDep, require_scope, scope_registry
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.config import Settings
 from app.core.idempotency_store import build_fingerprint, complete, guard
@@ -31,7 +33,7 @@ from app.core.repositories.api_keys import (
 )
 from app.core.security.tokens import ApiKeyHasher
 
-router = APIRouter(prefix="/api/v1", tags=["platform-api-keys"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["platform-api-keys"], route_class=SCMAPIRoute)
 
 API_KEY_ADMIN = "platform.admin"
 

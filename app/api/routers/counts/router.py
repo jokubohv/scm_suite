@@ -16,13 +16,26 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
-from app.api.schemas.counts import CountActionOut, CountCreateOut, CountOut, CountPage
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
+from app.api.schemas.counts import (
+    CountActionOut,
+    CountCreateOut,
+    CountLinePage,
+    CountNextOut,
+    CountOut,
+    CountPage,
+    CountPlanOut,
+    CountPlanPage,
+    CountSnapshotOut,
+    CountVarianceOut,
+)
 from app.contracts.counts import schemas
 from app.core.idempotency_store import IdempotencyStore, build_fingerprint
 from app.modules.counts.errors import CountsError
 from app.modules.counts.service import CountsService
 
-router = APIRouter(prefix="/api/v1", tags=["counts"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["counts"], route_class=SCMAPIRoute)
 
 COUNT_READ = "inventory.count.read"
 COUNT_CREATE = "inventory.count.create"
@@ -123,7 +136,7 @@ Recounter = Annotated[object, Depends(require_scope(COUNT_RECOUNT))]
 
 
 # ---------------------------------------------------------------------------- plans ----------
-@router.get("/count-plans", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/count-plans", response_model=CountPlanPage, dependencies=[Depends(require_scope(COUNT_READ))])
 async def list_plans(
     db: DbDep, principal: PrincipalDep, _: Read, status: str | None = None, frequency: str | None = None,
     next_run_before: date | None = None, limit: int = 100,
@@ -134,7 +147,7 @@ async def list_plans(
     )
 
 
-@router.post("/count-plans", status_code=201, dependencies=[Depends(require_scope(COUNT_PLAN))])
+@router.post("/count-plans", status_code=201, response_model=CountPlanOut, dependencies=[Depends(require_scope(COUNT_PLAN))])
 async def create_plan(
     body: schemas.CountPlanCreate, db: DbDep, principal: PrincipalDep, response: Response,
     idempotency_key: IdempotencyKey,
@@ -152,7 +165,7 @@ async def create_plan(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=201, body=row, resource_id=row["id"])
 
 
-@router.get("/count-plans/{plan_id}", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/count-plans/{plan_id}", response_model=CountPlanOut, dependencies=[Depends(require_scope(COUNT_READ))])
 async def get_plan(plan_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         return await _service(db, principal).get_plan(plan_id)
@@ -160,7 +173,7 @@ async def get_plan(plan_id: str, db: DbDep, principal: PrincipalDep, _: Read) ->
         _raise(exc)
 
 
-@router.patch("/count-plans/{plan_id}", dependencies=[Depends(require_scope(COUNT_PLAN))])
+@router.patch("/count-plans/{plan_id}", response_model=CountPlanOut, dependencies=[Depends(require_scope(COUNT_PLAN))])
 async def update_plan(
     plan_id: str, body: schemas.CountPlanUpdate, db: DbDep, principal: PrincipalDep,
     response: Response, idempotency_key: IdempotencyKey,
@@ -207,11 +220,11 @@ def _plan_action(action: str) -> Any:
 for _action, _scope in (("pause", COUNT_PLAN), ("resume", COUNT_PLAN), ("archive", COUNT_PLAN)):
     router.add_api_route(
         f"/count-plans/{{plan_id}}/{_action}", _plan_action(_action), methods=["POST"], status_code=200,
-        dependencies=[Depends(require_scope(_scope))],
+        response_model=CountPlanOut, dependencies=[Depends(require_scope(_scope))],
     )
 
 
-@router.post("/count-plans/{plan_id}/generate", status_code=201, dependencies=[Depends(require_scope(COUNT_CREATE))])
+@router.post("/count-plans/{plan_id}/generate", status_code=201, response_model=CountCreateOut, dependencies=[Depends(require_scope(COUNT_CREATE))])
 async def generate_from_plan(
     plan_id: str, body: schemas.GenerateCountIn, db: DbDep, principal: PrincipalDep, response: Response,
     idempotency_key: IdempotencyKey,
@@ -287,7 +300,7 @@ async def start_count(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.get("/inventory-counts/{count_id}/lines", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/inventory-counts/{count_id}/lines", response_model=CountLinePage, response_model_exclude_none=True, dependencies=[Depends(require_scope(COUNT_READ))])
 async def list_lines(
     count_id: str, db: DbDep, principal: PrincipalDep, _: Read, count_status: str | None = None,
     item_id: str | None = None, bin_id: str | None = None, limit: int = 500,
@@ -300,7 +313,7 @@ async def list_lines(
         _raise(exc)
 
 
-@router.post("/inventory-counts/{count_id}/lines", dependencies=[Depends(require_scope(COUNT_CAPTURE))])
+@router.post("/inventory-counts/{count_id}/lines", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_CAPTURE))])
 async def capture_lines(
     count_id: str, body: schemas.CaptureLinesIn, db: DbDep, principal: PrincipalDep, response: Response,
     idempotency_key: IdempotencyKey,
@@ -319,7 +332,7 @@ async def capture_lines(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.post("/inventory-counts/{count_id}/recount", dependencies=[Depends(require_scope(COUNT_RECOUNT))])
+@router.post("/inventory-counts/{count_id}/recount", response_model=CountActionOut, dependencies=[Depends(require_scope(COUNT_RECOUNT))])
 async def recount(
     count_id: str, body: schemas.RecountIn, db: DbDep, principal: PrincipalDep, response: Response,
     idempotency_key: IdempotencyKey,
@@ -428,7 +441,7 @@ async def post_variance(
     return await _finish(store, principal=principal, endpoint_id=endpoint, key=idempotency_key, status=200, body=row, resource_id=count_id)
 
 
-@router.get("/inventory-counts/{count_id}/snapshot", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/inventory-counts/{count_id}/snapshot", response_model=CountSnapshotOut, dependencies=[Depends(require_scope(COUNT_READ))])
 async def snapshot(count_id: str, db: DbDep, principal: PrincipalDep, _: Read, revision: int | None = None) -> dict[str, Any]:
     try:
         return await _service(db, principal).snapshot(count_id, revision=revision)
@@ -436,7 +449,7 @@ async def snapshot(count_id: str, db: DbDep, principal: PrincipalDep, _: Read, r
         _raise(exc)
 
 
-@router.get("/inventory-counts/{count_id}/variance", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/inventory-counts/{count_id}/variance", response_model=CountVarianceOut, dependencies=[Depends(require_scope(COUNT_READ))])
 async def variance(count_id: str, db: DbDep, principal: PrincipalDep, _: Read) -> dict[str, Any]:
     try:
         return await _service(db, principal).variance_preview(count_id)
@@ -444,7 +457,7 @@ async def variance(count_id: str, db: DbDep, principal: PrincipalDep, _: Read) -
         _raise(exc)
 
 
-@router.get("/items/{item_id}/next-count", dependencies=[Depends(require_scope(COUNT_READ))])
+@router.get("/items/{item_id}/next-count", response_model=CountNextOut, dependencies=[Depends(require_scope(COUNT_READ))])
 async def next_count(
     item_id: str, db: DbDep, principal: PrincipalDep, _: Read, location_id: str | None = None
 ) -> dict[str, Any]:
@@ -523,6 +536,7 @@ def _register_canonical_aliases() -> None:
             alias,
             methods=[method],
             status_code=int(getattr(alias_route, "status_code", None) or 200),
+            response_model=getattr(alias_route, "response_model", None),
             dependencies=[Depends(require_scope(ROUTE_SCOPES[(method, implementation_path)]))],
         )
         ROUTE_SCOPES[(method, "/api/v1" + relative_path)] = ROUTE_SCOPES[(method, implementation_path)]

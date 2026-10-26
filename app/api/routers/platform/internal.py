@@ -28,6 +28,8 @@ from app.api.routers.platform.boundary import (
     _http_error,
     get_adapter,
 )
+from app.api.routing import SCMAPIRoute
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.api.schemas.platform import PlatformObject
 from app.core.models import platform as p
 from app.core.platform_events import emit_platform_event
@@ -39,7 +41,7 @@ from app.core.repositories.boundary import (
     upsert_exchange_rates,
 )
 
-router = APIRouter(tags=["platform-internal"])
+router = APIRouter(responses=PROBLEM_RESPONSES, tags=["platform-internal"], route_class=SCMAPIRoute)
 
 PLATFORM_INTERNAL = "platform.internal"
 PLATFORM_FINANCE_SYNC = "platform.finance.sync"

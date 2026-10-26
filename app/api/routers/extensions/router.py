@@ -8,10 +8,12 @@ from typing import Annotated, Any
 from fastapi import APIRouter, Depends, Header
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
 from app.api.schemas import extensions as extensions_dto
+from app.api.schemas.common import PROBLEM_RESPONSES
 from app.modules.extensions.service import ExtensionService
 
-router = APIRouter(prefix="/api/v1", tags=["extensions"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["extensions"], route_class=SCMAPIRoute)
 
 READ = "extensions.read"
 WARRANTY = "extensions.warranty.write"

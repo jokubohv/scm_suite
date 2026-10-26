@@ -19,8 +19,9 @@ from fastapi import APIRouter, Body, Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
+from app.api.routing import SCMAPIRoute
 from app.api.schemas import procurement as procurement_dto
-from app.api.schemas.common import ActionResult
+from app.api.schemas.common import PROBLEM_RESPONSES, ActionResult
 from app.api.schemas.procurement import (
     PurchaseOrderCreate,
     PurchaseOrderOut,
@@ -44,7 +45,7 @@ from app.core.security.errors import ForbiddenScope
 from app.modules.procurement.errors import ProcurementError
 from app.modules.procurement.service import ProcurementService
 
-router = APIRouter(prefix="/api/v1", tags=["procurement"])
+router = APIRouter(prefix="/api/v1", responses=PROBLEM_RESPONSES, tags=["procurement"], route_class=SCMAPIRoute)
 
 VENDOR_READ = "procurement.vendor.read"
 VENDOR_WRITE = "procurement.vendor.write"

@@ -103,6 +103,15 @@ class ReceiptPage(Page[ReceiptSummaryOut]):
     pass
 
 
+class ReceiptDetailIn(APIModel):
+    qty_received: Decimal | None = None
+    bin_id: UUID | None = None
+    lot_id: UUID | None = None
+    serial_id: UUID | None = None
+    inventory_status_id: UUID | None = None
+    ownership: str | None = None
+
+
 class ReceiptCreateLine(APIModel):
     purchase_order_line_id: UUID | None = None
     item_id: UUID
@@ -114,7 +123,7 @@ class ReceiptCreateLine(APIModel):
     lot_id: UUID | None = None
     serial_ids: list[UUID] | None = None
     ownership: str | None = None
-    details: list[dict] | None = None
+    details: list[ReceiptDetailIn] | None = None
 
 
 class ReceiptCreate(APIModel):
@@ -177,7 +186,7 @@ class VendorPage(Page[VendorOut]):
 
 class VendorCreate(APIModel):
     name: str
-    vendor_number: str | None = None
+    vendor_number: str
     vendor_category_id: UUID | None = None
     currency_code: str | None = None
     payment_terms: str | None = None
