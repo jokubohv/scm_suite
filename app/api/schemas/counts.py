@@ -124,6 +124,7 @@ class CountPlanOut(APIModel):
     name: str
     frequency: str
     next_run_date: date | None = None
+    next_count_date: date | None = None
     last_run_at: datetime | None = None
     status: str
     blind_count: bool | None = None
@@ -156,6 +157,7 @@ class CountSnapshotOut(APIModel):
     status: str | None = None
     scope: CountScopeOut | None = None
     lines: list[CountLineOut] = Field(default_factory=list)
+    items: list[dict] = Field(default_factory=list)
     count: int | None = None
     revision_count: int | None = None
 
@@ -165,6 +167,8 @@ class CountVarianceOut(APIModel):
     count_number: str | None = None
     items: list[dict] = Field(default_factory=list)
     lines: list[CountLineOut] = Field(default_factory=list)
+    totals: dict | None = None
+    blind: bool | None = None
     total_variance_qty: Decimal | None = None
     total_variance_value: Decimal | None = None
     tolerance: dict | None = None

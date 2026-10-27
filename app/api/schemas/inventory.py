@@ -207,7 +207,7 @@ class LedgerActionOut(APIModel):
     total_value_base: Decimal | None = None
     value_only: bool | None = None
     event_ids: list[str] = Field(default_factory=list)
-    warnings: list[dict] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
     replayed: bool | None = None
 
 

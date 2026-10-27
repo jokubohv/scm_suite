@@ -284,8 +284,7 @@
           },
           "warnings": {
             "items": {
-              "additionalProperties": true,
-              "type": "object"
+              "type": "string"
             },
             "title": "Warnings",
             "type": "array"
@@ -29012,6 +29011,18 @@
             "title": "Name",
             "type": "string"
           },
+          "next_count_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Count Date"
+          },
           "next_run_date": {
             "anyOf": [
               {
@@ -29389,6 +29400,14 @@
             ],
             "title": "Id"
           },
+          "items": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Items",
+            "type": "array"
+          },
           "lines": {
             "items": {
               "$ref": "#/components/schemas/CountLineOut"
@@ -29468,6 +29487,17 @@
             ],
             "title": "Approval Required"
           },
+          "blind": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blind"
+          },
           "count_id": {
             "anyOf": [
               {
@@ -29541,6 +29571,18 @@
               }
             ],
             "title": "Total Variance Value"
+          },
+          "totals": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totals"
           }
         },
         "title": "CountVarianceOut",
@@ -60931,8 +60973,7 @@
           },
           "warnings": {
             "items": {
-              "additionalProperties": true,
-              "type": "object"
+              "type": "string"
             },
             "title": "Warnings",
             "type": "array"

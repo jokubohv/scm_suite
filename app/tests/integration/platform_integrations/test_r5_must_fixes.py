@@ -62,6 +62,12 @@ def test_mf3_write_result_fields() -> None:
     assert {"ledger_sequence", "posting_at", "total_qty_base", "total_value_base", "warnings", "replayed"} <= action
     ledger = set(spec["components"]["schemas"]["LedgerActionOut"]["properties"])
     assert {"ledger_sequence", "warnings", "replayed"} <= ledger
+    assert spec["components"]["schemas"]["ActionResult"]["properties"]["warnings"]["items"] == {"type": "string"}
+    assert spec["components"]["schemas"]["LedgerActionOut"]["properties"]["warnings"]["items"] == {"type": "string"}
+    variance = set(spec["components"]["schemas"]["CountVarianceOut"]["properties"])
+    assert {"totals", "blind"} <= variance
+    snapshot = set(spec["components"]["schemas"]["CountSnapshotOut"]["properties"])
+    assert "items" in snapshot
     count = set(spec["components"]["schemas"]["CountActionOut"]["properties"])
     assert {"tolerance", "approval_definition_id", "auto_posted"} <= count
 

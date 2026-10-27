@@ -190,8 +190,11 @@ async def test_variance_preview_and_next_count(client: Any) -> None:
     await _capture(client, count["count_id"], [{"line_id": lines[0]["id"], "counted_qty": "7"}])
     variance = await client.get(f"/api/v1/inventory-counts/{count['count_id']}/variance")
     assert variance.status_code == 200
-    row = variance.json()["items"][0]
+    variance_body = variance.json()
+    row = variance_body["items"][0]
     assert Decimal(row["variance_qty"]) == Decimal("-3")
+    assert variance_body["blind"] is False
+    assert {"variance_qty_total", "variance_qty_abs", "variance_value_base", "counted_lines"} <= set(variance_body["totals"])
     nxt = await client.get(f"/api/v1/items/{ITEM_A}/next-count")
     assert nxt.status_code == 200
     assert nxt.json()["interval_days"] >= 1 and nxt.json()["next_count_date"]

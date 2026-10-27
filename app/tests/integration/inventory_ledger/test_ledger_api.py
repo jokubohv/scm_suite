@@ -6,7 +6,7 @@ import uuid
 from decimal import Decimal
 
 import pytest
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from app.core.models.platform import outbox_event
 from app.tests.integration.inventory_ledger.conftest import seed_world
@@ -52,6 +52,23 @@ async def test_post_adjustment_updates_balances_and_events(ledger_client, world,
     assert Decimal(row["qty_on_hand"]) == Decimal("10") and Decimal(row["qty_available"]) == Decimal("10")
     events = (await db_session.execute(select(outbox_event.c.event_type).where(outbox_event.c.tenant_id == world["tenant_id"]))).scalars().all()
     assert "inventory.adjusted" in events and "inventory.balance.changed" in events
+
+
+async def test_negative_inventory_warn_policy_returns_string_warnings(ledger_client, world, db_session) -> None:
+    await db_session.execute(
+        text(
+            "INSERT INTO platform.tenant_setting (id, tenant_id, namespace, key, value) "
+            "VALUES (:id, :tenant_id, 'inventory', 'negative_inventory_policy', '\"WARN\"'::jsonb) "
+            "ON CONFLICT (tenant_id, namespace, key) DO UPDATE SET value = '\"WARN\"'::jsonb"
+        ),
+        {"id": str(uuid.uuid4()), "tenant_id": str(world["tenant_id"])},
+    )
+    await db_session.commit()
+    response = await _post(ledger_client, world, [_movement(world, "-1")], key="warn-policy-1")
+    assert response.status_code == 201, response.text
+    body = response.json()
+    assert body["warnings"] == ["NEGATIVE_INVENTORY_WARN_POLICY"]
+    assert all(isinstance(warning, str) for warning in body["warnings"])
 
 
 async def test_idempotent_retry_returns_same_transaction(ledger_client, world) -> None:
