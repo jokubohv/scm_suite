@@ -65,6 +65,16 @@ async def _capture(client: Any, count_id: str, lines: list[dict[str, Any]]) -> d
     return response.json()
 
 
+async def test_multiple_unposted_counts_are_allowed_per_tenant(client: Any) -> None:
+    """P1 runtime probe regression: NULLS NOT DISTINCT allowed only one unposted count per tenant."""
+    first = await _create_manual_count(client)
+    second = await _create_manual_count(client, blind=True)
+    assert first["count_id"] != second["count_id"]
+    counts = (await client.get("/api/v1/inventory-counts", params={"limit": 50})).json()
+    numbers = {row["id"] for row in counts["items"]}
+    assert {first["count_id"], second["count_id"]} <= numbers
+
+
 async def test_plan_crud_idempotency_and_generation(client: Any) -> None:
     plan = await _create_plan(client)
     assert plan["status"] == "ACTIVE"

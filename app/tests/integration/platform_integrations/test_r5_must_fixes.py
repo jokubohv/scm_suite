@@ -97,7 +97,10 @@ def test_mf6_location_and_status_dtos() -> None:
     assert {"code", "name", "location_type"} <= set(location["properties"])
     assert {"is_bins_enabled", "is_statuses_enabled", "is_consignment_allowed", "allow_commit_from_non_available"} <= set(location["properties"])
     update = _body(spec, "/api/v1/locations/{id}", "patch")
-    assert "code" in update["properties"]  # passes through to service immutable guard
+    # P1 residual: immutable identity fields are no longer published on PATCH (they were rejected by
+    # the service). LocationCreate keeps them.
+    assert {"code", "location_type", "is_unallocated"}.isdisjoint(update["properties"])
+    assert {"name", "parent_id", "is_bins_enabled"} <= set(update["properties"])
     status = _body(spec, "/api/v1/inventory-statuses", "post")
     assert {"is_available_for_allocation", "is_committable", "is_sellable", "is_consigned", "is_default"} <= set(status["properties"])
 

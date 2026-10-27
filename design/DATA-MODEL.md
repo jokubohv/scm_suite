@@ -963,7 +963,7 @@ One row per **feature-set slot** listing the tables it owns (liftable into `feat
 
 ### 21.1 Recommended migration order (single additive Alembic chain)
 
-Each row is one or more revisions; `expand` steps never drop/rename in prod (framework §6). Deferred FKs are added in the revision that owns the reference. Seed revisions are idempotent and run per tenant. Revision prefixes stay aligned to `design/feature-sets.json` (manifest authoritative for gates): M00 = `0001_platform_core`, `0002_platform_security`, `0003_platform_events`; **Δ-SSO's three tables are created inside the existing `0002_platform_security` revision — no new migration, FS-00 migration count stays 3, and later FS migrations keep their original numbers** (`0004_item_master` … `0030_rls_grants_verify`). **Δ-CFG/Δ-REUSE adds 7 tables + `assembly_unbuild_component` disposition columns inside the existing `0020_manufacturing_execution` revision — no new migration and no renumbering.**
+Each row is one or more revisions; `expand` steps never drop/rename in prod (framework §6). Deferred FKs are added in the revision that owns the reference. Seed revisions are idempotent and run per tenant. Revision prefixes stay aligned to `design/feature-sets.json` (manifest authoritative for gates): M00 = `0001_platform_core`, `0002_platform_security`, `0003_platform_events`; **Δ-SSO's three tables are created inside the existing `0002_platform_security` revision — no new migration, FS-00 migration count stays 3, and later FS migrations keep their original numbers** (`0004_item_master` … `0031_count_post_txn_idx`). **Δ-CFG/Δ-REUSE adds 7 tables + `assembly_unbuild_component` disposition columns inside the existing `0020_manufacturing_execution` revision — no new migration and no renumbering.**
 
 | Order | Revision prefix | Slots | Creates | Depends on (migrations) |
 |---|---|---|---|---|
@@ -982,7 +982,7 @@ Each row is one or more revisions; `expand` steps never drop/rename in prod (fra
 | M12 | `0026_quality` | FS-12 | quality specs/lines, inspection plans/lines/triggers/queues/inspections/results, COA | M11 |
 | M13 | `0027_consigned` | FS-13 | consignment agreements/items, ownership transfers/lines, consumption | M12 |
 | M14 | `0028_extensions` | FS-14 | item warranty, registrations/claims/actions/repair orders, customer parts, UPC registry | M13 |
-| M15 | `0029_reporting_views … 0030_rls_grants_verify` | FS-15 | reporting views/materialised views, final RLS/grants verification, deferred-FK orphan check | M14 |
+| M15 | `0029_reporting_views … 0031_count_post_txn_idx` | FS-15 | reporting views/materialised views, final RLS/grants verification, deferred-FK orphan check; fix (partial unique index) for multiple unposted counts | M14 |
 
 ### 21.2 Seed/reference data (idempotent, per tenant unless marked global)
 

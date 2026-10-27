@@ -15,7 +15,11 @@ Acceptance coverage:
 - R5 regression test asserts warning item schemas are strings and count variance/snapshot fields are published.
 
 Optional residuals also addressed:
-- `LocationUpdate` documents immutable `code`/`location_type`/`is_unallocated` so the service can reject mutation.
+- `LocationUpdate` immutable identity fields **removed from the PATCH DTO** (the service already rejects
+  mutation): `code`/`location_type`/`is_unallocated` are no longer published; the DTO forbids unknown
+  fields so older clients get a loud 422 instead of a silent no-op. `LocationCreate` keeps the full
+  create surface. **This is a contract change** — IntelRanch must re-generate/re-freeze its pinned
+  snapshot (do not claim the r7 freeze covers this revision).
 - `CountPlanOut.next_count_date` added.
 
 Verification: full suite, E2E and surface sweep run before deployment; runtime OpenAPI and contract artifacts regenerated. Deployment hash/time and live spec sha256 will be reported after deploy.

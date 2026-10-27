@@ -58,6 +58,9 @@ CURATED_BASES: tuple[str, ...] = (
     "/api/v1/rfqs",
     "/api/v1/vendor-contracts",
     "/api/v1/item-receipts",
+    "/api/v1/lots",
+    "/api/v1/fulfillments",
+    "/api/v1/inventory-transactions",
     "/api/v1/vendor-bills",
     "/api/v1/vendor-credits",
     "/api/v1/vendor-returns",
@@ -86,6 +89,13 @@ CURATED_BASES: tuple[str, ...] = (
     "/api/v1/allocation-runs",
     "/api/v1/reports",
 )
+
+#: Tools whose only "input" is the empty JSON object: they duplicate a plain list read that
+#: ``scm_api_request`` already covers, so they are not worth a curated entry (P1 residual cleanup).
+EMPTY_TOOL_EXCLUSIONS: frozenset[tuple[str, str]] = frozenset({
+    ("GET", "/api/v1/reports"),
+    ("GET", "/api/v1/work-centers"),
+})
 
 #: POST lifecycle suffixes worth exposing as named tools.
 ACTION_TAILS: frozenset[str] = frozenset({
@@ -317,6 +327,8 @@ def build_tool_registry(spec: dict[str, Any]) -> list[ToolSpec]:
         for method, operation in item.items():
             method_upper = method.upper()
             if method_upper not in {"GET", "POST", "PATCH", "DELETE"}:
+                continue
+            if (method_upper, path) in EMPTY_TOOL_EXCLUSIONS:
                 continue
             if shape == "collection" and method_upper not in {"GET", "POST"}:
                 continue

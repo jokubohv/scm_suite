@@ -177,9 +177,16 @@ inventory_count = mk(
     ],
     extra=[
         UniqueConstraint("tenant_id", "count_number", name="uq_inventory_count_number"),
-        UniqueConstraint(
-            "tenant_id", "posted_transaction_id", name="uq_inventory_count_posted_txn",
-            postgresql_nulls_not_distinct=True,
+        # Only POSTED counts have a transaction; multiple open/draft counts must coexist. A plain
+        # unique constraint with NULLS NOT DISTINCT allowed only one NULL row per tenant and made every
+        # count after the first fail with an unhandled 500 (P1 runtime probe). The partial unique index
+        # keeps the one-transaction-per-count link while allowing many unposted counts.
+        Index(
+            "uq_inventory_count_posted_txn",
+            "tenant_id",
+            "posted_transaction_id",
+            unique=True,
+            postgresql_where=text("posted_transaction_id IS NOT NULL"),
         ),
         CheckConstraint(f"count_type IN {COUNT_TYPES!r}".replace("'", "'"), name="ck_count_type"),
         CheckConstraint(f"status IN {COUNT_STATUSES!r}".replace("'", "'"), name="ck_inventory_count_status"),

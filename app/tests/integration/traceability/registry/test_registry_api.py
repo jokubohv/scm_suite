@@ -90,6 +90,27 @@ async def test_location_hierarchy_and_lifecycle(client: Any, db_session: Any) ->
     assert reactivate.status_code == 409
 
 
+async def test_location_update_rejects_immutable_identity_fields(client: Any) -> None:
+    """PATCH no longer accepts code/location_type/is_unallocated (contract residual fix)."""
+    warehouse = await create_location(client, code="WH-IMMUTABLE")
+    for field, value in (("code", "WH-CHANGED"), ("location_type", "STORE"), ("is_unallocated", True)):
+        response = await client.patch(
+            f"/api/v1/locations/{warehouse['id']}",
+            json={field: value},
+            headers={"If-Match": str(warehouse["version"])},
+        )
+        assert response.status_code == 422, (field, response.status_code, response.text)
+
+    renamed = await client.patch(
+        f"/api/v1/locations/{warehouse['id']}",
+        json={"name": "Renamed"},
+        headers={"If-Match": str(warehouse["version"])},
+    )
+    assert renamed.status_code == 200, renamed.text
+    assert renamed.json()["location"]["name"] == "Renamed"
+    assert renamed.json()["location"]["code"] == "WH-IMMUTABLE"
+
+
 async def test_sentinel_is_immutable(client: Any, seeded: dict[str, Any]) -> None:
     sentinel_id = seeded["sentinel"]["id"]
     patch = await client.patch(f"/api/v1/locations/{sentinel_id}", json={"name": "Renamed sentinel"})
