@@ -325,7 +325,19 @@ class LedgerDocuments:
             source=str(payload.get("adjustment_source") or "MANUAL"),
             actor=payload.get("actor_id"),
         )
-        for index, line in enumerate(payload.get("lines") or [], start=1):
+        expanded_lines: list[Mapping[str, Any]] = []
+        for line in payload.get("lines") or []:
+            serial_ids = list(line.get("serial_ids") or [])
+            if not serial_ids:
+                expanded_lines.append(line)
+                continue
+            qty = quantize(line.get("qty_delta"))
+            if Decimal(len(serial_ids)) != abs(qty):
+                raise ValidationFailed("adjustment qty_delta magnitude must equal the number of serial_ids")
+            sign = Decimal("1") if qty > 0 else Decimal("-1")
+            for serial_id in serial_ids:
+                expanded_lines.append({**dict(line), "serial_id": serial_id, "qty_delta": sign, "serial_ids": None})
+        for index, line in enumerate(expanded_lines, start=1):
             await self._exec(
                 "INSERT INTO inventory_ledger.inventory_adjustment_line (id, tenant_id, inventory_adjustment_id, line_number, item_id, location_id, inventory_status_id, ownership, bin_id, lot_id, serial_id, uom_id, qty_delta, unit_cost, value_delta, reason_code_id, memo, created_at, updated_at, version) "
                 "VALUES (:id, :tenant_id, :header, :line, :item, :location, :status, :ownership, :bin, :lot, :serial, :uom, :qty, :cost, :value, :reason, :memo, now(), now(), 1)",
@@ -650,6 +662,22 @@ class LedgerDocuments:
         for line in lines:
             qty = Decimal(str(line["qty"]))
             status = line["inventory_status_id"] or status_id
+            serial_ids = list(line.get("serial_ids") or [])
+            if serial_ids:
+                if qty != Decimal(len(serial_ids)):
+                    raise ValidationFailed("serialized transfer qty must equal the number of serial_ids")
+                out_details = [
+                    {"bin_id": line["bin_from_id"], "lot_id": line["lot_id"], "serial_id": serial_id,
+                     "inventory_status_id": status, "ownership": line["ownership"], "qty": "-1"}
+                    for serial_id in serial_ids
+                ]
+                in_details = [
+                    {"bin_id": line["bin_to_id"], "lot_id": line["lot_id"], "serial_id": serial_id,
+                     "inventory_status_id": status, "ownership": line["ownership"], "qty": "1"}
+                    for serial_id in serial_ids
+                ]
+            else:
+                out_details = in_details = None
             movements.append(
                 {
                     "item_id": line["item_id"],
@@ -661,6 +689,7 @@ class LedgerDocuments:
                     "qty": -qty,
                     "movement_type": "TRANSFER",
                     "source_line_ref": str(line["line_number"]),
+                    "details": out_details,
                 }
             )
             movements.append(
@@ -674,6 +703,7 @@ class LedgerDocuments:
                     "qty": qty,
                     "movement_type": "TRANSFER",
                     "source_line_ref": str(line["line_number"]),
+                    "details": in_details,
                 }
             )
         result = await self.ledger.post(
@@ -802,14 +832,30 @@ class LedgerDocuments:
             )
             if line is None:
                 raise ValidationFailed(f"transfer order line {line_number} not found")
+            serial_ids = list(line.get("serial_ids") or [])
+            if serial_ids:
+                if qty != Decimal(len(serial_ids)):
+                    raise ValidationFailed("serialized transfer-order qty must equal the number of serial_ids")
+                out_details = [
+                    {"serial_id": serial_id, "lot_id": line["lot_id"], "inventory_status_id": status_id,
+                     "ownership": "OWNED", "qty": "-1"} for serial_id in serial_ids
+                ]
+                in_details = [
+                    {"serial_id": serial_id, "lot_id": line["lot_id"], "inventory_status_id": status_id,
+                     "ownership": "OWNED", "qty": "1"} for serial_id in serial_ids
+                ]
+            else:
+                out_details = in_details = None
             movements.append(
                 {
                     "item_id": line["item_id"],
                     "location_id": header["from_location_id"],
                     "inventory_status_id": status_id,
+                    "lot_id": line["lot_id"],
                     "qty": -qty,
                     "movement_type": "TO_FULFILLMENT",
                     "source_line_ref": str(line_number),
+                    "details": out_details,
                 }
             )
             movements.append(
@@ -817,10 +863,12 @@ class LedgerDocuments:
                     "item_id": line["item_id"],
                     "location_id": header["to_location_id"],
                     "inventory_status_id": status_id,
+                    "lot_id": line["lot_id"],
                     "qty_class": "IN_TRANSIT",
                     "qty": qty,
                     "movement_type": "TO_FULFILLMENT",
                     "source_line_ref": str(line_number),
+                    "details": in_details,
                 }
             )
             await self._exec(
@@ -888,15 +936,31 @@ class LedgerDocuments:
                 raise ValidationFailed(f"transfer order line {line_number} not found")
             if qty > Decimal(str(line["qty_in_transit"])):
                 raise ValidationFailed("received quantity exceeds in-transit quantity")
+            serial_ids = list(line.get("serial_ids") or [])
+            if serial_ids:
+                if qty != Decimal(len(serial_ids)):
+                    raise ValidationFailed("serialized transfer-order qty must equal the number of serial_ids")
+                transit_details = [
+                    {"serial_id": serial_id, "lot_id": line["lot_id"], "inventory_status_id": status_id,
+                     "ownership": "OWNED", "qty": "-1"} for serial_id in serial_ids
+                ]
+                on_hand_details = [
+                    {"serial_id": serial_id, "lot_id": line["lot_id"], "inventory_status_id": status_id,
+                     "ownership": "OWNED", "qty": "1"} for serial_id in serial_ids
+                ]
+            else:
+                transit_details = on_hand_details = None
             movements.append(
                 {
                     "item_id": line["item_id"],
                     "location_id": header["to_location_id"],
                     "inventory_status_id": status_id,
+                    "lot_id": line["lot_id"],
                     "qty_class": "IN_TRANSIT",
                     "qty": -qty,
                     "movement_type": "TO_RECEIPT",
                     "source_line_ref": str(line_number),
+                    "details": transit_details,
                 }
             )
             movements.append(
@@ -904,9 +968,11 @@ class LedgerDocuments:
                     "item_id": line["item_id"],
                     "location_id": header["to_location_id"],
                     "inventory_status_id": status_id,
+                    "lot_id": line["lot_id"],
                     "qty": qty,
                     "movement_type": "TO_RECEIPT",
                     "source_line_ref": str(line_number),
+                    "details": on_hand_details,
                 }
             )
             await self._exec(
@@ -984,6 +1050,19 @@ class LedgerDocuments:
                 )
                 if loaded is not None:
                     commitments.append(loaded)
+            serial_ids = list(line.get("serial_ids") or [])
+            if serial_ids:
+                if qty != Decimal(len(serial_ids)):
+                    raise ValidationFailed("serialized fulfillment qty must equal the number of serial_ids")
+                details = [
+                    {"bin_id": line.get("bin_id"), "lot_id": line.get("lot_id"), "serial_id": serial_id,
+                     "inventory_status_id": _as_uuid(
+                         line.get("inventory_status_id") or status_id, field="inventory_status_id"
+                     ), "ownership": str(line.get("ownership") or "OWNED"), "qty": "-1"}
+                    for serial_id in serial_ids
+                ]
+            else:
+                details = None
             movements.append(
                 {
                     "item_id": _as_uuid(line.get("item_id"), field="item_id"),
@@ -997,6 +1076,7 @@ class LedgerDocuments:
                     "qty": -qty,
                     "movement_type": "FULFILLMENT",
                     "source_line_ref": str(len(movements) + 1),
+                    "details": details,
                 }
             )
         result = await self.ledger.post(

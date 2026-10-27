@@ -690,7 +690,7 @@ class CostingRepository:
             )
         )
         entry_seq = int(entry_seq_result.scalar_one()) + 1
-        layer_ids: dict[int, str] = {}
+        layer_ids: dict[str, str] = {}
         for action in result.layer_actions:
             if action.action == "CREATE":
                 values = {
@@ -706,7 +706,9 @@ class CostingRepository:
                     "derived_from_layer_id": action.derived_from_layer_id,
                 }
                 row = await self._insert(t.cost_layer, values)
-                layer_ids[action.layer_seq or 0] = row["id"]
+                # CostEntryDraft.layer_id is the engine's in-memory UUID; the database assigns the
+                # persisted layer id. Entries must reference the persisted id or fk_entry_layer fails.
+                layer_ids[action.layer_id] = row["id"]
             elif action.action == "CONSUME":
                 await self.session.execute(
                     update(t.cost_layer)
@@ -745,7 +747,7 @@ class CostingRepository:
                     "unit_cost": draft.unit_cost,
                     "value_delta": draft.value_delta,
                     "costing_method": method,
-                    "layer_id": draft.layer_id or layer_ids.get(0),
+                    "layer_id": layer_ids.get(draft.layer_id, draft.layer_id),
                     "estimated": draft.estimated,
                     "rounding_residual": draft.rounding_residual,
                     "effective_date": effective_date,

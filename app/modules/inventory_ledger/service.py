@@ -315,13 +315,31 @@ class LedgerService:
 
     @staticmethod
     def _balance_delta(movements: Iterable[Mapping[str, Any]]) -> dict[tuple, Decimal]:
+        """Aggregate balance deltas at the physical dimension carried by each detail.
+
+        A movement can carry line-level quantity while its physical lot/serial/status/bin dimensions
+        live on ``details`` (receipts, transfers, counts). Using the line's null ``lot_id`` here would
+        create an aggregate balance row and hide lot-specific availability.
+        """
         deltas: dict[tuple, Decimal] = {}
         for movement in movements:
-            key = (
-                movement["item_id"], movement["location_id"], movement["inventory_status_id"],
-                movement["ownership"], movement["qty_class"], movement.get("lot_id"), movement.get("serial_id"),
-            )
-            deltas[key] = deltas.get(key, QTY_ZERO) + movement["qty_base"]
+            details = movement.get("details") or []
+            if details:
+                for detail in details:
+                    key = (
+                        movement["item_id"], movement["location_id"],
+                        detail.get("inventory_status_id") or movement["inventory_status_id"],
+                        detail.get("ownership") or movement["ownership"], movement["qty_class"],
+                        detail.get("lot_id") if detail.get("lot_id") is not None else movement.get("lot_id"),
+                        detail.get("serial_id") if detail.get("serial_id") is not None else movement.get("serial_id"),
+                    )
+                    deltas[key] = deltas.get(key, QTY_ZERO) + detail.get("qty_base", QTY_ZERO)
+            else:
+                key = (
+                    movement["item_id"], movement["location_id"], movement["inventory_status_id"],
+                    movement["ownership"], movement["qty_class"], movement.get("lot_id"), movement.get("serial_id"),
+                )
+                deltas[key] = deltas.get(key, QTY_ZERO) + movement["qty_base"]
         return deltas
 
     # -- posting ------------------------------------------------------------------------------
