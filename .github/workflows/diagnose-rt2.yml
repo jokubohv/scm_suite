@@ -19,7 +19,7 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_DEPLOY_DIR: ${{ secrets.VPS_DEPLOY_DIR }}
         run: |
-          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && docker compose ps; echo '=== API LOGS ==='; docker compose logs api --no-color --tail 4000" > /tmp/api.logs 2>&1 || true
+          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && docker compose --env-file .env.production -f docker-compose.prod.yml ps; echo '=== API LOGS ==='; docker compose --env-file .env.production -f docker-compose.prod.yml logs api --no-color --tail 8000" > /tmp/api.logs 2>&1 || true
           echo '=== matching traceback lines ==='
           grep -n -E 'dcfca262|5198d7df|a8d66d6c|b9fbc386|Traceback|unhandled error|ERROR' /tmp/api.logs | tail -200 || true
           echo '=== tail ==='
