@@ -65,6 +65,28 @@ async def _capture(client: Any, count_id: str, lines: list[dict[str, Any]]) -> d
     return response.json()
 
 
+async def test_calculated_count_requires_a_real_scope(client: Any) -> None:
+    """P1 runtime probe regression: empty/default scope must not create an all-positions count."""
+    for scope in (None, {}):
+        body: dict[str, Any] = {"count_type": "CALCULATED", "count_date": "2026-10-23"}
+        if scope is not None:
+            body["scope"] = scope
+        response = await client.post("/api/v1/inventory-counts", json=body, headers=idem())
+        assert response.status_code == 422, (scope, response.status_code, response.text)
+        assert response.json()["code"] == "VALIDATION_FAILED"
+
+    scoped = await client.post(
+        "/api/v1/inventory-counts",
+        json={
+            "count_type": "CALCULATED",
+            "count_date": "2026-10-23",
+            "scope": {"items": [str(ITEM_A)]},
+        },
+        headers=idem(),
+    )
+    assert scoped.status_code == 201, scoped.text
+
+
 async def test_multiple_unposted_counts_are_allowed_per_tenant(client: Any) -> None:
     """P1 runtime probe regression: NULLS NOT DISTINCT allowed only one unposted count per tenant."""
     first = await _create_manual_count(client)
