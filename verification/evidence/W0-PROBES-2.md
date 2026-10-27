@@ -101,3 +101,19 @@ never true. Fix: validate meaningful scope content (`item_ids/location_ids/statu
 creating; regression test `test_calculated_count_requires_a_real_scope` covers absent/empty/default
 scope (422) and a valid item scope (201). This is included in the follow-up deploy commit and was
 verified after the second deploy (live probe: 422 `VALIDATION_FAILED`).
+
+## Second deploy (v2026.10.27-p2 / commit ae479fa) — CALCULATED fix verified
+
+`deploy-vps.yml` run `40448709308` (verify rerun once after a pre-existing SUPER_ADMIN_TOKEN test-order
+flake; rerun verified + built + deployed green). Final live checks:
+
+| Check | Result |
+|---|---|
+| `GET https://scm.k1hub.com/readyz` | **200** `{"status":"ok","checks":{"database":"ok","migrations_head":"0031_count_post_txn_idx","redis":"ok"}}` |
+| Live OpenAPI | 200, **4,411,670 bytes**, raw sha256 **`1525b652e2bff72be31c992da70cdb6b8b19f355f9c6f9d843e25a682e3529a2`**; `LocationUpdate` still has only mutable fields |
+| MCP discovery | **255 tools** (lots/fulfilments/inventory-transactions curated; empty list tools removed) |
+| CALCULATED count without a real scope | **422 `VALIDATION_FAILED`** for both absent and `{}` scope (previously 201 all-positions count) |
+| Count create with explicit item+location scope | **201** (unposted-count uniqueness fixed) |
+
+**Freeze note:** this branch changes the r7 published contract (`LocationUpdate`) and the live runtime
+sha differs from r7 — IntelRanch must re-fetch, re-verify and re-freeze; no freeze is claimed here.
