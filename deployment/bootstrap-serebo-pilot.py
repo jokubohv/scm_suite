@@ -42,7 +42,7 @@ def main() -> int:
             "code": code,
             "name": name,
             "timezone": "America/La_Paz",
-            "base_currency_code": "BOB",
+            "base_currency_code": "USD",
             "negative_inventory_policy": "BLOCK",
             "rounding_mode": "PER_MOVEMENT",
             "retention_ledger_years": 7,
