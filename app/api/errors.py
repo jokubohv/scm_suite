@@ -25,6 +25,8 @@ def problem_response(
     details: list[dict[str, Any]] | dict[str, Any] | None = None,
 ) -> JSONResponse:
     ctx = get_request_context()
+    correlation_id = ctx.correlation_id if ctx else getattr(request.state, "correlation_id", None) or request.headers.get("X-Request-ID")
+    trace_id = ctx.trace_id if ctx else getattr(request.state, "trace_id", None) or request.headers.get("X-Trace-ID")
     raw_details = details or []
     if isinstance(raw_details, dict):
         detail_list: list[dict[str, Any]] = [raw_details] if raw_details else []
@@ -37,10 +39,14 @@ def problem_response(
         "code": code,
         "message": message,
         "details": detail_list,
-        "correlation_id": ctx.correlation_id if ctx else None,
-        "trace_id": ctx.trace_id if ctx else None,
+        "correlation_id": correlation_id,
+        "trace_id": trace_id,
     }
     response = JSONResponse(status_code=status_code, content=payload, media_type=PROBLEM_MEDIA_TYPE)
+    if correlation_id:
+        response.headers["X-Request-ID"] = correlation_id
+    if trace_id:
+        response.headers["X-Trace-ID"] = trace_id
     if isinstance(details, dict):
         response.headers["WWW-Authenticate"] = "Bearer"
     return response

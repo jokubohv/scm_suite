@@ -25,6 +25,8 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         traceparent = request.headers.get("traceparent", "")
         match = TRACEPARENT_RE.match(traceparent)
         trace_id = match.group(1) if match else uuid.uuid4().hex
+        request.state.correlation_id = correlation_id
+        request.state.trace_id = trace_id
         token = set_request_context(RequestContext(correlation_id=correlation_id, trace_id=trace_id))
         started = time.perf_counter()
         response: Response | None = None

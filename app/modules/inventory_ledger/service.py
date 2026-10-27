@@ -594,20 +594,36 @@ class LedgerService:
         if existing is not None:
             return await self._result(existing)
         lines = await self._all("SELECT * FROM inventory_ledger.inventory_transaction_line WHERE tenant_id = :tenant_id AND inventory_transaction_id = :id ORDER BY line_number", id=txn_uuid)
+        detail_rows = await self._all(
+            "SELECT * FROM inventory_ledger.inventory_transaction_detail WHERE tenant_id = :tenant_id AND inventory_transaction_id = :id",
+            id=txn_uuid,
+        )
+        details_by_line: dict[Any, list[dict[str, Any]]] = {}
+        for detail in detail_rows:
+            details_by_line.setdefault(detail["inventory_transaction_line_id"], []).append(detail)
         movements = []
         for line in lines:
-            movements.append(
-                {
-                    "item_id": line["item_id"], "location_id": line["location_id"], "inventory_status_id": line["inventory_status_id"],
-                    "ownership": line["ownership"], "qty_class": line["qty_class"], "lot_id": line["lot_id"], "serial_id": line["serial_id"],
-                    "uom_id": line["uom_id"], "qty": -Decimal(str(line["qty_base"])), "qty_uom": -Decimal(str(line["qty_uom"])),
-                    "conversion_factor": Decimal(str(line["conversion_factor"])), "value_base": -Decimal(str(line["value_base"])),
-                    "value_txn": -Decimal(str(line["value_txn"])), "unit_cost": line["unit_cost"],
-                    "movement_type": "REVERSAL", "movement_direction": "IN" if Decimal(str(line["qty_base"])) < 0 else "OUT",
-                    "reason_code_id": line["reason_code_id"], "source_line_ref": line["source_line_ref"],
-                    "cost_object_id": line["cost_object_id"],
-                }
-            )
+            line_details = details_by_line.get(line["id"], [])
+            movement = {
+                "item_id": line["item_id"], "location_id": line["location_id"], "inventory_status_id": line["inventory_status_id"],
+                "ownership": line["ownership"], "qty_class": line["qty_class"], "lot_id": line["lot_id"], "serial_id": line["serial_id"],
+                "uom_id": line["uom_id"], "qty": -Decimal(str(line["qty_base"])), "qty_uom": -Decimal(str(line["qty_uom"])),
+                "conversion_factor": Decimal(str(line["conversion_factor"])), "value_base": -Decimal(str(line["value_base"])),
+                "value_txn": -Decimal(str(line["value_txn"])), "unit_cost": line["unit_cost"],
+                "movement_type": "REVERSAL", "movement_direction": "IN" if Decimal(str(line["qty_base"])) < 0 else "OUT",
+                "reason_code_id": line["reason_code_id"], "source_line_ref": line["source_line_ref"],
+                "cost_object_id": line["cost_object_id"],
+            }
+            if line_details:
+                movement["details"] = [
+                    {
+                        "bin_id": detail["bin_id"], "lot_id": detail["lot_id"], "serial_id": detail["serial_id"],
+                        "inventory_status_id": detail["inventory_status_id"], "ownership": detail["ownership"],
+                        "qty": -Decimal(str(detail["qty_base"])), "value_base": -Decimal(str(detail["value_base"])),
+                    }
+                    for detail in line_details
+                ]
+            movements.append(movement)
         command = {
             "posting_type": REVERSAL_TYPE.get(str(header["transaction_type"]), str(header["transaction_type"])),
             "transaction_date": utc_now().date().isoformat(),

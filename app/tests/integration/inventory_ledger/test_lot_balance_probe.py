@@ -58,3 +58,36 @@ async def test_receipt_lot_detail_creates_lot_balance_and_fulfillment(ledger_cli
         {"t": world["tenant_id"], "i": world["item_id"], "lot": lot_id},
     )).scalar_one()
     assert str(remaining) in {"2.000000000000", "2"}
+
+
+async def test_lot_transaction_reverse_preserves_details(ledger_client, world, db_session):
+    lot_id = uuid.uuid4()
+    await db_session.execute(
+        text(
+            "INSERT INTO traceability.lot (id, tenant_id, item_id, lot_number, is_active) "
+            "VALUES (:id, :tenant, :item, :number, true)"
+        ),
+        {"id": lot_id, "tenant": world["tenant_id"], "item": world["item_id"],
+         "number": f"REV-LOT-{uuid.uuid4().hex[:6]}"},
+    )
+    posted = await ledger_client.post(
+        "/api/v1/inventory-transactions",
+        json={"posting_type": "T-01", "transaction_date": "2026-10-23",
+              "movements": [await _movement(world, "5", lot_id=lot_id)]},
+        headers=world["headers"] | {"Idempotency-Key": f"lot-reverse-{uuid.uuid4().hex}"},
+    )
+    assert posted.status_code == 201, posted.text
+    reversed_ = await ledger_client.post(
+        f"/api/v1/inventory-transactions/{posted.json()['transaction_id']}/reverse",
+        json={"reason": "probe reverse"},
+        headers=world["headers"] | {"Idempotency-Key": f"lot-reverse-post-{uuid.uuid4().hex}"},
+    )
+    assert reversed_.status_code == 200, reversed_.text
+    assert reversed_.json()["transaction_id"] != posted.json()["transaction_id"]
+    remaining = (await db_session.execute(
+        text("SELECT coalesce(sum(qty_on_hand), 0) FROM inventory_ledger.inventory_balance "
+             "WHERE tenant_id = :t AND item_id = :i AND lot_id = :lot"),
+        {"t": world["tenant_id"], "i": world["item_id"], "lot": lot_id},
+    )).scalar_one()
+    from decimal import Decimal
+    assert Decimal(str(remaining)) == Decimal("0")
