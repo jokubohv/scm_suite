@@ -1,0 +1,70 @@
+name: bootstrap-serebo-pilot
+
+on:
+  workflow_dispatch:
+    inputs:
+      code:
+        description: New SCM tenant code
+        required: true
+        default: intelranch_pilot
+      name:
+        description: New SCM tenant name
+        required: true
+        default: Intel Ranch Pilot
+      admin_email:
+        description: Bootstrap admin email
+        required: true
+        default: scm-admin@intelranch.com
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_DEPLOY_DIR: ${{ secrets.VPS_DEPLOY_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+      - name: Trust the deployment host
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+      - name: Copy bootstrap artifacts
+        run: |
+          scp deployment/bootstrap-serebo-pilot.py deployment/serebo_pilot_scopes.json \
+            "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_DIR/deployment/"
+      - name: Bootstrap tenant and API key
+        run: |
+          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && bash -s" > bootstrap-result.json <<'REMOTE'
+          set -euo pipefail
+          TOKEN=$(grep -E '^SUPER_ADMIN_TOKEN=' .env.production | cut -d= -f2-)
+          test -n "$TOKEN"
+          CID=$(docker compose --env-file .env.production -f docker-compose.prod.yml ps -q api)
+          test -n "$CID"
+          docker cp deployment/bootstrap-serebo-pilot.py "$CID:/tmp/bootstrap-serebo-pilot.py"
+          docker cp deployment/serebo_pilot_scopes.json "$CID:/tmp/serebo_pilot_scopes.json"
+          docker compose --env-file .env.production -f docker-compose.prod.yml exec -T \
+            -e SUPER_ADMIN_TOKEN="$TOKEN" \
+            -e TENANT_CODE="${{ inputs.code }}" \
+            -e TENANT_NAME="${{ inputs.name }}" \
+            -e ADMIN_EMAIL="${{ inputs.admin_email }}" \
+            api python /tmp/bootstrap-serebo-pilot.py
+          REMOTE
+      - name: Record non-secret identity
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open('bootstrap-result.json'))
+          print(json.dumps({k:d.get(k) for k in ('tenant_id','tenant_code','tenant_name','api_key_id','scopes')}, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: serebo-pilot-bootstrap-result
+          path: bootstrap-result.json
+          retention-days: 1
