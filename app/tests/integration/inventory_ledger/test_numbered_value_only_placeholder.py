@@ -1,6 +1,6 @@
 """Real numbered receipt, costing and DB trigger for the observed T-04 failure."""
-from decimal import Decimal
 import uuid
+from decimal import Decimal
 
 import pytest
 from sqlalchemy import insert, text

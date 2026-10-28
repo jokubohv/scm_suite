@@ -67,7 +67,7 @@ async def test_invoice_matching_catalog_queries_are_complete_exact_and_tenant_sc
     prefix = f"INV-MATCH-{uuid.uuid4().hex[:8]}"
     # Deliberately reverse the UUID relation at the first page boundary. An `id > cursor`
     # predicate combined with vendor_number ordering repeats A and omits C/D/E.
-    ids = sorted((uuid.uuid4() for _ in range(5)))
+    ids = sorted(uuid.uuid4() for _ in range(5))
     vendor_ids = [ids[4], ids[3], ids[0], ids[2], ids[1]]
     numbers = [f"{prefix}-{letter}" for letter in "ABCDE"]
     exact_tax = f"TAX-{prefix}"

@@ -5,9 +5,9 @@ the independently owned joined journey establishes real PO/receipt lifecycle.
 """
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
-from decimal import Decimal
 import uuid
+from datetime import UTC, date, datetime
+from decimal import Decimal
 
 import pytest
 from sqlalchemy import func, insert, select, update
@@ -16,8 +16,12 @@ from app.api.deps import token_service
 from app.core.models.platform import app_user, feature_flag, permission_scope, role, role_permission
 from app.modules.item_master.tables import item, uom, uom_type
 from app.modules.procurement.tables import (
-    item_receipt, item_receipt_line, purchase_order, purchase_order_line,
-    vendor, vendor_bill,
+    item_receipt,
+    item_receipt_line,
+    purchase_order,
+    purchase_order_line,
+    vendor,
+    vendor_bill,
 )
 from app.tests.integration.procurement.test_invoice_catalog_matching import _catalog_world
 
@@ -55,7 +59,7 @@ async def world(db_session):
     await db_session.execute(insert(vendor).values(id=world['vendor_id'], tenant_id=tenant_id,
         vendor_number='SYN-P4-VENDOR', name='Synthetic bill supplier', currency_code='USD'))
     world['documents'] = []
-    stamp = datetime(2026, 10, 28, tzinfo=timezone.utc)
+    stamp = datetime(2026, 10, 28, tzinfo=UTC)
     for index in range(3):
         po_id, po_line_id, receipt_id, receipt_line_id = (uuid.uuid4() for _ in range(4))
         await db_session.execute(insert(purchase_order).values(id=po_id, tenant_id=tenant_id,
