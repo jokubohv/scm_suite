@@ -22,6 +22,27 @@ from app.tests.integration.platform_extras.conftest import (
 pytestmark = pytest.mark.integration
 
 
+@pytest.fixture()
+async def operator_client(extras_client, monkeypatch):
+    """Use the real account-creation guard with an isolated synthetic credential."""
+    from app.api import deps
+    from app.core.config import get_settings
+
+    token = "synthetic-platform-bootstrap-" + uuid4().hex
+    with monkeypatch.context() as patch:
+        patch.setenv("SUPER_ADMIN_TOKEN", token)
+        patch.setenv("ACCOUNT_CREATION_SUPER_ADMIN_ONLY", "true")
+        get_settings.cache_clear()
+        deps._settings.cache_clear()
+        extras_client.headers["X-Super-Admin-Token"] = token
+        try:
+            yield extras_client
+        finally:
+            extras_client.headers.pop("X-Super-Admin-Token", None)
+    get_settings.cache_clear()
+    deps._settings.cache_clear()
+
+
 async def test_offboard_transition_export_marker_sessions_and_replay(
     extras_client, db_session, principal_holder
 ) -> None:
@@ -94,7 +115,7 @@ async def test_offboard_guards_and_validation(extras_client, db_session, princip
     assert forbidden.status_code == 403
 
 
-async def test_bootstrap_admin_invitation_without_plaintext_token(extras_client, db_session, principal_holder) -> None:
+async def test_bootstrap_admin_invitation_without_plaintext_token(operator_client, db_session, principal_holder) -> None:
     await ensure_system_tenant(db_session)
     tenant_id = await seed_tenant(db_session, "BOOT")
     await seed_membership(db_session, tenant_id, email="owner@boot.example")
@@ -103,8 +124,14 @@ async def test_bootstrap_admin_invitation_without_plaintext_token(extras_client,
 
     principal_holder.set(principal(SYSTEM_ID, scopes=PLATFORM_ADMIN_SCOPES))
     path = f"/api/v1/platform/tenants/{tenant_id}/bootstrap-admin"
+    denied = await operator_client.post(
+        path, json={"email": "New.Admin@Boot.Example"},
+        headers={"X-Super-Admin-Token": "invalid", "Idempotency-Key": "bootstrap-denied"},
+    )
+    assert denied.status_code == 401
+    assert denied.json()["code"] == "SUPER_ADMIN_TOKEN_INVALID"
     headers = {"Idempotency-Key": "bootstrap-1"}
-    response = await extras_client.post(path, json={"email": "New.Admin@Boot.Example"}, headers=headers)
+    response = await operator_client.post(path, json={"email": "New.Admin@Boot.Example"}, headers=headers)
     assert response.status_code == 200, response.text
     body = response.json()
     assert body["invitation_id"] and body["expires_at"]
@@ -123,18 +150,18 @@ async def test_bootstrap_admin_invitation_without_plaintext_token(extras_client,
     assert list(invitation["intended_role_ids"]) == [admin_role]
     assert len(invitation["token_hash"]) == 64
 
-    replay = await extras_client.post(path, json={"email": "New.Admin@Boot.Example"}, headers=headers)
+    replay = await operator_client.post(path, json={"email": "New.Admin@Boot.Example"}, headers=headers)
     assert replay.status_code == 200
     assert replay.json()["invitation_id"] == body["invitation_id"]
 
-    invalid_email = await extras_client.post(
+    invalid_email = await operator_client.post(
         path, json={"email": "not-an-email"}, headers={"Idempotency-Key": "bootstrap-bad-email"}
     )
     assert invalid_email.status_code == 422
 
     no_inviter_tenant = await seed_tenant(db_session, "NOINV")
     await seed_role(db_session, no_inviter_tenant, "admin")
-    conflict = await extras_client.post(
+    conflict = await operator_client.post(
         f"/api/v1/platform/tenants/{no_inviter_tenant}/bootstrap-admin",
         json={"email": "admin@noinv.example"},
         headers={"Idempotency-Key": "bootstrap-no-inviter"},
@@ -144,7 +171,7 @@ async def test_bootstrap_admin_invitation_without_plaintext_token(extras_client,
 
 
 async def test_bootstrap_admin_requires_active_tenant_and_admin_role(
-    extras_client, db_session, principal_holder
+    operator_client, db_session, principal_holder
 ) -> None:
     await ensure_system_tenant(db_session)
     suspended = await seed_tenant(db_session, "SUSP", status="SUSPENDED")
@@ -152,7 +179,7 @@ async def test_bootstrap_admin_requires_active_tenant_and_admin_role(
     from app.tests.integration.platform_extras.conftest import SYSTEM_ID
 
     principal_holder.set(principal(SYSTEM_ID, scopes=PLATFORM_ADMIN_SCOPES))
-    response = await extras_client.post(
+    response = await operator_client.post(
         f"/api/v1/platform/tenants/{suspended}/bootstrap-admin",
         json={"email": "admin@susp.example"},
         headers={"Idempotency-Key": "bootstrap-suspended"},
@@ -162,7 +189,7 @@ async def test_bootstrap_admin_requires_active_tenant_and_admin_role(
 
     active_no_role = await seed_tenant(db_session, "NOROLE")
     await seed_membership(db_session, active_no_role)
-    response = await extras_client.post(
+    response = await operator_client.post(
         f"/api/v1/platform/tenants/{active_no_role}/bootstrap-admin",
         json={"email": "admin@norole.example"},
         headers={"Idempotency-Key": "bootstrap-no-role"},
