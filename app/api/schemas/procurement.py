@@ -100,7 +100,7 @@ class ReceiptSummaryOut(APIModel):
 
 
 class ReceiptPage(Page[ReceiptSummaryOut]):
-    pass
+    pagination_contract_version: Literal[1] | None = None
 
 
 class ReceiptDetailIn(APIModel):
@@ -181,7 +181,7 @@ class VendorOut(APIModel):
 
 
 class VendorPage(Page[VendorOut]):
-    pass
+    matching_contract_version: Literal[1] = 1
 
 
 class VendorCreate(APIModel):
@@ -260,7 +260,7 @@ class PurchaseOrderOut(APIModel):
 
 
 class PurchaseOrderPage(Page[PurchaseOrderOut]):
-    pass
+    pagination_contract_version: Literal[1] | None = None
 
 
 class PurchaseOrderLineCreate(APIModel):
@@ -309,6 +309,11 @@ class VendorBillLineOut(APIModel):
     description: str | None = None
     qty: Decimal | None = None
     unit_price: Decimal | None = None
+    uom_id: UUID | None = None
+    amount: Decimal | None = None
+    expense_account_ref: str | None = None
+    is_landed_cost: bool | None = None
+    landed_cost_category_id: UUID | None = None
     line_total: Decimal | None = None
     purchase_order_line_id: UUID | None = None
     item_receipt_line_id: UUID | None = None
@@ -316,6 +321,14 @@ class VendorBillLineOut(APIModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
     version: int | None = None
+
+
+class VendorBillMatchSummary(APIModel):
+    match_status: str
+    tolerance_amount: Decimal | None = None
+    tolerance_percent: Decimal | None = None
+    exception_codes: list[str] = Field(default_factory=list)
+    notes: str | None = None
 
 
 class VendorBillOut(APIModel):
@@ -338,6 +351,7 @@ class VendorBillOut(APIModel):
     payment_terms: str | None = None
     posted_transaction_id: UUID | None = None
     match_status: str | None = None
+    match: VendorBillMatchSummary | None = None
     exception_codes: list[str] = Field(default_factory=list)
     memo: str | None = None
     created_at: datetime | None = None
@@ -350,7 +364,7 @@ class VendorBillOut(APIModel):
 
 
 class VendorBillPage(Page[VendorBillOut]):
-    pass
+    bill_preparation_contract_version: Literal[1] = 1
 
 
 class VendorBillLineCreate(APIModel):
@@ -358,6 +372,7 @@ class VendorBillLineCreate(APIModel):
     description: str | None = None
     qty: Decimal | None = None
     unit_price: Decimal | None = None
+    uom_id: UUID | None = None
     purchase_order_line_id: UUID | None = None
     item_receipt_line_id: UUID | None = None
     tax_code_id: UUID | None = None
@@ -941,6 +956,7 @@ class VendorCategoryPage(Page[VendorCategoryOut]):
 
 class ItemVendorPage(Page[ItemVendorOut]):
     model_config = ConfigDict(extra="allow", from_attributes=True, populate_by_name=True)
+    matching_contract_version: Literal[1] = 1
 
 
 class ItemVendorPricePage(Page[ItemVendorPriceOut]):

@@ -1,0 +1,76 @@
+{
+  "base": "2dbdda9f0b4830c498733a599d12448c2b42309b",
+  "generator_versions": {
+    "fastapi": "0.138.0",
+    "pydantic": "2.13.4"
+  },
+  "contract_lint": "passed",
+  "runtime": {
+    "paths": 982,
+    "operations": 1259,
+    "added_operations": [],
+    "removed_operations": [],
+    "changed_path_methods": {
+      "/api/v1/item-vendors": [
+        "get"
+      ],
+      "/api/v1/item-receipts": [
+        "get"
+      ],
+      "/api/v1/vendors": [
+        "get"
+      ],
+      "/api/v1/vendor-bills": [
+        "get"
+      ],
+      "/api/v1/purchase-orders": [
+        "get"
+      ]
+    },
+    "sha256": "63fb52caf30d824a52b28dc43123f8a4c49b20dc9b17bf348fd0fd50575b9e8d",
+    "changed_schemas": [
+      "ItemVendorPage",
+      "PurchaseOrderPage",
+      "ReceiptPage",
+      "VendorBillLineCreate",
+      "VendorBillLineOut",
+      "VendorBillMatchSummary",
+      "VendorBillOut",
+      "VendorBillPage",
+      "VendorPage"
+    ]
+  },
+  "aggregate": {
+    "paths": 991,
+    "operations": 1268,
+    "added_operations": [],
+    "removed_operations": [],
+    "changed_path_methods": {
+      "/api/v1/vendor-bills/{bill_id}": [
+        "get",
+        "patch"
+      ],
+      "/api/v1/item-vendors": [
+        "get"
+      ],
+      "/api/v1/vendor-bills/{id}": [
+        "get",
+        "patch"
+      ],
+      "/api/v1/item-receipts": [
+        "get"
+      ],
+      "/api/v1/vendors": [
+        "get"
+      ],
+      "/api/v1/vendor-bills": [
+        "get",
+        "post"
+      ],
+      "/api/v1/purchase-orders": [
+        "get"
+      ]
+    },
+    "sha256": "014bc9d9e5ac54d7377a9abc6797cc2079bc848d140283773f9d895bb66ab2d6"
+  }
+}

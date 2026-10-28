@@ -443,6 +443,8 @@ class ProcurementService:
         is_inactive: bool | None = None,
         category_id: str | None = None,
         q: str | None = None,
+        tax_id: str | None = None,
+        vendor_number: str | None = None,
         limit: int = 50,
         cursor: str | None = None,
     ) -> dict[str, Any]:
@@ -457,15 +459,27 @@ class ProcurementService:
         if q:
             clauses.append("(vendor_number ILIKE :q OR name ILIKE :q)")
             params["q"] = f"%{q}%"
+        if tax_id is not None:
+            clauses.append("tax_id = :tax_id")
+            params["tax_id"] = tax_id
+        if vendor_number is not None:
+            clauses.append("vendor_number = :vendor_number")
+            params["vendor_number"] = vendor_number
         if cursor:
-            clauses.append("id > :cursor")
+            previous = await self._require_row("vendor", cursor, "vendor cursor")
+            clauses.append("(vendor_number, id) > (:cursor_number, :cursor)")
+            params["cursor_number"] = previous["vendor_number"]
             params["cursor"] = _as_uuid(cursor)
+        page_size = params["limit"]
+        params["limit"] = page_size + 1
         rows = await self._all(
-            f"SELECT * FROM procurement.vendor WHERE {' AND '.join(clauses)} ORDER BY vendor_number LIMIT :limit",
+            f"SELECT * FROM procurement.vendor WHERE {' AND '.join(clauses)} ORDER BY vendor_number, id LIMIT :limit",
             **params,
         )
-        next_cursor = str(rows[-1]["id"]) if len(rows) >= params["limit"] and rows else None
-        return {"items": rows, "next_cursor": next_cursor}
+        has_more = len(rows) > page_size
+        rows = rows[:page_size]
+        next_cursor = str(rows[-1]["id"]) if has_more else None
+        return {"items": rows, "next_cursor": next_cursor, "matching_contract_version": 1}
 
     async def get_vendor_purchase_history(
         self,
@@ -668,6 +682,8 @@ class ProcurementService:
         item_id: str | None = None,
         vendor_id: str | None = None,
         is_preferred: bool | None = None,
+        vendor_item_code: str | None = None,
+        cursor: str | None = None,
         limit: int = 100,
     ) -> dict[str, Any]:
         clauses = ["tenant_id = :tenant_id"]
@@ -681,13 +697,22 @@ class ProcurementService:
         if is_preferred is not None:
             clauses.append("is_preferred = :preferred")
             params["preferred"] = bool(is_preferred)
-        return {
-            "items": await self._all(
-                f"SELECT * FROM procurement.item_vendor WHERE {' AND '.join(clauses)} ORDER BY item_id, vendor_id LIMIT :limit",
-                **params,
-            ),
-            "next_cursor": None,
-        }
+        if vendor_item_code is not None:
+            clauses.append("vendor_item_code = :vendor_item_code")
+            params["vendor_item_code"] = vendor_item_code
+        if cursor:
+            previous = await self._require_row("item_vendor", cursor, "item vendor cursor")
+            clauses.append("(item_id, vendor_id, id) > (:cursor_item, :cursor_vendor, :cursor)")
+            params.update(cursor_item=previous["item_id"], cursor_vendor=previous["vendor_id"], cursor=_as_uuid(cursor))
+        page_size = params["limit"]
+        params["limit"] = page_size + 1
+        rows = await self._all(
+            f"SELECT * FROM procurement.item_vendor WHERE {' AND '.join(clauses)} ORDER BY item_id, vendor_id, id LIMIT :limit",
+            **params,
+        )
+        has_more = len(rows) > page_size
+        rows = rows[:page_size]
+        return {"items": rows, "next_cursor": str(rows[-1]["id"]) if has_more else None, "matching_contract_version": 1}
 
     async def add_item_vendor_price(
         self,
@@ -1741,10 +1766,13 @@ class ProcurementService:
         po_type: str | None = None,
         expected_receipt_from: str | None = None,
         expected_receipt_to: str | None = None,
+        q: str | None = None,
+        cursor: str | None = None,
         limit: int = 50,
     ) -> dict[str, Any]:
         clauses = ["tenant_id = :tenant_id"]
-        params: dict[str, Any] = {"limit": max(1, min(int(limit), 200))}
+        page_size = max(1, min(int(limit), 200))
+        params: dict[str, Any] = {"limit": page_size + 1}
         if vendor_id:
             clauses.append("vendor_id = :vendor")
             params["vendor"] = _as_uuid(vendor_id)
@@ -1760,13 +1788,17 @@ class ProcurementService:
         if expected_receipt_to:
             clauses.append("expected_receipt_date <= :to_date")
             params["to_date"] = _date(expected_receipt_to)
-        return {
-            "items": await self._all(
-                f"SELECT * FROM procurement.purchase_order WHERE {' AND '.join(clauses)} ORDER BY created_at DESC LIMIT :limit",
-                **params,
-            ),
-            "next_cursor": None,
-        }
+        if q:
+            clauses.append("document_number ILIKE :q")
+            params["q"] = f"%{q}%"
+        if cursor:
+            anchor = await self._require_row("purchase_order", cursor, "cursor")
+            clauses.append("(created_at, id) < (:cursor_at, :cursor_id)")
+            params.update(cursor_at=_stamp(anchor["created_at"]), cursor_id=_as_uuid(cursor))
+        rows = await self._all(
+            f"SELECT * FROM procurement.purchase_order WHERE {' AND '.join(clauses)} ORDER BY created_at DESC, id DESC LIMIT :limit", **params
+        )
+        return {"items": rows[:page_size], "next_cursor": str(rows[page_size-1]["id"]) if len(rows) > page_size else None, "pagination_contract_version": 1}
 
     async def update_purchase_order(
         self, po_id: Any, data: Mapping[str, Any], *, actor_id: str | None = None, expected_version: int | None = None
@@ -2314,10 +2346,14 @@ class ProcurementService:
         status: str | None = None,
         received_from: str | None = None,
         received_to: str | None = None,
+        vendor_id: str | None = None,
+        q: str | None = None,
+        cursor: str | None = None,
         limit: int = 50,
     ) -> dict[str, Any]:
         clauses = ["tenant_id = :tenant_id"]
-        params: dict[str, Any] = {"limit": max(1, min(int(limit), 200))}
+        page_size = max(1, min(int(limit), 200))
+        params: dict[str, Any] = {"limit": page_size + 1}
         if purchase_order_id:
             clauses.append("purchase_order_id = :po")
             params["po"] = _as_uuid(purchase_order_id)
@@ -2330,13 +2366,20 @@ class ProcurementService:
         if received_to:
             clauses.append("received_at <= :to_date")
             params["to_date"] = _stamp(received_to)
-        return {
-            "items": await self._all(
-                f"SELECT * FROM procurement.item_receipt WHERE {' AND '.join(clauses)} ORDER BY received_at DESC LIMIT :limit",
-                **params,
-            ),
-            "next_cursor": None,
-        }
+        if vendor_id:
+            clauses.append("vendor_id = :vendor")
+            params["vendor"] = _as_uuid(vendor_id)
+        if q:
+            clauses.append("document_number ILIKE :q")
+            params["q"] = f"%{q}%"
+        if cursor:
+            anchor = await self._require_row("item_receipt", cursor, "cursor")
+            clauses.append("(received_at, id) < (:cursor_at, :cursor_id)")
+            params.update(cursor_at=_stamp(anchor["received_at"]), cursor_id=_as_uuid(cursor))
+        rows = await self._all(
+            f"SELECT * FROM procurement.item_receipt WHERE {' AND '.join(clauses)} ORDER BY received_at DESC, id DESC LIMIT :limit", **params
+        )
+        return {"items": rows[:page_size], "next_cursor": str(rows[page_size-1]["id"]) if len(rows) > page_size else None, "pagination_contract_version": 1}
 
     async def update_receipt(
         self, receipt_id: Any, data: Mapping[str, Any], *, actor_id: str | None = None
@@ -2650,6 +2693,34 @@ class ProcurementService:
             rate=dec(bill.get("exchange_rate") or 1),
         )
 
+    async def _validate_bill_links(self, data: Mapping[str, Any], line: Mapping[str, Any]) -> None:
+        """Validate selected document relationships independently of FK existence."""
+        po_line = await self._require_row("purchase_order_line", line["purchase_order_line_id"], "purchase order line") if line.get("purchase_order_line_id") else None
+        receipt_line = await self._require_row("item_receipt_line", line["item_receipt_line_id"], "receipt line") if line.get("item_receipt_line_id") else None
+        po_ids = {str(value) for value in (data.get("purchase_order_id"), po_line.get("purchase_order_id") if po_line else None) if value}
+        receipt_ids = {str(value) for value in (data.get("item_receipt_id"), receipt_line.get("item_receipt_id") if receipt_line else None) if value}
+        if len(po_ids) > 1 or len(receipt_ids) > 1:
+            raise ValidationFailed("bill line does not belong to its selected document")
+        for receipt_id in receipt_ids:
+            receipt = await self._require_row("item_receipt", receipt_id, "item receipt")
+            if receipt["status"] != "POSTED" or str(receipt["vendor_id"]) != str(data["vendor_id"]):
+                raise ValidationFailed("bill receipt must be posted and belong to the bill vendor")
+            if receipt.get("purchase_order_id"):
+                po_ids.add(str(receipt["purchase_order_id"]))
+        if len(po_ids) > 1:
+            raise ValidationFailed("bill receipt and purchase order do not agree")
+        for po_id in po_ids:
+            po = await self._require_row("purchase_order", po_id, "purchase order")
+            if str(po["vendor_id"]) != str(data["vendor_id"]):
+                raise ValidationFailed("bill purchase order belongs to another vendor")
+        if receipt_line and po_line and str(receipt_line.get("purchase_order_line_id")) != str(po_line["id"]):
+            raise ValidationFailed("bill receipt line and purchase order line do not agree")
+        for selected in (po_line, receipt_line):
+            if selected and str(selected.get("item_id")) != str(line.get("item_id")):
+                raise ValidationFailed("bill item does not match the selected document line")
+            if selected and line.get("uom_id") and selected.get("uom_id") and str(selected["uom_id"]) != str(line["uom_id"]):
+                raise ValidationFailed("bill unit does not match the selected document line")
+
     async def create_bill(
         self, data: Mapping[str, Any], *, actor_id: str | None = None, idempotency_key: str | None = None
     ) -> dict[str, Any]:
@@ -2684,6 +2755,8 @@ class ProcurementService:
         total = ZERO
         prepared = []
         for index, line in enumerate(lines, start=1):
+            if line.get("item_id") and not line.get("is_landed_cost"):
+                await self._validate_bill_links(data, line)
             qty_value = qty(line.get("qty") or 0)
             unit_price = money(line.get("unit_price") or 0)
             amount = money(line["amount"]) if line.get("amount") is not None else money(qty_value * unit_price)
@@ -2811,10 +2884,14 @@ class ProcurementService:
         vendor_id: str | None = None,
         status: str | None = None,
         match_status: str | None = None,
+        vendor_bill_number: str | None = None,
+        q: str | None = None,
+        cursor: str | None = None,
         limit: int = 50,
     ) -> dict[str, Any]:
         clauses = ["b.tenant_id = :tenant_id"]
-        params: dict[str, Any] = {"limit": max(1, min(int(limit), 200))}
+        page_size = max(1, min(int(limit), 200))
+        params: dict[str, Any] = {"limit": page_size + 1}
         if vendor_id:
             clauses.append("b.vendor_id = :vendor")
             params["vendor"] = _as_uuid(vendor_id)
@@ -2824,15 +2901,25 @@ class ProcurementService:
         if match_status:
             clauses.append("m.match_status = :match_status")
             params["match_status"] = match_status.upper()
+        if vendor_bill_number is not None:
+            clauses.append("b.vendor_bill_number = :reference")
+            params["reference"] = vendor_bill_number
+        if q:
+            clauses.append("(b.document_number ILIKE :q OR b.vendor_bill_number ILIKE :q)")
+            params["q"] = f"%{q}%"
+        if cursor:
+            anchor = await self._require_row("vendor_bill", cursor, "cursor")
+            clauses.append("(b.created_at, b.id) < (:cursor_at, :cursor_id)")
+            params.update(cursor_at=_stamp(anchor["created_at"]), cursor_id=_as_uuid(cursor))
         rows = await self._all(
             f"""
             SELECT b.*, m.match_status, m.exception_codes FROM procurement.vendor_bill b
               LEFT JOIN procurement.vendor_bill_match m ON m.tenant_id = b.tenant_id AND m.vendor_bill_id = b.id
-             WHERE {" AND ".join(clauses)} ORDER BY b.created_at DESC LIMIT :limit
+             WHERE {" AND ".join(clauses)} ORDER BY b.created_at DESC, b.id DESC LIMIT :limit
             """,
             **params,
         )
-        return {"items": rows, "next_cursor": None}
+        return {"items": rows[:page_size], "next_cursor": str(rows[page_size-1]["id"]) if len(rows) > page_size else None}
 
     async def update_bill(
         self, bill_id: Any, data: Mapping[str, Any], *, actor_id: str | None = None

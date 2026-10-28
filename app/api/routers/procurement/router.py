@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from typing import Annotated, Any, NoReturn
 
-from fastapi import APIRouter, Body, Depends, Header, HTTPException
+from fastapi import APIRouter, Body, Depends, Header, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import DbDep, PrincipalDep, require_scope
@@ -213,12 +213,18 @@ async def list_vendors(
     is_inactive: bool | None = None,
     category_id: str | None = None,
     q: str | None = None,
+    tax_id: Annotated[str | None, Query(max_length=200)] = None,
+    vendor_number: Annotated[str | None, Query(max_length=200)] = None,
     cursor: str | None = None,
     limit: int = 50,
 ) -> dict[str, Any]:
-    return await _service(db, principal).list_vendors(
-        is_inactive=is_inactive, category_id=category_id, q=q, cursor=cursor, limit=_limit(limit)
-    )
+    try:
+        return await _service(db, principal).list_vendors(
+            is_inactive=is_inactive, category_id=category_id, q=q, tax_id=tax_id,
+            vendor_number=vendor_number, cursor=cursor, limit=_limit(limit)
+        )
+    except Exception as exc:  # noqa: BLE001
+        _raise(exc)
 
 
 @router.post("/vendors", status_code=201, response_model=VendorOut, dependencies=[Depends(require_scope(VENDOR_WRITE))])
@@ -379,10 +385,17 @@ async def list_item_vendors(
     item_id: str | None = None,
     vendor_id: str | None = None,
     is_preferred: bool | None = None,
+    vendor_item_code: Annotated[str | None, Query(max_length=200)] = None,
+    cursor: str | None = None,
+    limit: int = 100,
 ) -> dict[str, Any]:
-    return await _service(db, principal).list_item_vendors(
-        item_id=item_id, vendor_id=vendor_id, is_preferred=is_preferred
-    )
+    try:
+        return await _service(db, principal).list_item_vendors(
+            item_id=item_id, vendor_id=vendor_id, is_preferred=is_preferred,
+            vendor_item_code=vendor_item_code, cursor=cursor, limit=_limit(limit)
+        )
+    except Exception as exc:  # noqa: BLE001
+        _raise(exc)
 
 
 @router.post(
@@ -861,6 +874,8 @@ async def list_purchase_orders(
     po_type: str | None = None,
     expected_receipt_from: str | None = None,
     expected_receipt_to: str | None = None,
+    q: str | None = None,
+    cursor: str | None = None,
     limit: int = 50,
 ) -> dict[str, Any]:
     return await _service(db, principal).list_purchase_orders(
@@ -869,6 +884,8 @@ async def list_purchase_orders(
         po_type=po_type,
         expected_receipt_from=expected_receipt_from,
         expected_receipt_to=expected_receipt_to,
+        q=q,
+        cursor=cursor,
         limit=_limit(limit),
     )
 
@@ -1037,6 +1054,9 @@ async def list_receipts(
     status: str | None = None,
     received_from: str | None = None,
     received_to: str | None = None,
+    vendor_id: str | None = None,
+    q: str | None = None,
+    cursor: str | None = None,
     limit: int = 50,
 ) -> dict[str, Any]:
     return await _service(db, principal).list_receipts(
@@ -1044,6 +1064,9 @@ async def list_receipts(
         status=status,
         received_from=received_from,
         received_to=received_to,
+        vendor_id=vendor_id,
+        q=q,
+        cursor=cursor,
         limit=_limit(limit),
     )
 
@@ -1147,10 +1170,14 @@ async def list_bills(
     vendor_id: str | None = None,
     status: str | None = None,
     match_status: str | None = None,
+    vendor_bill_number: str | None = None,
+    q: str | None = None,
+    cursor: str | None = None,
     limit: int = 50,
 ) -> dict[str, Any]:
     return await _service(db, principal).list_bills(
-        vendor_id=vendor_id, status=status, match_status=match_status, limit=_limit(limit)
+        vendor_id=vendor_id, status=status, match_status=match_status,
+        vendor_bill_number=vendor_bill_number, q=q, cursor=cursor, limit=_limit(limit)
     )
 
 
