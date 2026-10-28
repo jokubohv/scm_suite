@@ -91,6 +91,54 @@
           },
           {
             "in": "query",
+            "name": "vendor_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Vendor Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
             "name": "limit",
             "required": false,
             "schema": {
@@ -306,6 +354,18 @@
                         }
                       ],
                       "title": "Next Cursor"
+                    },
+                    "pagination_contract_version": {
+                      "anyOf": [
+                        {
+                          "const": 1,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Pagination Contract Version"
                     }
                   },
                   "required": [
@@ -28618,6 +28678,49 @@
               ],
               "title": "Is Preferred"
             }
+          },
+          {
+            "in": "query",
+            "name": "vendor_item_code",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Vendor Item Code"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "title": "Limit",
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -28834,6 +28937,12 @@
                       },
                       "title": "Items",
                       "type": "array"
+                    },
+                    "matching_contract_version": {
+                      "const": 1,
+                      "default": 1,
+                      "title": "Matching Contract Version",
+                      "type": "integer"
                     },
                     "next_cursor": {
                       "anyOf": [
@@ -50375,6 +50484,38 @@
           },
           {
             "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
             "name": "limit",
             "required": false,
             "schema": {
@@ -50858,6 +50999,18 @@
                         }
                       ],
                       "title": "Next Cursor"
+                    },
+                    "pagination_contract_version": {
+                      "anyOf": [
+                        {
+                          "const": 1,
+                          "type": "integer"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ],
+                      "title": "Pagination Contract Version"
                     }
                   },
                   "required": [
@@ -212824,6 +212977,54 @@
           },
           {
             "in": "query",
+            "name": "vendor_bill_number",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Vendor Bill Number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
             "name": "limit",
             "required": false,
             "schema": {
@@ -212839,6 +213040,12 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "bill_preparation_contract_version": {
+                      "const": 1,
+                      "default": 1,
+                      "title": "Bill Preparation Contract Version",
+                      "type": "integer"
+                    },
                     "count": {
                       "anyOf": [
                         {
@@ -212967,6 +213174,18 @@
                           "lines": {
                             "items": {
                               "properties": {
+                                "amount": {
+                                  "anyOf": [
+                                    {
+                                      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Amount"
+                                },
                                 "created_at": {
                                   "anyOf": [
                                     {
@@ -212990,10 +213209,32 @@
                                   ],
                                   "title": "Description"
                                 },
+                                "expense_account_ref": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Expense Account Ref"
+                                },
                                 "id": {
                                   "format": "uuid",
                                   "title": "Id",
                                   "type": "string"
+                                },
+                                "is_landed_cost": {
+                                  "anyOf": [
+                                    {
+                                      "type": "boolean"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Is Landed Cost"
                                 },
                                 "item_id": {
                                   "anyOf": [
@@ -213018,6 +213259,18 @@
                                     }
                                   ],
                                   "title": "Item Receipt Line Id"
+                                },
+                                "landed_cost_category_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Landed Cost Category Id"
                                 },
                                 "line_number": {
                                   "anyOf": [
@@ -213090,6 +213343,18 @@
                                   ],
                                   "title": "Unit Price"
                                 },
+                                "uom_id": {
+                                  "anyOf": [
+                                    {
+                                      "format": "uuid",
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "title": "Uom Id"
+                                },
                                 "updated_at": {
                                   "anyOf": [
                                     {
@@ -213134,6 +213399,68 @@
                             },
                             "title": "Lines",
                             "type": "array"
+                          },
+                          "match": {
+                            "anyOf": [
+                              {
+                                "properties": {
+                                  "exception_codes": {
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "title": "Exception Codes",
+                                    "type": "array"
+                                  },
+                                  "match_status": {
+                                    "title": "Match Status",
+                                    "type": "string"
+                                  },
+                                  "notes": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ],
+                                    "title": "Notes"
+                                  },
+                                  "tolerance_amount": {
+                                    "anyOf": [
+                                      {
+                                        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ],
+                                    "title": "Tolerance Amount"
+                                  },
+                                  "tolerance_percent": {
+                                    "anyOf": [
+                                      {
+                                        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                        "type": "string"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ],
+                                    "title": "Tolerance Percent"
+                                  }
+                                },
+                                "required": [
+                                  "match_status"
+                                ],
+                                "title": "VendorBillMatchSummary",
+                                "type": "object"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
                           },
                           "match_status": {
                             "anyOf": [
@@ -215102,6 +215429,18 @@
                             }
                           ],
                           "title": "Unit Price"
+                        },
+                        "uom_id": {
+                          "anyOf": [
+                            {
+                              "format": "uuid",
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "title": "Uom Id"
                         }
                       },
                       "title": "VendorBillLineCreate",
@@ -215315,6 +215654,18 @@
                     "lines": {
                       "items": {
                         "properties": {
+                          "amount": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Amount"
+                          },
                           "created_at": {
                             "anyOf": [
                               {
@@ -215338,10 +215689,32 @@
                             ],
                             "title": "Description"
                           },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
                           "id": {
                             "format": "uuid",
                             "title": "Id",
                             "type": "string"
+                          },
+                          "is_landed_cost": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost"
                           },
                           "item_id": {
                             "anyOf": [
@@ -215366,6 +215739,18 @@
                               }
                             ],
                             "title": "Item Receipt Line Id"
+                          },
+                          "landed_cost_category_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Landed Cost Category Id"
                           },
                           "line_number": {
                             "anyOf": [
@@ -215438,6 +215823,18 @@
                             ],
                             "title": "Unit Price"
                           },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
                           "updated_at": {
                             "anyOf": [
                               {
@@ -215482,6 +215879,68 @@
                       },
                       "title": "Lines",
                       "type": "array"
+                    },
+                    "match": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "exception_codes": {
+                              "items": {
+                                "type": "string"
+                              },
+                              "title": "Exception Codes",
+                              "type": "array"
+                            },
+                            "match_status": {
+                              "title": "Match Status",
+                              "type": "string"
+                            },
+                            "notes": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Notes"
+                            },
+                            "tolerance_amount": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Amount"
+                            },
+                            "tolerance_percent": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Percent"
+                            }
+                          },
+                          "required": [
+                            "match_status"
+                          ],
+                          "title": "VendorBillMatchSummary",
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "match_status": {
                       "anyOf": [
@@ -217390,6 +217849,18 @@
                     "lines": {
                       "items": {
                         "properties": {
+                          "amount": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Amount"
+                          },
                           "created_at": {
                             "anyOf": [
                               {
@@ -217413,10 +217884,32 @@
                             ],
                             "title": "Description"
                           },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
                           "id": {
                             "format": "uuid",
                             "title": "Id",
                             "type": "string"
+                          },
+                          "is_landed_cost": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost"
                           },
                           "item_id": {
                             "anyOf": [
@@ -217441,6 +217934,18 @@
                               }
                             ],
                             "title": "Item Receipt Line Id"
+                          },
+                          "landed_cost_category_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Landed Cost Category Id"
                           },
                           "line_number": {
                             "anyOf": [
@@ -217513,6 +218018,18 @@
                             ],
                             "title": "Unit Price"
                           },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
                           "updated_at": {
                             "anyOf": [
                               {
@@ -217557,6 +218074,68 @@
                       },
                       "title": "Lines",
                       "type": "array"
+                    },
+                    "match": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "exception_codes": {
+                              "items": {
+                                "type": "string"
+                              },
+                              "title": "Exception Codes",
+                              "type": "array"
+                            },
+                            "match_status": {
+                              "title": "Match Status",
+                              "type": "string"
+                            },
+                            "notes": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Notes"
+                            },
+                            "tolerance_amount": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Amount"
+                            },
+                            "tolerance_percent": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Percent"
+                            }
+                          },
+                          "required": [
+                            "match_status"
+                          ],
+                          "title": "VendorBillMatchSummary",
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "match_status": {
                       "anyOf": [
@@ -219477,6 +220056,18 @@
                                 }
                               ],
                               "title": "Unit Price"
+                            },
+                            "uom_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Uom Id"
                             }
                           },
                           "title": "VendorBillLineCreate",
@@ -219685,6 +220276,18 @@
                     "lines": {
                       "items": {
                         "properties": {
+                          "amount": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Amount"
+                          },
                           "created_at": {
                             "anyOf": [
                               {
@@ -219708,10 +220311,32 @@
                             ],
                             "title": "Description"
                           },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
                           "id": {
                             "format": "uuid",
                             "title": "Id",
                             "type": "string"
+                          },
+                          "is_landed_cost": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost"
                           },
                           "item_id": {
                             "anyOf": [
@@ -219736,6 +220361,18 @@
                               }
                             ],
                             "title": "Item Receipt Line Id"
+                          },
+                          "landed_cost_category_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Landed Cost Category Id"
                           },
                           "line_number": {
                             "anyOf": [
@@ -219808,6 +220445,18 @@
                             ],
                             "title": "Unit Price"
                           },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
                           "updated_at": {
                             "anyOf": [
                               {
@@ -219852,6 +220501,68 @@
                       },
                       "title": "Lines",
                       "type": "array"
+                    },
+                    "match": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "exception_codes": {
+                              "items": {
+                                "type": "string"
+                              },
+                              "title": "Exception Codes",
+                              "type": "array"
+                            },
+                            "match_status": {
+                              "title": "Match Status",
+                              "type": "string"
+                            },
+                            "notes": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Notes"
+                            },
+                            "tolerance_amount": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Amount"
+                            },
+                            "tolerance_percent": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Percent"
+                            }
+                          },
+                          "required": [
+                            "match_status"
+                          ],
+                          "title": "VendorBillMatchSummary",
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "match_status": {
                       "anyOf": [
@@ -238878,6 +239589,18 @@
                     "lines": {
                       "items": {
                         "properties": {
+                          "amount": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Amount"
+                          },
                           "created_at": {
                             "anyOf": [
                               {
@@ -238901,10 +239624,32 @@
                             ],
                             "title": "Description"
                           },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
                           "id": {
                             "format": "uuid",
                             "title": "Id",
                             "type": "string"
+                          },
+                          "is_landed_cost": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost"
                           },
                           "item_id": {
                             "anyOf": [
@@ -238929,6 +239674,18 @@
                               }
                             ],
                             "title": "Item Receipt Line Id"
+                          },
+                          "landed_cost_category_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Landed Cost Category Id"
                           },
                           "line_number": {
                             "anyOf": [
@@ -239001,6 +239758,18 @@
                             ],
                             "title": "Unit Price"
                           },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
                           "updated_at": {
                             "anyOf": [
                               {
@@ -239045,6 +239814,68 @@
                       },
                       "title": "Lines",
                       "type": "array"
+                    },
+                    "match": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "exception_codes": {
+                              "items": {
+                                "type": "string"
+                              },
+                              "title": "Exception Codes",
+                              "type": "array"
+                            },
+                            "match_status": {
+                              "title": "Match Status",
+                              "type": "string"
+                            },
+                            "notes": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Notes"
+                            },
+                            "tolerance_amount": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Amount"
+                            },
+                            "tolerance_percent": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Percent"
+                            }
+                          },
+                          "required": [
+                            "match_status"
+                          ],
+                          "title": "VendorBillMatchSummary",
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "match_status": {
                       "anyOf": [
@@ -240965,6 +241796,18 @@
                                 }
                               ],
                               "title": "Unit Price"
+                            },
+                            "uom_id": {
+                              "anyOf": [
+                                {
+                                  "format": "uuid",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Uom Id"
                             }
                           },
                           "title": "VendorBillLineCreate",
@@ -241173,6 +242016,18 @@
                     "lines": {
                       "items": {
                         "properties": {
+                          "amount": {
+                            "anyOf": [
+                              {
+                                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Amount"
+                          },
                           "created_at": {
                             "anyOf": [
                               {
@@ -241196,10 +242051,32 @@
                             ],
                             "title": "Description"
                           },
+                          "expense_account_ref": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Expense Account Ref"
+                          },
                           "id": {
                             "format": "uuid",
                             "title": "Id",
                             "type": "string"
+                          },
+                          "is_landed_cost": {
+                            "anyOf": [
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Is Landed Cost"
                           },
                           "item_id": {
                             "anyOf": [
@@ -241224,6 +242101,18 @@
                               }
                             ],
                             "title": "Item Receipt Line Id"
+                          },
+                          "landed_cost_category_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Landed Cost Category Id"
                           },
                           "line_number": {
                             "anyOf": [
@@ -241296,6 +242185,18 @@
                             ],
                             "title": "Unit Price"
                           },
+                          "uom_id": {
+                            "anyOf": [
+                              {
+                                "format": "uuid",
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ],
+                            "title": "Uom Id"
+                          },
                           "updated_at": {
                             "anyOf": [
                               {
@@ -241340,6 +242241,68 @@
                       },
                       "title": "Lines",
                       "type": "array"
+                    },
+                    "match": {
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "exception_codes": {
+                              "items": {
+                                "type": "string"
+                              },
+                              "title": "Exception Codes",
+                              "type": "array"
+                            },
+                            "match_status": {
+                              "title": "Match Status",
+                              "type": "string"
+                            },
+                            "notes": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Notes"
+                            },
+                            "tolerance_amount": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Amount"
+                            },
+                            "tolerance_percent": {
+                              "anyOf": [
+                                {
+                                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "null"
+                                }
+                              ],
+                              "title": "Tolerance Percent"
+                            }
+                          },
+                          "required": [
+                            "match_status"
+                          ],
+                          "title": "VendorBillMatchSummary",
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     },
                     "match_status": {
                       "anyOf": [
@@ -361080,6 +362043,40 @@
           },
           {
             "in": "query",
+            "name": "tax_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tax Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "vendor_number",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Vendor Number"
+            }
+          },
+          {
+            "in": "query",
             "name": "cursor",
             "required": false,
             "schema": {
@@ -361353,6 +362350,12 @@
                       },
                       "title": "Items",
                       "type": "array"
+                    },
+                    "matching_contract_version": {
+                      "const": 1,
+                      "default": 1,
+                      "title": "Matching Contract Version",
+                      "type": "integer"
                     },
                     "next_cursor": {
                       "anyOf": [

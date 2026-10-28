@@ -455,6 +455,17 @@ class LedgerService:
                 subsidiary_ref=line["subsidiary_ref"], cost_object=line["cost_object_id"], date=validated["transaction_date"],
             )
             for detail in line["details"]:
+                # Procurement's value-only calls may carry an empty physical
+                # placeholder. The financial value is on the ledger line; this
+                # zero/identity-free row represents no allocation to persist.
+                # Real physical and nonempty details keep their numbered guards.
+                if (
+                    value_only
+                    and detail["qty_base"] == 0
+                    and detail["value_base"] == 0
+                    and not any(detail.get(key) for key in ("bin_id", "lot_id", "serial_id"))
+                ):
+                    continue
                 await self._exec(
                     """
                     INSERT INTO inventory_ledger.inventory_transaction_detail

@@ -1,0 +1,41 @@
+{
+  "base": "2dbdda9f0b4830c498733a599d12448c2b42309b",
+  "generator_versions": {
+    "fastapi": "0.138.0",
+    "pydantic": "2.13.4"
+  },
+  "contract_lint": "passed",
+  "web_types": "not applicable: mainline has no web project",
+  "runtime": {
+    "paths": 982,
+    "operations": 1259,
+    "removed_operations": [],
+    "added_operations": [],
+    "changed_get_paths": [
+      "/api/v1/item-vendors",
+      "/api/v1/vendors"
+    ],
+    "sha256": "f36b1be1440071070ea0dd0d80d90545608a60351f6cba0606792f0d691aa02d"
+  },
+  "aggregate": {
+    "paths": 991,
+    "operations": 1268,
+    "removed_operations": [],
+    "added_operations": [],
+    "changed_get_paths": [
+      "/api/v1/item-vendors",
+      "/api/v1/vendors"
+    ],
+    "sha256": "396f0df2c3d55289442f1eb05657ab7932ee300b4ab278b4c16a8fd562b8c0d4"
+  },
+  "tracked_files_changed": [
+    "app/api/routers/procurement/router.py",
+    "app/api/schemas/procurement.py",
+    "app/contracts/procurement/openapi.fragment.json",
+    "app/modules/procurement/service.py",
+    "contracts/openapi/fragments/FS-08.openapi.json",
+    "contracts/openapi/openapi.json",
+    "contracts/openapi/openapi.yaml",
+    "deployment/runtime.openapi.json"
+  ]
+}
