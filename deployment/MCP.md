@@ -27,21 +27,26 @@ schemas, resources and prompts.
 
 ## Tool catalogue
 
-The server derives a curated catalogue from the runtime OpenAPI document:
+The server derives a **255-tool** curated catalogue from the runtime OpenAPI document (982 paths /
+1,259 operations):
 
-- CRUD tools for items, UOMs, locations, bins, inventory statuses, adjustments, transfers, counts,
-  vendors, purchase orders, receipts, bills, warehouses, inbound shipments, receiving, putaway,
-  waves, pick/put tasks, assemblies, BOMs, work orders, routings, work centers, quality,
-  consignment, warranty, UPC registry, pricing, allocation runs and reports
-- named lifecycle tools such as submit/post/approve/release/complete/capture/cancel
-- `scm_api_request` fallback for any remaining `/api/v1/` business endpoint
+- CRUD tools for items, UOMs, locations, bins, inventory statuses, lots, adjustments, transfers,
+  counts, fulfilments, inventory transactions, vendors, purchase orders, receipts, bills, warehouses,
+  inbound shipments, receiving, putaway, waves, pick/put tasks, assemblies, BOMs, work orders,
+  routings, work centers, quality, consignment, warranty, UPC registry, pricing, allocation runs and
+  reports
+- named lifecycle tools such as submit/post/approve/release/complete/capture/cancel/reverse
+- `scm_api_request` fallback for any remaining `/api/v1/` business endpoint (including the two
+  no-argument list reads `GET /reports` and `GET /work-centers`, which are intentionally not curated
+  because their only input is the empty JSON object)
 - resources: `scm://openapi`, `scm://mcp/info`, `scm://mcp/tools`
 - prompts: `inventory_adjustment`, `procure_to_pay`, `cycle_count`
 
-Every tool input schema is generated from the runtime OpenAPI contract. All request bodies are now typed in the runtime API
-contract (0 opaque body operations), so all 151 body-bearing MCP tools expose real fields, required
-flags, enums and nested line schemas. Every tool inherits the caller's tenant and API-key scopes. Write calls automatically receive an
-`Idempotency-Key`; approval tools require a key with the relevant approval scope.
+Every tool input schema is generated from the runtime OpenAPI contract. All request bodies are typed in
+the runtime API contract (0 opaque body operations), so all **144 body-bearing MCP tools** expose real
+fields, required flags, enums and nested line schemas. Every tool inherits the caller's tenant and
+API-key scopes. Write calls automatically receive an `Idempotency-Key`; approval tools require a key
+with the relevant approval scope.
 
 ## Examples
 

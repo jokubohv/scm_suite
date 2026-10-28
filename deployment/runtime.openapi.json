@@ -61312,6 +61312,7 @@
         "type": "object"
       },
       "LocationUpdate": {
+        "additionalProperties": false,
         "properties": {
           "address": {
             "anyOf": [
@@ -61335,17 +61336,6 @@
               }
             ],
             "title": "Allow Commit From Non Available"
-          },
-          "code": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Code"
           },
           "is_bins_enabled": {
             "anyOf": [
@@ -61379,28 +61369,6 @@
               }
             ],
             "title": "Is Statuses Enabled"
-          },
-          "is_unallocated": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Is Unallocated"
-          },
-          "location_type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Location Type"
           },
           "name": {
             "anyOf": [

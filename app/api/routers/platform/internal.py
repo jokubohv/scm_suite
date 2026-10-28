@@ -78,7 +78,7 @@ async def internal_deps(request: Request, _: InternalService) -> dict[str, Any]:
     return {
         "platform_version": __version__,
         "plan_version": "1.5.0",
-        "migrations_head": "0030_rls_grants_verify",
+        "migrations_head": "0031_count_post_txn_idx",
         "outbox": {"depth": None, "oldest_age_s": None},
         "jobs": {"queued": None, "running": None, "oldest_pending_s": None},
         "scheduler": {"leader": "worker", "last_tick": datetime.now(UTC).isoformat()},

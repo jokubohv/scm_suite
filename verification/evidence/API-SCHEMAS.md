@@ -13,8 +13,8 @@ so they inherit the typed request bodies automatically.
 | Runtime operations | 1,259 |
 | Operations with a request body | 647 |
 | **Opaque request bodies** (`additionalProperties: true`, no fields) | **360** |
-| Curated MCP tools | 240 |
-| MCP body tools | 134 |
+| Curated MCP tools | 255 |
+| MCP body tools | 144 |
 | **Opaque MCP body tools** | **113** |
 
 ## After
@@ -24,8 +24,8 @@ so they inherit the typed request bodies automatically.
 | Runtime operations | 1,259 |
 | Operations with a request body | 700 |
 | **Opaque request bodies** | **0** |
-| MCP tools | 240 |
-| MCP body tools | 151 |
+| MCP tools | 255 |
+| MCP body tools | 144 |
 | **Opaque MCP body tools** | **0** |
 
 The extra 53 body operations are action endpoints that previously had no documented request body;

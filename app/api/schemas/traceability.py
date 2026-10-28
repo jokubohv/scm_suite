@@ -67,10 +67,13 @@ class LocationCreate(APIModel):
 
 
 class LocationUpdate(APIModel):
+    # Contract correction (P1 residual): ``code``/``location_type``/``is_unallocated`` are immutable
+    # identity fields rejected by the service, so they are no longer published on PATCH. Forbidding
+    # unknown fields makes an old client that still sends them fail loudly (422) instead of a silent
+    # no-op; ``LocationCreate`` keeps the full create surface.
+    model_config = ConfigDict(extra="forbid", from_attributes=True, populate_by_name=True)
+
     name: str | None = None
-    code: str | None = None
-    location_type: str | None = None
-    is_unallocated: bool | None = None
     parent_id: str | None = None
     address: dict | None = None
     subsidiary_ref: str | None = None
