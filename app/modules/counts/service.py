@@ -313,7 +313,11 @@ class CountsService:
         status_ids = [str(status) for status in scope.get("statuses") or []]
         if count_type == "MANUAL" and not (item_ids or location_ids):
             raise CountsValidationError("manual count requires an explicit item or location scope")
-        if count_type == "CALCULATED" and not scope:
+        if count_type == "CALCULATED" and not (
+            item_ids or location_ids or status_ids or scope.get("bins") or scope.get("abc")
+        ):
+            # CountCreate materialises ``scope`` with empty lists, so ``not scope`` was always False and
+            # a CALCULATED count with no real scope target silently created an all-positions count.
             raise CountsValidationError("calculated count requires scope inputs (items/locations/abc)")
         positions = await self.repo.load_positions(
             item_ids=item_ids, location_ids=location_ids, status_ids=status_ids,

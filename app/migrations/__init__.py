@@ -1,7 +1,7 @@
 """Alembic migration environment package.
 
 The platform keeps exactly **one** additive migration chain under ``app/migrations/versions/``.
-Revision identifiers are 4-digit-prefixed (``0001_platform_core`` … ``0030_rls_grants_verify``)
+Revision identifiers are 4-digit-prefixed (``0001_platform_core`` … ``0031_count_post_txn_idx``)
 and are pre-allocated in ``design/DATA-MODEL.md`` §21.1 / ``design/feature-sets.json``.
 """
 

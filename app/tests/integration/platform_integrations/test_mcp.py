@@ -65,6 +65,27 @@ async def test_tool_registry_is_derived_from_runtime_openapi() -> None:
         assert re.match(r"^[a-z0-9_]+$", tool.name)
 
 
+async def test_p1_resource_tools_are_curated_and_empty_tools_removed() -> None:
+    """P1 residual cleanup: lots/fulfilments/inventory-transactions are curated; empty list tools go."""
+    tools = mcp_router.build_tool_registry(create_app().openapi())
+    names = {tool.name for tool in tools}
+    for expected in (
+        "lots_list",
+        "lots_get",
+        "lots_create",
+        "fulfillments_create",
+        "inventory_transactions_list",
+        "inventory_transactions_create",
+        "inventory_transactions_get",
+        "inventory_transactions_reverse",
+    ):
+        assert expected in names, expected
+    assert "reports_list" not in names
+    assert "work_centers_list" not in names
+    # Still reachable through the generic escape hatch, which remains present.
+    assert "scm_api_request" in names
+
+
 async def test_api_request_schemas_are_typed_and_injected() -> None:
     spec = create_app().openapi()
 
