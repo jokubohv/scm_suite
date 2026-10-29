@@ -92,7 +92,7 @@ fi
 echo "== apply scoped reset =="
 psql_reset
 
-echo "== verify post-reset (pre-PATCH, expected_currency=USD) =="
-psql_verify USD "$BASELINE"
+echo "== verify post-reset (expected_currency=$EXPECTED_CURRENCY) =="
+psql_verify "$EXPECTED_CURRENCY" "$BASELINE"
 
 echo "RESULT=apply-ok BACKUP_FILE=$BACKUP_FILE BASELINE_FILE=$BASELINE_FILE"
