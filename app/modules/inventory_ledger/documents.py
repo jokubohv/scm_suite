@@ -662,6 +662,8 @@ class LedgerDocuments:
         for line in lines:
             qty = Decimal(str(line["qty"]))
             status = line["inventory_status_id"] or status_id
+            out_details: list[dict[str, Any]] | None
+            in_details: list[dict[str, Any]] | None
             serial_ids = list(line.get("serial_ids") or [])
             if serial_ids:
                 if qty != Decimal(len(serial_ids)):
@@ -832,6 +834,8 @@ class LedgerDocuments:
             )
             if line is None:
                 raise ValidationFailed(f"transfer order line {line_number} not found")
+            out_details: list[dict[str, Any]] | None
+            in_details: list[dict[str, Any]] | None
             serial_ids = list(line.get("serial_ids") or [])
             if serial_ids:
                 if qty != Decimal(len(serial_ids)):
@@ -936,6 +940,8 @@ class LedgerDocuments:
                 raise ValidationFailed(f"transfer order line {line_number} not found")
             if qty > Decimal(str(line["qty_in_transit"])):
                 raise ValidationFailed("received quantity exceeds in-transit quantity")
+            transit_details: list[dict[str, Any]] | None
+            on_hand_details: list[dict[str, Any]] | None
             serial_ids = list(line.get("serial_ids") or [])
             if serial_ids:
                 if qty != Decimal(len(serial_ids)):

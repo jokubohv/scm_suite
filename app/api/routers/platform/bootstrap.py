@@ -156,12 +156,12 @@ async def _provision_tenant_rbac(session: Any, tenant_id: UUID) -> dict[str, int
     }
     inserted_links = 0
     for row in catalogue.role_permission_rows():
-        role_id = role_ids.get(row["role_code"])
-        scope_id = scope_ids.get(row["scope"])
-        if role_id is None or scope_id is None or (role_id, scope_id) in existing_links:
+        link_role_id = role_ids.get(row["role_code"])
+        link_scope_id = scope_ids.get(row["scope"])
+        if link_role_id is None or link_scope_id is None or (link_role_id, link_scope_id) in existing_links:
             continue
         await session.execute(
-            p.role_permission.insert().values(tenant_id=tenant_id, role_id=role_id, scope_id=scope_id)
+            p.role_permission.insert().values(tenant_id=tenant_id, role_id=link_role_id, scope_id=link_scope_id)
         )
         inserted_links += 1
     return {"scopes": inserted_scopes, "roles": inserted_roles, "role_permissions": inserted_links}
@@ -284,7 +284,7 @@ async def whoami() -> BootstrapWhoAmI:
 @router.post("/tenants", response_model=PlatformObject, status_code=201, dependencies=[Depends(require_super_admin)])
 async def bootstrap_tenant(body: TenantBootstrapIn, db: DbDep) -> dict[str, Any]:
     repo = PlatformAdminRepository(db)
-    payload = {
+    payload: dict[str, Any] = {
         "code": body.code,
         "name": body.name,
         "status": "ACTIVE",

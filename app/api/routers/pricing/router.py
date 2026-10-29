@@ -1309,7 +1309,7 @@ async def patch_price_schedule(
 ) -> dict[str, Any]:
     body = body.model_dump(exclude_unset=True)
     service = _service(db)
-    values = {
+    values: dict[str, Any] = {
         key: (body[key].upper() if key == "calculation_mode" and body.get(key) else body[key])
         for key in ("name", "calculation_mode", "is_marginal", "is_inactive")
         if key in body
@@ -1729,7 +1729,7 @@ async def patch_item_collection(
     service = _service(db)
     try:
         await service.get_master(t.item_collection, principal.tenant_id, collection_id)
-        values = {key: body[key] for key in ("name", "criteria", "is_inactive") if key in body}
+        values: dict[str, Any] = {key: body[key] for key in ("name", "criteria", "is_inactive") if key in body}
         if "is_active" in body:
             values["is_inactive"] = not bool(body["is_active"])
         row = await service.repo.update_row(
@@ -1993,7 +1993,9 @@ async def patch_coupon(
     service = _service(db)
     try:
         await service.get_master(t.coupon, principal.tenant_id, coupon_id)
-        values = {key: body[key] for key in ("name", "value", "end_date", "max_uses", "is_active") if key in body}
+        values: dict[str, Any] = {
+            key: body[key] for key in ("name", "value", "end_date", "max_uses", "is_active") if key in body
+        }
         row = await service.repo.update_row(
             t.coupon, principal.tenant_id, coupon_id, values, principal.identity_id, expected_version=_version(if_match)
         )
@@ -2144,7 +2146,7 @@ async def patch_price_update(
                     "details": [],
                 },
             )
-        values = {key: body[key] for key in ("effective_start", "effective_end", "priority") if key in body}
+        values: dict[str, Any] = {key: body[key] for key in ("effective_start", "effective_end", "priority") if key in body}
         updated = await service.repo.update_row(
             t.price_update,
             principal.tenant_id,

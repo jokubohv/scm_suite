@@ -8,11 +8,11 @@ from __future__ import annotations
 
 import hmac
 import json
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Iterable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from functools import lru_cache
-from typing import Annotated
+from typing import Annotated, Any, cast
 
 from fastapi import Depends, Header, HTTPException, Request
 from sqlalchemy import text
@@ -213,7 +213,7 @@ async def authenticate_api_key(raw_key: str) -> AuthContext | None:
             app_user_id=app_user_id,
             tenant_id=tenant_id,
             token_version=0,
-            scopes=frozenset(str(scope) for scope in (row.get("scopes") or [])),
+            scopes=frozenset(str(scope) for scope in cast("Iterable[Any]", row.get("scopes") or [])),
         )
     return None
 

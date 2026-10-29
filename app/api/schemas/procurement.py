@@ -1121,7 +1121,6 @@ class ProcurementRequestDTO(ProcurementDTO):
     receipt_type: Any | None = None
     deferred_posting: Any | None = None
     variance_account_ref: Any | None = None
-    payment_terms: Any | None = None
     landed_cost_charges: Any | None = None
     is_landed_cost: Any | None = None
     landed_cost_category_id: Any | None = None
@@ -1134,7 +1133,6 @@ class ProcurementRequestDTO(ProcurementDTO):
     qty_released: Any | None = None
     release_date: Any | None = None
     status_reason: Any | None = None
-    memo: Any | None = None
     merge_into_vendor_id: Any | None = None
     source_vendor_id: Any | None = None
     target_vendor_id: Any | None = None
