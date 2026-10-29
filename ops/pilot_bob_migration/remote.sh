@@ -32,7 +32,7 @@ echo "== MODE=$MODE STAMP=$STAMP TENANT=$TENANT_CODE EXPECTED_CURRENCY=$EXPECTED
 
 if [ "$MODE" != "verify" ]; then
   echo "== database size before =="
-  compose exec -T postgres sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Atc "select pg_size_pretty(pg_database_size(current_database())) || \x27 | \x27 || current_database()"'
+  compose exec -T postgres sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Atc "select pg_size_pretty(pg_database_size(current_database())), current_database()"'
   echo "== backup =="
   compose exec -T postgres sh -c 'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc --no-owner --no-privileges' > "$BACKUP_FILE"
   test -s "$BACKUP_FILE" || { echo "FATAL: empty backup"; exit 1; }
