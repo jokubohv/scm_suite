@@ -1,0 +1,20 @@
+{
+  "boundary": "localhost HTTP -> unmodified app authentication/authorization -> PostgreSQL 16 non-superuser login",
+  "create_bob": 201,
+  "cross_tenant_read": 200,
+  "duplicate": 409,
+  "reader_write_denied": 403,
+  "patch": 200,
+  "base_currencies": [
+    "USD",
+    "USD"
+  ],
+  "audits": [
+    "platform.currency.created",
+    "platform.currency.updated"
+  ],
+  "downgrade_preserves_data": true,
+  "downgrade_write": 500,
+  "reupgrade_preserves_data": true,
+  "reupgrade_write": 201
+}
