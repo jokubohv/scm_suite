@@ -105,6 +105,11 @@ class LedgerCostingAdapter:
         mapped_type = MOVEMENT_TYPE_MAP.get(str(movement_type).upper())
         if mapped_type is None:
             mapped_type = "IN" if qty >= 0 else "OUT"
+        if mapped_type in {"IN", "OUT"}:
+            # Some posting paths use one source movement label for both legs (e.g. distribution uses
+            # BOOTSTRAP_DISTRIBUTION for the unallocated -qty leg and the destination +qty leg). The
+            # costing engine keys IN/OUT off the quantity sign, so normalise the mapped direction.
+            mapped_type = "IN" if qty > 0 else "OUT"
         if mapped_type in {"REVALUE", "LANDED", "VARIANCE", "COGS_ADJUST"}:
             if value_delta is None:
                 value_delta = Decimal("0")

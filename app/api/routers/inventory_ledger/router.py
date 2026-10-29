@@ -109,7 +109,11 @@ REASON = "inventory.reason.manage"
 
 
 def _ledger(db: AsyncSession, principal: PrincipalDep) -> LedgerService:
-    return LedgerService(db, principal.tenant_id)
+    # Use the posting facade so every HTTP posting path (generic transactions and owned documents)
+    # gets the same optional FS-05 costing adapter as procurement/WMS/manufacturing callers.
+    from app.modules.inventory_ledger.facade import PostingPort
+
+    return PostingPort(db, principal.tenant_id).ledger
 
 
 def _documents(db: AsyncSession, principal: PrincipalDep) -> LedgerDocuments:

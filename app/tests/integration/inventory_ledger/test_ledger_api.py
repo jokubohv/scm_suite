@@ -162,3 +162,86 @@ async def test_tenant_isolation(ledger_client, world, db_session) -> None:
     assert cross.status_code == 404
     other_balances = await ledger_client.get("/api/v1/inventory/balances", headers=other["headers"])
     assert other_balances.status_code == 200 and other_balances.json()["items"] == []
+
+
+async def test_transaction_currency_defaults_to_tenant_base_currency(ledger_client, world, db_session) -> None:
+    """Posting commands without an explicit currency must inherit the tenant base currency.
+
+    Regression: the ledger used to hard-code USD, so a BOB tenant's transactions were stamped USD even
+    though every document amount was BOB.
+    """
+    await db_session.execute(
+        text("UPDATE platform.tenant SET base_currency_code = 'BOB' WHERE id = :tenant"),
+        {"tenant": world["tenant_id"]},
+    )
+    response = await _post(
+        ledger_client, world, [_movement(world, "2", unit_cost="5", value_base="10")], key="currency-default-1"
+    )
+    assert response.status_code == 201, response.text
+    transaction_id = uuid.UUID(response.json()["transaction_id"])
+    currency = (
+        await db_session.execute(
+            text(
+                "SELECT currency_code FROM inventory_ledger.inventory_transaction "
+                "WHERE tenant_id = :tenant AND id = :txn"
+            ),
+            {"tenant": world["tenant_id"], "txn": transaction_id},
+        )
+    ).scalar_one()
+    assert currency == "BOB"
+
+
+async def test_adjustment_posting_creates_costing_entries(ledger_client, world, db_session) -> None:
+    """Adjustment documents posted through the API must run FS-05 valuation like other posting paths.
+
+    Regression: the API wiring built a bare LedgerService, so adjustment postings updated balances but
+    skipped the synchronous costing adapter (no item_cost/cost_ledger_entry artefacts).
+    """
+    created = await ledger_client.post(
+        "/api/v1/inventory-adjustments",
+        json={
+            "transaction_date": "2026-10-23",
+            "memo": "costing regression",
+            "lines": [{
+                "item_id": str(world["item_id"]),
+                "location_id": str(world["location_id"]),
+                "inventory_status_id": str(world["status_id"]),
+                "qty_delta": "3",
+                "unit_cost": "4",
+            }],
+        },
+        headers=world["headers"] | {"Idempotency-Key": "adj-costing-1"},
+    )
+    assert created.status_code == 201, created.text
+    document_id = created.json()["id"]
+    submitted = await ledger_client.post(
+        f"/api/v1/inventory-adjustments/{document_id}/submit",
+        headers=world["headers"] | {"Idempotency-Key": "adj-costing-submit"},
+    )
+    assert submitted.status_code == 200, submitted.text
+    posted = await ledger_client.post(
+        f"/api/v1/inventory-adjustments/{document_id}/post",
+        headers=world["headers"] | {"Idempotency-Key": "adj-costing-post"},
+    )
+    assert posted.status_code == 200, posted.text
+    transaction_id = uuid.UUID(posted.json()["transaction_id"])
+    entries = (
+        await db_session.execute(
+            text(
+                "SELECT count(*), coalesce(sum(value_delta), 0) FROM costing.cost_ledger_entry "
+                "WHERE tenant_id = :tenant AND inventory_transaction_id = :txn"
+            ),
+            {"tenant": world["tenant_id"], "txn": transaction_id},
+        )
+    ).one()
+    assert int(entries[0]) >= 1, "adjustment posting did not create FS-05 cost ledger entries"
+    assert Decimal(str(entries[1])) != Decimal("0")
+    item_costs = (
+        await db_session.execute(
+            text(
+                "SELECT count(*) FROM costing.item_cost WHERE tenant_id = :tenant AND item_id = :item"
+            ),
+            {"tenant": world["tenant_id"], "item": world["item_id"]},
+        )
+    ).scalar_one()
+    assert int(item_costs) >= 1
