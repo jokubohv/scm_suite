@@ -70,4 +70,4 @@ jobs:
               "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_DIR/ops/pilot_bob_migration/"
       - name: Execute scoped operation
         run: |
-          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && MODE='$MODE' EXPECTED_CURRENCY='$EXPECTED_CURRENCY' bash ops/pilot_bob_migration/remote.sh"
+          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && MODE='$MODE' EXPECTED_CURRENCY='$EXPECTED_CURRENCY' VPS_DEPLOY_DIR='$VPS_DEPLOY_DIR' bash ops/pilot_bob_migration/remote.sh"

@@ -4,7 +4,7 @@
 set -euo pipefail
 umask 077
 : "${MODE:?MODE is required (backup|preflight|dry-run|apply|verify)}"
-: "${VPS_DEPLOY_DIR:?VPS_DEPLOY_DIR is required}"
+VPS_DEPLOY_DIR="${VPS_DEPLOY_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 TENANT_CODE="${TENANT_CODE:-intelranch_pilot}"
 EXPECTED_TENANT_ID="${EXPECTED_TENANT_ID:-7ee5cb96-619f-466e-9b34-9d2fef906f10}"
 EXPECTED_CURRENCY="${EXPECTED_CURRENCY:-BOB}"
