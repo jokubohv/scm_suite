@@ -1,0 +1,73 @@
+name: ops-pilot-bob-migration
+
+# Guarded operator workflow for the synthetic SCM pilot tenant only:
+# backup, preflight, dry-run, scoped demo-data reset, post-change verification.
+# The reset clears only currency-change blocker data; master data, users, API keys
+# and Serebo links are preserved. It never changes the base currency itself.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "backup | preflight | dry-run | apply | verify"
+        required: true
+        default: backup
+        type: choice
+        options: [backup, preflight, dry-run, apply, verify]
+      confirmation:
+        description: 'For apply: RESET intelranch_pilot BEFORE BOB'
+        required: false
+        default: ""
+      expected_currency:
+        description: "For verify: expected tenant base currency (USD pre-PATCH, BOB post-PATCH)"
+        required: false
+        default: BOB
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ops-pilot-bob-migration
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    env:
+      MODE: ${{ inputs.mode }}
+      CONFIRMATION: ${{ inputs.confirmation }}
+      EXPECTED_CURRENCY: ${{ inputs.expected_currency }}
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_DEPLOY_DIR: ${{ secrets.VPS_DEPLOY_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate inputs
+        run: |
+          set -euo pipefail
+          case "$MODE" in backup|preflight|dry-run|apply|verify) ;; *) echo "invalid mode"; exit 1 ;; esac
+          if [ "$MODE" = "apply" ] && [ "$CONFIRMATION" != "RESET intelranch_pilot BEFORE BOB" ]; then
+            echo "apply requires confirmation: RESET intelranch_pilot BEFORE BOB"; exit 1
+          fi
+          case "$EXPECTED_CURRENCY" in USD|BOB) ;; *) echo "expected_currency must be USD or BOB"; exit 1 ;; esac
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+      - name: Trust deployment host
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+      - name: Copy migration files
+        run: |
+          ssh "$VPS_USER@$VPS_HOST" "mkdir -p '$VPS_DEPLOY_DIR/ops/pilot_bob_migration'"
+          scp ops/pilot_bob_migration/_common.sql \
+              ops/pilot_bob_migration/preflight.sql \
+              ops/pilot_bob_migration/reset.sql \
+              ops/pilot_bob_migration/verify.sql \
+              ops/pilot_bob_migration/seed_pilot_demo.py \
+              ops/pilot_bob_migration/README.md \
+              ops/pilot_bob_migration/remote.sh \
+              "$VPS_USER@$VPS_HOST:$VPS_DEPLOY_DIR/ops/pilot_bob_migration/"
+      - name: Execute scoped operation
+        run: |
+          ssh "$VPS_USER@$VPS_HOST" "cd '$VPS_DEPLOY_DIR' && MODE='$MODE' EXPECTED_CURRENCY='$EXPECTED_CURRENCY' bash ops/pilot_bob_migration/remote.sh"
