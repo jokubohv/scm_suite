@@ -747,7 +747,7 @@ class CostingRepository:
                     "unit_cost": draft.unit_cost,
                     "value_delta": draft.value_delta,
                     "costing_method": method,
-                    "layer_id": layer_ids.get(draft.layer_id, draft.layer_id),
+                    "layer_id": layer_ids.get(draft.layer_id, draft.layer_id) if draft.layer_id is not None else None,
                     "estimated": draft.estimated,
                     "rounding_residual": draft.rounding_residual,
                     "effective_date": effective_date,

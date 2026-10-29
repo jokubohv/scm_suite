@@ -456,9 +456,9 @@ async def _call_tool(tool: ToolSpec, arguments: dict[str, Any], request: Request
                    "/api/v1/bootstrap", "/api/v1/mcp")
         if any(path == prefix or path.startswith(prefix + "/") for prefix in blocked):
             raise ValueError("path is not available through MCP")
-        query = arguments.get("query") or None
-        body = arguments.get("body")
-        return await _proxy_http(request, method, path, api_key=api_key, query=query, body=body)
+        proxy_query = arguments.get("query") or None
+        proxy_body = arguments.get("body")
+        return await _proxy_http(request, method, path, api_key=api_key, query=proxy_query, body=proxy_body)
 
     args = dict(arguments)
     path = tool.path
@@ -466,27 +466,29 @@ async def _call_tool(tool: ToolSpec, arguments: dict[str, Any], request: Request
         if name not in args:
             raise ValueError(f"missing path parameter {name!r}")
         path = path.replace("{" + name + "}", str(args.pop(name)))
-    query: dict[str, Any] = {}
+    query_params: dict[str, Any] = {}
     for name in tool.query_params:
         if name in args:
-            query[name] = args.pop(name)
+            query_params[name] = args.pop(name)
     headers: dict[str, str] = {}
     for name in tool.header_params:
         if name in args:
             headers[name] = str(args.pop(name))
-    body: Any = None
+    tool_body: Any = None
     if tool.body_single:
-        body = args.pop("body", None)
+        tool_body = args.pop("body", None)
     elif tool.body_properties:
-        body = {name: args.pop(name) for name in tool.body_properties if name in args}
-        if not body and not tool.body_additional:
-            body = None
+        tool_body = {name: args.pop(name) for name in tool.body_properties if name in args}
+        if not tool_body and not tool.body_additional:
+            tool_body = None
     elif tool.body_additional:
-        body = dict(args) or None
+        tool_body = dict(args) or None
         args.clear()
     if method_requires_idempotency(tool.method):
         headers.setdefault("Idempotency-Key", secrets.token_hex(16))
-    return await _proxy_http(request, tool.method, path, api_key=api_key, query=query or None, body=body, headers=headers)
+    return await _proxy_http(
+        request, tool.method, path, api_key=api_key, query=query_params or None, body=tool_body, headers=headers
+    )
 
 
 def method_requires_idempotency(method: str) -> bool:
@@ -623,7 +625,7 @@ async def mcp_endpoint(request: Request, body: JSONRPCRequest) -> Response:
     payload = body.model_dump()
     request_id = payload.get("id")
     parsed, method, params = _jsonrpc_payload(payload, request_id)
-    if parsed is None:
+    if parsed is None or method is None:
         return JSONResponse(_mcp_error(request_id, -32600, str(params)), status_code=400)
     if request_id is None and method.startswith("notifications/"):
         return Response(status_code=202)
@@ -657,8 +659,8 @@ async def mcp_endpoint(request: Request, body: JSONRPCRequest) -> Response:
         arguments = params.get("arguments") or {}
         if not isinstance(name, str) or not isinstance(arguments, dict):
             return JSONResponse(_mcp_error(request_id, -32602, "tools/call requires name and object arguments"))
-        tools = {tool.name: tool for tool in _tools_for_app(request.app)}
-        tool = tools.get(name)
+        tools_by_name = {tool.name: tool for tool in _tools_for_app(request.app)}
+        tool = tools_by_name.get(name)
         if tool is None:
             return JSONResponse(_mcp_error(request_id, -32602, f"unknown tool {name!r}"))
         try:

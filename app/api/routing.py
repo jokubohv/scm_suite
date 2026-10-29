@@ -18,7 +18,7 @@ PUBLIC_PATHS = frozenset({
     "/api/v1/auth/providers", "/api/v1/auth/sso/start", "/api/v1/auth/sso/callback",
 })
 PUBLIC_PREFIXES = ("/api/v1/admin/invitations/",)
-DEFAULT_SECURITY = [{"BearerAuth": []}, {"ApiKeyAuth": []}]
+DEFAULT_SECURITY: list[dict[str, list[str]]] = [{"BearerAuth": []}, {"ApiKeyAuth": []}]
 
 
 def security_for(method: str, path: str) -> list[dict[str, list[str]]]:

@@ -1,0 +1,15 @@
+{
+  "boundary": "localhost HTTP, real API keys, PostgreSQL 16 production grants",
+  "durable_bob_change": 200,
+  "other_tenant_unchanged": true,
+  "concurrent_append": "CONFIGURATION_BUSY",
+  "committed_zero_history": "BASE_CURRENCY_IN_USE",
+  "concurrent_cost_update": "CONFIGURATION_BUSY",
+  "retry_after_rollback": 200,
+  "concurrent_configuration_statuses": [
+    200,
+    409
+  ],
+  "committed_audits": 3,
+  "app_role_superuser_or_bypassrls": false
+}

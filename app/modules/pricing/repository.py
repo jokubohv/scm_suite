@@ -1362,6 +1362,7 @@ class PricingRepository:
         if definition is None:
             raise PricingRepositoryError("JOB_NOT_FOUND", "pricing job definition not found", status_code=404)
         job_definition_table = platform_models.metadata.tables["platform.job_definition"]
+        effective_definition: Any = definition
         if UUID(str(definition["tenant_id"])) != tid:
             # Seed rows live under the SYSTEM tenant; job_run requires a tenant-scoped definition.
             existing_tenant_definition = (
@@ -1377,7 +1378,7 @@ class PricingRepository:
                 .first()
             )
             if existing_tenant_definition is not None:
-                definition = existing_tenant_definition
+                effective_definition = existing_tenant_definition
             else:
                 tenant_definition_id = uuid.uuid4()
                 now_definition = _now()
@@ -1398,7 +1399,7 @@ class PricingRepository:
                         version=1,
                     )
                 )
-                definition = {  # type: ignore[assignment]
+                effective_definition = {
                     **dict(definition),
                     "id": tenant_definition_id,
                     "tenant_id": tid,
@@ -1421,7 +1422,7 @@ class PricingRepository:
             run_table.insert().values(
                 id=run_id,
                 tenant_id=tid,
-                job_definition_id=definition["id"],
+                job_definition_id=effective_definition["id"],
                 run_key=run_key,
                 status="QUEUED",
                 attempt=1,

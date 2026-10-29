@@ -682,7 +682,7 @@ class WmsService:
         rows = await self._all("SELECT * FROM wms.system_rule WHERE tenant_id = :tenant_id ORDER BY code")
         if not rows:
             # Tenants created after the 0023 seed migration still get the frozen default catalogue.
-            rows = [
+            default_rows: list[dict[str, Any]] = [
                 {
                     "id": None,
                     "tenant_id": str(self.tenant_id),
@@ -696,6 +696,7 @@ class WmsService:
                 }
                 for code, name, description, default_enabled, applies_to in t.SYSTEM_RULE_SEEDS
             ]
+            rows = default_rows
         settings: dict[str, dict[str, Any]] = {}
         if warehouse_id:
             for setting in await self._all(

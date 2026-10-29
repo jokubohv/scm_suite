@@ -37,10 +37,17 @@ def test_planning_module_has_no_ledger_write_imports() -> None:
         assert "app.modules.inventory_ledger.tables" not in source or path.name in {"repository.py", "service.py"}
 
 
-async def _counts(session) -> dict[str, int]:
+async def _counts(session, tenant_id) -> dict[str, int]:
     counts: dict[str, int] = {}
     for table in LEDGER_TABLES:
-        counts[table] = int((await session.execute(text(f"SELECT count(*) FROM {table}"))).scalar_one())
+        counts[table] = int(
+            (
+                await session.execute(
+                    text(f"SELECT count(*) FROM {table} WHERE tenant_id = :tenant_id"),
+                    {"tenant_id": tenant_id},
+                )
+            ).scalar_one()
+        )
     return counts
 
 
@@ -52,7 +59,7 @@ async def test_planning_runs_do_not_touch_ledger_rows(db_session) -> None:
     await _seed_location_status(db_session, tenant_id, location_id=location_id, status_id=status_id, suffix=uuid4().hex[:6].upper())
     await seed_balance(db_session, tenant_id=tenant_id, item_id=item_id, location_id=location_id, status_id=status_id, qty="10", value="40")
     await db_session.flush()
-    before = await _counts(db_session)
+    before = await _counts(db_session, tenant_id)
 
     service = PlanningService(db_session, tenant_id)
     rule = await service.create_rule(
@@ -71,7 +78,7 @@ async def test_planning_runs_do_not_touch_ledger_rows(db_session) -> None:
     await service.run_supply_plan(plan["id"])
     await service.create_calculation({"calculation_day": "2026-10-23", "scope": {"items": [str(item_id)]}})
     await service.rebuild_atp({"scope": {"items": [str(item_id)], "locations": [str(location_id)]}, "as_of": "2026-10-23"})
-    after = await _counts(db_session)
+    after = await _counts(db_session, tenant_id)
     assert after == before, f"planning wrote ledger/cost rows: {before} -> {after}"
 
 

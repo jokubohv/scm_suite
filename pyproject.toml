@@ -76,6 +76,9 @@ ignore_missing_imports = true
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
+# Routers intentionally re-bind a FastAPI DTO parameter to its dict payload before passing it to the
+# service layer; enable the documented redefinition pattern instead of suppressing every call site.
+allow_redefinition = true
 check_untyped_defs = true
 exclude = "app/migrations/versions|app/tests|app/migrations/tests|app/seed/tests"
 

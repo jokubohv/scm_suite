@@ -515,7 +515,7 @@ async def apply_planning_values(
 ) -> dict[str, Any]:
     assert key is not None
     payload = body.model_dump(exclude_unset=True)
-    values = {name: payload[name] for name in ("reorder_point", "preferred_stock_level", "safety_stock", "lead_time_days", "seasonal_demand") if name in payload}
+    values: dict[str, Any] = {name: payload[name] for name in ("reorder_point", "preferred_stock_level", "safety_stock", "lead_time_days", "seasonal_demand") if name in payload}
     service = _svc(db, principal)
     return await _idempotent_mutation(
         db=db, principal=principal, endpoint_id="items.planning_values", key=key,
@@ -540,7 +540,7 @@ async def apply_location_planning_values(
 ) -> dict[str, Any]:
     assert key is not None
     payload = body.model_dump(exclude_unset=True)
-    values = {name: payload[name] for name in ("reorder_point", "preferred_stock_level", "safety_stock", "lead_time_days", "seasonal_demand") if name in payload}
+    values: dict[str, Any] = {name: payload[name] for name in ("reorder_point", "preferred_stock_level", "safety_stock", "lead_time_days", "seasonal_demand") if name in payload}
     service = _svc(db, principal)
     return await _idempotent_mutation(
         db=db, principal=principal, endpoint_id="items.location_planning_values", key=key,

@@ -242,7 +242,7 @@ class CostingService:
         if payload.get("is_inactive") is not None:
             values["is_inactive"] = bool(payload["is_inactive"])
         lines = payload.get("lines")
-        normalized = None
+        normalized: list[dict[str, Any]] | None = None
         if lines is not None:
             normalized = []
             for line in lines:
