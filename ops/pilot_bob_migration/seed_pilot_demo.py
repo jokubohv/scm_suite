@@ -256,6 +256,10 @@ class Client:
         self._api_key = api_key
         self.timeout = timeout
         self.calls = 0
+        # A rerun after the scoped reset must not replay cached SCM responses that point
+        # at deleted documents. Stable read-before-write markers keep the seed idempotent;
+        # the salt only prevents stale Idempotency-Key cache replays across runs.
+        self.idem_salt = os.environ.get("SEED_IDEM_SALT") or os.urandom(4).hex()
 
     def _url(self, path: str, params: Mapping[str, Any] | None = None) -> str:
         url = self.base_url + path
@@ -274,7 +278,7 @@ class Client:
         if data is not None:
             headers["Content-Type"] = "application/json"
         if idem:
-            headers["Idempotency-Key"] = idem
+            headers["Idempotency-Key"] = f"{idem}-{self.idem_salt}"
         last_error: Exception | None = None
         for attempt in range(3):
             request = urllib.request.Request(self._url(path, params), data=data, method=method)
@@ -1055,10 +1059,18 @@ def ensure_lots(ctx: SeedContext) -> None:
                 client.patch(f"/api/v1/lots/{lot['id']}", patch, idem=f"seed-lot-enrich-{lot['id']}")
             except ApiError as exc:
                 # Lot dates/cost basis become immutable once stock movements exist. Run the
-                # reset before seeding so this enrichment happens on a movement-free tenant;
-                # if a manual rerun happens after postings, keep going with a warning instead
-                # of failing the whole reseed.
-                ctx.warn(f"lot {lot.get('lot_number')} declarations could not be enriched ({exc}); existing stock movements make them immutable")
+                # reset before seeding so this enrichment normally happens on a movement-free
+                # tenant. If a preserved legacy lot is still immutable (or a manual rerun
+                # happens after postings), retire that incomplete lot; the item already has a
+                # complete synthetic lot and verify only reports active lots.
+                try:
+                    client.post(f"/api/v1/lots/{lot['id']}/inactivate",
+                                {"reason": "Lote heredado incompleto; reemplazado por lote sintético completo"},
+                                idem=f"seed-lot-inactivate-{lot['id']}", allow=(409,))
+                except ApiError as inactive_exc:
+                    ctx.warn(f"lot {lot.get('lot_number')} declarations could not be enriched ({exc}) nor retired ({inactive_exc})")
+                else:
+                    ctx.act("lots", "inactivated", lot.get("lot_number"))
             else:
                 lot.update(patch)
                 ctx.act("lots", "updated", lot.get("lot_number"))

@@ -17,7 +17,7 @@ row, and it never deletes rows.
 `seed_pilot_demo.py` is a stdlib-only Python 3.11+ script that:
 
 1. Authenticates with an SCM **tenant API key** from `SCM_API_KEY` (`X-API-Key`) and calls only
-   `SCM_BASE_URL`. No other environment variables, hosts, credentials or database access are used.
+   `SCM_BASE_URL`/`SCM_API_KEY`. On the Serebo VPS the API container stores the same values as `SEREBO_SCM_BASE_URL`/`SEREBO_SCM_API_KEY`, so the run command maps them explicitly. No other environment variables, hosts, credentials or database access are used.
 2. Audits surviving master data and **fills every empty inventory-relevant field** instead of
    duplicating rows:
    - **Items** (all active stockable types): description, category, UPC, external ref, base/stock
@@ -64,7 +64,7 @@ valuation. Inactivate them via the items API after the demo if they are not want
 | # | Requirement | Why / failure behaviour |
 |---|---|---|
 | 1 | Tenant base currency is already **BOB** (guarded `PATCH /api/v1/admin/tenant-configuration`) and platform currency `BOB` is active | `--verify` requires BOB on vendors/items/POs/receipts and (deployed) tenant configuration; seed sends BOB everywhere |
-| 2 | SCM VPS `SCM_BASE_URL` / `SCM_API_KEY` set **inside the running Serebo API container** | The script reads only those two variables |
+| 2 | SCM URL/key passed as `SCM_BASE_URL`/`SCM_API_KEY` to the script inside the running Serebo API container (mapped from the container's `SEREBO_SCM_BASE_URL`/`SEREBO_SCM_API_KEY`) | The script reads only those two variables |
 | 3 | API key has the full pilot scope set (`deployment/serebo_pilot_scopes.json`, 227 scopes) | Create/update master data, post adjustments/receipts/transfers, count capture |
 | 4 | Feature flags on: `traceability.registry.enabled`, `inventory.ledger.enabled`, `inventory.counts.enabled`, `costing.engine.enabled` | Seed fails fast listing any disabled flag; it never mutates flags |
 | 5 | SCM database backup already taken by the migration workflow | Rollback anchor (this script itself never deletes) |
@@ -82,14 +82,18 @@ VPS deployment directory (the same place the operator runs `docker compose ... e
 
 ```bash
 # sanity: the SCM env vars exist in the container (no secret is printed)
-docker exec serebo-api-1 sh -c '[ -n "$SCM_BASE_URL" ] && [ -n "$SCM_API_KEY" ] && echo scm-env-ok'
+docker exec serebo-api-1 sh -c '[ -n "$SEREBO_SCM_BASE_URL" ] && [ -n "$SEREBO_SCM_API_KEY" ] && echo scm-env-ok'
 
 # 1) seed (safe to rerun; JSON report to stdout, human summary to stderr)
-docker exec -i serebo-api-1 python3 - --json-out /tmp/scm_seed.json \
+docker exec -i serebo-api-1 sh -c '
+  SCM_BASE_URL="$SEREBO_SCM_BASE_URL" SCM_API_KEY="$SEREBO_SCM_API_KEY" \
+  python3 - --json-out /tmp/scm_seed.json' \
   < ops/pilot_bob_migration/seed_pilot_demo.py > /tmp/scm_seed_stdout.json 2> /tmp/scm_seed.log
 
 # 2) read-only verification; exits non-zero on required gaps
-docker exec -i serebo-api-1 python3 - --verify --json-out /tmp/scm_verify.json \
+docker exec -i serebo-api-1 sh -c '
+  SCM_BASE_URL="$SEREBO_SCM_BASE_URL" SCM_API_KEY="$SEREBO_SCM_API_KEY" \
+  python3 - --verify --json-out /tmp/scm_verify.json' \
   < ops/pilot_bob_migration/seed_pilot_demo.py > /tmp/scm_verify_stdout.json 2> /tmp/scm_verify.log
 
 # 3) copy evidence out of the container
@@ -254,3 +258,16 @@ scratch BOB tenants; local feature flags were enabled on the scratch tenants via
 only; the local tenant here was created with `base_currency_code=BOB` because the deployed-only
 tenant-configuration endpoint does not exist in the older local image. None of this touches
 production.
+
+
+## Production rerun notes (2026-10-29)
+
+* SCM's `Idempotency-Key` cache is not cleared by the scoped reset, so a rerun after a reset
+  could replay a cached response pointing at a deleted document. The script therefore salts
+  Idempotency-Keys per run (or from `SEED_IDEM_SALT`); read-before-write markers keep it
+  idempotent for already-correct data.
+* Preserved legacy lots whose declarations are immutable (stock movements exist) are retired
+  via `/lots/{id}/inactivate` when a complete synthetic lot already exists for the item.
+* Production proof: after reset + BOB switch, seed created opening stock (32 lines), PO000002,
+  posted receipt IR000003 (16 BOB lines, 9 lot lines), posted transfer and count snapshot;
+  `--verify` returned 69 passed / 0 failed / 5 documented API-limitation warnings.
