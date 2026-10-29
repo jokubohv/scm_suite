@@ -38,6 +38,7 @@ from app.api.routers.platform import ops as platform_ops
 from app.api.routers.platform import platform_admin as platform_admin
 from app.api.routers.platform import rbac as platform_rbac
 from app.api.routers.platform import sso as platform_sso
+from app.api.routers.platform import tenant_configuration as tenant_configuration
 from app.api.routers.platform import tenants as platform_tenants
 from app.api.routers.pricing import router as pricing_router
 from app.api.routers.procurement import router as procurement_router
@@ -131,6 +132,7 @@ def create_app() -> FastAPI:
     register_router(platform_extras.router)
     register_router(platform_sso.router)
     register_router(platform_tenants.router)
+    register_router(tenant_configuration.router)
     register_router(platform_admin.router)
     register_router(platform_bootstrap.router)
     register_router(platform_internal.router)
