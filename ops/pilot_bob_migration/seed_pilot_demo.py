@@ -270,7 +270,7 @@ class Client:
             params: Mapping[str, Any] | None = None, timeout: float | None = None) -> tuple[int, Any]:
         ok_set, allow_set = set(ok), set(allow)
         data = None if body is None else json.dumps(body, default=_jsonable).encode("utf-8")
-        headers = {"Accept": "application/json", "X-API-Key": self._api_key}
+        headers = {"Accept": "application/json", "X-API-Key": self._api_key, "User-Agent": "serebo-scm/0.1"}
         if data is not None:
             headers["Content-Type"] = "application/json"
         if idem:
@@ -1035,6 +1035,33 @@ def ensure_lots(ctx: SeedContext) -> None:
     client = ctx.client
     _, payload = client.get("/api/v1/lots", {"limit": 200, "active": "true"})
     lots = _items_of(payload)
+    # Enrich every surviving lot of a lot-numbered item so all declaration fields are
+    # populated. The reset preserves lots (master/reference data), and some pilot lots
+    # historically carried only part of the declarations; LotPatch supports the missing
+    # manufacture_date/cost_basis without touching quantities.
+    item_by_id = {str(item["id"]): item for item in ctx.stockable_items()}
+    for lot in lots:
+        item = item_by_id.get(str(lot.get("item_id")))
+        if item is None or ctx.numbered_kind(item) != "LOT":
+            continue
+        patch: dict[str, Any] = {}
+        if not _present(lot.get("manufacture_date")):
+            patch["manufacture_date"] = (ctx.seed_date - timedelta(days=180)).isoformat()
+        if not _present(lot.get("cost_basis")):
+            price = _dec(_lookup(item, "purchasing.purchase_price") or _synth_price(str(item.get("item_number"))))
+            patch["cost_basis"] = _money(price)
+        if patch:
+            try:
+                client.patch(f"/api/v1/lots/{lot['id']}", patch, idem=f"seed-lot-enrich-{lot['id']}")
+            except ApiError as exc:
+                # Lot dates/cost basis become immutable once stock movements exist. Run the
+                # reset before seeding so this enrichment happens on a movement-free tenant;
+                # if a manual rerun happens after postings, keep going with a warning instead
+                # of failing the whole reseed.
+                ctx.warn(f"lot {lot.get('lot_number')} declarations could not be enriched ({exc}); existing stock movements make them immutable")
+            else:
+                lot.update(patch)
+                ctx.act("lots", "updated", lot.get("lot_number"))
     by_item: dict[str, list[dict[str, Any]]] = {}
     for lot in lots:
         by_item.setdefault(str(lot.get("item_id")), []).append(lot)
@@ -1746,6 +1773,33 @@ def run_verify(client: Client) -> dict[str, Any]:
     # ---- lots ----------------------------------------------------------------------------
     _, payload = client.get("/api/v1/lots", {"limit": 200, "active": "true"})
     lots = _items_of(payload)
+    # Enrich every surviving lot of a lot-numbered item so all declaration fields are
+    # populated. The reset preserves lots (master/reference data), and some pilot lots
+    # historically carried only part of the declarations; LotPatch supports the missing
+    # manufacture_date/cost_basis without touching quantities.
+    item_by_id = {str(item["id"]): item for item in ctx.stockable_items()}
+    for lot in lots:
+        item = item_by_id.get(str(lot.get("item_id")))
+        if item is None or ctx.numbered_kind(item) != "LOT":
+            continue
+        patch: dict[str, Any] = {}
+        if not _present(lot.get("manufacture_date")):
+            patch["manufacture_date"] = (ctx.seed_date - timedelta(days=180)).isoformat()
+        if not _present(lot.get("cost_basis")):
+            price = _dec(_lookup(item, "purchasing.purchase_price") or _synth_price(str(item.get("item_number"))))
+            patch["cost_basis"] = _money(price)
+        if patch:
+            try:
+                client.patch(f"/api/v1/lots/{lot['id']}", patch, idem=f"seed-lot-enrich-{lot['id']}")
+            except ApiError as exc:
+                # Lot dates/cost basis become immutable once stock movements exist. Run the
+                # reset before seeding so this enrichment happens on a movement-free tenant;
+                # if a manual rerun happens after postings, keep going with a warning instead
+                # of failing the whole reseed.
+                ctx.warn(f"lot {lot.get('lot_number')} declarations could not be enriched ({exc}); existing stock movements make them immutable")
+            else:
+                lot.update(patch)
+                ctx.act("lots", "updated", lot.get("lot_number"))
     by_item: dict[str, list[dict[str, Any]]] = {}
     for lot in lots:
         by_item.setdefault(str(lot.get("item_id")), []).append(lot)
