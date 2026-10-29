@@ -18,7 +18,7 @@ test -f "$OPS_DIR/_common.sql" || { echo "FATAL: migration files missing at $OPS
 compose() { docker compose --env-file .env.production -f docker-compose.prod.yml "$@"; }
 psql_base="psql -v ON_ERROR_STOP=1 -U \"\$POSTGRES_USER\" -d \"\$POSTGRES_DB\" -v expected_tenant_id=$EXPECTED_TENANT_ID"
 psql_file() { compose exec -T postgres sh -c "$psql_base -v tenant_code=$TENANT_CODE -f $1"; }
-psql_verify() { compose exec -T postgres sh -c "$psql_base -v tenant_code=$TENANT_CODE -v expected_currency=$1 -v baseline_protected_counts=$2 -f /tmp/pilot_bob_migration/verify.sql"; }
+psql_verify() { compose exec -T postgres sh -c "$psql_base -v tenant_code=$TENANT_CODE -v expected_currency=$1 -v baseline_protected_counts='$2' -f /tmp/pilot_bob_migration/verify.sql"; }
 psql_reset() { compose exec -T postgres sh -c "$psql_base -v tenant_code=$TENANT_CODE -v mode=$MODE -f /tmp/pilot_bob_migration/reset.sql"; }
 
 mkdir -p "$WORK_DIR"
