@@ -983,6 +983,7 @@ Each row is one or more revisions; `expand` steps never drop/rename in prod (fra
 | M13 | `0027_consigned` | FS-13 | consignment agreements/items, ownership transfers/lines, consumption | M12 |
 | M14 | `0028_extensions` | FS-14 | item warranty, registrations/claims/actions/repair orders, customer parts, UPC registry | M13 |
 | M15 | `0029_reporting_views … 0031_count_post_txn_idx` | FS-15 | reporting views/materialised views, final RLS/grants verification, deferred-FK orphan check; fix (partial unique index) for multiple unposted counts | M14 |
+| M16 | `0032_currency_global_writes` | FS-00 | Add INSERT/UPDATE RLS policies for global currency reference rows with a request tenant context; retain API `platform.finance.sync` authorization, existing grants and tenant isolation. No currency seeds or tenant base-currency changes. | M15 |
 
 ### 21.2 Seed/reference data (idempotent, per tenant unless marked global)
 
