@@ -28,6 +28,27 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: inventory
+          POSTGRES_USER: inventory
+          POSTGRES_PASSWORD: inventory
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U inventory -d inventory"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      TEST_DB_PROFILE: url
+      TEST_DATABASE_URL: postgresql+asyncpg://inventory:inventory@localhost:5432/inventory
+      DATABASE_URL: postgresql+asyncpg://inventory:inventory@localhost:5432/inventory
+      REDIS_URL: redis://localhost:6379/0
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -39,7 +60,9 @@ jobs:
         run: ruff check app
       - name: Type check
         run: mypy app
-      - name: Unit tests
+      - name: Migrate test database
+        run: python -m alembic upgrade head
+      - name: Tests
         run: pytest -q
       - name: Compose config
         if: hashFiles('docker-compose.yml') != ''

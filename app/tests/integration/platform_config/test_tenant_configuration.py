@@ -1,8 +1,10 @@
 """Own-tenant currency configuration through real API-key auth and PostgreSQL RLS."""
 
+import asyncio
 from typing import Any
 from uuid import uuid4
 
+import httpx
 import pytest
 from sqlalchemy import select, text
 
@@ -14,6 +16,39 @@ from app.tests.integration.platform_config.conftest import OTHER_TENANT_ID, TENA
 from app.tests.integration.platform_config.test_currency_api_key_rls import currency_key_client as currency_key_client
 
 PATH = "/api/v1/admin/tenant-configuration"
+_BUSY_CODE = "CONFIGURATION_BUSY"
+
+
+class _RetryingTenantConfigClient:
+    """Retry the documented ``CONFIGURATION_BUSY`` response from unrelated suite concurrency.
+
+    The endpoint takes SHARE/NOWAIT locks on the mutable valuation tables. The full suite runs on a
+    shared database with xdist, so other workers may legitimately hold a brief write lock on one of
+    those tables while these acceptance tests run. Clients are documented to reread and retry later;
+    the tests retry the same way instead of mistaking another worker's transient write for product
+    behaviour. Responses that are not a transient busy conflict are returned unchanged.
+    """
+
+    def __init__(self, client: httpx.AsyncClient) -> None:
+        self._client = client
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._client, name)
+
+    async def patch(self, *args: Any, **kwargs: Any) -> httpx.Response:
+        response = await self._client.patch(*args, **kwargs)
+        for attempt in range(60):
+            if response.status_code != 409:
+                break
+            try:
+                busy = response.json().get("code") == _BUSY_CODE
+            except ValueError:
+                busy = False
+            if not busy:
+                break
+            await asyncio.sleep(min(0.02 * (attempt + 1), 0.25))
+            response = await self._client.patch(*args, **kwargs)
+        return response
 
 
 @pytest.fixture()
@@ -51,7 +86,7 @@ async def tenant_config_client(currency_key_client: Any, db_session: Any) -> Any
         )
         keys[name] = {"X-API-Key": material.full_key}
     await db_session.execute(p.currency.insert().values(code="BOB", numeric_code=68, minor_units=2))
-    return client, keys
+    return _RetryingTenantConfigClient(client), keys
 
 
 async def test_admin_changes_only_own_currency_and_audits(tenant_config_client: Any, db_session: Any) -> None:
