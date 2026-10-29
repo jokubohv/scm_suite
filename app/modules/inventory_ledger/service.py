@@ -247,7 +247,7 @@ def validate_command(command: Mapping[str, Any]) -> dict[str, Any]:
         "source_doc_type": command.get("source_doc_type"),
         "source_doc_id": command.get("source_doc_id"),
         "external_ref": command.get("external_ref"),
-        "currency_code": str(command.get("currency_code") or "USD"),
+        "currency_code": str(command["currency_code"]).upper() if command.get("currency_code") else None,
         "exchange_rate": quantize(command.get("exchange_rate", 1)),
         "idempotency_key": command.get("idempotency_key"),
         "correlation_id": command.get("correlation_id"),
@@ -343,8 +343,18 @@ class LedgerService:
         return deltas
 
     # -- posting ------------------------------------------------------------------------------
+    async def _tenant_base_currency(self) -> str | None:
+        value = await self._scalar(
+            "SELECT base_currency_code FROM platform.tenant WHERE id = :tenant_id"
+        )
+        return str(value).upper() if value else None
+
     async def post(self, command: Mapping[str, Any], *, idempotency_key: str | None = None) -> dict[str, Any]:
         validated = validate_command(command)
+        if not validated.get("currency_code"):
+            # The ledger records amounts in the tenant's base currency. Posting paths that do not
+            # carry a document currency must inherit it from the tenant instead of the DB default.
+            validated["currency_code"] = await self._tenant_base_currency() or "USD"
         key = idempotency_key or validated.get("idempotency_key")
         if not key:
             raise ledger_error("Idempotency-Key or idempotency_key is required", code="IDEMPOTENCY_KEY_REQUIRED", http_status=400)
